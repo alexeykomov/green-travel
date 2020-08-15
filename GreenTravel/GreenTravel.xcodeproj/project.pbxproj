@@ -1,0 +1,667 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824924E7ED9100EBB756 /* AppDelegate.m */; };
+		5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824C24E7ED9100EBB756 /* SceneDelegate.m */; };
+		5A14825024E7ED9100EBB756 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824F24E7ED9100EBB756 /* ViewController.m */; };
+		5A14825324E7ED9100EBB756 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A14825124E7ED9100EBB756 /* Main.storyboard */; };
+		5A14825624E7ED9100EBB756 /* GreenTravel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5A14825424E7ED9100EBB756 /* GreenTravel.xcdatamodeld */; };
+		5A14825824E7ED9400EBB756 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A14825724E7ED9400EBB756 /* Assets.xcassets */; };
+		5A14825B24E7ED9400EBB756 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A14825924E7ED9400EBB756 /* LaunchScreen.storyboard */; };
+		5A14825E24E7ED9400EBB756 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14825D24E7ED9400EBB756 /* main.m */; };
+		5A14826824E7ED9400EBB756 /* GreenTravelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14826724E7ED9400EBB756 /* GreenTravelTests.m */; };
+		5A14827324E7ED9400EBB756 /* GreenTravelUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14827224E7ED9400EBB756 /* GreenTravelUITests.m */; };
+		5A14828324E7F92300EBB756 /* Colors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14828224E7F92300EBB756 /* Colors.m */; };
+		5A14828724E807E800EBB756 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14828624E807E800EBB756 /* MainViewController.m */; };
+		5A14828A24E80E3900EBB756 /* MainContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14828924E80E3900EBB756 /* MainContentViewController.m */; };
+		5A14828D24E8101A00EBB756 /* IndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14828C24E8101A00EBB756 /* IndexViewController.m */; };
+		5A14829024E8102B00EBB756 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14828F24E8102B00EBB756 /* MapViewController.m */; };
+		5A14829324E8103400EBB756 /* BookmarksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14829224E8103400EBB756 /* BookmarksViewController.m */; };
+		5A14829624E812BF00EBB756 /* TextUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14829524E812BF00EBB756 /* TextUtils.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5A14826424E7ED9400EBB756 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A14823D24E7ED9000EBB756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5A14824424E7ED9000EBB756;
+			remoteInfo = GreenTravel;
+		};
+		5A14826F24E7ED9400EBB756 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A14823D24E7ED9000EBB756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5A14824424E7ED9000EBB756;
+			remoteInfo = GreenTravel;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		5A14824524E7ED9100EBB756 /* GreenTravel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenTravel.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A14824824E7ED9100EBB756 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5A14824924E7ED9100EBB756 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5A14824B24E7ED9100EBB756 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		5A14824C24E7ED9100EBB756 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		5A14824E24E7ED9100EBB756 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		5A14824F24E7ED9100EBB756 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		5A14825224E7ED9100EBB756 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5A14825524E7ED9100EBB756 /* GreenTravel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GreenTravel.xcdatamodel; sourceTree = "<group>"; };
+		5A14825724E7ED9400EBB756 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5A14825A24E7ED9400EBB756 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5A14825C24E7ED9400EBB756 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A14825D24E7ED9400EBB756 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5A14826324E7ED9400EBB756 /* GreenTravelTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreenTravelTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A14826724E7ED9400EBB756 /* GreenTravelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GreenTravelTests.m; sourceTree = "<group>"; };
+		5A14826924E7ED9400EBB756 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A14826E24E7ED9400EBB756 /* GreenTravelUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreenTravelUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A14827224E7ED9400EBB756 /* GreenTravelUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GreenTravelUITests.m; sourceTree = "<group>"; };
+		5A14827424E7ED9400EBB756 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A14828124E7F92300EBB756 /* Colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
+		5A14828224E7F92300EBB756 /* Colors.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Colors.m; sourceTree = "<group>"; };
+		5A14828524E807E800EBB756 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		5A14828624E807E800EBB756 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		5A14828824E80E3900EBB756 /* MainContentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainContentViewController.h; sourceTree = "<group>"; };
+		5A14828924E80E3900EBB756 /* MainContentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainContentViewController.m; sourceTree = "<group>"; };
+		5A14828B24E8101A00EBB756 /* IndexViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexViewController.h; sourceTree = "<group>"; };
+		5A14828C24E8101A00EBB756 /* IndexViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexViewController.m; sourceTree = "<group>"; };
+		5A14828E24E8102B00EBB756 /* MapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		5A14828F24E8102B00EBB756 /* MapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		5A14829124E8103400EBB756 /* BookmarksViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookmarksViewController.h; sourceTree = "<group>"; };
+		5A14829224E8103400EBB756 /* BookmarksViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookmarksViewController.m; sourceTree = "<group>"; };
+		5A14829424E812BF00EBB756 /* TextUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextUtils.h; sourceTree = "<group>"; };
+		5A14829524E812BF00EBB756 /* TextUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextUtils.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5A14824224E7ED9000EBB756 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A14826024E7ED9400EBB756 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A14826B24E7ED9400EBB756 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5A14823C24E7ED9000EBB756 = {
+			isa = PBXGroup;
+			children = (
+				5A14824724E7ED9100EBB756 /* GreenTravel */,
+				5A14826624E7ED9400EBB756 /* GreenTravelTests */,
+				5A14827124E7ED9400EBB756 /* GreenTravelUITests */,
+				5A14824624E7ED9100EBB756 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5A14824624E7ED9100EBB756 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A14824524E7ED9100EBB756 /* GreenTravel.app */,
+				5A14826324E7ED9400EBB756 /* GreenTravelTests.xctest */,
+				5A14826E24E7ED9400EBB756 /* GreenTravelUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5A14824724E7ED9100EBB756 /* GreenTravel */ = {
+			isa = PBXGroup;
+			children = (
+				5A14828424E800F200EBB756 /* screens */,
+				5A14824824E7ED9100EBB756 /* AppDelegate.h */,
+				5A14824924E7ED9100EBB756 /* AppDelegate.m */,
+				5A14824B24E7ED9100EBB756 /* SceneDelegate.h */,
+				5A14824C24E7ED9100EBB756 /* SceneDelegate.m */,
+				5A14824E24E7ED9100EBB756 /* ViewController.h */,
+				5A14824F24E7ED9100EBB756 /* ViewController.m */,
+				5A14825124E7ED9100EBB756 /* Main.storyboard */,
+				5A14828024E7F91000EBB756 /* utilities */,
+				5A14825724E7ED9400EBB756 /* Assets.xcassets */,
+				5A14825924E7ED9400EBB756 /* LaunchScreen.storyboard */,
+				5A14825C24E7ED9400EBB756 /* Info.plist */,
+				5A14825D24E7ED9400EBB756 /* main.m */,
+				5A14825424E7ED9100EBB756 /* GreenTravel.xcdatamodeld */,
+			);
+			path = GreenTravel;
+			sourceTree = "<group>";
+		};
+		5A14826624E7ED9400EBB756 /* GreenTravelTests */ = {
+			isa = PBXGroup;
+			children = (
+				5A14826724E7ED9400EBB756 /* GreenTravelTests.m */,
+				5A14826924E7ED9400EBB756 /* Info.plist */,
+			);
+			path = GreenTravelTests;
+			sourceTree = "<group>";
+		};
+		5A14827124E7ED9400EBB756 /* GreenTravelUITests */ = {
+			isa = PBXGroup;
+			children = (
+				5A14827224E7ED9400EBB756 /* GreenTravelUITests.m */,
+				5A14827424E7ED9400EBB756 /* Info.plist */,
+			);
+			path = GreenTravelUITests;
+			sourceTree = "<group>";
+		};
+		5A14828024E7F91000EBB756 /* utilities */ = {
+			isa = PBXGroup;
+			children = (
+				5A14828124E7F92300EBB756 /* Colors.h */,
+				5A14828224E7F92300EBB756 /* Colors.m */,
+				5A14829424E812BF00EBB756 /* TextUtils.h */,
+				5A14829524E812BF00EBB756 /* TextUtils.m */,
+			);
+			path = utilities;
+			sourceTree = "<group>";
+		};
+		5A14828424E800F200EBB756 /* screens */ = {
+			isa = PBXGroup;
+			children = (
+				5A14828524E807E800EBB756 /* MainViewController.h */,
+				5A14828624E807E800EBB756 /* MainViewController.m */,
+				5A14828824E80E3900EBB756 /* MainContentViewController.h */,
+				5A14828924E80E3900EBB756 /* MainContentViewController.m */,
+				5A14828B24E8101A00EBB756 /* IndexViewController.h */,
+				5A14828C24E8101A00EBB756 /* IndexViewController.m */,
+				5A14828E24E8102B00EBB756 /* MapViewController.h */,
+				5A14828F24E8102B00EBB756 /* MapViewController.m */,
+				5A14829124E8103400EBB756 /* BookmarksViewController.h */,
+				5A14829224E8103400EBB756 /* BookmarksViewController.m */,
+			);
+			path = screens;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5A14824424E7ED9000EBB756 /* GreenTravel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A14827724E7ED9400EBB756 /* Build configuration list for PBXNativeTarget "GreenTravel" */;
+			buildPhases = (
+				5A14824124E7ED9000EBB756 /* Sources */,
+				5A14824224E7ED9000EBB756 /* Frameworks */,
+				5A14824324E7ED9000EBB756 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GreenTravel;
+			productName = GreenTravel;
+			productReference = 5A14824524E7ED9100EBB756 /* GreenTravel.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5A14826224E7ED9400EBB756 /* GreenTravelTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A14827A24E7ED9400EBB756 /* Build configuration list for PBXNativeTarget "GreenTravelTests" */;
+			buildPhases = (
+				5A14825F24E7ED9400EBB756 /* Sources */,
+				5A14826024E7ED9400EBB756 /* Frameworks */,
+				5A14826124E7ED9400EBB756 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A14826524E7ED9400EBB756 /* PBXTargetDependency */,
+			);
+			name = GreenTravelTests;
+			productName = GreenTravelTests;
+			productReference = 5A14826324E7ED9400EBB756 /* GreenTravelTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		5A14826D24E7ED9400EBB756 /* GreenTravelUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A14827D24E7ED9400EBB756 /* Build configuration list for PBXNativeTarget "GreenTravelUITests" */;
+			buildPhases = (
+				5A14826A24E7ED9400EBB756 /* Sources */,
+				5A14826B24E7ED9400EBB756 /* Frameworks */,
+				5A14826C24E7ED9400EBB756 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A14827024E7ED9400EBB756 /* PBXTargetDependency */,
+			);
+			name = GreenTravelUITests;
+			productName = GreenTravelUITests;
+			productReference = 5A14826E24E7ED9400EBB756 /* GreenTravelUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5A14823D24E7ED9000EBB756 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1160;
+				ORGANIZATIONNAME = "Alex K";
+				TargetAttributes = {
+					5A14824424E7ED9000EBB756 = {
+						CreatedOnToolsVersion = 11.6;
+					};
+					5A14826224E7ED9400EBB756 = {
+						CreatedOnToolsVersion = 11.6;
+						TestTargetID = 5A14824424E7ED9000EBB756;
+					};
+					5A14826D24E7ED9400EBB756 = {
+						CreatedOnToolsVersion = 11.6;
+						TestTargetID = 5A14824424E7ED9000EBB756;
+					};
+				};
+			};
+			buildConfigurationList = 5A14824024E7ED9000EBB756 /* Build configuration list for PBXProject "GreenTravel" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5A14823C24E7ED9000EBB756;
+			productRefGroup = 5A14824624E7ED9100EBB756 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5A14824424E7ED9000EBB756 /* GreenTravel */,
+				5A14826224E7ED9400EBB756 /* GreenTravelTests */,
+				5A14826D24E7ED9400EBB756 /* GreenTravelUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5A14824324E7ED9000EBB756 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A14825B24E7ED9400EBB756 /* LaunchScreen.storyboard in Resources */,
+				5A14825824E7ED9400EBB756 /* Assets.xcassets in Resources */,
+				5A14825324E7ED9100EBB756 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A14826124E7ED9400EBB756 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A14826C24E7ED9400EBB756 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5A14824124E7ED9000EBB756 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A14825E24E7ED9400EBB756 /* main.m in Sources */,
+				5A14828324E7F92300EBB756 /* Colors.m in Sources */,
+				5A14828D24E8101A00EBB756 /* IndexViewController.m in Sources */,
+				5A14825024E7ED9100EBB756 /* ViewController.m in Sources */,
+				5A14829624E812BF00EBB756 /* TextUtils.m in Sources */,
+				5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */,
+				5A14828724E807E800EBB756 /* MainViewController.m in Sources */,
+				5A14828A24E80E3900EBB756 /* MainContentViewController.m in Sources */,
+				5A14829024E8102B00EBB756 /* MapViewController.m in Sources */,
+				5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */,
+				5A14829324E8103400EBB756 /* BookmarksViewController.m in Sources */,
+				5A14825624E7ED9100EBB756 /* GreenTravel.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A14825F24E7ED9400EBB756 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A14826824E7ED9400EBB756 /* GreenTravelTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A14826A24E7ED9400EBB756 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A14827324E7ED9400EBB756 /* GreenTravelUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5A14826524E7ED9400EBB756 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5A14824424E7ED9000EBB756 /* GreenTravel */;
+			targetProxy = 5A14826424E7ED9400EBB756 /* PBXContainerItemProxy */;
+		};
+		5A14827024E7ED9400EBB756 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5A14824424E7ED9000EBB756 /* GreenTravel */;
+			targetProxy = 5A14826F24E7ED9400EBB756 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		5A14825124E7ED9100EBB756 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A14825224E7ED9100EBB756 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5A14825924E7ED9400EBB756 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A14825A24E7ED9400EBB756 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5A14827524E7ED9400EBB756 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		5A14827624E7ED9400EBB756 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5A14827824E7ED9400EBB756 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NWSTPFC433;
+				INFOPLIST_FILE = GreenTravel/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = by.gov.nasb.GreenTravel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5A14827924E7ED9400EBB756 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NWSTPFC433;
+				INFOPLIST_FILE = GreenTravel/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = by.gov.nasb.GreenTravel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		5A14827B24E7ED9400EBB756 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NWSTPFC433;
+				INFOPLIST_FILE = GreenTravelTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = by.gov.nasb.GreenTravelTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GreenTravel.app/GreenTravel";
+			};
+			name = Debug;
+		};
+		5A14827C24E7ED9400EBB756 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NWSTPFC433;
+				INFOPLIST_FILE = GreenTravelTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = by.gov.nasb.GreenTravelTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GreenTravel.app/GreenTravel";
+			};
+			name = Release;
+		};
+		5A14827E24E7ED9400EBB756 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NWSTPFC433;
+				INFOPLIST_FILE = GreenTravelUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = by.gov.nasb.GreenTravelUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GreenTravel;
+			};
+			name = Debug;
+		};
+		5A14827F24E7ED9400EBB756 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NWSTPFC433;
+				INFOPLIST_FILE = GreenTravelUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = by.gov.nasb.GreenTravelUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GreenTravel;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5A14824024E7ED9000EBB756 /* Build configuration list for PBXProject "GreenTravel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A14827524E7ED9400EBB756 /* Debug */,
+				5A14827624E7ED9400EBB756 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A14827724E7ED9400EBB756 /* Build configuration list for PBXNativeTarget "GreenTravel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A14827824E7ED9400EBB756 /* Debug */,
+				5A14827924E7ED9400EBB756 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A14827A24E7ED9400EBB756 /* Build configuration list for PBXNativeTarget "GreenTravelTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A14827B24E7ED9400EBB756 /* Debug */,
+				5A14827C24E7ED9400EBB756 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A14827D24E7ED9400EBB756 /* Build configuration list for PBXNativeTarget "GreenTravelUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A14827E24E7ED9400EBB756 /* Debug */,
+				5A14827F24E7ED9400EBB756 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		5A14825424E7ED9100EBB756 /* GreenTravel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5A14825524E7ED9100EBB756 /* GreenTravel.xcdatamodel */,
+			);
+			currentVersion = 5A14825524E7ED9100EBB756 /* GreenTravel.xcdatamodel */;
+			path = GreenTravel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 5A14823D24E7ED9000EBB756 /* Project object */;
+}
