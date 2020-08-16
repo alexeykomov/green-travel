@@ -39,6 +39,12 @@
 	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Montserrat-Regular</string>
+		<string>Montserrat-SemiBold</string>
+		<string>Montserrat-Bold</string>
+	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

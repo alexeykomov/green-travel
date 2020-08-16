@@ -8,8 +8,13 @@
 
 #import "PlacesTableViewCell.h"
 #import "PhotoCollectionViewCell.h"
+#import "Colors.h"
 
 static NSString * const kPhotoCellId = @"photoCellId";
+
+@interface PlacesTableViewCell ()
+
+@end
 
 @implementation PlacesTableViewCell
 
@@ -38,6 +43,17 @@ static NSString * const kPhotoCellId = @"photoCellId";
     collectionView.delegate = self;
     
     [self addSubview:collectionView];
+    self.backgroundColor = [Colors get].green;
+    
+    self.headerLabel = [[UILabel alloc] init];
+    [self addSubview:self.headerLabel];
+    [self.headerLabel setFont:[UIFont fontWithName:@"Montserrat-Bold" size:12.0]];
+    
+    self.headerLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.headerLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [self.headerLabel.topAnchor constraintEqualToAnchor:self.topAnchor]
+    ]];
 }
 
 #pragma mark - Collection view

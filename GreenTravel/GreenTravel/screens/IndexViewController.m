@@ -8,11 +8,13 @@
 #import "TextUtils.h"
 #import "IndexViewController.h"
 #import "PlacesTableViewCell.h"
+#import "PlacesItem.h"
 
 @interface IndexViewController ()
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *contentView;
+@property (strong, nonatomic) NSMutableArray<PlacesItem *> *dataSouce;
 
 @end
 
@@ -50,6 +52,20 @@ static CGFloat kTableRowHeight = 100.0;
     
 #pragma mark - Table view
     [self.tableView registerClass:PlacesTableViewCell.class forCellReuseIdentifier:kCollectionCellId];
+    self.dataSouce = [[NSMutableArray alloc] init];
+    PlacesItem *territory = [[PlacesItem alloc] init];
+    territory.header = @"Заповедные территории";
+    
+    PlacesItem *paths = [[PlacesItem alloc] init];
+    paths.header = @"Маршруты";
+    
+    PlacesItem *historicalPlaces = [[PlacesItem alloc] init];
+    historicalPlaces.header = @"Исторические места";
+    
+    PlacesItem *excursions = [[PlacesItem alloc] init];
+    excursions.header = @"Экскурсии";
+        
+    [self.dataSouce addObjectsFromArray:@[territory, paths, historicalPlaces, excursions]];
 }
 
 UIImage* getImageFromGradientLayer(CAGradientLayer* gradient) {
@@ -74,11 +90,15 @@ UIImage* getImageFromGradientLayer(CAGradientLayer* gradient) {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 4;
+    return [self.dataSouce count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     PlacesTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kCollectionCellId forIndexPath:indexPath];
+    
+    cell.headerLabel.attributedText = getAttributedString([self.dataSouce[indexPath.row].header uppercaseString], [Colors get].black, 12.0, UIFontWeightBold);
+    self.dataSouce[indexPath.row].header;
+    
     return cell;
 }
 

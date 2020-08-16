@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PlacesTableViewCell : UITableViewCell<UICollectionViewDelegate>
 
+@property (strong, nonatomic) UILabel *headerLabel;
+
 @end
 
 NS_ASSUME_NONNULL_END
