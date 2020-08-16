@@ -7,6 +7,7 @@
 //
 
 #import "BookmarksViewController.h"
+#import "Colors.h"
 
 @interface BookmarksViewController ()
 
@@ -17,6 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [Colors get].white;
 }
 
 /*

@@ -1,8 +1,8 @@
 //
-//  MainContentViewController.h
+//  PhotoCollectionViewCell.h
 //  GreenTravel
 //
-//  Created by Alex K on 8/15/20.
+//  Created by Alex K on 8/16/20.
 //  Copyright © 2020 Alex K. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MainContentViewController : UITabBarController
+@interface PhotoCollectionViewCell : UICollectionViewCell
 
 @end
 

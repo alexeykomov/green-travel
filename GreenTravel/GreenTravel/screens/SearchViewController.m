@@ -1,24 +1,22 @@
 //
-//  MapViewController.m
+//  SearchViewController.m
 //  GreenTravel
 //
-//  Created by Alex K on 8/15/20.
+//  Created by Alex K on 8/16/20.
 //  Copyright © 2020 Alex K. All rights reserved.
 //
 
-#import "MapViewController.h"
-#import "Colors.h"
+#import "SearchViewController.h"
 
-@interface MapViewController ()
+@interface SearchViewController ()
 
 @end
 
-@implementation MapViewController
+@implementation SearchViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [Colors get].white;
 }
 
 /*

@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) UIColor *red;
 @property (strong, nonatomic) UIColor *blue;
 @property (strong, nonatomic) UIColor *green;
+@property (strong, nonatomic) UIColor *shamrock;
 @property (strong, nonatomic) UIColor *yellow;
 @property (strong, nonatomic) UIColor *yellowHighlighted;
 @property (strong, nonatomic) UIColor *grey;

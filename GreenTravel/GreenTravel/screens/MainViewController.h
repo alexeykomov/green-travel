@@ -1,5 +1,5 @@
 //
-//  MainViewController.h
+//  MainContentViewController.h
 //  GreenTravel
 //
 //  Created by Alex K on 8/15/20.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MainViewController : UIViewController
+@interface MainViewController : UITabBarController
 
 @end
 

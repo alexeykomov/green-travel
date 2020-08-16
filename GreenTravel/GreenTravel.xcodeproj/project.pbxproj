@@ -10,7 +10,6 @@
 		5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824924E7ED9100EBB756 /* AppDelegate.m */; };
 		5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824C24E7ED9100EBB756 /* SceneDelegate.m */; };
 		5A14825024E7ED9100EBB756 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824F24E7ED9100EBB756 /* ViewController.m */; };
-		5A14825324E7ED9100EBB756 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A14825124E7ED9100EBB756 /* Main.storyboard */; };
 		5A14825624E7ED9100EBB756 /* GreenTravel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5A14825424E7ED9100EBB756 /* GreenTravel.xcdatamodeld */; };
 		5A14825824E7ED9400EBB756 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A14825724E7ED9400EBB756 /* Assets.xcassets */; };
 		5A14825B24E7ED9400EBB756 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A14825924E7ED9400EBB756 /* LaunchScreen.storyboard */; };
@@ -18,12 +17,14 @@
 		5A14826824E7ED9400EBB756 /* GreenTravelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14826724E7ED9400EBB756 /* GreenTravelTests.m */; };
 		5A14827324E7ED9400EBB756 /* GreenTravelUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14827224E7ED9400EBB756 /* GreenTravelUITests.m */; };
 		5A14828324E7F92300EBB756 /* Colors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14828224E7F92300EBB756 /* Colors.m */; };
-		5A14828724E807E800EBB756 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14828624E807E800EBB756 /* MainViewController.m */; };
-		5A14828A24E80E3900EBB756 /* MainContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14828924E80E3900EBB756 /* MainContentViewController.m */; };
+		5A14828A24E80E3900EBB756 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14828924E80E3900EBB756 /* MainViewController.m */; };
 		5A14828D24E8101A00EBB756 /* IndexViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14828C24E8101A00EBB756 /* IndexViewController.m */; };
 		5A14829024E8102B00EBB756 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14828F24E8102B00EBB756 /* MapViewController.m */; };
 		5A14829324E8103400EBB756 /* BookmarksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14829224E8103400EBB756 /* BookmarksViewController.m */; };
 		5A14829624E812BF00EBB756 /* TextUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14829524E812BF00EBB756 /* TextUtils.m */; };
+		5A14829B24E9440C00EBB756 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14829A24E9440C00EBB756 /* SearchViewController.m */; };
+		5A14829E24E9501100EBB756 /* PlacesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14829D24E9501100EBB756 /* PlacesTableViewCell.m */; };
+		5A1482A124E9527700EBB756 /* PhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482A024E9527700EBB756 /* PhotoCollectionViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,7 +52,6 @@
 		5A14824C24E7ED9100EBB756 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		5A14824E24E7ED9100EBB756 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		5A14824F24E7ED9100EBB756 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		5A14825224E7ED9100EBB756 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5A14825524E7ED9100EBB756 /* GreenTravel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GreenTravel.xcdatamodel; sourceTree = "<group>"; };
 		5A14825724E7ED9400EBB756 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A14825A24E7ED9400EBB756 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -65,10 +65,8 @@
 		5A14827424E7ED9400EBB756 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A14828124E7F92300EBB756 /* Colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
 		5A14828224E7F92300EBB756 /* Colors.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Colors.m; sourceTree = "<group>"; };
-		5A14828524E807E800EBB756 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
-		5A14828624E807E800EBB756 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		5A14828824E80E3900EBB756 /* MainContentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainContentViewController.h; sourceTree = "<group>"; };
-		5A14828924E80E3900EBB756 /* MainContentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainContentViewController.m; sourceTree = "<group>"; };
+		5A14828824E80E3900EBB756 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		5A14828924E80E3900EBB756 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		5A14828B24E8101A00EBB756 /* IndexViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexViewController.h; sourceTree = "<group>"; };
 		5A14828C24E8101A00EBB756 /* IndexViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexViewController.m; sourceTree = "<group>"; };
 		5A14828E24E8102B00EBB756 /* MapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
@@ -77,6 +75,12 @@
 		5A14829224E8103400EBB756 /* BookmarksViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookmarksViewController.m; sourceTree = "<group>"; };
 		5A14829424E812BF00EBB756 /* TextUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextUtils.h; sourceTree = "<group>"; };
 		5A14829524E812BF00EBB756 /* TextUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextUtils.m; sourceTree = "<group>"; };
+		5A14829924E9440C00EBB756 /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		5A14829A24E9440C00EBB756 /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
+		5A14829C24E9501100EBB756 /* PlacesTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlacesTableViewCell.h; sourceTree = "<group>"; };
+		5A14829D24E9501100EBB756 /* PlacesTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlacesTableViewCell.m; sourceTree = "<group>"; };
+		5A14829F24E9527700EBB756 /* PhotoCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionViewCell.h; sourceTree = "<group>"; };
+		5A1482A024E9527700EBB756 /* PhotoCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectionViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,14 +131,10 @@
 		5A14824724E7ED9100EBB756 /* GreenTravel */ = {
 			isa = PBXGroup;
 			children = (
+				5A14829824E8915A00EBB756 /* app */,
 				5A14828424E800F200EBB756 /* screens */,
-				5A14824824E7ED9100EBB756 /* AppDelegate.h */,
-				5A14824924E7ED9100EBB756 /* AppDelegate.m */,
-				5A14824B24E7ED9100EBB756 /* SceneDelegate.h */,
-				5A14824C24E7ED9100EBB756 /* SceneDelegate.m */,
 				5A14824E24E7ED9100EBB756 /* ViewController.h */,
 				5A14824F24E7ED9100EBB756 /* ViewController.m */,
-				5A14825124E7ED9100EBB756 /* Main.storyboard */,
 				5A14828024E7F91000EBB756 /* utilities */,
 				5A14825724E7ED9400EBB756 /* Assets.xcassets */,
 				5A14825924E7ED9400EBB756 /* LaunchScreen.storyboard */,
@@ -177,18 +177,49 @@
 		5A14828424E800F200EBB756 /* screens */ = {
 			isa = PBXGroup;
 			children = (
-				5A14828524E807E800EBB756 /* MainViewController.h */,
-				5A14828624E807E800EBB756 /* MainViewController.m */,
-				5A14828824E80E3900EBB756 /* MainContentViewController.h */,
-				5A14828924E80E3900EBB756 /* MainContentViewController.m */,
+				5A14828824E80E3900EBB756 /* MainViewController.h */,
+				5A14828924E80E3900EBB756 /* MainViewController.m */,
 				5A14828B24E8101A00EBB756 /* IndexViewController.h */,
 				5A14828C24E8101A00EBB756 /* IndexViewController.m */,
+				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
+				5A14829924E9440C00EBB756 /* SearchViewController.h */,
+				5A14829A24E9440C00EBB756 /* SearchViewController.m */,
 				5A14828E24E8102B00EBB756 /* MapViewController.h */,
 				5A14828F24E8102B00EBB756 /* MapViewController.m */,
 				5A14829124E8103400EBB756 /* BookmarksViewController.h */,
 				5A14829224E8103400EBB756 /* BookmarksViewController.m */,
 			);
 			path = screens;
+			sourceTree = "<group>";
+		};
+		5A14829824E8915A00EBB756 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				5A14824824E7ED9100EBB756 /* AppDelegate.h */,
+				5A14824924E7ED9100EBB756 /* AppDelegate.m */,
+				5A14824B24E7ED9100EBB756 /* SceneDelegate.h */,
+				5A14824C24E7ED9100EBB756 /* SceneDelegate.m */,
+			);
+			path = app;
+			sourceTree = "<group>";
+		};
+		5A1482A224E9578800EBB756 /* PlacesTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				5A14829C24E9501100EBB756 /* PlacesTableViewCell.h */,
+				5A14829D24E9501100EBB756 /* PlacesTableViewCell.m */,
+				5A1482A324E9579A00EBB756 /* PhotoCollectionViewCell */,
+			);
+			path = PlacesTableViewCell;
+			sourceTree = "<group>";
+		};
+		5A1482A324E9579A00EBB756 /* PhotoCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				5A14829F24E9527700EBB756 /* PhotoCollectionViewCell.h */,
+				5A1482A024E9527700EBB756 /* PhotoCollectionViewCell.m */,
+			);
+			path = PhotoCollectionViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -296,7 +327,6 @@
 			files = (
 				5A14825B24E7ED9400EBB756 /* LaunchScreen.storyboard in Resources */,
 				5A14825824E7ED9400EBB756 /* Assets.xcassets in Resources */,
-				5A14825324E7ED9100EBB756 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,17 +351,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A14829E24E9501100EBB756 /* PlacesTableViewCell.m in Sources */,
 				5A14825E24E7ED9400EBB756 /* main.m in Sources */,
 				5A14828324E7F92300EBB756 /* Colors.m in Sources */,
 				5A14828D24E8101A00EBB756 /* IndexViewController.m in Sources */,
 				5A14825024E7ED9100EBB756 /* ViewController.m in Sources */,
 				5A14829624E812BF00EBB756 /* TextUtils.m in Sources */,
 				5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */,
-				5A14828724E807E800EBB756 /* MainViewController.m in Sources */,
-				5A14828A24E80E3900EBB756 /* MainContentViewController.m in Sources */,
+				5A1482A124E9527700EBB756 /* PhotoCollectionViewCell.m in Sources */,
+				5A14828A24E80E3900EBB756 /* MainViewController.m in Sources */,
 				5A14829024E8102B00EBB756 /* MapViewController.m in Sources */,
 				5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */,
 				5A14829324E8103400EBB756 /* BookmarksViewController.m in Sources */,
+				5A14829B24E9440C00EBB756 /* SearchViewController.m in Sources */,
 				5A14825624E7ED9100EBB756 /* GreenTravel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -368,14 +400,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		5A14825124E7ED9100EBB756 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5A14825224E7ED9100EBB756 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		5A14825924E7ED9400EBB756 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
