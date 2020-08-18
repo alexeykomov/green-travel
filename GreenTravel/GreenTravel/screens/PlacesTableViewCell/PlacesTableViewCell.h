@@ -10,9 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PlacesTableViewCell : UITableViewCell<UICollectionViewDelegate>
+@class PlacesItem;
 
-@property (strong, nonatomic) UILabel *headerLabel;
+@interface PlacesTableViewCell : UITableViewCell<UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
+
+- (void)update:(PlacesItem *)item; 
 
 @end
 

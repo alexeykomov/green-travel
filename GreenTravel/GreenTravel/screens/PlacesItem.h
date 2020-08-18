@@ -10,10 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class ParticularPlaceItem;
+
 @interface PlacesItem : NSObject
 
 @property (strong, nonatomic) NSString *header;
-@property (strong, nonatomic) NSString *moreLabel;
+@property (strong, nonatomic) NSArray<ParticularPlaceItem *> *items; 
 
 @end
 

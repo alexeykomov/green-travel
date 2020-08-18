@@ -9,6 +9,7 @@
 #import "IndexViewController.h"
 #import "PlacesTableViewCell.h"
 #import "PlacesItem.h"
+#import "ParticularPlaceItem.h"
 
 @interface IndexViewController ()
 
@@ -55,6 +56,13 @@ static CGFloat kTableRowHeight = 100.0;
     self.dataSouce = [[NSMutableArray alloc] init];
     PlacesItem *territory = [[PlacesItem alloc] init];
     territory.header = @"Заповедные территории";
+    NSMutableArray *territoryItems = [[NSMutableArray alloc] init];
+    ParticularPlaceItem *itemA = [[ParticularPlaceItem alloc] init];
+    itemA.name = @"Беловежская пуща";
+    ParticularPlaceItem *itemB = [[ParticularPlaceItem alloc] init];
+    itemA.name = @"Березинский биосферный заповедник";
+    [territoryItems addObjectsFromArray:@[itemA, itemB]];
+    territory.items = territoryItems;
     
     PlacesItem *paths = [[PlacesItem alloc] init];
     paths.header = @"Маршруты";
@@ -96,9 +104,8 @@ UIImage* getImageFromGradientLayer(CAGradientLayer* gradient) {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     PlacesTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kCollectionCellId forIndexPath:indexPath];
     
-    cell.headerLabel.attributedText = getAttributedString([self.dataSouce[indexPath.row].header uppercaseString], [Colors get].black, 12.0, UIFontWeightBold);
-    self.dataSouce[indexPath.row].header;
-    
+    [cell update:self.dataSouce[indexPath.row]];
+
     return cell;
 }
 

@@ -44,6 +44,7 @@
 		5A1482C924E9DD9000EBB756 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482B724E9DD9000EBB756 /* Montserrat-SemiBold.ttf */; };
 		5A1482CA24E9DD9000EBB756 /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482B824E9DD9000EBB756 /* Montserrat-BoldItalic.ttf */; };
 		5A1482CB24E9DD9000EBB756 /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482B924E9DD9000EBB756 /* Montserrat-ThinItalic.ttf */; };
+		5A1482CE24EB091300EBB756 /* ParticularPlaceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482CD24EB091300EBB756 /* ParticularPlaceItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +121,8 @@
 		5A1482B724E9DD9000EBB756 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
 		5A1482B824E9DD9000EBB756 /* Montserrat-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-BoldItalic.ttf"; sourceTree = "<group>"; };
 		5A1482B924E9DD9000EBB756 /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; };
+		5A1482CC24EB091300EBB756 /* ParticularPlaceItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParticularPlaceItem.h; sourceTree = "<group>"; };
+		5A1482CD24EB091300EBB756 /* ParticularPlaceItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParticularPlaceItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +226,8 @@
 				5A14828C24E8101A00EBB756 /* IndexViewController.m */,
 				5A1482A424E9CF2300EBB756 /* PlacesItem.h */,
 				5A1482A524E9CF2300EBB756 /* PlacesItem.m */,
+				5A1482CC24EB091300EBB756 /* ParticularPlaceItem.h */,
+				5A1482CD24EB091300EBB756 /* ParticularPlaceItem.m */,
 				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
 				5A14829924E9440C00EBB756 /* SearchViewController.h */,
 				5A14829A24E9440C00EBB756 /* SearchViewController.m */,
@@ -447,6 +452,7 @@
 				5A1482A124E9527700EBB756 /* PhotoCollectionViewCell.m in Sources */,
 				5A14828A24E80E3900EBB756 /* MainViewController.m in Sources */,
 				5A14829024E8102B00EBB756 /* MapViewController.m in Sources */,
+				5A1482CE24EB091300EBB756 /* ParticularPlaceItem.m in Sources */,
 				5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */,
 				5A14829324E8103400EBB756 /* BookmarksViewController.m in Sources */,
 				5A14829B24E9440C00EBB756 /* SearchViewController.m in Sources */,
