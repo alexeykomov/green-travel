@@ -10,6 +10,9 @@
 #import "PlacesTableViewCell.h"
 #import "PlacesItem.h"
 #import "ParticularPlaceItem.h"
+#import "DetailsViewController.h"
+#import "SearchViewController.h"
+#import "PlacesViewController.h"
 
 @interface IndexViewController ()
 
@@ -20,7 +23,7 @@
 @end
 
 static NSString * const kCollectionCellId = @"collectionCellId";
-static CGFloat kTableRowHeight = 100.0;
+static CGFloat kTableRowHeight = 210.0;
 
 @implementation IndexViewController
 
@@ -54,15 +57,35 @@ static CGFloat kTableRowHeight = 100.0;
 #pragma mark - Table view
     [self.tableView registerClass:PlacesTableViewCell.class forCellReuseIdentifier:kCollectionCellId];
     self.dataSouce = [[NSMutableArray alloc] init];
+    self.tableView.allowsSelection = NO;
     PlacesItem *territory = [[PlacesItem alloc] init];
     territory.header = @"Заповедные территории";
     NSMutableArray *territoryItems = [[NSMutableArray alloc] init];
     ParticularPlaceItem *itemA = [[ParticularPlaceItem alloc] init];
+    __weak typeof(self) weakSelf = self;
+    __weak typeof(itemA) weakItemA = itemA;
+    itemA.onPlaceCellPress = ^void (ParticularPlaceItem *item) {
+        DetailsViewController *detailsController = [[DetailsViewController alloc] init];
+        detailsController.item = weakItemA;
+        [weakSelf.navigationController pushViewController:detailsController animated:YES];
+    };
     itemA.name = @"Беловежская пуща";
     ParticularPlaceItem *itemB = [[ParticularPlaceItem alloc] init];
-    itemA.name = @"Березинский биосферный заповедник";
+    itemB.name = @"Березинский биосферный заповедник";
+    __weak typeof(itemB) weakItemB = itemB;
+    itemB.onPlaceCellPress = ^void (ParticularPlaceItem *item) {
+        DetailsViewController *detailsController = [[DetailsViewController alloc] init];
+        
+        detailsController.item = weakItemB;
+        [weakSelf.navigationController pushViewController:detailsController animated:YES];
+    };
     [territoryItems addObjectsFromArray:@[itemA, itemB]];
     territory.items = territoryItems;
+    territory.onAllButtonPress = ^void (PlacesItem *item) {
+        PlacesViewController *placesController = [[PlacesViewController alloc] init];
+        placesController.item = item;
+        [weakSelf.navigationController pushViewController:placesController animated:YES];
+    };
     
     PlacesItem *paths = [[PlacesItem alloc] init];
     paths.header = @"Маршруты";
@@ -88,7 +111,7 @@ UIImage* getImageFromGradientLayer(CAGradientLayer* gradient) {
 }
 
 - (void) onSearchPress:(id)sender {
-    
+    [self.navigationController pushViewController:[[SearchViewController alloc] init] animated:NO];
 }
 
 #pragma mark - Table data source

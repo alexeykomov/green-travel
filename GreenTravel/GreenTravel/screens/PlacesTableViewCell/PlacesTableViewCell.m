@@ -11,6 +11,7 @@
 #import "Colors.h"
 #import "TextUtils.h"
 #import "PlacesItem.h"
+#import "ParticularPlaceItem.h"
 
 static NSString * const kPhotoCellId = @"photoCellId";
 
@@ -20,6 +21,7 @@ static NSString * const kPhotoCellId = @"photoCellId";
 @property (strong, nonatomic) UIButton *allButton;
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray<ParticularPlaceItem *> *dataSource;
+@property (strong, nonatomic) PlacesItem *item;
 
 @end
 
@@ -45,24 +47,6 @@ static NSString * const kPhotoCellId = @"photoCellId";
 }
 
 - (void)setUp {
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
-    [self.collectionView registerClass:PhotoCollectionViewCell.class forCellWithReuseIdentifier:kPhotoCellId];
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-    self.collectionView.backgroundColor = [Colors get].green;
-    self.collectionView.alwaysBounceHorizontal = YES;
-    
-    [self addSubview:self.collectionView];
-    self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
-    [NSLayoutConstraint activateConstraints:@[
-        [self.collectionView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:10.0],
-        [self.collectionView.topAnchor constraintEqualToAnchor:self.topAnchor constant:10.0],
-        [self.collectionView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10.0],
-        [self.collectionView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-10.0],
-    ]];
-    
     self.headerLabel = [[UILabel alloc] init];
     [self addSubview:self.headerLabel];
     [self.headerLabel setFont:[UIFont fontWithName:@"Montserrat-Bold" size:12.0]];
@@ -73,9 +57,29 @@ static NSString * const kPhotoCellId = @"photoCellId";
         [self.headerLabel.topAnchor constraintEqualToAnchor:self.topAnchor constant:24.0]
     ]];
     
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
+    [self.collectionView registerClass:PhotoCollectionViewCell.class forCellWithReuseIdentifier:kPhotoCellId];
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+    self.collectionView.backgroundColor = [Colors get].white;
+    self.collectionView.alwaysBounceHorizontal = YES;
+    
+    [self addSubview:self.collectionView];
+    self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.collectionView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
+        [self.collectionView.topAnchor constraintEqualToAnchor:self.headerLabel.bottomAnchor constant:16.0],
+        [self.collectionView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10.0],
+        [self.collectionView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-10.0],
+    ]];
+    
     self.allButton = [[UIButton alloc] init];
     [self addSubview:self.allButton];
-    [self.allButton setAttributedTitle:getAttributedString(@"Все", [Colors get].green, 12.0, UIFontWeightRegular) forState:UIControlStateNormal];
+    [self.allButton.titleLabel setFont:[UIFont fontWithName:@"Montserrat-Semibold" size:12.0]];
+    [self.allButton setAttributedTitle:getAttributedString(@"Все", [Colors get].green, 12.0, UIFontWeightSemibold) forState:UIControlStateNormal];
+    [self.allButton addTarget:self action:@selector(onAllButtonPress:) forControlEvents:UIControlEventTouchUpInside];
     
     self.allButton.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
@@ -87,6 +91,7 @@ static NSString * const kPhotoCellId = @"photoCellId";
 - (void)update:(PlacesItem *)item {
     self.headerLabel.attributedText = getAttributedString([item.header uppercaseString], [Colors get].black, 12.0, UIFontWeightBold);
     self.dataSource = item.items;
+    self.item = item;
     [self.collectionView reloadData];
 }
 
@@ -106,6 +111,21 @@ static NSString * const kPhotoCellId = @"photoCellId";
     PhotoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kPhotoCellId forIndexPath:indexPath];
     
     return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(324.0, 144.0);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"Did select item at index path: %@", indexPath);
+    ParticularPlaceItem *item = self.dataSource[indexPath.row];
+    
+    item.onPlaceCellPress(item);
+}
+
+- (void)onAllButtonPress:(id)sender {
+    self.item.onAllButtonPress(self.item);
 }
 
 @end

@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSString *name;
 
+@property (strong, nonatomic) void (^onPlaceCellPress)(ParticularPlaceItem *);
+
 @end 
 
 NS_ASSUME_NONNULL_END

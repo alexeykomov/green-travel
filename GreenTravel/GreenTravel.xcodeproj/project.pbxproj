@@ -45,6 +45,18 @@
 		5A1482CA24E9DD9000EBB756 /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482B824E9DD9000EBB756 /* Montserrat-BoldItalic.ttf */; };
 		5A1482CB24E9DD9000EBB756 /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482B924E9DD9000EBB756 /* Montserrat-ThinItalic.ttf */; };
 		5A1482CE24EB091300EBB756 /* ParticularPlaceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482CD24EB091300EBB756 /* ParticularPlaceItem.m */; };
+		5A1482D924EC617F00EBB756 /* OpenSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482CF24EC617E00EBB756 /* OpenSans-ExtraBoldItalic.ttf */; };
+		5A1482DA24EC617F00EBB756 /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482D024EC617E00EBB756 /* OpenSans-Italic.ttf */; };
+		5A1482DB24EC617F00EBB756 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482D124EC617E00EBB756 /* OpenSans-Light.ttf */; };
+		5A1482DC24EC617F00EBB756 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482D224EC617E00EBB756 /* OpenSans-Regular.ttf */; };
+		5A1482DD24EC617F00EBB756 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482D324EC617E00EBB756 /* OpenSans-SemiBold.ttf */; };
+		5A1482DE24EC617F00EBB756 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482D424EC617E00EBB756 /* OpenSans-ExtraBold.ttf */; };
+		5A1482DF24EC617F00EBB756 /* OpenSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482D524EC617F00EBB756 /* OpenSans-SemiBoldItalic.ttf */; };
+		5A1482E024EC617F00EBB756 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482D624EC617F00EBB756 /* OpenSans-BoldItalic.ttf */; };
+		5A1482E124EC617F00EBB756 /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482D724EC617F00EBB756 /* OpenSans-LightItalic.ttf */; };
+		5A1482E224EC617F00EBB756 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482D824EC617F00EBB756 /* OpenSans-Bold.ttf */; };
+		5A1482E624EC80FC00EBB756 /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482E524EC80FC00EBB756 /* DetailsViewController.m */; };
+		5A1482E924EC8C2C00EBB756 /* PlacesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482E824EC8C2C00EBB756 /* PlacesViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +135,20 @@
 		5A1482B924E9DD9000EBB756 /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; };
 		5A1482CC24EB091300EBB756 /* ParticularPlaceItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParticularPlaceItem.h; sourceTree = "<group>"; };
 		5A1482CD24EB091300EBB756 /* ParticularPlaceItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParticularPlaceItem.m; sourceTree = "<group>"; };
+		5A1482CF24EC617E00EBB756 /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		5A1482D024EC617E00EBB756 /* OpenSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Italic.ttf"; sourceTree = "<group>"; };
+		5A1482D124EC617E00EBB756 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
+		5A1482D224EC617E00EBB756 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		5A1482D324EC617E00EBB756 /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		5A1482D424EC617E00EBB756 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		5A1482D524EC617F00EBB756 /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		5A1482D624EC617F00EBB756 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
+		5A1482D724EC617F00EBB756 /* OpenSans-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-LightItalic.ttf"; sourceTree = "<group>"; };
+		5A1482D824EC617F00EBB756 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		5A1482E424EC80FC00EBB756 /* DetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsViewController.h; sourceTree = "<group>"; };
+		5A1482E524EC80FC00EBB756 /* DetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
+		5A1482E724EC8C2C00EBB756 /* PlacesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlacesViewController.h; sourceTree = "<group>"; };
+		5A1482E824EC8C2C00EBB756 /* PlacesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlacesViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +203,7 @@
 				5A14828424E800F200EBB756 /* screens */,
 				5A14824E24E7ED9100EBB756 /* ViewController.h */,
 				5A14824F24E7ED9100EBB756 /* ViewController.m */,
+				5A1482E324EC80AB00EBB756 /* model */,
 				5A14828024E7F91000EBB756 /* utilities */,
 				5A1482A724E9DD7600EBB756 /* fonts */,
 				5A14825724E7ED9400EBB756 /* Assets.xcassets */,
@@ -224,13 +251,13 @@
 				5A14828924E80E3900EBB756 /* MainViewController.m */,
 				5A14828B24E8101A00EBB756 /* IndexViewController.h */,
 				5A14828C24E8101A00EBB756 /* IndexViewController.m */,
-				5A1482A424E9CF2300EBB756 /* PlacesItem.h */,
-				5A1482A524E9CF2300EBB756 /* PlacesItem.m */,
-				5A1482CC24EB091300EBB756 /* ParticularPlaceItem.h */,
-				5A1482CD24EB091300EBB756 /* ParticularPlaceItem.m */,
 				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
 				5A14829924E9440C00EBB756 /* SearchViewController.h */,
 				5A14829A24E9440C00EBB756 /* SearchViewController.m */,
+				5A1482E424EC80FC00EBB756 /* DetailsViewController.h */,
+				5A1482E524EC80FC00EBB756 /* DetailsViewController.m */,
+				5A1482E724EC8C2C00EBB756 /* PlacesViewController.h */,
+				5A1482E824EC8C2C00EBB756 /* PlacesViewController.m */,
 				5A14828E24E8102B00EBB756 /* MapViewController.h */,
 				5A14828F24E8102B00EBB756 /* MapViewController.m */,
 				5A14829124E8103400EBB756 /* BookmarksViewController.h */,
@@ -272,6 +299,16 @@
 		5A1482A724E9DD7600EBB756 /* fonts */ = {
 			isa = PBXGroup;
 			children = (
+				5A1482D824EC617F00EBB756 /* OpenSans-Bold.ttf */,
+				5A1482D624EC617F00EBB756 /* OpenSans-BoldItalic.ttf */,
+				5A1482D424EC617E00EBB756 /* OpenSans-ExtraBold.ttf */,
+				5A1482CF24EC617E00EBB756 /* OpenSans-ExtraBoldItalic.ttf */,
+				5A1482D024EC617E00EBB756 /* OpenSans-Italic.ttf */,
+				5A1482D124EC617E00EBB756 /* OpenSans-Light.ttf */,
+				5A1482D724EC617F00EBB756 /* OpenSans-LightItalic.ttf */,
+				5A1482D224EC617E00EBB756 /* OpenSans-Regular.ttf */,
+				5A1482D324EC617E00EBB756 /* OpenSans-SemiBold.ttf */,
+				5A1482D524EC617F00EBB756 /* OpenSans-SemiBoldItalic.ttf */,
 				5A1482A824E9DD8F00EBB756 /* Montserrat-Black.ttf */,
 				5A1482A924E9DD8F00EBB756 /* Montserrat-BlackItalic.ttf */,
 				5A1482AF24E9DD8F00EBB756 /* Montserrat-Bold.ttf */,
@@ -292,6 +329,17 @@
 				5A1482B924E9DD9000EBB756 /* Montserrat-ThinItalic.ttf */,
 			);
 			path = fonts;
+			sourceTree = "<group>";
+		};
+		5A1482E324EC80AB00EBB756 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				5A1482A424E9CF2300EBB756 /* PlacesItem.h */,
+				5A1482A524E9CF2300EBB756 /* PlacesItem.m */,
+				5A1482CC24EB091300EBB756 /* ParticularPlaceItem.h */,
+				5A1482CD24EB091300EBB756 /* ParticularPlaceItem.m */,
+			);
+			path = model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -398,25 +446,35 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A1482C124E9DD9000EBB756 /* Montserrat-Bold.ttf in Resources */,
+				5A1482DA24EC617F00EBB756 /* OpenSans-Italic.ttf in Resources */,
+				5A1482D924EC617F00EBB756 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
 				5A1482C024E9DD9000EBB756 /* Montserrat-ExtraBoldItalic.ttf in Resources */,
 				5A1482C624E9DD9000EBB756 /* Montserrat-ExtraLightItalic.ttf in Resources */,
 				5A1482BE24E9DD9000EBB756 /* Montserrat-Light.ttf in Resources */,
 				5A1482BD24E9DD9000EBB756 /* Montserrat-SemiBoldItalic.ttf in Resources */,
 				5A14825B24E7ED9400EBB756 /* LaunchScreen.storyboard in Resources */,
+				5A1482E224EC617F00EBB756 /* OpenSans-Bold.ttf in Resources */,
 				5A1482C924E9DD9000EBB756 /* Montserrat-SemiBold.ttf in Resources */,
+				5A1482DF24EC617F00EBB756 /* OpenSans-SemiBoldItalic.ttf in Resources */,
+				5A1482E024EC617F00EBB756 /* OpenSans-BoldItalic.ttf in Resources */,
 				5A1482BB24E9DD9000EBB756 /* Montserrat-BlackItalic.ttf in Resources */,
 				5A1482C224E9DD9000EBB756 /* Montserrat-ExtraLight.ttf in Resources */,
 				5A14825824E7ED9400EBB756 /* Assets.xcassets in Resources */,
 				5A1482C424E9DD9000EBB756 /* Montserrat-ExtraBold.ttf in Resources */,
 				5A1482C724E9DD9000EBB756 /* Montserrat-MediumItalic.ttf in Resources */,
 				5A1482C324E9DD9000EBB756 /* Montserrat-LightItalic.ttf in Resources */,
+				5A1482DB24EC617F00EBB756 /* OpenSans-Light.ttf in Resources */,
+				5A1482E124EC617F00EBB756 /* OpenSans-LightItalic.ttf in Resources */,
 				5A1482CA24E9DD9000EBB756 /* Montserrat-BoldItalic.ttf in Resources */,
+				5A1482DD24EC617F00EBB756 /* OpenSans-SemiBold.ttf in Resources */,
 				5A1482CB24E9DD9000EBB756 /* Montserrat-ThinItalic.ttf in Resources */,
 				5A1482C824E9DD9000EBB756 /* Montserrat-Thin.ttf in Resources */,
 				5A1482BC24E9DD9000EBB756 /* Montserrat-Regular.ttf in Resources */,
 				5A1482BF24E9DD9000EBB756 /* Montserrat-Medium.ttf in Resources */,
 				5A1482BA24E9DD9000EBB756 /* Montserrat-Black.ttf in Resources */,
+				5A1482DC24EC617F00EBB756 /* OpenSans-Regular.ttf in Resources */,
 				5A1482C524E9DD9000EBB756 /* Montserrat-Italic.ttf in Resources */,
+				5A1482DE24EC617F00EBB756 /* OpenSans-ExtraBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,7 +509,9 @@
 				5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */,
 				5A1482A124E9527700EBB756 /* PhotoCollectionViewCell.m in Sources */,
 				5A14828A24E80E3900EBB756 /* MainViewController.m in Sources */,
+				5A1482E624EC80FC00EBB756 /* DetailsViewController.m in Sources */,
 				5A14829024E8102B00EBB756 /* MapViewController.m in Sources */,
+				5A1482E924EC8C2C00EBB756 /* PlacesViewController.m in Sources */,
 				5A1482CE24EB091300EBB756 /* ParticularPlaceItem.m in Sources */,
 				5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */,
 				5A14829324E8103400EBB756 /* BookmarksViewController.m in Sources */,

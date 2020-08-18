@@ -44,6 +44,7 @@
 		<string>Montserrat-Regular</string>
 		<string>Montserrat-SemiBold</string>
 		<string>Montserrat-Bold</string>
+		<string>OpenSans-Bold</string>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>

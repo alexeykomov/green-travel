@@ -15,7 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PlacesItem : NSObject
 
 @property (strong, nonatomic) NSString *header;
-@property (strong, nonatomic) NSArray<ParticularPlaceItem *> *items; 
+@property (strong, nonatomic) NSArray<ParticularPlaceItem *> *items;
+@property (strong, nonatomic) void (^onAllButtonPress)(PlacesItem *);
 
 @end
 
