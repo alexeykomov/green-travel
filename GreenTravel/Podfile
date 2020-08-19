@@ -1,0 +1,7 @@
+platform :ios, '13.0'
+use_frameworks!
+
+target 'GreenTravel' do
+  pod 'SDWebImage'
+  pod 'Mapbox-iOS-SDK', '~> 6.0.0'
+end

@@ -1,0 +1,26 @@
+PODS:
+  - Mapbox-iOS-SDK (6.0.0):
+    - MapboxMobileEvents (= 0.10.2)
+  - MapboxMobileEvents (0.10.2)
+  - SDWebImage (5.8.1):
+    - SDWebImage/Core (= 5.8.1)
+  - SDWebImage/Core (5.8.1)
+
+DEPENDENCIES:
+  - Mapbox-iOS-SDK (~> 6.0.0)
+  - SDWebImage
+
+SPEC REPOS:
+  trunk:
+    - Mapbox-iOS-SDK
+    - MapboxMobileEvents
+    - SDWebImage
+
+SPEC CHECKSUMS:
+  Mapbox-iOS-SDK: 48ff7550bd459b8494da8ef4d660a668e9187ef0
+  MapboxMobileEvents: 2bc0ca2eedb627b73cf403258dce2b2fa98074a6
+  SDWebImage: e3eae2eda88578db0685a0c88597fdadd9433f05
+
+PODFILE CHECKSUM: 8f8482caa724c450151002a4001a5b53bf460a60
+
+COCOAPODS: 1.8.4

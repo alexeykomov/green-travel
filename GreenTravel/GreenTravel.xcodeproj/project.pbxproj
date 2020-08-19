@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24E780EAC2C979C4EF44C2DD /* Pods_GreenTravel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */; };
 		5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824924E7ED9100EBB756 /* AppDelegate.m */; };
 		5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824C24E7ED9100EBB756 /* SceneDelegate.m */; };
 		5A14825024E7ED9100EBB756 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824F24E7ED9100EBB756 /* ViewController.m */; };
@@ -149,6 +150,9 @@
 		5A1482E524EC80FC00EBB756 /* DetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
 		5A1482E724EC8C2C00EBB756 /* PlacesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlacesViewController.h; sourceTree = "<group>"; };
 		5A1482E824EC8C2C00EBB756 /* PlacesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlacesViewController.m; sourceTree = "<group>"; };
+		72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.debug.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.debug.xcconfig"; sourceTree = "<group>"; };
+		91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GreenTravel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.release.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +160,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24E780EAC2C979C4EF44C2DD /* Pods_GreenTravel.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +188,8 @@
 				5A14826624E7ED9400EBB756 /* GreenTravelTests */,
 				5A14827124E7ED9400EBB756 /* GreenTravelUITests */,
 				5A14824624E7ED9100EBB756 /* Products */,
+				72F07A37AC1DE1BCFA8BD0F1 /* Pods */,
+				8B80FB97708A092B6E0D7523 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -342,6 +349,24 @@
 			path = model;
 			sourceTree = "<group>";
 		};
+		72F07A37AC1DE1BCFA8BD0F1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */,
+				9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		8B80FB97708A092B6E0D7523 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -349,9 +374,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5A14827724E7ED9400EBB756 /* Build configuration list for PBXNativeTarget "GreenTravel" */;
 			buildPhases = (
+				81A3BA4C70CAF422138D64F4 /* [CP] Check Pods Manifest.lock */,
 				5A14824124E7ED9000EBB756 /* Sources */,
 				5A14824224E7ED9000EBB756 /* Frameworks */,
 				5A14824324E7ED9000EBB756 /* Resources */,
+				FBE9B7EF3C7B8A19EF9D6659 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -493,6 +520,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		81A3BA4C70CAF422138D64F4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GreenTravel-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FBE9B7EF3C7B8A19EF9D6659 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GreenTravel/Pods-GreenTravel-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GreenTravel/Pods-GreenTravel-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GreenTravel/Pods-GreenTravel-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5A14824124E7ED9000EBB756 /* Sources */ = {
@@ -675,6 +744,7 @@
 		};
 		5A14827824E7ED9400EBB756 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -693,6 +763,7 @@
 		};
 		5A14827924E7ED9400EBB756 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

@@ -8,6 +8,9 @@
 
 #import "PlacesViewController.h"
 #import "PlacesItem.h"
+#import "PhotoCollectionViewCell.h"
+#import "Colors.h"
+#import "ParticularPlaceItem.h"
 
 @interface PlacesViewController ()
 
@@ -15,13 +18,16 @@
 
 @implementation PlacesViewController
 
-static NSString * const reuseIdentifier = @"Cell";
+static NSString * const kPhotoCellId = @"photoCellId";
+static const CGFloat kCellAspectRatio = 324.0 / 144.0;
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        self = [self initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
+        UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+        [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+        self = [self initWithCollectionViewLayout:flowLayout];
     }
     return self;
 }
@@ -31,11 +37,13 @@ static NSString * const reuseIdentifier = @"Cell";
     
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
-    
+    self.collectionView.backgroundColor = [Colors get].white;
     // Register cell classes
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    [self.collectionView registerClass:[PhotoCollectionViewCell class] forCellWithReuseIdentifier:kPhotoCellId];
+    self.collectionView.alwaysBounceVertical = YES;
     
     self.title = self.item.header;
+    [self.collectionView reloadData];
     
     // Do any additional setup after loading the view.
 }
@@ -54,24 +62,35 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
 #warning Incomplete implementation, return the number of sections
-    return 0;
+    return 1;
 }
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of items
-    return 0;
+    return [self.item.items count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    PhotoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kPhotoCellId forIndexPath:indexPath];
     
-    // Configure the cell
+    
     
     return cell;
 }
 
 #pragma mark <UICollectionViewDelegate>
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    CGFloat maxWidth = self.view.bounds.size.width - 10;
+    return CGSizeMake(maxWidth, maxWidth / kCellAspectRatio);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"Did select item at index path: %@", indexPath);
+    ParticularPlaceItem *item = self.item.items[indexPath.row];
+    item.onPlaceCellPress(item);
+}
 
 /*
 // Uncomment this method to specify if the specified item should be highlighted during tracking
