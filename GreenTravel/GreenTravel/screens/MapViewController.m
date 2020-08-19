@@ -8,6 +8,7 @@
 
 #import "MapViewController.h"
 #import "Colors.h"
+@import Mapbox;
 
 @interface MapViewController ()
 
@@ -18,7 +19,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [Colors get].white;
+    //self.view.backgroundColor = [Colors get].white;
+    
+    NSURL *url = [NSURL URLWithString:@"mapbox://styles/mapbox/streets-v11"];
+    MGLMapView *mapView = [[MGLMapView alloc] initWithFrame:CGRectZero styleURL:url];
+    [self.view addSubview:mapView];
+    
+    mapView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [mapView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+        [mapView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+        [mapView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+        [mapView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]
+    ]];
+    
+    [mapView setCenterCoordinate:CLLocationCoordinate2DMake(53.893, 27.567) zoomLevel:9.0 animated:NO];
+    
+                  
 }
 
 /*
