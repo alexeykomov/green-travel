@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ParticularPlaceItem : NSObject
 
 @property (strong, nonatomic) NSString *name;
-
+@property (strong, nonatomic) NSString *imageURL;
 @property (strong, nonatomic) void (^onPlaceCellPress)(ParticularPlaceItem *);
 
 @end 

@@ -12,6 +12,7 @@
 #import "TextUtils.h"
 #import "PlacesItem.h"
 #import "ParticularPlaceItem.h"
+#import "SizeUtils.h"
 
 static NSString * const kPhotoCellId = @"photoCellId";
 
@@ -114,7 +115,8 @@ static NSString * const kPhotoCellId = @"photoCellId";
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(324.0, 144.0);
+    CGSize adaptedSize = CGSizeMake(self.bounds.size.width - 50, self.bounds.size.height);
+    return getCellSize(adaptedSize);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {

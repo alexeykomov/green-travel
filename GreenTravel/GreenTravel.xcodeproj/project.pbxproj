@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -58,6 +58,8 @@
 		5A1482E224EC617F00EBB756 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A1482D824EC617F00EBB756 /* OpenSans-Bold.ttf */; };
 		5A1482E624EC80FC00EBB756 /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482E524EC80FC00EBB756 /* DetailsViewController.m */; };
 		5A1482E924EC8C2C00EBB756 /* PlacesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482E824EC8C2C00EBB756 /* PlacesViewController.m */; };
+		5A1482EC24EDC34C00EBB756 /* SizeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482EB24EDC34C00EBB756 /* SizeUtils.m */; };
+		5A1482EF24EDC8E500EBB756 /* StyleUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482EE24EDC8E500EBB756 /* StyleUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +152,10 @@
 		5A1482E524EC80FC00EBB756 /* DetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
 		5A1482E724EC8C2C00EBB756 /* PlacesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlacesViewController.h; sourceTree = "<group>"; };
 		5A1482E824EC8C2C00EBB756 /* PlacesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlacesViewController.m; sourceTree = "<group>"; };
+		5A1482EA24EDC34C00EBB756 /* SizeUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SizeUtils.h; sourceTree = "<group>"; };
+		5A1482EB24EDC34C00EBB756 /* SizeUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SizeUtils.m; sourceTree = "<group>"; };
+		5A1482ED24EDC8E500EBB756 /* StyleUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StyleUtils.h; sourceTree = "<group>"; };
+		5A1482EE24EDC8E500EBB756 /* StyleUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StyleUtils.m; sourceTree = "<group>"; };
 		72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.debug.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.debug.xcconfig"; sourceTree = "<group>"; };
 		91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GreenTravel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.release.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.release.xcconfig"; sourceTree = "<group>"; };
@@ -247,6 +253,10 @@
 				5A14828224E7F92300EBB756 /* Colors.m */,
 				5A14829424E812BF00EBB756 /* TextUtils.h */,
 				5A14829524E812BF00EBB756 /* TextUtils.m */,
+				5A1482EA24EDC34C00EBB756 /* SizeUtils.h */,
+				5A1482EB24EDC34C00EBB756 /* SizeUtils.m */,
+				5A1482ED24EDC8E500EBB756 /* StyleUtils.h */,
+				5A1482EE24EDC8E500EBB756 /* StyleUtils.m */,
 			);
 			path = utilities;
 			sourceTree = "<group>";
@@ -355,7 +365,6 @@
 				72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */,
 				9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -582,8 +591,10 @@
 				5A14829024E8102B00EBB756 /* MapViewController.m in Sources */,
 				5A1482E924EC8C2C00EBB756 /* PlacesViewController.m in Sources */,
 				5A1482CE24EB091300EBB756 /* ParticularPlaceItem.m in Sources */,
+				5A1482EC24EDC34C00EBB756 /* SizeUtils.m in Sources */,
 				5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */,
 				5A14829324E8103400EBB756 /* BookmarksViewController.m in Sources */,
+				5A1482EF24EDC8E500EBB756 /* StyleUtils.m in Sources */,
 				5A14829B24E9440C00EBB756 /* SearchViewController.m in Sources */,
 				5A14825624E7ED9100EBB756 /* GreenTravel.xcdatamodeld in Sources */,
 			);

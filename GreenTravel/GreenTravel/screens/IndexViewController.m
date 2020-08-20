@@ -13,6 +13,7 @@
 #import "DetailsViewController.h"
 #import "SearchViewController.h"
 #import "PlacesViewController.h"
+#import "StyleUtils.h"
 
 @interface IndexViewController ()
 
@@ -40,19 +41,14 @@ static CGFloat kTableRowHeight = 210.0;
     self.navigationItem.rightBarButtonItem.tintColor = [Colors get].white;
     
     UINavigationBar *navigationBar = self.navigationController.navigationBar;
-    CAGradientLayer *gradient = [[CAGradientLayer alloc] init];
     navigationBar.titleTextAttributes = getTextAttributes([Colors get].white, 16.0, UIFontWeightSemibold);
     navigationBar.barStyle = UIBarStyleBlack;
+#pragma mark - Navigation item gradient
     CGRect navBarBounds = navigationBar.bounds;
     
     navBarBounds.size.height += UIApplication.sharedApplication.statusBarFrame.size.height;
     
-    gradient.frame = navBarBounds;
-    gradient.colors = @[(id)[Colors get].green.CGColor, (id)[Colors get].shamrock.CGColor];
-    gradient.startPoint = CGPointMake(0, 0);
-    gradient.endPoint = CGPointMake(1, 0);
-    
-    [navigationBar setBackgroundImage:getImageFromGradientLayer(gradient) forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    [navigationBar setBackgroundImage:getGradientImageToFillRect(navBarBounds) forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     
 #pragma mark - Table view
     [self.tableView registerClass:PlacesTableViewCell.class forCellReuseIdentifier:kCollectionCellId];
@@ -99,16 +95,6 @@ static CGFloat kTableRowHeight = 210.0;
     [self.dataSouce addObjectsFromArray:@[territory, paths, historicalPlaces, excursions]];
 }
 
-UIImage* getImageFromGradientLayer(CAGradientLayer* gradient) {
-    UIImage* gradientImage;
-    UIGraphicsBeginImageContext(gradient.frame.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    [gradient renderInContext:context];
-    gradientImage = [UIGraphicsGetImageFromCurrentImageContext() resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-    UIGraphicsEndImageContext();
-    return gradientImage;
-}
 
 - (void) onSearchPress:(id)sender {
     [self.navigationController pushViewController:[[SearchViewController alloc] init] animated:NO];
@@ -133,6 +119,7 @@ UIImage* getImageFromGradientLayer(CAGradientLayer* gradient) {
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     return kTableRowHeight;
 }
 

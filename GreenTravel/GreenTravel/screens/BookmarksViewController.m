@@ -8,6 +8,7 @@
 
 #import "BookmarksViewController.h"
 #import "Colors.h"
+#import "StyleUtils.h"
 
 @interface BookmarksViewController ()
 
@@ -19,6 +20,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [Colors get].white;
+    
+    UINavigationBar *navigationBar = self.navigationController.navigationBar;
+    CGRect navBarBounds = navigationBar.bounds;
+    navBarBounds.size.height += UIApplication.sharedApplication.statusBarFrame.size.height;
+    
+    [navigationBar setBackgroundImage:getGradientImageToFillRect(navBarBounds) forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
 }
 
 /*
