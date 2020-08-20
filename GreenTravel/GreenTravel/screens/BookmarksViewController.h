@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BookmarksViewController : UIViewController
+@interface BookmarksViewController : UICollectionViewController<UICollectionViewDelegateFlowLayout>
 
 @end
 
