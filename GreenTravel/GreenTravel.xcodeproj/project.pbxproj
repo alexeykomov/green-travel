@@ -61,6 +61,11 @@
 		5A1482EC24EDC34C00EBB756 /* SizeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482EB24EDC34C00EBB756 /* SizeUtils.m */; };
 		5A1482EF24EDC8E500EBB756 /* StyleUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482EE24EDC8E500EBB756 /* StyleUtils.m */; };
 		5A1482F224EF005300EBB756 /* BookmarkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482F124EF005300EBB756 /* BookmarkCell.m */; };
+		5A1482F524F04B0B00EBB756 /* NearbyPlacesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482F424F04B0B00EBB756 /* NearbyPlacesViewController.m */; };
+		5A1482F824F0716300EBB756 /* SearchHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482F724F0716300EBB756 /* SearchHeaderCell.m */; };
+		5A1482FB24F0717300EBB756 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482FA24F0717300EBB756 /* SearchCell.m */; };
+		5A14830124F129E900EBB756 /* SearchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830024F129E900EBB756 /* SearchItem.m */; };
+		5A14830424F136B800EBB756 /* WeRecommendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830324F136B800EBB756 /* WeRecommendCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -159,6 +164,16 @@
 		5A1482EE24EDC8E500EBB756 /* StyleUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StyleUtils.m; sourceTree = "<group>"; };
 		5A1482F024EF005300EBB756 /* BookmarkCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BookmarkCell.h; sourceTree = "<group>"; };
 		5A1482F124EF005300EBB756 /* BookmarkCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookmarkCell.m; sourceTree = "<group>"; };
+		5A1482F324F04B0B00EBB756 /* NearbyPlacesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NearbyPlacesViewController.h; sourceTree = "<group>"; };
+		5A1482F424F04B0B00EBB756 /* NearbyPlacesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NearbyPlacesViewController.m; sourceTree = "<group>"; };
+		5A1482F624F0716300EBB756 /* SearchHeaderCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchHeaderCell.h; sourceTree = "<group>"; };
+		5A1482F724F0716300EBB756 /* SearchHeaderCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchHeaderCell.m; sourceTree = "<group>"; };
+		5A1482F924F0717300EBB756 /* SearchCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchCell.h; sourceTree = "<group>"; };
+		5A1482FA24F0717300EBB756 /* SearchCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchCell.m; sourceTree = "<group>"; };
+		5A1482FF24F129E900EBB756 /* SearchItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchItem.h; sourceTree = "<group>"; };
+		5A14830024F129E900EBB756 /* SearchItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchItem.m; sourceTree = "<group>"; };
+		5A14830224F136B800EBB756 /* WeRecommendCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeRecommendCell.h; sourceTree = "<group>"; };
+		5A14830324F136B800EBB756 /* WeRecommendCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeRecommendCell.m; sourceTree = "<group>"; };
 		72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.debug.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.debug.xcconfig"; sourceTree = "<group>"; };
 		91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GreenTravel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.release.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.release.xcconfig"; sourceTree = "<group>"; };
@@ -272,8 +287,9 @@
 				5A14828B24E8101A00EBB756 /* IndexViewController.h */,
 				5A14828C24E8101A00EBB756 /* IndexViewController.m */,
 				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
-				5A14829924E9440C00EBB756 /* SearchViewController.h */,
-				5A14829A24E9440C00EBB756 /* SearchViewController.m */,
+				5A14830624F1496600EBB756 /* SearchViewController */,
+				5A1482F324F04B0B00EBB756 /* NearbyPlacesViewController.h */,
+				5A1482F424F04B0B00EBB756 /* NearbyPlacesViewController.m */,
 				5A1482E424EC80FC00EBB756 /* DetailsViewController.h */,
 				5A1482E524EC80FC00EBB756 /* DetailsViewController.m */,
 				5A1482E724EC8C2C00EBB756 /* PlacesViewController.h */,
@@ -360,8 +376,49 @@
 				5A1482A524E9CF2300EBB756 /* PlacesItem.m */,
 				5A1482CC24EB091300EBB756 /* ParticularPlaceItem.h */,
 				5A1482CD24EB091300EBB756 /* ParticularPlaceItem.m */,
+				5A1482FF24F129E900EBB756 /* SearchItem.h */,
+				5A14830024F129E900EBB756 /* SearchItem.m */,
 			);
 			path = model;
+			sourceTree = "<group>";
+		};
+		5A1482FD24F124B200EBB756 /* SearchHeaderCell */ = {
+			isa = PBXGroup;
+			children = (
+				5A1482F624F0716300EBB756 /* SearchHeaderCell.h */,
+				5A1482F724F0716300EBB756 /* SearchHeaderCell.m */,
+			);
+			path = SearchHeaderCell;
+			sourceTree = "<group>";
+		};
+		5A1482FE24F124C300EBB756 /* SearchCell */ = {
+			isa = PBXGroup;
+			children = (
+				5A1482F924F0717300EBB756 /* SearchCell.h */,
+				5A1482FA24F0717300EBB756 /* SearchCell.m */,
+			);
+			path = SearchCell;
+			sourceTree = "<group>";
+		};
+		5A14830524F136BB00EBB756 /* WeRecommendCell */ = {
+			isa = PBXGroup;
+			children = (
+				5A14830224F136B800EBB756 /* WeRecommendCell.h */,
+				5A14830324F136B800EBB756 /* WeRecommendCell.m */,
+			);
+			path = WeRecommendCell;
+			sourceTree = "<group>";
+		};
+		5A14830624F1496600EBB756 /* SearchViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5A14829924E9440C00EBB756 /* SearchViewController.h */,
+				5A14829A24E9440C00EBB756 /* SearchViewController.m */,
+				5A1482FD24F124B200EBB756 /* SearchHeaderCell */,
+				5A14830524F136BB00EBB756 /* WeRecommendCell */,
+				5A1482FE24F124C300EBB756 /* SearchCell */,
+			);
+			path = SearchViewController;
 			sourceTree = "<group>";
 		};
 		72F07A37AC1DE1BCFA8BD0F1 /* Pods */ = {
@@ -585,8 +642,10 @@
 				5A14829E24E9501100EBB756 /* PlacesTableViewCell.m in Sources */,
 				5A1482F224EF005300EBB756 /* BookmarkCell.m in Sources */,
 				5A14825E24E7ED9400EBB756 /* main.m in Sources */,
+				5A14830124F129E900EBB756 /* SearchItem.m in Sources */,
 				5A14828324E7F92300EBB756 /* Colors.m in Sources */,
 				5A14828D24E8101A00EBB756 /* IndexViewController.m in Sources */,
+				5A1482F824F0716300EBB756 /* SearchHeaderCell.m in Sources */,
 				5A14825024E7ED9100EBB756 /* ViewController.m in Sources */,
 				5A14829624E812BF00EBB756 /* TextUtils.m in Sources */,
 				5A1482A624E9CF2300EBB756 /* PlacesItem.m in Sources */,
@@ -594,13 +653,16 @@
 				5A1482A124E9527700EBB756 /* PhotoCollectionViewCell.m in Sources */,
 				5A14828A24E80E3900EBB756 /* MainViewController.m in Sources */,
 				5A1482E624EC80FC00EBB756 /* DetailsViewController.m in Sources */,
+				5A14830424F136B800EBB756 /* WeRecommendCell.m in Sources */,
 				5A14829024E8102B00EBB756 /* MapViewController.m in Sources */,
+				5A1482F524F04B0B00EBB756 /* NearbyPlacesViewController.m in Sources */,
 				5A1482E924EC8C2C00EBB756 /* PlacesViewController.m in Sources */,
 				5A1482CE24EB091300EBB756 /* ParticularPlaceItem.m in Sources */,
 				5A1482EC24EDC34C00EBB756 /* SizeUtils.m in Sources */,
 				5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */,
 				5A14829324E8103400EBB756 /* BookmarksViewController.m in Sources */,
 				5A1482EF24EDC8E500EBB756 /* StyleUtils.m in Sources */,
+				5A1482FB24F0717300EBB756 /* SearchCell.m in Sources */,
 				5A14829B24E9440C00EBB756 /* SearchViewController.m in Sources */,
 				5A14825624E7ED9100EBB756 /* GreenTravel.xcdatamodeld in Sources */,
 			);

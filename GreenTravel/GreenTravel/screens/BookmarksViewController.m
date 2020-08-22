@@ -35,16 +35,17 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
     return self;
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [Colors get].white;
     
     UINavigationBar *navigationBar = self.navigationController.navigationBar;
-    CGRect navBarBounds = navigationBar.bounds;
-    navBarBounds.size.height += UIApplication.sharedApplication.statusBarFrame.size.height;
-    
-    [navigationBar setBackgroundImage:getGradientImageToFillRect(navBarBounds) forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    configureNavigationBar(navigationBar);
     
     
     [self.collectionView registerClass:BookmarkCell.class forCellWithReuseIdentifier:kBookmarkCellId];

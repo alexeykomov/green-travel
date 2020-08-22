@@ -66,6 +66,7 @@ static NSString * const kPhotoCellId = @"photoCellId";
     self.collectionView.dataSource = self;
     self.collectionView.backgroundColor = [Colors get].white;
     self.collectionView.alwaysBounceHorizontal = YES;
+    self.collectionView.showsHorizontalScrollIndicator = NO;
     
     [self addSubview:self.collectionView];
     self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;

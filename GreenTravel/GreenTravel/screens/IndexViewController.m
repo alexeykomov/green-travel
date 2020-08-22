@@ -20,6 +20,7 @@
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) NSMutableArray<PlacesItem *> *dataSouce;
+@property (strong, nonatomic) UIBarButtonItem *originalBackButtonItem;
 
 @end
 
@@ -41,19 +42,17 @@ static CGFloat kTableRowHeight = 210.0;
     self.navigationItem.rightBarButtonItem.tintColor = [Colors get].white;
     
     UINavigationBar *navigationBar = self.navigationController.navigationBar;
-    navigationBar.titleTextAttributes = getTextAttributes([Colors get].white, 16.0, UIFontWeightSemibold);
-    navigationBar.barStyle = UIBarStyleBlack;
-#pragma mark - Navigation item gradient
-    CGRect navBarBounds = navigationBar.bounds;
+    configureNavigationBar(navigationBar);
     
-    navBarBounds.size.height += UIApplication.sharedApplication.statusBarFrame.size.height;
-    
-    [navigationBar setBackgroundImage:getGradientImageToFillRect(navBarBounds) forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    self.originalBackButtonItem = self.navigationItem.backBarButtonItem;
     
 #pragma mark - Table view
     [self.tableView registerClass:PlacesTableViewCell.class forCellReuseIdentifier:kCollectionCellId];
     self.dataSouce = [[NSMutableArray alloc] init];
     self.tableView.allowsSelection = NO;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.alwaysBounceVertical = YES;
+    
     PlacesItem *territory = [[PlacesItem alloc] init];
     territory.header = @"Заповедные территории";
     NSMutableArray *territoryItems = [[NSMutableArray alloc] init];
@@ -95,8 +94,14 @@ static CGFloat kTableRowHeight = 210.0;
     [self.dataSouce addObjectsFromArray:@[territory, paths, historicalPlaces, excursions]];
 }
 
+#pragma mark - Lifecycle
+
+- (void)viewDidAppear:(BOOL)animated {
+    [self.navigationItem setBackBarButtonItem:self.originalBackButtonItem];
+}
 
 - (void) onSearchPress:(id)sender {
+    [self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil]];
     [self.navigationController pushViewController:[[SearchViewController alloc] init] animated:NO];
 }
 

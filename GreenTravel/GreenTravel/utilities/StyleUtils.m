@@ -8,6 +8,7 @@
 
 #import "StyleUtils.h"
 #import "Colors.h"
+#import "TextUtils.h"
 
 
 UIImage* getGradientImageToFillRect(CGRect rect) {
@@ -25,4 +26,15 @@ UIImage* getGradientImageToFillRect(CGRect rect) {
     gradientImage = [UIGraphicsGetImageFromCurrentImageContext() resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
     UIGraphicsEndImageContext();
     return gradientImage;
+}
+
+void configureNavigationBar(UINavigationBar *navigationBar) {
+    navigationBar.titleTextAttributes = getTextAttributes([Colors get].white, 16.0, UIFontWeightSemibold);
+    navigationBar.barStyle = UIBarStyleBlack;
+#pragma mark - Navigation item gradient
+    CGRect navBarBounds = navigationBar.bounds;
+    
+    navBarBounds.size.height += UIApplication.sharedApplication.statusBarFrame.size.height;
+    
+    [navigationBar setBackgroundImage:getGradientImageToFillRect(navBarBounds) forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
 }

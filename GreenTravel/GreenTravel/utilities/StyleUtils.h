@@ -10,3 +10,4 @@
 #import <UIKit/UIKit.h>
 
 UIImage* getGradientImageToFillRect(CGRect rect);
+void configureNavigationBar(UINavigationBar *navigationBar);

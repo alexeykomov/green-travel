@@ -33,6 +33,7 @@ static Colors *instance;
         self.shamrock = UIColorFromHEX(0x35C7A4);
         self.yellow = UIColorFromHEX(0xF9CC78);
         self.pineTree = UIColorFromHEX(0x152702);
+        self.heavyMetal = UIColorFromHEX(0x151614);
         self.yellowHighlighted = UIColorFromHEX(0xFDF4E3);
         self.grey = UIColorFromHEX(0x757a7e);
     }

@@ -1,33 +1,30 @@
 //
-//  MapViewController.m
+//  NearbyPlacesViewController.m
 //  GreenTravel
 //
-//  Created by Alex K on 8/15/20.
+//  Created by Alex K on 8/21/20.
 //  Copyright © 2020 Alex K. All rights reserved.
 //
 
-#import "MapViewController.h"
-#import "Colors.h"
+#import "NearbyPlacesViewController.h"
 @import Mapbox;
 #import "StyleUtils.h"
 
-@interface MapViewController ()
+@interface NearbyPlacesViewController ()
 
 @end
 
-@implementation MapViewController
-
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
-}
+@implementation NearbyPlacesViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    //self.view.backgroundColor = [Colors get].white;
     
     UINavigationBar *navigationBar = self.navigationController.navigationBar;
-    configureNavigationBar(navigationBar);
+    CGRect navBarBounds = navigationBar.bounds;
+    navBarBounds.size.height += UIApplication.sharedApplication.statusBarFrame.size.height;
+    
+    [navigationBar setBackgroundImage:getGradientImageToFillRect(navBarBounds) forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     
     NSURL *url = [NSURL URLWithString:@"mapbox://styles/mapbox/streets-v11"];
     MGLMapView *mapView = [[MGLMapView alloc] initWithFrame:CGRectZero styleURL:url];
