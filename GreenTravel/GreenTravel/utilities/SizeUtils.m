@@ -11,5 +11,6 @@
 static const CGFloat kCellAspectRatio = 324.0 / 144.0;
 
 CGSize getCellSize(CGSize inputSize) {
-    return CGSizeMake(inputSize.width, inputSize.width / kCellAspectRatio);
+    CGFloat cappedWidth = MIN(inputSize.width, 500.0);
+    return CGSizeMake(cappedWidth, cappedWidth / kCellAspectRatio);
 };

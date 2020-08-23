@@ -42,7 +42,7 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [Colors get].white;
+    self.collectionView.backgroundColor = [Colors get].green;
     
     UINavigationBar *navigationBar = self.navigationController.navigationBar;
     configureNavigationBar(navigationBar);
@@ -103,8 +103,17 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
 static const CGFloat kInset = 12.0;
 static const CGFloat kSpacing = 12.0;
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [self.collectionView.collectionViewLayout invalidateLayout];
+}
+
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    CGSize layoutGuide = [self.view.safeAreaLayoutGuide layoutFrame].size;
     CGFloat baseWidth = self.collectionView.bounds.size.width;
+    NSLog(@"Base width: %f", self.collectionView.bounds.size.width);
+    NSLog(@"Bounds: %@", @(self.collectionView.bounds));
+    NSLog(@"Safe are layout guide size: %@", @([self.view.safeAreaLayoutGuide layoutFrame].size));
+    //CGFloat baseWidth = layoutGuide.width;
     
     long index = indexPath.row + indexPath.section * 2;
     if (index >= [self.dataSource count]) {

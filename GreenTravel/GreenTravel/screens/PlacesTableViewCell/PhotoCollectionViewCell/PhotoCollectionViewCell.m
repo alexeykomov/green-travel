@@ -26,7 +26,7 @@
 - (void)setUp {
     drawShadow(self);
     
-#pragma mark - Image    
+#pragma mark - Image
     UIImageView *placeholder = [[UIImageView alloc] init];
     [self addSubview:placeholder];
     

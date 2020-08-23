@@ -14,6 +14,7 @@
 #import "SearchViewController.h"
 #import "PlacesViewController.h"
 #import "StyleUtils.h"
+#import "SizeUtils.h"
 
 @interface IndexViewController ()
 
@@ -126,8 +127,8 @@ static CGFloat kTableRowHeight = 210.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    return kTableRowHeight;
+    CGSize adaptedSize = CGSizeMake(self.view.bounds.size.width - 50, self.view.bounds.size.height);
+    return getCellSize(adaptedSize).height + 2 * 16.0 + 50.0;
 }
 
 /*

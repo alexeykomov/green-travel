@@ -43,7 +43,7 @@ void configureNavigationBar(UINavigationBar *navigationBar) {
 void drawShadow(UIView *view) {
     UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:view.bounds];
     view.layer.masksToBounds = NO;
-    view.layer.shadowColor = [[Colors get].pineTree CGColor];
+    view.layer.shadowColor = [[Colors get].heavyMetal CGColor];
     view.layer.shadowOpacity = 0.2;
     view.layer.shadowOffset = CGSizeMake(0.0, 5.0);
     view.layer.shadowRadius = 8.0;

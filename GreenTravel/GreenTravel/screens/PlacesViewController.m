@@ -60,6 +60,10 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
 
 #pragma mark <UICollectionViewDataSource>
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [self.collectionView.collectionViewLayout invalidateLayout];
+}
+
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
 #warning Incomplete implementation, return the number of sections
     return 1;

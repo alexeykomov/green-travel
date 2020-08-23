@@ -60,7 +60,7 @@
         [self.countLabel.topAnchor constraintEqualToAnchor:self.topAnchor constant:10.0],
         [self.countLabel.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10.0],
     ]];
-    
+#pragma mark - Subscribe to orientation change
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeviceOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 

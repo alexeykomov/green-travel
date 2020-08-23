@@ -71,10 +71,10 @@ static NSString * const kPhotoCellId = @"photoCellId";
     [self addSubview:self.collectionView];
     self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [self.collectionView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
-        [self.collectionView.topAnchor constraintEqualToAnchor:self.headerLabel.bottomAnchor constant:16.0],
-        [self.collectionView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10.0],
-        [self.collectionView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-10.0],
+        [self.collectionView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:0.0],
+        [self.collectionView.topAnchor constraintEqualToAnchor:self.headerLabel.bottomAnchor constant:0.0],
+        [self.collectionView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:0.0],
+        [self.collectionView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:0.0],
     ]];
     
     self.allButton = [[UIButton alloc] init];
@@ -97,6 +97,11 @@ static NSString * const kPhotoCellId = @"photoCellId";
     [self.collectionView reloadData];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+    [self.collectionView.collectionViewLayout invalidateLayout];
+}
+
 #pragma mark - Collection view
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -117,6 +122,8 @@ static NSString * const kPhotoCellId = @"photoCellId";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGSize adaptedSize = CGSizeMake(self.bounds.size.width - 50, self.bounds.size.height);
+
+    
     return getCellSize(adaptedSize);
 }
 
@@ -129,6 +136,23 @@ static NSString * const kPhotoCellId = @"photoCellId";
 
 - (void)onAllButtonPress:(id)sender {
     self.item.onAllButtonPress(self.item);
+}
+
+#pragma mark - <UICollectionViewDelegate>
+
+static const CGFloat kInset = 16.0;
+static const CGFloat kSpacing = 16.0;
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return kSpacing;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(kInset, kInset, kInset, kInset);
 }
 
 @end
