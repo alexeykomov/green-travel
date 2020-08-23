@@ -10,6 +10,7 @@
 #import "Colors.h"
 #import "TextUtils.h"
 #import "DetailsViewController.h"
+#import "StyleUtils.h"
 
 @implementation PhotoCollectionViewCell
 
@@ -23,8 +24,9 @@
 }
 
 - (void)setUp {
-#pragma mark - Image
+    drawShadow(self);
     
+#pragma mark - Image    
     UIImageView *placeholder = [[UIImageView alloc] init];
     [self addSubview:placeholder];
     

@@ -31,10 +31,21 @@ UIImage* getGradientImageToFillRect(CGRect rect) {
 void configureNavigationBar(UINavigationBar *navigationBar) {
     navigationBar.titleTextAttributes = getTextAttributes([Colors get].white, 16.0, UIFontWeightSemibold);
     navigationBar.barStyle = UIBarStyleBlack;
+    navigationBar.tintColor = [Colors get].white;
 #pragma mark - Navigation item gradient
     CGRect navBarBounds = navigationBar.bounds;
     
     navBarBounds.size.height += UIApplication.sharedApplication.statusBarFrame.size.height;
     
     [navigationBar setBackgroundImage:getGradientImageToFillRect(navBarBounds) forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+}
+
+void drawShadow(UIView *view) {
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:view.bounds];
+    view.layer.masksToBounds = NO;
+    view.layer.shadowColor = [[Colors get].pineTree CGColor];
+    view.layer.shadowOpacity = 0.2;
+    view.layer.shadowOffset = CGSizeMake(0.0, 5.0);
+    view.layer.shadowRadius = 8.0;
+    view.layer.shadowPath = [shadowPath CGPath];
 }

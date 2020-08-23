@@ -11,3 +11,4 @@
 
 UIImage* getGradientImageToFillRect(CGRect rect);
 void configureNavigationBar(UINavigationBar *navigationBar);
+void drawShadow(UIView *view);

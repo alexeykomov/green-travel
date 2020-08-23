@@ -30,6 +30,8 @@
         self.tabBar.tintColor = [Colors get].white;
     }
 
+    self.view.backgroundColor = [Colors get].white;
+
 #pragma mark - IndexViewController
     
     IndexViewController *indexController = [[IndexViewController alloc] init];

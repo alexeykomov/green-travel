@@ -53,6 +53,8 @@ static CGFloat kTableRowHeight = 210.0;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.alwaysBounceVertical = YES;
     
+
+    
     PlacesItem *territory = [[PlacesItem alloc] init];
     territory.header = @"Заповедные территории";
     NSMutableArray *territoryItems = [[NSMutableArray alloc] init];

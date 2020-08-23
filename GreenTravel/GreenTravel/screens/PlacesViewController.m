@@ -81,15 +81,35 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
 
 #pragma mark <UICollectionViewDelegate>
 
+static const CGFloat kInset = 12.0;
+static const CGFloat kSpacing = 12.0;
+
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat maxWidth = self.view.bounds.size.width - 10;
-    return CGSizeMake(maxWidth, maxWidth / kCellAspectRatio);
+    CGFloat baseWidth = self.view.bounds.size.width;
+    
+    return CGSizeMake((baseWidth - kInset * 2),
+    ((baseWidth - kInset * 2) / kCellAspectRatio));
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Did select item at index path: %@", indexPath);
     ParticularPlaceItem *item = self.item.items[indexPath.row];
     item.onPlaceCellPress(item);
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return kSpacing;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    if (section > 0) {
+        return UIEdgeInsetsMake(0, kInset, kInset, kInset);
+    }
+    return UIEdgeInsetsMake(kInset, kInset, kInset, kInset);
 }
 
 /*

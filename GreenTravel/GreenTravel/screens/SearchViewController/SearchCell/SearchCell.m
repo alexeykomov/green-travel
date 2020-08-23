@@ -38,7 +38,7 @@
     return self;
 }
 
-- (void)setUp {
+- (void)setUp {    
     self.header = [[UILabel alloc] init];
     [self addSubview:self.header];
     

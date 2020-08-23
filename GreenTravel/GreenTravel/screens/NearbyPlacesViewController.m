@@ -9,6 +9,7 @@
 #import "NearbyPlacesViewController.h"
 @import Mapbox;
 #import "StyleUtils.h"
+#import "Colors.h"
 
 @interface NearbyPlacesViewController ()
 
@@ -20,11 +21,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    UINavigationBar *navigationBar = self.navigationController.navigationBar;
-    CGRect navBarBounds = navigationBar.bounds;
-    navBarBounds.size.height += UIApplication.sharedApplication.statusBarFrame.size.height;
+    self.title = @"Рядом";
+    self.view.backgroundColor = [Colors get].white;
     
-    [navigationBar setBackgroundImage:getGradientImageToFillRect(navBarBounds) forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    UINavigationBar *navigationBar = self.navigationController.navigationBar;
+    configureNavigationBar(navigationBar);
     
     NSURL *url = [NSURL URLWithString:@"mapbox://styles/mapbox/streets-v11"];
     MGLMapView *mapView = [[MGLMapView alloc] initWithFrame:CGRectZero styleURL:url];

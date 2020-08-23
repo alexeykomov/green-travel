@@ -35,6 +35,7 @@
 - (void)setUp {
     UIImageView *placeImage = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"mappin.circle"]];
     [self addSubview:placeImage];
+    placeImage.tintColor = [Colors get].heavyMetal;
     
     placeImage.translatesAutoresizingMaskIntoConstraints = NO;
     

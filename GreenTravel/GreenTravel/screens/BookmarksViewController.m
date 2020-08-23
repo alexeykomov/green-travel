@@ -87,14 +87,21 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"cellForItemAtIndexPath method, index path: %@", indexPath);
     BookmarkCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kBookmarkCellId forIndexPath:indexPath];
-    [cell update:self.dataSource[indexPath.row]];
+    
+    long index = indexPath.row + indexPath.section * 2;
+
+    if (index >= [self.dataSource count]) {
+        return cell;
+    }
+    
+    [cell update:self.dataSource[index]];
     return cell;
 }
 
 #pragma mark <UICollectionViewDelegateFlowLayout>
 
-static const CGFloat INSET = 12.0;
-static const CGFloat SPACING = 12.0;
+static const CGFloat kInset = 12.0;
+static const CGFloat kSpacing = 12.0;
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat baseWidth = self.collectionView.bounds.size.width;
@@ -104,23 +111,25 @@ static const CGFloat SPACING = 12.0;
         return CGSizeZero;
     }
     
-    return CGSizeMake((baseWidth - INSET * 2 - SPACING * 2) / 2,
-                      (baseWidth / kCellAspectRatio - INSET * 2 - SPACING * 2) / 2);
+    CGSize cellSize = CGSizeMake((baseWidth - 3 * kInset) / 2,
+                                 ((baseWidth - 3 * kInset) / kCellAspectRatio ) / 2);
+    
+    return cellSize;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return SPACING;
+    return 0;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 0;
+    return kSpacing;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     if (section > 0) {
-        return UIEdgeInsetsMake(0, INSET, INSET, INSET);
+        return UIEdgeInsetsMake(0, kInset, kInset, kInset);
     }
-    return UIEdgeInsetsMake(INSET, INSET, INSET, INSET);
+    return UIEdgeInsetsMake(kInset, kInset, kInset, kInset);
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -140,8 +149,15 @@ static const CGFloat SPACING = 12.0;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Selected cell at index path: %@", indexPath);
+    
+    long index = indexPath.row + indexPath.section * 2;
+    
+    if (index >= [self.dataSource count]) {
+        return;
+    }
+    
     PlacesViewController *placesViewController = [[PlacesViewController alloc] init];
-    placesViewController.item = self.dataSource[indexPath.row];
+    placesViewController.item = self.dataSource[index];
     [self.navigationController pushViewController:placesViewController animated:YES];
 }
 

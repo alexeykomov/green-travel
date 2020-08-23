@@ -10,6 +10,7 @@
 #import "Colors.h"
 #import "TextUtils.h"
 #import "PlacesItem.h"
+#import "StyleUtils.h"
 
 @interface BookmarkCell ()
 
@@ -34,12 +35,7 @@
     
     self.layer.cornerRadius = 15.0;
     
-    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:self.bounds];
-    self.layer.masksToBounds = NO;
-    self.layer.shadowColor = [[Colors get].pineTree CGColor];
-    self.layer.shadowOpacity = 0.2;
-    self.layer.shadowOffset = CGSizeMake(0.0, 5.0);
-    self.layer.shadowPath = [shadowPath CGPath];
+    drawShadow(self);
     
 #pragma mark - Header label
     self.headerLabel = [[UILabel alloc] init];
@@ -64,12 +60,18 @@
         [self.countLabel.topAnchor constraintEqualToAnchor:self.topAnchor constant:10.0],
         [self.countLabel.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10.0],
     ]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeviceOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)update:(PlacesItem *)item {
     self.headerLabel.attributedText = getAttributedString([item.header uppercaseString], [Colors get].black, 10.0, UIFontWeightRegular);
     self.countLabel.attributedText = getAttributedString([@([item.items count]) stringValue], [Colors get].black, 10.0, UIFontWeightRegular);
     self.item = item;
+}
+
+- (void)onDeviceOrientationChange:(id)sender {
+    drawShadow(self);
 }
 
 

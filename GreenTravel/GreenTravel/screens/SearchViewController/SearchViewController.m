@@ -13,7 +13,8 @@
 #import "SearchCell.h"
 #import "DetailsViewController.h"
 #import "SearchItem.h"
-#import "WeRecommendCell.h"    
+#import "WeRecommendCell.h"
+#import "NearbyPlacesViewController.h"
 
 @interface SearchViewController ()
 
@@ -127,6 +128,11 @@ static const CGFloat kSearchRowHeight = 40.0;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     DetailsViewController *detailsController = [[DetailsViewController alloc] init];
+    if (indexPath.row == 0 && ![self isSearching]) {
+        NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
+        [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
+        return;
+    }
     if ([self isSearching]) {
         detailsController.item = self.dataSourceFiltered[indexPath.row];
     } else {
@@ -156,6 +162,15 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 - (BOOL)isSearching {
     return self.searchController.isActive && ![self isSearchBarEmpty];
+}
+
+#pragma mark - Lifecycle
+// This fixes situation when view underlying in the stack doesn't adapt to
+// navigation bar of variable height. https://stackoverflow.com/a/47976999
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController.view setNeedsLayout];
+    [self.navigationController.view layoutIfNeeded];
 }
 
 /*
