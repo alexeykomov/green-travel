@@ -35,10 +35,10 @@
     
     mapView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [mapView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
-        [mapView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
-        [mapView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
-        [mapView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]
+        [mapView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+        [mapView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [mapView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [mapView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
     ]];
     
     [mapView setCenterCoordinate:CLLocationCoordinate2DMake(53.893, 27.567)

@@ -15,6 +15,7 @@
 #import "PlacesViewController.h"
 #import "StyleUtils.h"
 #import "SizeUtils.h"
+#import "PlacesTableViewCellConstants.h"
 
 @interface IndexViewController ()
 

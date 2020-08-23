@@ -66,6 +66,7 @@
 		5A1482FB24F0717300EBB756 /* SearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A1482FA24F0717300EBB756 /* SearchCell.m */; };
 		5A14830124F129E900EBB756 /* SearchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830024F129E900EBB756 /* SearchItem.m */; };
 		5A14830424F136B800EBB756 /* WeRecommendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830324F136B800EBB756 /* WeRecommendCell.m */; };
+		5A14830924F3083E00EBB756 /* PlacesTableViewCellConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830824F3083D00EBB756 /* PlacesTableViewCellConstants.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -174,6 +175,8 @@
 		5A14830024F129E900EBB756 /* SearchItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchItem.m; sourceTree = "<group>"; };
 		5A14830224F136B800EBB756 /* WeRecommendCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeRecommendCell.h; sourceTree = "<group>"; };
 		5A14830324F136B800EBB756 /* WeRecommendCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeRecommendCell.m; sourceTree = "<group>"; };
+		5A14830724F3083D00EBB756 /* PlacesTableViewCellConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlacesTableViewCellConstants.h; sourceTree = "<group>"; };
+		5A14830824F3083D00EBB756 /* PlacesTableViewCellConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlacesTableViewCellConstants.m; sourceTree = "<group>"; };
 		72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.debug.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.debug.xcconfig"; sourceTree = "<group>"; };
 		91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GreenTravel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.release.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.release.xcconfig"; sourceTree = "<group>"; };
@@ -320,6 +323,8 @@
 			children = (
 				5A14829C24E9501100EBB756 /* PlacesTableViewCell.h */,
 				5A14829D24E9501100EBB756 /* PlacesTableViewCell.m */,
+				5A14830724F3083D00EBB756 /* PlacesTableViewCellConstants.h */,
+				5A14830824F3083D00EBB756 /* PlacesTableViewCellConstants.m */,
 				5A1482A324E9579A00EBB756 /* PhotoCollectionViewCell */,
 			);
 			path = PlacesTableViewCell;
@@ -662,6 +667,7 @@
 				5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */,
 				5A14829324E8103400EBB756 /* BookmarksViewController.m in Sources */,
 				5A1482EF24EDC8E500EBB756 /* StyleUtils.m in Sources */,
+				5A14830924F3083E00EBB756 /* PlacesTableViewCellConstants.m in Sources */,
 				5A1482FB24F0717300EBB756 /* SearchCell.m in Sources */,
 				5A14829B24E9440C00EBB756 /* SearchViewController.m in Sources */,
 				5A14825624E7ED9100EBB756 /* GreenTravel.xcdatamodeld in Sources */,

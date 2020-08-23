@@ -9,8 +9,9 @@
 #import "SizeUtils.h"
 
 static const CGFloat kCellAspectRatio = 324.0 / 144.0;
+static const CGFloat kMaxCellWidth = 500.0;
 
 CGSize getCellSize(CGSize inputSize) {
-    CGFloat cappedWidth = MIN(inputSize.width, 500.0);
+    CGFloat cappedWidth = MIN(inputSize.width, kMaxCellWidth);
     return CGSizeMake(cappedWidth, cappedWidth / kCellAspectRatio);
 };
