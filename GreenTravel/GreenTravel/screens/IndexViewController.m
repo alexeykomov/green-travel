@@ -16,6 +16,7 @@
 #import "StyleUtils.h"
 #import "SizeUtils.h"
 #import "PlacesTableViewCellConstants.h"
+#import "CategoriesRetriever.h"
 
 @interface IndexViewController ()
 
@@ -30,6 +31,12 @@ static NSString * const kCollectionCellId = @"collectionCellId";
 static CGFloat kTableRowHeight = 210.0;
 
 @implementation IndexViewController
+
+- (instancetype) initWithCategoriesRetriever:(CategoriesRetriever *)categoriesRetriever {
+    self = [super init];
+    _categoriesRetriever = categoriesRetriever;
+    return self;
+}
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
@@ -68,9 +75,9 @@ static CGFloat kTableRowHeight = 210.0;
         detailsController.item = weakItemA;
         [weakSelf.navigationController pushViewController:detailsController animated:YES];
     };
-    itemA.name = @"Беловежская пуща";
+    itemA.title = @"Беловежская пуща";
     ParticularPlaceItem *itemB = [[ParticularPlaceItem alloc] init];
-    itemB.name = @"Березинский биосферный заповедник";
+    itemB.title = @"Березинский биосферный заповедник";
     __weak typeof(itemB) weakItemB = itemB;
     itemB.onPlaceCellPress = ^void (ParticularPlaceItem *item) {
         DetailsViewController *detailsController = [[DetailsViewController alloc] init];

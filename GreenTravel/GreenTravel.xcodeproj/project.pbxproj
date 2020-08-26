@@ -67,6 +67,9 @@
 		5A14830124F129E900EBB756 /* SearchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830024F129E900EBB756 /* SearchItem.m */; };
 		5A14830424F136B800EBB756 /* WeRecommendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830324F136B800EBB756 /* WeRecommendCell.m */; };
 		5A14830924F3083E00EBB756 /* PlacesTableViewCellConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830824F3083D00EBB756 /* PlacesTableViewCellConstants.m */; };
+		5A324B7B24F6E3CB0044A671 /* Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B7A24F6E3CB0044A671 /* Category.m */; };
+		5A324B7E24F6E8820044A671 /* CategoriesRetriever.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B7D24F6E8820044A671 /* CategoriesRetriever.m */; };
+		5A324B8124F70B490044A671 /* ApiService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B8024F70B490044A671 /* ApiService.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +180,12 @@
 		5A14830324F136B800EBB756 /* WeRecommendCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeRecommendCell.m; sourceTree = "<group>"; };
 		5A14830724F3083D00EBB756 /* PlacesTableViewCellConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlacesTableViewCellConstants.h; sourceTree = "<group>"; };
 		5A14830824F3083D00EBB756 /* PlacesTableViewCellConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlacesTableViewCellConstants.m; sourceTree = "<group>"; };
+		5A324B7924F6E3CB0044A671 /* Category.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Category.h; sourceTree = "<group>"; };
+		5A324B7A24F6E3CB0044A671 /* Category.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Category.m; sourceTree = "<group>"; };
+		5A324B7C24F6E8820044A671 /* CategoriesRetriever.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesRetriever.h; sourceTree = "<group>"; };
+		5A324B7D24F6E8820044A671 /* CategoriesRetriever.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoriesRetriever.m; sourceTree = "<group>"; };
+		5A324B7F24F70B490044A671 /* ApiService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApiService.h; sourceTree = "<group>"; };
+		5A324B8024F70B490044A671 /* ApiService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApiService.m; sourceTree = "<group>"; };
 		72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.debug.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.debug.xcconfig"; sourceTree = "<group>"; };
 		91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GreenTravel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.release.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.release.xcconfig"; sourceTree = "<group>"; };
@@ -289,6 +298,10 @@
 				5A14828924E80E3900EBB756 /* MainViewController.m */,
 				5A14828B24E8101A00EBB756 /* IndexViewController.h */,
 				5A14828C24E8101A00EBB756 /* IndexViewController.m */,
+				5A324B7C24F6E8820044A671 /* CategoriesRetriever.h */,
+				5A324B7D24F6E8820044A671 /* CategoriesRetriever.m */,
+				5A324B7F24F70B490044A671 /* ApiService.h */,
+				5A324B8024F70B490044A671 /* ApiService.m */,
 				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
 				5A14830624F1496600EBB756 /* SearchViewController */,
 				5A1482F324F04B0B00EBB756 /* NearbyPlacesViewController.h */,
@@ -383,6 +396,8 @@
 				5A1482CD24EB091300EBB756 /* ParticularPlaceItem.m */,
 				5A1482FF24F129E900EBB756 /* SearchItem.h */,
 				5A14830024F129E900EBB756 /* SearchItem.m */,
+				5A324B7924F6E3CB0044A671 /* Category.h */,
+				5A324B7A24F6E3CB0044A671 /* Category.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -646,14 +661,17 @@
 			files = (
 				5A14829E24E9501100EBB756 /* PlacesTableViewCell.m in Sources */,
 				5A1482F224EF005300EBB756 /* BookmarkCell.m in Sources */,
+				5A324B7E24F6E8820044A671 /* CategoriesRetriever.m in Sources */,
 				5A14825E24E7ED9400EBB756 /* main.m in Sources */,
 				5A14830124F129E900EBB756 /* SearchItem.m in Sources */,
 				5A14828324E7F92300EBB756 /* Colors.m in Sources */,
 				5A14828D24E8101A00EBB756 /* IndexViewController.m in Sources */,
 				5A1482F824F0716300EBB756 /* SearchHeaderCell.m in Sources */,
+				5A324B7B24F6E3CB0044A671 /* Category.m in Sources */,
 				5A14825024E7ED9100EBB756 /* ViewController.m in Sources */,
 				5A14829624E812BF00EBB756 /* TextUtils.m in Sources */,
 				5A1482A624E9CF2300EBB756 /* PlacesItem.m in Sources */,
+				5A324B8124F70B490044A671 /* ApiService.m in Sources */,
 				5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */,
 				5A1482A124E9527700EBB756 /* PhotoCollectionViewCell.m in Sources */,
 				5A14828A24E80E3900EBB756 /* MainViewController.m in Sources */,

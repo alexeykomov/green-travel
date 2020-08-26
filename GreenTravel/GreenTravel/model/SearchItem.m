@@ -10,13 +10,25 @@
 
 @implementation SearchItem
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _distance = -1;
+        _title = @"";
+    }
+    return self;
+}
+
 - (NSString *)searchableText {
-    NSNumberFormatter *fmt = [[NSNumberFormatter alloc] init];
-    fmt.numberStyle = NSNumberFormatterDecimalStyle;
-    fmt.maximumFractionDigits = 1;
-    
-    NSString *kilometers = [fmt stringFromNumber:@(self.distance)];
-    return [NSString stringWithFormat:@"%@, %@ км", self.header, kilometers];
+    if (self.distance >= 0) {
+        NSNumberFormatter *fmt = [[NSNumberFormatter alloc] init];
+        fmt.numberStyle = NSNumberFormatterDecimalStyle;
+        fmt.maximumFractionDigits = 1;
+        NSString *kilometers = [fmt stringFromNumber:@(self.distance)];
+        return [NSString stringWithFormat:@"%@, %@ км", self.title, kilometers];
+    }
+    return [NSString stringWithFormat:@"%@", self.title];
 }
 
 @end

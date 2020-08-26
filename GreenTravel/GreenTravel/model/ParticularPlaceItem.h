@@ -7,13 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ParticularPlaceItem : NSObject
 
-@property (strong, nonatomic) NSString *name;
-@property (strong, nonatomic) NSString *imageURL;
+@property (strong, nonatomic) NSString *uuid;
+@property (strong, nonatomic) NSString *title;
+@property (strong, nonatomic) NSString *cover;
+@property (assign, nonatomic) CLLocationCoordinate2D coords;
+@property (assign, nonatomic) BOOL bokmarked;
 @property (strong, nonatomic) void (^onPlaceCellPress)(ParticularPlaceItem *);
 
 @end 

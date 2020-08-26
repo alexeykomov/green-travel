@@ -61,19 +61,19 @@ static const CGFloat kSearchRowHeight = 40.0;
     self.definesPresentationContext = YES;
     
     SearchItem *itemA = [[SearchItem alloc] init];
-    itemA.header = @"Беловежская пуща";
+    itemA.title = @"Беловежская пуща";
     itemA.distance = 56.5;
     SearchItem *itemB = [[SearchItem alloc] init];
-    itemB.header = @"Нарочанские озера";
+    itemB.title = @"Нарочанские озера";
     itemB.distance = 100.0;
     SearchItem *itemС = [[SearchItem alloc] init];
-    itemС.header = @"Ольшанские болота";
+    itemС.title = @"Ольшанские болота";
     itemС.distance = 56.0;
     SearchItem *itemD = [[SearchItem alloc] init];
-    itemD.header = @"Беловежская пуща";
+    itemD.title = @"Беловежская пуща";
     itemD.distance = 56.5;
     SearchItem *itemE = [[SearchItem alloc] init];
-    itemE.header = @"Нарочанские озера";
+    itemE.title = @"Нарочанские озера";
     itemE.distance = 100.0;
     
     [self.dataSourceRecommendations addObjectsFromArray:@[itemA, itemB, itemС, itemD, itemE]];

@@ -13,7 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SearchItem : NSObject
 
-@property (strong, nonatomic) NSString *header;
+@property (strong, nonatomic) NSString *correspondingUUID;
+@property (strong, nonatomic) NSString *title;
 @property (assign, nonatomic) CGFloat distance;
 - (NSString *)searchableText;
 
