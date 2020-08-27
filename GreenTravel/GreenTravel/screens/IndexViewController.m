@@ -8,8 +8,8 @@
 #import "TextUtils.h"
 #import "IndexViewController.h"
 #import "PlacesTableViewCell.h"
-#import "PlacesItem.h"
-#import "ParticularPlaceItem.h"
+#import "PlaceItem.h"
+#import "Category.h"
 #import "DetailsViewController.h"
 #import "SearchViewController.h"
 #import "PlacesViewController.h"
@@ -22,7 +22,7 @@
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *contentView;
-@property (strong, nonatomic) NSMutableArray<PlacesItem *> *dataSouce;
+@property (strong, nonatomic) NSMutableArray<Category *> *dataSource;
 @property (strong, nonatomic) UIBarButtonItem *originalBackButtonItem;
 
 @end
@@ -57,29 +57,29 @@ static CGFloat kTableRowHeight = 210.0;
     
 #pragma mark - Table view
     [self.tableView registerClass:PlacesTableViewCell.class forCellReuseIdentifier:kCollectionCellId];
-    self.dataSouce = [[NSMutableArray alloc] init];
+    self.dataSource = [[NSMutableArray alloc] init];
     self.tableView.allowsSelection = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.alwaysBounceVertical = YES;
     
 
     
-    PlacesItem *territory = [[PlacesItem alloc] init];
-    territory.header = @"Заповедные территории";
+    Category *territory = [[Category alloc] init];
+    territory.title = @"Заповедные территории";
     NSMutableArray *territoryItems = [[NSMutableArray alloc] init];
-    ParticularPlaceItem *itemA = [[ParticularPlaceItem alloc] init];
+    PlaceItem *itemA = [[PlaceItem alloc] init];
     __weak typeof(self) weakSelf = self;
     __weak typeof(itemA) weakItemA = itemA;
-    itemA.onPlaceCellPress = ^void (ParticularPlaceItem *item) {
+    itemA.onPlaceCellPress = ^void (PlaceItem *item) {
         DetailsViewController *detailsController = [[DetailsViewController alloc] init];
         detailsController.item = weakItemA;
         [weakSelf.navigationController pushViewController:detailsController animated:YES];
     };
     itemA.title = @"Беловежская пуща";
-    ParticularPlaceItem *itemB = [[ParticularPlaceItem alloc] init];
+    PlaceItem *itemB = [[PlaceItem alloc] init];
     itemB.title = @"Березинский биосферный заповедник";
     __weak typeof(itemB) weakItemB = itemB;
-    itemB.onPlaceCellPress = ^void (ParticularPlaceItem *item) {
+    itemB.onPlaceCellPress = ^void (PlaceItem *item) {
         DetailsViewController *detailsController = [[DetailsViewController alloc] init];
         
         detailsController.item = weakItemB;
@@ -87,22 +87,22 @@ static CGFloat kTableRowHeight = 210.0;
     };
     [territoryItems addObjectsFromArray:@[itemA, itemB]];
     territory.items = territoryItems;
-    territory.onAllButtonPress = ^void (PlacesItem *item) {
+    territory.onAllButtonPress = ^void (Category *item) {
         PlacesViewController *placesController = [[PlacesViewController alloc] init];
         placesController.item = item;
         [weakSelf.navigationController pushViewController:placesController animated:YES];
     };
     
-    PlacesItem *paths = [[PlacesItem alloc] init];
-    paths.header = @"Маршруты";
+    Category *paths = [[Category alloc] init];
+    paths.title = @"Маршруты";
     
-    PlacesItem *historicalPlaces = [[PlacesItem alloc] init];
-    historicalPlaces.header = @"Исторические места";
+    Category *historicalPlaces = [[Category alloc] init];
+    historicalPlaces.title = @"Исторические места";
     
-    PlacesItem *excursions = [[PlacesItem alloc] init];
-    excursions.header = @"Экскурсии";
+    Category *excursions = [[Category alloc] init];
+    excursions.title = @"Экскурсии";
         
-    [self.dataSouce addObjectsFromArray:@[territory, paths, historicalPlaces, excursions]];
+    [self.dataSource addObjectsFromArray:@[territory, paths, historicalPlaces, excursions]];
 }
 
 #pragma mark - Lifecycle
@@ -123,13 +123,13 @@ static CGFloat kTableRowHeight = 210.0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.dataSouce count];
+    return [self.dataSource count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     PlacesTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kCollectionCellId forIndexPath:indexPath];
     
-    [cell update:self.dataSouce[indexPath.row]];
+    [cell update:self.dataSource[indexPath.row]];
 
     return cell;
 }

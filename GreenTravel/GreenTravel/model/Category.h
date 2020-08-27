@@ -10,15 +10,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ParticularPlaceItem;
+@class PlaceItem;
 
 @interface Category : NSObject
 
 @property (strong, nonatomic) NSString *uuid;
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) Category *categories;
-@property (strong, nonatomic) ParticularPlaceItem *items;
+@property (strong, nonatomic) NSArray<PlaceItem *> *items;
 @property (strong, nonatomic) NSString *cover;
+@property (strong, nonatomic) void (^onAllButtonPress)(Category *);
 
 
 @end

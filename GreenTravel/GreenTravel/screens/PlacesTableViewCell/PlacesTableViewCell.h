@@ -10,11 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class PlacesItem;
+@class Category;
 
 @interface PlacesTableViewCell : UITableViewCell<UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
 
-- (void)update:(PlacesItem *)item; 
+- (void)update:(Category *)item; 
 
 @end
 

@@ -31,13 +31,8 @@ static NSString * const kGetCategoriesURL = @"http://localhost:3000/categories";
         [imagesFromAPI enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSLog(@"Object from JSON: %@", obj);
             Category *category = [[Category alloc] init];
-            [parsedItems addObject:];
+            //[parsedItems addObject:];
         }];
-    
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf updateFavoriteProperty];
-            [weakSelf.tableView reloadData];
-        });
     }];
     
        

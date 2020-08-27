@@ -10,11 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ParticularPlaceItem;
+@class PlaceItem;
 
 @interface DetailsViewController : UIViewController
 
-@property (strong, nonatomic) ParticularPlaceItem *item;
+@property (strong, nonatomic) PlaceItem *item;
 
 @end
 

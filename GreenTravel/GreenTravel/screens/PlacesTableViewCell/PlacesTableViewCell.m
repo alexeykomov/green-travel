@@ -10,8 +10,8 @@
 #import "PhotoCollectionViewCell.h"
 #import "Colors.h"
 #import "TextUtils.h"
-#import "PlacesItem.h"
-#import "ParticularPlaceItem.h"
+#import "Category.h"
+#import "PlaceItem.h"
 #import "SizeUtils.h"
 
 static NSString * const kPhotoCellId = @"photoCellId";
@@ -21,8 +21,8 @@ static NSString * const kPhotoCellId = @"photoCellId";
 @property (strong, nonatomic) UILabel *headerLabel;
 @property (strong, nonatomic) UIButton *allButton;
 @property (strong, nonatomic) UICollectionView *collectionView;
-@property (strong, nonatomic) NSArray<ParticularPlaceItem *> *dataSource;
-@property (strong, nonatomic) PlacesItem *item;
+@property (strong, nonatomic) NSArray<PlaceItem *> *dataSource;
+@property (strong, nonatomic) Category *item;
 
 @end
 
@@ -90,8 +90,8 @@ static NSString * const kPhotoCellId = @"photoCellId";
     ]];
 }
 
-- (void)update:(PlacesItem *)item {
-    self.headerLabel.attributedText = getAttributedString([item.header uppercaseString], [Colors get].black, 12.0, UIFontWeightBold);
+- (void)update:(Category *)item {
+    self.headerLabel.attributedText = getAttributedString([item.title uppercaseString], [Colors get].black, 12.0, UIFontWeightBold);
     self.dataSource = item.items;
     self.item = item;
     [self.collectionView reloadData];
@@ -129,7 +129,7 @@ static NSString * const kPhotoCellId = @"photoCellId";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Did select item at index path: %@", indexPath);
-    ParticularPlaceItem *item = self.dataSource[indexPath.row];
+    PlaceItem *item = self.dataSource[indexPath.row];
     
     item.onPlaceCellPress(item);
 }

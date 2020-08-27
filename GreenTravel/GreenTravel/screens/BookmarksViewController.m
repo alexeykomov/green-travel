@@ -10,12 +10,12 @@
 #import "Colors.h"
 #import "StyleUtils.h"
 #import "BookmarkCell.h"
-#import "PlacesItem.h"
+#import "Category.h"
 #import "PlacesViewController.h"
 
 @interface BookmarksViewController ()
 
-@property(strong, nonatomic) NSMutableArray<PlacesItem *> *dataSource;
+@property(strong, nonatomic) NSMutableArray<Category *> *dataSource;
 
 @end
 
@@ -55,18 +55,18 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
 #pragma mark - Places
     self.dataSource = [[NSMutableArray alloc] init];
     
-    PlacesItem *territory = [[PlacesItem alloc] init];
-    territory.header = @"Заповедные территории";
+    Category *territory = [[Category alloc] init];
+    territory.title = @"Заповедные территории";
     territory.items = @[];
     
-    PlacesItem *paths = [[PlacesItem alloc] init];
-    paths.header = @"Маршруты";
+    Category *paths = [[Category alloc] init];
+    paths.title = @"Маршруты";
     
-    PlacesItem *historicalPlaces = [[PlacesItem alloc] init];
-    historicalPlaces.header = @"Исторические места";
+    Category *historicalPlaces = [[Category alloc] init];
+    historicalPlaces.title = @"Исторические места";
     
-    PlacesItem *excursions = [[PlacesItem alloc] init];
-    excursions.header = @"Экскурсии";   
+    Category *excursions = [[Category alloc] init];
+    excursions.title = @"Экскурсии";   
     
     [self.dataSource addObjectsFromArray:@[territory, paths, historicalPlaces, excursions]];
     

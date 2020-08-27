@@ -8,7 +8,7 @@
 
 #import "SearchViewController.h"
 #import "Colors.h"
-#import "ParticularPlaceItem.h"
+#import "PlaceItem.h"
 #import "SearchHeaderCell.h"
 #import "SearchCell.h"
 #import "DetailsViewController.h"

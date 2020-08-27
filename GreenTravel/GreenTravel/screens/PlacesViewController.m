@@ -7,10 +7,10 @@
 //
 
 #import "PlacesViewController.h"
-#import "PlacesItem.h"
+#import "Category.h"
 #import "PhotoCollectionViewCell.h"
 #import "Colors.h"
-#import "ParticularPlaceItem.h"
+#import "PlaceItem.h"
 
 @interface PlacesViewController ()
 
@@ -42,7 +42,7 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
     [self.collectionView registerClass:[PhotoCollectionViewCell class] forCellWithReuseIdentifier:kPhotoCellId];
     self.collectionView.alwaysBounceVertical = YES;
     
-    self.title = self.item.header;
+    self.title = self.item.title;
     [self.collectionView reloadData];
     
     // Do any additional setup after loading the view.
@@ -97,7 +97,7 @@ static const CGFloat kSpacing = 12.0;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Did select item at index path: %@", indexPath);
-    ParticularPlaceItem *item = self.item.items[indexPath.row];
+    PlaceItem *item = self.item.items[indexPath.row];
     item.onPlaceCellPress(item);
 }
 

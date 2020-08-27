@@ -10,12 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class PlacesItem;
+@class Category;
 
 @interface BookmarkCell : UICollectionViewCell
 
-@property (strong, nonatomic) PlacesItem *item;
-- (void)update:(PlacesItem *)item;
+@property (strong, nonatomic) Category *item;
+- (void)update:(Category *)item;
 
 @end
 

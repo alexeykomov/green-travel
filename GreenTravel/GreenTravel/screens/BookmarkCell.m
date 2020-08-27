@@ -9,7 +9,7 @@
 #import "BookmarkCell.h"
 #import "Colors.h"
 #import "TextUtils.h"
-#import "PlacesItem.h"
+#import "Category.h"
 #import "StyleUtils.h"
 
 @interface BookmarkCell ()
@@ -64,8 +64,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeviceOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
-- (void)update:(PlacesItem *)item {
-    self.headerLabel.attributedText = getAttributedString([item.header uppercaseString], [Colors get].black, 10.0, UIFontWeightRegular);
+- (void)update:(Category *)item {
+    self.headerLabel.attributedText = getAttributedString([item.title uppercaseString], [Colors get].black, 10.0, UIFontWeightRegular);
     self.countLabel.attributedText = getAttributedString([@([item.items count]) stringValue], [Colors get].black, 10.0, UIFontWeightRegular);
     self.item = item;
 }

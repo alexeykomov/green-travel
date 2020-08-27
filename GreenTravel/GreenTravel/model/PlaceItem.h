@@ -11,14 +11,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ParticularPlaceItem : NSObject
+@interface PlaceItem : NSObject
 
 @property (strong, nonatomic) NSString *uuid;
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *cover;
 @property (assign, nonatomic) CLLocationCoordinate2D coords;
 @property (assign, nonatomic) BOOL bokmarked;
-@property (strong, nonatomic) void (^onPlaceCellPress)(ParticularPlaceItem *);
+@property (strong, nonatomic) void (^onPlaceCellPress)(PlaceItem *);
 
 @end 
 

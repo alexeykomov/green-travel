@@ -8,7 +8,7 @@
 
 #import "DetailsViewController.h"
 #import "Colors.h"
-#import "ParticularPlaceItem.h"
+#import "PlaceItem.h"
 
 @interface DetailsViewController ()
 

@@ -6,9 +6,9 @@
 //  Copyright © 2020 Alex K. All rights reserved.
 //
 
-#import "ParticularPlaceItem.h"
+#import "PlaceItem.h"
 
-@implementation ParticularPlaceItem
+@implementation PlaceItem
 
 
 @end
