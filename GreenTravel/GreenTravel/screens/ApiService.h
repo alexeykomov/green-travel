@@ -10,12 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class IndexModel;
 @class Category;
 
 @interface ApiService : NSObject
 
-@property (strong, nonatomic) NSURLSession *session;
-- (NSArray<Category *>*)getCategories; 
+- (instancetype)initWithSession:(NSURLSession *)session model:(IndexModel *)model;
+- (void)loadCategories;
+- (void)loadDetailsByUUID:(NSString *)uuid;
 
 @end
 

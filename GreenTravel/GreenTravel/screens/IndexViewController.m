@@ -17,9 +17,13 @@
 #import "SizeUtils.h"
 #import "PlacesTableViewCellConstants.h"
 #import "CategoriesRetriever.h"
+#import "IndexModel.h"
+#import "ApiService.h"
 
 @interface IndexViewController ()
 
+@property (strong, nonatomic) ApiService *apiService;
+@property (strong, nonatomic) IndexModel *model;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) NSMutableArray<Category *> *dataSource;
@@ -32,9 +36,11 @@ static CGFloat kTableRowHeight = 210.0;
 
 @implementation IndexViewController
 
-- (instancetype) initWithCategoriesRetriever:(CategoriesRetriever *)categoriesRetriever {
+- (instancetype) initWithApiService:(ApiService *)apiService
+                              model:(nonnull IndexModel *)model{
     self = [super init];
-    _categoriesRetriever = categoriesRetriever;
+    _apiService = apiService;
+    _model  = model;
     return self;
 }
 
@@ -103,6 +109,8 @@ static CGFloat kTableRowHeight = 210.0;
     excursions.title = @"Экскурсии";
         
     [self.dataSource addObjectsFromArray:@[territory, paths, historicalPlaces, excursions]];
+    
+    [self.apiService loadCategories];
 }
 
 #pragma mark - Lifecycle

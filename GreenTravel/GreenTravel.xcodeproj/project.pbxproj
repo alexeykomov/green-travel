@@ -69,6 +69,7 @@
 		5A324B7B24F6E3CB0044A671 /* Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B7A24F6E3CB0044A671 /* Category.m */; };
 		5A324B7E24F6E8820044A671 /* CategoriesRetriever.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B7D24F6E8820044A671 /* CategoriesRetriever.m */; };
 		5A324B8124F70B490044A671 /* ApiService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B8024F70B490044A671 /* ApiService.m */; };
+		5A324B8424F860420044A671 /* ImageService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B8324F860420044A671 /* ImageService.m */; };
 		5A69921724F7DE51008FB47E /* IndexModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921624F7DE51008FB47E /* IndexModel.m */; };
 		5A69921A24F7DF63008FB47E /* PathItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921924F7DF63008FB47E /* PathItem.m */; };
 		5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921C24F7E11F008FB47E /* PlaceDetails.m */; };
@@ -187,6 +188,8 @@
 		5A324B7D24F6E8820044A671 /* CategoriesRetriever.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoriesRetriever.m; sourceTree = "<group>"; };
 		5A324B7F24F70B490044A671 /* ApiService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApiService.h; sourceTree = "<group>"; };
 		5A324B8024F70B490044A671 /* ApiService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApiService.m; sourceTree = "<group>"; };
+		5A324B8224F860420044A671 /* ImageService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageService.h; sourceTree = "<group>"; };
+		5A324B8324F860420044A671 /* ImageService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageService.m; sourceTree = "<group>"; };
 		5A69921524F7DE51008FB47E /* IndexModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexModel.h; sourceTree = "<group>"; };
 		5A69921624F7DE51008FB47E /* IndexModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexModel.m; sourceTree = "<group>"; };
 		5A69921824F7DF63008FB47E /* PathItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PathItem.h; sourceTree = "<group>"; };
@@ -311,6 +314,8 @@
 				5A324B7D24F6E8820044A671 /* CategoriesRetriever.m */,
 				5A324B7F24F70B490044A671 /* ApiService.h */,
 				5A324B8024F70B490044A671 /* ApiService.m */,
+				5A324B8224F860420044A671 /* ImageService.h */,
+				5A324B8324F860420044A671 /* ImageService.m */,
 				5A69921524F7DE51008FB47E /* IndexModel.h */,
 				5A69921624F7DE51008FB47E /* IndexModel.m */,
 				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
@@ -689,6 +694,7 @@
 				5A324B8124F70B490044A671 /* ApiService.m in Sources */,
 				5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */,
 				5A69922024F7E134008FB47E /* PathDetails.m in Sources */,
+				5A324B8424F860420044A671 /* ImageService.m in Sources */,
 				5A1482A124E9527700EBB756 /* PhotoCollectionViewCell.m in Sources */,
 				5A14828A24E80E3900EBB756 /* MainViewController.m in Sources */,
 				5A1482E624EC80FC00EBB756 /* DetailsViewController.m in Sources */,

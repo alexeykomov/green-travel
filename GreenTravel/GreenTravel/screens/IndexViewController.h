@@ -10,12 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class CategoriesRetriever;
+@class ApiService;
+@class IndexModel;
 
 @interface IndexViewController : UITableViewController
 
-@property (strong, nonatomic) CategoriesRetriever *categoriesRetriever;
-- (instancetype) initWithCategoriesRetriever:(CategoriesRetriever *)categoriesRetriever;
+- (instancetype) initWithApiService:(ApiService *)apiService
+                              model:(IndexModel *)model;
 
 @end
 

@@ -12,8 +12,15 @@
 #import "BookmarksViewController.h"
 #import "Colors.h"
 #import "TextUtils.h"
+#import "ApiService.h"
+#import "IndexModel.h"
 
 @interface MainViewController ()
+
+@property (strong, nonatomic) ApiService *apiService;
+@property (strong, nonatomic) IndexModel *indexModel;
+@property (strong, nonatomic) NSURLSession *session;
+
 
 @end
 
@@ -31,10 +38,16 @@
     }
 
     self.view.backgroundColor = [Colors get].white;
+    
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    self.session = [NSURLSession sessionWithConfiguration:configuration];
+    self.indexModel = [[IndexModel alloc] init];
+    self.apiService = [[ApiService alloc] initWithSession:self.session model:self.indexModel];
+    
 
 #pragma mark - IndexViewController
     
-    IndexViewController *indexController = [[IndexViewController alloc] init];
+    IndexViewController *indexController = [[IndexViewController alloc] initWithApiService:self.apiService model:self.indexModel];
     indexController.title = @"Главная";
     UINavigationController *indexViewControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:indexController];
     UIImage *indexImage;

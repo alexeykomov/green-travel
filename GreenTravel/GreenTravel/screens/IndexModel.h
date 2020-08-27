@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSDictionary<NSString *, PathDetails *> *pathsByUUID;
 
 + (instancetype)get;
+- (void)updateCategories:(NSArray<Category *> *)categories;
+- (void)subsribeForCategoriesUpdate:(NSArray<Category *> *)categories;
 
 @end
 
