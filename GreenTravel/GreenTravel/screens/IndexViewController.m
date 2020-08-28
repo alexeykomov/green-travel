@@ -157,4 +157,8 @@ static CGFloat kTableRowHeight = 210.0;
 }
 */
 
+- (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
+    
+}
+
 @end

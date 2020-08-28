@@ -38,12 +38,13 @@ static NSString * const kGetCategoriesURL = @"http://localhost:3000/categories";
 - (void)loadCategories {
     
     NSURL *url = [NSURL URLWithString:kGetCategoriesURL];
+    __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         NSArray *categories = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         NSLog(@"Error when loading categories: %@", error);
-        NSArray<Category *> *mappedCategories = [[self mapCategoriesFromJSON:categories] copy];
-        [self.model updateCategories:mappedCategories];
+        NSArray<Category *> *mappedCategories = [[weakSelf mapCategoriesFromJSON:categories] copy];
+        [weakSelf.model updateCategories:mappedCategories];
     }];
     
     [task resume];

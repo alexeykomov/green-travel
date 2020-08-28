@@ -198,6 +198,8 @@
 		5A69921C24F7E11F008FB47E /* PlaceDetails.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlaceDetails.m; sourceTree = "<group>"; };
 		5A69921E24F7E134008FB47E /* PathDetails.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PathDetails.h; sourceTree = "<group>"; };
 		5A69921F24F7E134008FB47E /* PathDetails.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PathDetails.m; sourceTree = "<group>"; };
+		5A69922124F910F2008FB47E /* CategoriesObservable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesObservable.h; sourceTree = "<group>"; };
+		5A69922424F91175008FB47E /* CategoriesObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesObserver.h; sourceTree = "<group>"; };
 		72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.debug.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.debug.xcconfig"; sourceTree = "<group>"; };
 		91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GreenTravel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.release.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.release.xcconfig"; sourceTree = "<group>"; };
@@ -318,6 +320,8 @@
 				5A324B8324F860420044A671 /* ImageService.m */,
 				5A69921524F7DE51008FB47E /* IndexModel.h */,
 				5A69921624F7DE51008FB47E /* IndexModel.m */,
+				5A69922124F910F2008FB47E /* CategoriesObservable.h */,
+				5A69922424F91175008FB47E /* CategoriesObserver.h */,
 				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
 				5A14830624F1496600EBB756 /* SearchViewController */,
 				5A1482F324F04B0B00EBB756 /* NearbyPlacesViewController.h */,

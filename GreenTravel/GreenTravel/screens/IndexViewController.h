@@ -7,13 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CategoriesObserver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class ApiService;
 @class IndexModel;
 
-@interface IndexViewController : UITableViewController
+@interface IndexViewController : UITableViewController<CategoriesObserver>
 
 - (instancetype) initWithApiService:(ApiService *)apiService
                               model:(IndexModel *)model;
