@@ -21,7 +21,8 @@ static NSString * const kPhotoCellId = @"photoCellId";
 @property (strong, nonatomic) UILabel *headerLabel;
 @property (strong, nonatomic) UIButton *allButton;
 @property (strong, nonatomic) UICollectionView *collectionView;
-@property (strong, nonatomic) NSArray<PlaceItem *> *dataSource;
+@property (strong, nonatomic) NSArray<PlaceItem *> *dataSourceItems;
+@property (strong, nonatomic) NSArray<Category *> *dataSourceCategories;
 @property (strong, nonatomic) Category *item;
 
 @end
@@ -92,7 +93,10 @@ static NSString * const kPhotoCellId = @"photoCellId";
 
 - (void)update:(Category *)item {
     self.headerLabel.attributedText = getAttributedString([item.title uppercaseString], [Colors get].black, 12.0, UIFontWeightBold);
-    self.dataSource = item.items;
+    if ([item.categories count] > 0) {
+        
+    }
+    self.dataSourceItems = item.items;
     self.item = item;
     [self.collectionView reloadData];
 }
@@ -110,7 +114,7 @@ static NSString * const kPhotoCellId = @"photoCellId";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self.dataSource count];
+    return [self.dataSourceItems count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -129,7 +133,7 @@ static NSString * const kPhotoCellId = @"photoCellId";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Did select item at index path: %@", indexPath);
-    PlaceItem *item = self.dataSource[indexPath.row];
+    PlaceItem *item = self.dataSourceItems[indexPath.row];
     
     item.onPlaceCellPress(item);
 }

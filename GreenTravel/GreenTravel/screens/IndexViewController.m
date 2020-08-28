@@ -26,7 +26,6 @@
 @property (strong, nonatomic) IndexModel *model;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *contentView;
-@property (strong, nonatomic) NSMutableArray<Category *> *dataSource;
 @property (strong, nonatomic) UIBarButtonItem *originalBackButtonItem;
 
 @end
@@ -63,53 +62,12 @@ static CGFloat kTableRowHeight = 210.0;
     
 #pragma mark - Table view
     [self.tableView registerClass:PlacesTableViewCell.class forCellReuseIdentifier:kCollectionCellId];
-    self.dataSource = [[NSMutableArray alloc] init];
     self.tableView.allowsSelection = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.alwaysBounceVertical = YES;
     
 
-    
-    Category *territory = [[Category alloc] init];
-    territory.title = @"Заповедные территории";
-    NSMutableArray *territoryItems = [[NSMutableArray alloc] init];
-    PlaceItem *itemA = [[PlaceItem alloc] init];
-    __weak typeof(self) weakSelf = self;
-    __weak typeof(itemA) weakItemA = itemA;
-    itemA.onPlaceCellPress = ^void (PlaceItem *item) {
-        DetailsViewController *detailsController = [[DetailsViewController alloc] init];
-        detailsController.item = weakItemA;
-        [weakSelf.navigationController pushViewController:detailsController animated:YES];
-    };
-    itemA.title = @"Беловежская пуща";
-    PlaceItem *itemB = [[PlaceItem alloc] init];
-    itemB.title = @"Березинский биосферный заповедник";
-    __weak typeof(itemB) weakItemB = itemB;
-    itemB.onPlaceCellPress = ^void (PlaceItem *item) {
-        DetailsViewController *detailsController = [[DetailsViewController alloc] init];
-        
-        detailsController.item = weakItemB;
-        [weakSelf.navigationController pushViewController:detailsController animated:YES];
-    };
-    [territoryItems addObjectsFromArray:@[itemA, itemB]];
-    territory.items = territoryItems;
-    territory.onAllButtonPress = ^void (Category *item) {
-        PlacesViewController *placesController = [[PlacesViewController alloc] init];
-        placesController.item = item;
-        [weakSelf.navigationController pushViewController:placesController animated:YES];
-    };
-    
-    Category *paths = [[Category alloc] init];
-    paths.title = @"Маршруты";
-    
-    Category *historicalPlaces = [[Category alloc] init];
-    historicalPlaces.title = @"Исторические места";
-    
-    Category *excursions = [[Category alloc] init];
-    excursions.title = @"Экскурсии";
-        
-    [self.dataSource addObjectsFromArray:@[territory, paths, historicalPlaces, excursions]];
-    
+    [self.model addObserver:self];
     [self.apiService loadCategories];
 }
 
@@ -131,13 +89,13 @@ static CGFloat kTableRowHeight = 210.0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.dataSource count];
+    return [self.model.categories count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     PlacesTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kCollectionCellId forIndexPath:indexPath];
     
-    [cell update:self.dataSource[indexPath.row]];
+    [cell update:self.model.categories[indexPath.row]];
 
     return cell;
 }
@@ -147,18 +105,10 @@ static CGFloat kTableRowHeight = 210.0;
     return getCellSize(adaptedSize).height + 2 * 16.0 + 50.0;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 }
 
 @end
