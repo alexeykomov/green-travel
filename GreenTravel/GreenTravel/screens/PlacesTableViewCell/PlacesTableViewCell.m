@@ -94,9 +94,10 @@ static NSString * const kPhotoCellId = @"photoCellId";
 - (void)update:(Category *)item {
     self.headerLabel.attributedText = getAttributedString([item.title uppercaseString], [Colors get].black, 12.0, UIFontWeightBold);
     if ([item.categories count] > 0) {
-        
+        self.dataSourceCategories = item.categories;
+    } else {
+        self.dataSourceItems = item.items;
     }
-    self.dataSourceItems = item.items;
     self.item = item;
     [self.collectionView reloadData];
 }
@@ -114,27 +115,34 @@ static NSString * const kPhotoCellId = @"photoCellId";
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    NSUInteger howManyCategories = [self.dataSourceCategories count];
+    if (howManyCategories > 0) {
+        return howManyCategories;
+    }
     return [self.dataSourceItems count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"cellForItemAtIndexPath method, index path: %@", indexPath);
-    PhotoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kPhotoCellId forIndexPath:indexPath];
     
+    PhotoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kPhotoCellId forIndexPath:indexPath];
     return cell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGSize adaptedSize = CGSizeMake(self.bounds.size.width - 50, self.bounds.size.height);
-
-    
     return getCellSize(adaptedSize);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Did select item at index path: %@", indexPath);
-    PlaceItem *item = self.dataSourceItems[indexPath.row];
+    if ([self.dataSourceCategories count] > 0) {
+        Category *category = self.dataSourceCategories[indexPath.row];
+        category.onAllButtonPress(category);
+        return;
+    }
     
+    PlaceItem *item = self.dataSourceItems[indexPath.row];
     item.onPlaceCellPress(item);
 }
 

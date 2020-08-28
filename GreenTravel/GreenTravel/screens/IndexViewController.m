@@ -106,8 +106,9 @@ static CGFloat kTableRowHeight = 210.0;
 }
 
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
+        [weakSelf.tableView reloadData];
     });
 }
 

@@ -6,11 +6,19 @@
 //  Copyright © 2020 Alex K. All rights reserved.
 //
 
+#import "PlaceItem.h"
+#import "Category.h"
 #import "PhotoCollectionViewCell.h"
+#import "StyleUtils.h"
 #import "Colors.h"
 #import "TextUtils.h"
-#import "DetailsViewController.h"
-#import "StyleUtils.h"
+
+@interface PhotoCollectionViewCell ()
+
+@property (strong, nonatomic) Category *category;
+@property (strong, nonatomic) PlaceItem *item;
+
+@end
 
 @implementation PhotoCollectionViewCell
 
@@ -75,6 +83,14 @@
 }
 
 - (void)onPlaceButtonPress:(id)sender {
+    
+}
+
+- (void)updateItem:(PlaceItem *)item {
+    
+}
+
+- (void)updateCategory:(Category *)category {
     
 }
 
