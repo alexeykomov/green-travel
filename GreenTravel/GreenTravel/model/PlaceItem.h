@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *cover;
 @property (assign, nonatomic) CLLocationCoordinate2D coords;
 @property (assign, nonatomic) BOOL bokmarked;
-@property (strong, nonatomic) void (^onPlaceCellPress)(PlaceItem *);
+@property (strong, nonatomic) void (^onPlaceCellPress)(void);
 
 @end 
 

@@ -126,6 +126,11 @@ static NSString * const kPhotoCellId = @"photoCellId";
     NSLog(@"cellForItemAtIndexPath method, index path: %@", indexPath);
     
     PhotoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kPhotoCellId forIndexPath:indexPath];
+    if ([self.dataSourceCategories count] > 0) {
+        [cell updateCategory:self.dataSourceCategories[indexPath.row]];
+        return cell;
+    }
+    [cell updateItem:self.dataSourceItems[indexPath.row]];
     return cell;
 }
 
@@ -138,16 +143,16 @@ static NSString * const kPhotoCellId = @"photoCellId";
     NSLog(@"Did select item at index path: %@", indexPath);
     if ([self.dataSourceCategories count] > 0) {
         Category *category = self.dataSourceCategories[indexPath.row];
-        category.onAllButtonPress(category);
+        category.onAllButtonPress();
         return;
     }
     
     PlaceItem *item = self.dataSourceItems[indexPath.row];
-    item.onPlaceCellPress(item);
+    item.onPlaceCellPress();
 }
 
 - (void)onAllButtonPress:(id)sender {
-    self.item.onAllButtonPress(self.item);
+    self.item.onAllButtonPress();
 }
 
 #pragma mark - <UICollectionViewDelegate>

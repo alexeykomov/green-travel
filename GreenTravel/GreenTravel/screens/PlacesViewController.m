@@ -42,7 +42,7 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
     [self.collectionView registerClass:[PhotoCollectionViewCell class] forCellWithReuseIdentifier:kPhotoCellId];
     self.collectionView.alwaysBounceVertical = YES;
     
-    self.title = self.item.title;
+    self.title = self.category.title;
     [self.collectionView reloadData];
     
     // Do any additional setup after loading the view.
@@ -65,20 +65,26 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-#warning Incomplete implementation, return the number of sections
     return 1;
 }
 
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of items
-    return [self.item.items count];
+    NSUInteger howManyCategories = [self.category.categories count];
+    if (howManyCategories > 0) {
+        return howManyCategories;
+    }
+    return [self.category.items count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     PhotoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kPhotoCellId forIndexPath:indexPath];
     
-    
+    if ([self.category.categories count] > 0) {
+        [cell updateCategory:self.category.categories[indexPath.row]];
+        
+    } else {
+        [cell updateItem:self.category.items[indexPath.row]];
+    }
     
     return cell;
 }
@@ -97,8 +103,13 @@ static const CGFloat kSpacing = 12.0;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Did select item at index path: %@", indexPath);
-    PlaceItem *item = self.item.items[indexPath.row];
-    item.onPlaceCellPress(item);
+    if ([self.category.categories count] > 0) {
+        Category *category = self.category.categories[indexPath.row];
+        category.onPlaceCellPress();
+        return;
+    }
+    PlaceItem *item = self.category.items[indexPath.row];
+    item.onPlaceCellPress();
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {

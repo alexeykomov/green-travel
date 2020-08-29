@@ -11,10 +11,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class Category;
+@class PlaceItem;
 
 @interface PlacesViewController : UICollectionViewController
 
-@property (strong, nonatomic) Category *item;
+@property (strong, nonatomic) Category *category;
 
 @end
 

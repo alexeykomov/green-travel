@@ -10,7 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class PlaceItem;
+@class Category;
+
 @interface PhotoCollectionViewCell : UICollectionViewCell
+
+- (void)updateItem:(PlaceItem *)item;
+- (void)updateCategory:(Category *)category;
 
 @end
 

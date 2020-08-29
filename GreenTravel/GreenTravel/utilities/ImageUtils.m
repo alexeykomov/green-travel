@@ -1,0 +1,24 @@
+//
+//  ImageService.m
+//  GreenTravel
+//
+//  Created by Alex K on 8/28/20.
+//  Copyright © 2020 Alex K. All rights reserved.
+//
+
+#import "ImageUtils.h"
+#import <UIKit/UIKit.h>
+@import SDWebImage;
+
+SDWebImageCombinedOperation* loadImage(NSString *url, void (^onImageReady)(UIImage *)) {
+    NSURL *urlForImage = [NSURL URLWithString:url];
+    
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    return [manager loadImageWithURL:urlForImage options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        
+    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+        if (image) {
+            onImageReady(image);
+        }
+    }];
+}

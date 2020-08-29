@@ -166,7 +166,7 @@ static const CGFloat kSpacing = 12.0;
     }
     
     PlacesViewController *placesViewController = [[PlacesViewController alloc] init];
-    placesViewController.item = self.dataSource[index];
+    placesViewController.category = self.dataSource[index];
     [self.navigationController pushViewController:placesViewController animated:YES];
 }
 

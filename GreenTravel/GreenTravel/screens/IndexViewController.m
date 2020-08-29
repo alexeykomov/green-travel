@@ -105,11 +105,47 @@ static CGFloat kTableRowHeight = 210.0;
     return getCellSize(adaptedSize).height + 2 * 16.0 + 50.0;
 }
 
+#pragma mark - Categories update
+
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
     __weak typeof(self) weakSelf = self;
+    
+    [self fillNavigationListeners:self.model.categories];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.tableView reloadData];
     });
+}
+
+- (void)fillNavigationListeners:(NSArray<Category *> *)categories {
+    __weak typeof(self) weakSelf = self;
+    [categories enumerateObjectsUsingBlock:^(Category * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        __weak typeof(obj) weakCategory = obj;
+        obj.onAllButtonPress = ^void() {
+            PlacesViewController *placesViewController = [[PlacesViewController alloc] init];
+            placesViewController.category = weakCategory;
+            [weakSelf.navigationController pushViewController:placesViewController animated:YES];
+        };
+        [weakSelf fillNavigationListeners:obj.categories];
+        
+        [obj.categories enumerateObjectsUsingBlock:^(Category * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            __weak typeof(obj) weakCategory = obj;
+            obj.onPlaceCellPress = ^void() {
+                PlacesViewController *placesViewController = [[PlacesViewController alloc] init];
+                placesViewController.category = weakCategory;
+                [weakSelf.navigationController pushViewController:placesViewController animated:YES];
+            };
+        }];
+
+        [obj.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            __weak typeof(obj) weakItem = obj;
+            obj.onPlaceCellPress = ^void() {
+                DetailsViewController *detailsViewController = [[DetailsViewController alloc] init];
+                detailsViewController.item = weakItem;
+                [weakSelf.navigationController pushViewController:detailsViewController animated:YES];
+            };
+        }];
+    }];
 }
 
 @end

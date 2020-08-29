@@ -12,11 +12,16 @@
 #import "StyleUtils.h"
 #import "Colors.h"
 #import "TextUtils.h"
+#import "ImageUtils.h"
 
 @interface PhotoCollectionViewCell ()
 
 @property (strong, nonatomic) Category *category;
 @property (strong, nonatomic) PlaceItem *item;
+@property (strong, nonatomic) UILabel *headerLabel;
+@property (strong, nonatomic) UIButton *favoritesButton;
+@property (strong, nonatomic) UIImageView *placeholder;
+
 
 @end
 
@@ -35,46 +40,47 @@
     drawShadow(self);
     
 #pragma mark - Image
-    UIImageView *placeholder = [[UIImageView alloc] init];
-    [self addSubview:placeholder];
+    self.placeholder = [[UIImageView alloc] init];
+    [self addSubview:self.placeholder];
     
-    placeholder.translatesAutoresizingMaskIntoConstraints = NO;
-    placeholder.backgroundColor = [Colors get].blue;
+    self.placeholder.contentMode = UIViewContentModeScaleAspectFill;
+    self.placeholder.translatesAutoresizingMaskIntoConstraints = NO;
+    self.placeholder.backgroundColor = [Colors get].blue;
     
-    placeholder.layer.cornerRadius = 15.0;
-    placeholder.layer.masksToBounds = YES;
+    self.placeholder.layer.cornerRadius = 15.0;
+    self.placeholder.layer.masksToBounds = YES;
     
     [NSLayoutConstraint activateConstraints:@[
-        [placeholder.topAnchor constraintEqualToAnchor:self.topAnchor],
-        [placeholder.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-        [placeholder.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-        [placeholder.bottomAnchor constraintEqualToAnchor:self.bottomAnchor]
+        [self.placeholder.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [self.placeholder.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [self.placeholder.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [self.placeholder.bottomAnchor constraintEqualToAnchor:self.bottomAnchor]
     ]];
     
 #pragma mark - Header label
-    UILabel *headerLabel = [[UILabel alloc] init];
-    [self addSubview:headerLabel];
+    self.headerLabel = [[UILabel alloc] init];
+    [self addSubview:self.headerLabel];
     
-    headerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [headerLabel setFont:[UIFont fontWithName:@"OpenSans-Bold" size:16.0]];
-    headerLabel.attributedText = getAttributedString(@"Беловежская пуща", [Colors get].white, 16.0, UIFontWeightBold);
+    self.headerLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.headerLabel setFont:[UIFont fontWithName:@"OpenSans-Bold" size:16.0]];
     
     [NSLayoutConstraint activateConstraints:@[
-        [headerLabel.topAnchor constraintEqualToAnchor:self.topAnchor constant:16.0],
-        [headerLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
-        [headerLabel.heightAnchor constraintEqualToConstant:20.0]
+        [self.headerLabel.topAnchor constraintEqualToAnchor:self.topAnchor constant:16.0],
+        [self.headerLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
+        [self.headerLabel.heightAnchor constraintEqualToConstant:20.0]
     ]];
     
-    UILabel *favoritesButton = [UIButton systemButtonWithImage:[UIImage systemImageNamed:@"bookmark"] target:self action:@selector(onFavoritePress:)];
-    favoritesButton.tintColor = [Colors get].white;
-    [self addSubview:favoritesButton];
+    self.favoritesButton = [UIButton systemButtonWithImage:[UIImage systemImageNamed:@"bookmark"] target:self action:@selector(onFavoritePress:)];
+    self.favoritesButton.tintColor = [Colors get].white;
+    [self addSubview:self.favoritesButton];
     
-    favoritesButton.translatesAutoresizingMaskIntoConstraints = NO;
+    self.favoritesButton.translatesAutoresizingMaskIntoConstraints = NO;
     
     [NSLayoutConstraint activateConstraints:@[
-        [favoritesButton.topAnchor constraintEqualToAnchor:headerLabel.topAnchor],
-        [favoritesButton.leadingAnchor constraintEqualToAnchor:headerLabel.trailingAnchor constant:16.0],
-        [favoritesButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16.0]
+        [self.favoritesButton.topAnchor constraintEqualToAnchor:self.headerLabel.topAnchor],
+        [self.favoritesButton.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.headerLabel.trailingAnchor constant:16.0],
+        [self.favoritesButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16.0],
+        [self.favoritesButton.widthAnchor constraintEqualToConstant:21.0]
     ]];
 }
 
@@ -87,11 +93,24 @@
 }
 
 - (void)updateItem:(PlaceItem *)item {
+    self.headerLabel.attributedText = getAttributedString(item.title, [Colors get].white, 16.0, UIFontWeightBold);
+    [self.favoritesButton setSelected:item.bokmarked];
+    loadImage(item.cover, ^(UIImage *image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.placeholder setImage:image];
+        });
+    });
     
 }
 
 - (void)updateCategory:(Category *)category {
-    
+     self.headerLabel.attributedText = getAttributedString(category.title, [Colors get].white, 16.0, UIFontWeightBold);
+    [self.favoritesButton setHidden:YES];
+    loadImage(category.cover, ^(UIImage *image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.placeholder setImage:image];
+        });
+    });
 }
 
 @end

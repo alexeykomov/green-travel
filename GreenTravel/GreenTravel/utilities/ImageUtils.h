@@ -7,11 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+@import SDWebImage;
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface ImageService : NSObject
-
-@end
-
-NS_ASSUME_NONNULL_END
+SDWebImageCombinedOperation* loadImage(NSString *url, void (^onImageReady)(UIImage *));
