@@ -10,12 +10,23 @@
 #import "Colors.h"
 @import Mapbox;
 #import "StyleUtils.h"
+#import "MapModel.h"
 
 @interface MapViewController ()
+
+@property (strong, nonatomic) MapModel *model;
 
 @end
 
 @implementation MapViewController
+
+- (instancetype)initWithModel:(MapModel *)model {
+    self = [super init];
+    if (self) {
+        _model = model;
+    }
+    return self;
+}
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
@@ -43,6 +54,10 @@
     
     [mapView setCenterCoordinate:CLLocationCoordinate2DMake(53.893, 27.567)
                        zoomLevel:9.0 animated:NO];
+    
+    [self.model.mapItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+    }];
 }
 
 /*

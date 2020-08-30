@@ -7,10 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SearchItemsObserver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SearchViewController : UITableViewController<UISearchResultsUpdating>
+@class SearchModel;
+
+
+@interface SearchViewController : UITableViewController<UISearchResultsUpdating, SearchItemsObserver>
+
+- (instancetype)initWithModel:(SearchModel *)model;
 
 @end
 

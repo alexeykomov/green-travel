@@ -14,6 +14,8 @@
 #import "TextUtils.h"
 #import "ApiService.h"
 #import "IndexModel.h"
+#import "SearchModel.h"
+#import "MapModel.h"
 
 @interface MainViewController ()
 
@@ -43,11 +45,12 @@
     self.session = [NSURLSession sessionWithConfiguration:configuration];
     self.indexModel = [[IndexModel alloc] init];
     self.apiService = [[ApiService alloc] initWithSession:self.session model:self.indexModel];
-    
+    SearchModel *searchModel = [[SearchModel alloc] initWithIndexModel:self.indexModel];
+    MapModel *mapModel = [[MapModel alloc] initWithIndexModel:self.indexModel];
 
 #pragma mark - IndexViewController
     
-    IndexViewController *indexController = [[IndexViewController alloc] initWithApiService:self.apiService model:self.indexModel];
+    IndexViewController *indexController = [[IndexViewController alloc]   initWithApiService:self.apiService model:self.indexModel searchModel:searchModel]; 
     indexController.title = @"Главная";
     UINavigationController *indexViewControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:indexController];
     UIImage *indexImage;

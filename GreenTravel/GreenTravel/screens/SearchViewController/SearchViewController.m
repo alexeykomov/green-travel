@@ -15,13 +15,14 @@
 #import "SearchItem.h"
 #import "WeRecommendCell.h"
 #import "NearbyPlacesViewController.h"
+#import "SearchModel.h"
 
 @interface SearchViewController ()
 
 @property (strong, nonatomic) NSMutableArray<SearchItem *> *dataSourceRecommendations;
-@property (strong, nonatomic) NSMutableArray<SearchItem *> *dataSourceOrig;
 @property (strong, nonatomic) NSMutableArray<SearchItem *> *dataSourceFiltered;
 @property (strong, nonatomic) UISearchController *searchController;
+@property (strong, nonatomic) SearchModel *model;
 
 @end
 
@@ -37,12 +38,19 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 @implementation SearchViewController
 
+- (instancetype)initWithModel:(SearchModel *)model {
+    self = [super init];
+    if (self) {
+        _model = model;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
     self.dataSourceRecommendations = [[NSMutableArray alloc] init];
-    self.dataSourceOrig = [[NSMutableArray alloc] init];
     self.dataSourceFiltered = [[NSMutableArray alloc] init];
     
     self.tableView.backgroundColor = [Colors get].white;
@@ -77,7 +85,6 @@ static const CGFloat kSearchRowHeight = 40.0;
     itemE.distance = 100.0;
     
     [self.dataSourceRecommendations addObjectsFromArray:@[itemA, itemB, itemС, itemD, itemE]];
-    [self.dataSourceOrig addObjectsFromArray:@[itemA, itemB, itemС, itemD, itemE]];
 }
 
 #pragma mark - Table view data source
@@ -134,7 +141,8 @@ static const CGFloat kSearchRowHeight = 40.0;
         return;
     }
     if ([self isSearching]) {
-        detailsController.item = self.dataSourceFiltered[indexPath.row];
+        detailsController.item = self.dataSourceFiltered[indexPath.row].correspondingPlaceItem;
+        self.searchController.searchBar.text = @"";
     } else {
         detailsController.item = self.dataSourceRecommendations[indexPath.row - kDataSourceOrigOffset];
     }
@@ -146,8 +154,8 @@ static const CGFloat kSearchRowHeight = 40.0;
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     NSString *search = searchController.searchBar.text;
     [self.dataSourceFiltered removeAllObjects];
-    for (SearchItem *item in self.dataSourceOrig) {
-        if ([[item searchableText] containsString:search]) {
+    for (SearchItem *item in self.model.searchItems) {
+        if ([[item searchableText] localizedCaseInsensitiveContainsString:search]) {
             [self.dataSourceFiltered addObject:item];
             continue;
         }
@@ -182,6 +190,10 @@ static const CGFloat kSearchRowHeight = 40.0;
     // Pass the selected object to the new view controller.
 }
 */
+
+- (void)onSearchItemsUpdate:(nonnull NSArray<SearchItem *> *)searchItems {
+    [self.tableView reloadData];
+}
 
 @end
  

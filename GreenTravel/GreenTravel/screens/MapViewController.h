@@ -10,7 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MapModel;
+
 @interface MapViewController : UIViewController
+
+- (instancetype)initWithModel:(MapModel *)model;
 
 @end
 
