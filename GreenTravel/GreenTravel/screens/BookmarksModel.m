@@ -55,7 +55,8 @@
         }
         [weakSelf fillMapItemsFromCategories:category.categories];
         [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (![weakSelf.itemUUIDs containsObject:item.uuid]) {
+            if (![weakSelf.itemUUIDs containsObject:item.uuid] &&
+                item.bokmarked) {
                 [weakSelf.itemUUIDs addObject:item.uuid];
                 weakSelf.categoryTypeToBookmark[category.uuid] = @([weakSelf.categoryTypeToBookmark[category.uuid] intValue] + 1);
             }

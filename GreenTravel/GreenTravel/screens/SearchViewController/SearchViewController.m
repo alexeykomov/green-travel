@@ -16,6 +16,7 @@
 #import "WeRecommendCell.h"
 #import "NearbyPlacesViewController.h"
 #import "SearchModel.h"
+#import <CoreLocation/CoreLocation.h>
 
 @interface SearchViewController ()
 
@@ -23,6 +24,8 @@
 @property (strong, nonatomic) NSMutableArray<SearchItem *> *dataSourceFiltered;
 @property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) SearchModel *model;
+@property (strong, nonatomic) CLLocation *lastLocation;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end
 
@@ -85,6 +88,17 @@ static const CGFloat kSearchRowHeight = 40.0;
     itemE.distance = 100.0;
     
     [self.dataSourceRecommendations addObjectsFromArray:@[itemA, itemB, itemС, itemD, itemE]];
+    self.locationManager =  [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    __weak typeof(self) weakSelf = self;
+    [locations enumerateObjectsUsingBlock:^(CLLocation * _Nonnull location, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx == [locations count] - 1) {
+            weakSelf.lastLocation = location;
+        }
+    }];
 }
 
 #pragma mark - Table view data source
@@ -137,6 +151,9 @@ static const CGFloat kSearchRowHeight = 40.0;
     DetailsViewController *detailsController = [[DetailsViewController alloc] init];
     if (indexPath.row == 0 && ![self isSearching]) {
         NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
+        if([CLLocationManager significantLocationChangeMonitoringAvailable]) {
+            [self.locationManager startMonitoringSignificantLocationChanges];
+        }
         [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
         return;
     }
