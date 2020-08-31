@@ -12,10 +12,12 @@
 #import "BookmarkCell.h"
 #import "Category.h"
 #import "PlacesViewController.h"
+#import "BookmarksModel.h"
+#import "BookmarkItem.h"
 
 @interface BookmarksViewController ()
 
-@property(strong, nonatomic) NSMutableArray<Category *> *dataSource;
+@property (strong, nonatomic) BookmarksModel *model;
 
 @end
 
@@ -24,13 +26,14 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
 
 @implementation BookmarksViewController
 
-- (instancetype)init
+- (instancetype)initWithModel:(BookmarksModel *)model
 {
     self = [super init];
     if (self) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
         self = [self initWithCollectionViewLayout:layout];
+        _model = model;
     }
     return self;
 }
@@ -52,32 +55,13 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
     self.collectionView.backgroundColor = [Colors get].white;
     self.collectionView.alwaysBounceVertical = YES;
     
-#pragma mark - Places
-    self.dataSource = [[NSMutableArray alloc] init];
-    
-    Category *territory = [[Category alloc] init];
-    territory.title = @"Заповедные территории";
-    territory.items = @[];
-    
-    Category *paths = [[Category alloc] init];
-    paths.title = @"Маршруты";
-    
-    Category *historicalPlaces = [[Category alloc] init];
-    historicalPlaces.title = @"Исторические места";
-    
-    Category *excursions = [[Category alloc] init];
-    excursions.title = @"Экскурсии";   
-    
-    [self.dataSource addObjectsFromArray:@[territory, paths, historicalPlaces, excursions]];
-    
-    [self.collectionView reloadData];
+    [self.model addObserver:self];
 }
 
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return ceil((float)[self.dataSource count] / 2.0);
-;
+    return ceil((float)[self.model.bookmarkItems count] / 2.0);
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -90,11 +74,11 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
     
     long index = indexPath.row + indexPath.section * 2;
 
-    if (index >= [self.dataSource count]) {
+    if (index >= [self.model.bookmarkItems count]) {
         return cell;
     }
     
-    [cell update:self.dataSource[index]];
+    [cell update:self.model.bookmarkItems[index]];
     return cell;
 }
 
@@ -116,7 +100,7 @@ static const CGFloat kSpacing = 12.0;
     //CGFloat baseWidth = layoutGuide.width;
     
     long index = indexPath.row + indexPath.section * 2;
-    if (index >= [self.dataSource count]) {
+    if (index >= [self.model.bookmarkItems count]) {
         return CGSizeZero;
     }
     
@@ -161,23 +145,31 @@ static const CGFloat kSpacing = 12.0;
     
     long index = indexPath.row + indexPath.section * 2;
     
-    if (index >= [self.dataSource count]) {
+    if (index >= [self.model.bookmarkItems count]) {
+        return;
+    }
+    BookmarkItem *bookmarkItem = self.model.bookmarkItems[index];
+    if (bookmarkItem.howMany == 0) {
         return;
     }
     
     PlacesViewController *placesViewController = [[PlacesViewController alloc] init];
-    placesViewController.category = self.dataSource[index];
+    placesViewController.category = bookmarkItem.correspondingCategory;
     [self.navigationController pushViewController:placesViewController animated:YES];
 }
 
 /*
-#pragma mark - Navigation
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)onBookmarksUpdate:(nonnull NSArray<BookmarkItem *> *)bookmarkItems {
+    [self.collectionView reloadData];
 }
-*/
 
 @end

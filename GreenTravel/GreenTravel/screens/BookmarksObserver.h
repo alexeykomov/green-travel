@@ -10,11 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class BoormarkItem;
+@class BookmarkItem;
 
 @protocol BookmarksObserver <NSObject>
 
-- (void)onBookmarksUpdate:(NSArray<BoormarkItem *>*)bookmarkItems;
+- (void)onBookmarksUpdate:(NSArray<BookmarkItem *>*)bookmarkItems;
 
 @end
 

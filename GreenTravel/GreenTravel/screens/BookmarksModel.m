@@ -17,6 +17,7 @@
 
 @property (strong, nonatomic) IndexModel *indexModel;
 @property (strong, nonatomic) NSMutableDictionary<NSString*, NSNumber*> *categoryTypeToBookmark;
+@property (strong, nonatomic) NSMutableSet<NSString*> *itemUUIDs;
 
 @end
 
@@ -28,6 +29,7 @@
             self.indexModel = model;
             self.bookmarkItems = [[NSMutableArray alloc] init];
             self.categoryTypeToBookmark = [[NSMutableDictionary alloc] init];
+            self.itemUUIDs = [[NSMutableSet alloc] init];
             self.bookmarksObservers = [[NSMutableArray alloc] init];
             [self.indexModel addObserver:self];
         }
@@ -35,39 +37,34 @@
 }
 
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
-    //[self fillMapItemsFromCategories:categories];
+    [self fillMapItemsFromCategories:categories];
     [self notifyObservers];
 }
 
-//- (void)fillMapItemsFromCategories:(NSArray<Category *> *)categories {
-//    __weak typeof(self) weakSelf = self;
-//    [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
-//        if (!self.categoryTypeToBookmark[category.uuid]) {
-//            BookmarkItem *bookmarkItem = [[BookmarkItem alloc] init];
-//            bookmarkItem.correspondingCategory = category;
-//            bookmarkItem.title = category.title;
-//            bookmarkItem.uuid = category.uuid;
-//
-//            self.categoryTypeToBookmark[category.uuid] = @1;
-//            [self.bookmarkItems addObject:bookmarkItem];
-//        } else {
-//            self.categoryTypeToBookmark[category.uuid] = self.categoryTypeToBookmark[category.uuid] + 1;
-//        }
-//        
-//        [weakSelf fillMapItemsFromCategories:category.categories];
-//        [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-//            if (![weakSelf.uuids containsObject:item.uuid]) {
-//                BookmarkItem *bookmarkItem = [[BookmarkItem alloc] init];
-//                bookmarkItem.coords = item.coords;
-//                bookmarkItem.title = item.title;
-//                bookmarkItem.correspondingPlaceItem = item;
-//                [bookmarkItem.bookmarkItems addObject:mapItem];
-//                
-//                [bookmarkItem.uuids addObject:item.uuid];
-//            }
-//        }];
-//    }];
-//}
+- (void)fillMapItemsFromCategories:(NSArray<Category *> *)categories {
+    __weak typeof(self) weakSelf = self;
+    [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (!weakSelf.categoryTypeToBookmark[category.uuid] && [category.categories count] == 0) {
+            weakSelf.categoryTypeToBookmark[category.uuid] = @0;
+            BookmarkItem *bookmarkItem = [[BookmarkItem alloc] init];
+            bookmarkItem.correspondingCategory = category;
+            bookmarkItem.howMany = 0;
+            bookmarkItem.title = category.title;
+            bookmarkItem.uuid = category.uuid;
+            [weakSelf.bookmarkItems addObject:bookmarkItem];
+        }
+        [weakSelf fillMapItemsFromCategories:category.categories];
+        [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (![weakSelf.itemUUIDs containsObject:item.uuid]) {
+                [weakSelf.itemUUIDs addObject:item.uuid];
+                weakSelf.categoryTypeToBookmark[category.uuid] = @([weakSelf.categoryTypeToBookmark[category.uuid] intValue] + 1);
+            }
+        }];
+    }];
+    [self.bookmarkItems enumerateObjectsUsingBlock:^(BookmarkItem * _Nonnull bookmarkItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        bookmarkItem.howMany = [weakSelf.categoryTypeToBookmark[bookmarkItem.uuid] intValue];
+    }];
+}
 
 - (void)addObserver:(nonnull id<BookmarksObserver>)observer {
     [self.bookmarksObservers addObject:observer];

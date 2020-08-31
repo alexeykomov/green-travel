@@ -16,6 +16,7 @@
 #import "IndexModel.h"
 #import "SearchModel.h"
 #import "MapModel.h"
+#import "BookmarksModel.h"
 
 @interface MainViewController ()
 
@@ -47,6 +48,7 @@
     self.apiService = [[ApiService alloc] initWithSession:self.session model:self.indexModel];
     SearchModel *searchModel = [[SearchModel alloc] initWithIndexModel:self.indexModel];
     MapModel *mapModel = [[MapModel alloc] initWithIndexModel:self.indexModel];
+    BookmarksModel *bookmarksModel = [[BookmarksModel alloc] initWithIndexModel:self.indexModel];
 
 #pragma mark - IndexViewController
     
@@ -95,7 +97,7 @@
     
 #pragma mark - BookmarksViewController
     
-    BookmarksViewController *bookmarksController = [[BookmarksViewController alloc] init];
+    BookmarksViewController *bookmarksController = [[BookmarksViewController alloc] initWithModel:bookmarksModel];
     bookmarksController.title = @"Закладки";
     UINavigationController *bookmarksControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:bookmarksController];
     UIImage *bookmarksImage;

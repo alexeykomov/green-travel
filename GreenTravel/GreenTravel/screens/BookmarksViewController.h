@@ -7,10 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BookmarksObserver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BookmarksViewController : UICollectionViewController<UICollectionViewDelegateFlowLayout>
+@class BookmarksModel;
+
+@interface BookmarksViewController : UICollectionViewController<UICollectionViewDelegateFlowLayout, BookmarksObserver>
+
+- (instancetype)initWithModel:(BookmarksModel *)model;
 
 @end
 

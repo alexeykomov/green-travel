@@ -11,6 +11,7 @@
 #import "TextUtils.h"
 #import "Category.h"
 #import "StyleUtils.h"
+#import "BookmarkItem.h"
 
 @interface BookmarkCell ()
 
@@ -64,9 +65,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeviceOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
-- (void)update:(Category *)item {
+- (void)update:(BookmarkItem *)item {
     self.headerLabel.attributedText = getAttributedString([item.title uppercaseString], [Colors get].black, 10.0, UIFontWeightRegular);
-    self.countLabel.attributedText = getAttributedString([@([item.items count]) stringValue], [Colors get].black, 10.0, UIFontWeightRegular);
+    self.countLabel.attributedText = getAttributedString([@(item.howMany) stringValue], [Colors get].black, 10.0, UIFontWeightRegular);
     self.item = item;
 }
 
