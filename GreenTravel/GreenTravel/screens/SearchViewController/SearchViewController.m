@@ -26,6 +26,8 @@
 @property (strong, nonatomic) SearchModel *model;
 @property (strong, nonatomic) CLLocation *lastLocation;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (assign, nonatomic) BOOL locationIsEnabled;
+@property (assign, nonatomic) BOOL intentionToGoToNearbyPlaces;
 
 @end
 
@@ -92,6 +94,8 @@ static const CGFloat kSearchRowHeight = 40.0;
     self.locationManager.delegate = self;
 }
 
+#pragma mark - Location manager
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     __weak typeof(self) weakSelf = self;
     [locations enumerateObjectsUsingBlock:^(CLLocation * _Nonnull location, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -100,6 +104,19 @@ static const CGFloat kSearchRowHeight = 40.0;
         }
     }];
 }
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        self.locationIsEnabled = YES;
+        [manager startMonitoringSignificantLocationChanges];
+        if (self.intentionToGoToNearbyPlaces) {
+            NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
+            [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
+            self.intentionToGoToNearbyPlaces = NO;
+        }
+    }
+}
+
 
 #pragma mark - Table view data source
 
@@ -150,11 +167,15 @@ static const CGFloat kSearchRowHeight = 40.0;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     DetailsViewController *detailsController = [[DetailsViewController alloc] init];
     if (indexPath.row == 0 && ![self isSearching]) {
-        NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
+        self.intentionToGoToNearbyPlaces = YES;
         if([CLLocationManager significantLocationChangeMonitoringAvailable]) {
-            [self.locationManager startMonitoringSignificantLocationChanges];
+            [self.locationManager requestWhenInUseAuthorization];
         }
-        [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
+        if (self.locationIsEnabled) {
+            NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
+            [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
+            self.intentionToGoToNearbyPlaces = NO;
+        }
         return;
     }
     if ([self isSearching]) {
