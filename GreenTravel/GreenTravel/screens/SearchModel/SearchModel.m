@@ -81,9 +81,10 @@
 }
 
 - (void)onLocationUpdate:(CLLocation *)lastLocation {
+    NSLog(@"Last location: %@", lastLocation);
     [self.searchItems enumerateObjectsUsingBlock:^(SearchItem * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
-        CLLocation *itemLocation = [[CLLocation alloc] initWithCoordinate:searchItem.correspondingPlaceItem.coords altitude:0 horizontalAccuracy:0 verticalAccuracy:0 timestamp:NSDate.now];
-        searchItem.distance = [lastLocation distanceFromLocation:itemLocation];
+        CLLocation *itemLocation = [[CLLocation alloc] initWithCoordinate:searchItem.correspondingPlaceItem.coords altitude:0 horizontalAccuracy:500.0 verticalAccuracy:500.0 timestamp:NSDate.now];
+        searchItem.distance = [lastLocation distanceFromLocation:itemLocation] / 1000.0;
         NSLog(@"Distance: %f", searchItem.distance);
     }];
     [self notifyObservers];

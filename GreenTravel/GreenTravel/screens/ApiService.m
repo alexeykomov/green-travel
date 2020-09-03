@@ -12,7 +12,7 @@
 #import "PlaceItem.h"
 #import <CoreLocation/CoreLocation.h>
 
-static NSString * const kGetCategoriesURL = @"http://localhost:3000/categories";
+static NSString * const kGetCategoriesURL = @"http://192.168.0.13:3000/categories";
 
 @interface ApiService ()
 

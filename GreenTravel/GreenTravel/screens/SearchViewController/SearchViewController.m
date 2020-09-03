@@ -101,10 +101,13 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 - (void)onAuthorizationStatusChange:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
-        if (self.intentionToGoToNearbyPlaces) {
-            NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
-            [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
-            self.intentionToGoToNearbyPlaces = NO;
+        if (self.locationModel.locationEnabled) {
+            [self.locationModel startMonitoring];
+            if (self.intentionToGoToNearbyPlaces) {
+                NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
+    //            [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
+                self.intentionToGoToNearbyPlaces = NO;
+            }
         }
     }
 }
@@ -170,7 +173,7 @@ static const CGFloat kSearchRowHeight = 40.0;
         [self.locationModel authorize];
         if (self.locationModel.locationEnabled) {
             NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
-            [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
+//            [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
             self.intentionToGoToNearbyPlaces = NO;
         }
         return;

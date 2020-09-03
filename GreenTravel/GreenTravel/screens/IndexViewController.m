@@ -72,7 +72,6 @@ static CGFloat kTableRowHeight = 210.0;
     self.tableView.allowsSelection = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.alwaysBounceVertical = YES;
-    
 
     [self.model addObserver:self];
     [self.apiService loadCategories];
