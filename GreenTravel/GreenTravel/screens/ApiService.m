@@ -7,7 +7,6 @@
 //
 
 #import "ApiService.h"
-#import "CategoriesRetriever.h"
 #import "Category.h"
 #import "IndexModel.h"
 #import "PlaceItem.h"

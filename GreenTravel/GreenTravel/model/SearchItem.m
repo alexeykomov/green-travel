@@ -22,6 +22,7 @@
 
 - (NSString *)searchableText {
     if (self.distance >= 0) {
+        NSLog(@"Search distance: %f", self.distance);
         NSNumberFormatter *fmt = [[NSNumberFormatter alloc] init];
         fmt.numberStyle = NSNumberFormatterDecimalStyle;
         fmt.maximumFractionDigits = 1;

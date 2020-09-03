@@ -16,16 +16,17 @@
 #import "StyleUtils.h"
 #import "SizeUtils.h"
 #import "PlacesTableViewCellConstants.h"
-#import "CategoriesRetriever.h"
 #import "IndexModel.h"
 #import "SearchModel.h" 
 #import "ApiService.h"
+#import "LocationModel.h"
 
 @interface IndexViewController ()
 
 @property (strong, nonatomic) ApiService *apiService;
 @property (strong, nonatomic) IndexModel *model;
 @property (strong, nonatomic) SearchModel *searchModel;
+@property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) UIBarButtonItem *originalBackButtonItem;
@@ -39,11 +40,13 @@ static CGFloat kTableRowHeight = 210.0;
 
 - (instancetype) initWithApiService:(ApiService *)apiService
                               model:(nonnull IndexModel *)model
-                        searchModel:(SearchModel *)searchModel{
+                        searchModel:(SearchModel *)searchModel
+                      locationModel:(LocationModel *)locationModel{
     self = [super init];
     _apiService = apiService;
     _model = model;
     _searchModel = searchModel;
+    _locationModel = locationModel;
     return self;
 }
 
@@ -83,7 +86,7 @@ static CGFloat kTableRowHeight = 210.0;
 
 - (void) onSearchPress:(id)sender {
     [self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil]];
-    [self.navigationController pushViewController:[[SearchViewController alloc] initWithModel:self.searchModel] animated:NO];
+    [self.navigationController pushViewController:[[SearchViewController alloc] initWithModel:self.searchModel locationModel:self.locationModel] animated:NO];
 }
 
 #pragma mark - Table data source

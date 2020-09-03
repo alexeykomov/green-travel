@@ -12,10 +12,12 @@
 #import "Category.h"
 #import "SearchItem.h"
 #import "PlaceItem.h"
+#import "LocationModel.h"
 
 @interface SearchModel ()
 
 @property (strong, nonatomic) IndexModel *indexModel;
+@property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) NSMutableSet *uuids;
 
 @end
@@ -23,14 +25,17 @@
 @implementation SearchModel
 
 - (instancetype)initWithIndexModel:(IndexModel *)model
+                     locationModel:(LocationModel *)locationModel
 {
     self = [super init];
     if (self) {
-        self.indexModel = model;
+        _indexModel = model;
+        _locationModel = locationModel;
         self.searchItems = [[NSMutableArray alloc] init];
         self.uuids = [[NSMutableSet alloc] init];
         self.searchItemsObservers = [[NSMutableArray alloc] init];
         [self.indexModel addObserver:self];
+        [self.locationModel addObserver:self];
     }
     return self;
 }
@@ -73,6 +78,19 @@
 
 - (void)removeObserver:(nonnull id<SearchItemsObserver>)observer {
     [self.searchItemsObservers removeObject:observer];
+}
+
+- (void)onLocationUpdate:(CLLocation *)lastLocation {
+    [self.searchItems enumerateObjectsUsingBlock:^(SearchItem * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        CLLocation *itemLocation = [[CLLocation alloc] initWithCoordinate:searchItem.correspondingPlaceItem.coords altitude:0 horizontalAccuracy:0 verticalAccuracy:0 timestamp:NSDate.now];
+        searchItem.distance = [lastLocation distanceFromLocation:itemLocation];
+        NSLog(@"Distance: %f", searchItem.distance);
+    }];
+    [self notifyObservers];
+}
+
+- (void)onAuthorizationStatusChange:(CLAuthorizationStatus)status {
+    
 }
 
 @end

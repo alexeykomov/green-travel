@@ -67,7 +67,6 @@
 		5A14830424F136B800EBB756 /* WeRecommendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830324F136B800EBB756 /* WeRecommendCell.m */; };
 		5A14830924F3083E00EBB756 /* PlacesTableViewCellConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830824F3083D00EBB756 /* PlacesTableViewCellConstants.m */; };
 		5A324B7B24F6E3CB0044A671 /* Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B7A24F6E3CB0044A671 /* Category.m */; };
-		5A324B7E24F6E8820044A671 /* CategoriesRetriever.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B7D24F6E8820044A671 /* CategoriesRetriever.m */; };
 		5A324B8124F70B490044A671 /* ApiService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B8024F70B490044A671 /* ApiService.m */; };
 		5A324B8424F860420044A671 /* ImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B8324F860420044A671 /* ImageUtils.m */; };
 		5A324B8A24FAB9780044A671 /* SearchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B8924FAB9780044A671 /* SearchModel.m */; };
@@ -190,8 +189,6 @@
 		5A14830824F3083D00EBB756 /* PlacesTableViewCellConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlacesTableViewCellConstants.m; sourceTree = "<group>"; };
 		5A324B7924F6E3CB0044A671 /* Category.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Category.h; sourceTree = "<group>"; };
 		5A324B7A24F6E3CB0044A671 /* Category.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Category.m; sourceTree = "<group>"; };
-		5A324B7C24F6E8820044A671 /* CategoriesRetriever.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesRetriever.h; sourceTree = "<group>"; };
-		5A324B7D24F6E8820044A671 /* CategoriesRetriever.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoriesRetriever.m; sourceTree = "<group>"; };
 		5A324B7F24F70B490044A671 /* ApiService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApiService.h; sourceTree = "<group>"; };
 		5A324B8024F70B490044A671 /* ApiService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApiService.m; sourceTree = "<group>"; };
 		5A324B8224F860420044A671 /* ImageUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageUtils.h; sourceTree = "<group>"; };
@@ -214,6 +211,8 @@
 		5A324B9B24FBAEEB0044A671 /* BookmarksModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BookmarksModel.m; sourceTree = "<group>"; };
 		5A324B9D24FEF87B0044A671 /* LocationModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationModel.h; sourceTree = "<group>"; };
 		5A324B9E24FEF87B0044A671 /* LocationModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationModel.m; sourceTree = "<group>"; };
+		5A324BA4250025AF0044A671 /* LocationObservable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationObservable.h; sourceTree = "<group>"; };
+		5A324BA5250025B90044A671 /* LocationObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationObserver.h; sourceTree = "<group>"; };
 		5A69921524F7DE51008FB47E /* IndexModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexModel.h; sourceTree = "<group>"; };
 		5A69921624F7DE51008FB47E /* IndexModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexModel.m; sourceTree = "<group>"; };
 		5A69921824F7DF63008FB47E /* PathItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PathItem.h; sourceTree = "<group>"; };
@@ -338,26 +337,16 @@
 				5A14828924E80E3900EBB756 /* MainViewController.m */,
 				5A14828B24E8101A00EBB756 /* IndexViewController.h */,
 				5A14828C24E8101A00EBB756 /* IndexViewController.m */,
-				5A324B7C24F6E8820044A671 /* CategoriesRetriever.h */,
-				5A324B7D24F6E8820044A671 /* CategoriesRetriever.m */,
 				5A324B7F24F70B490044A671 /* ApiService.h */,
 				5A324B8024F70B490044A671 /* ApiService.m */,
-				5A69921524F7DE51008FB47E /* IndexModel.h */,
-				5A69921624F7DE51008FB47E /* IndexModel.m */,
-				5A324B8824FAB9780044A671 /* SearchModel.h */,
-				5A324B8924FAB9780044A671 /* SearchModel.m */,
-				5A324B8F24FB00A60044A671 /* MapModel.h */,
-				5A324B9024FB00A60044A671 /* MapModel.m */,
-				5A324B9A24FBAEEB0044A671 /* BookmarksModel.h */,
-				5A324B9B24FBAEEB0044A671 /* BookmarksModel.m */,
-				5A69922124F910F2008FB47E /* CategoriesObservable.h */,
-				5A69922424F91175008FB47E /* CategoriesObserver.h */,
-				5A324B8B24FABA620044A671 /* SearchItemsObservable.h */,
-				5A324B8C24FAC1950044A671 /* SearchItemsObserver.h */,
-				5A324B8D24FAFF4F0044A671 /* MapItemsObservable.h */,
-				5A324B8E24FAFF630044A671 /* MapItemsObserver.h */,
-				5A324B9624FBAD340044A671 /* BookmarksObserver.h */,
-				5A324B9524FBAD260044A671 /* BookmarksObservable.h */,
+				5A324B9D24FEF87B0044A671 /* LocationModel.h */,
+				5A324B9E24FEF87B0044A671 /* LocationModel.m */,
+				5A324BA4250025AF0044A671 /* LocationObservable.h */,
+				5A324BA5250025B90044A671 /* LocationObserver.h */,
+				5A324BA3250025390044A671 /* SearchModel */,
+				5A324BA22500252D0044A671 /* IndexModel */,
+				5A324BA12500251F0044A671 /* MapModel */,
+				5A324BA0250025110044A671 /* BookmarksModel */,
 				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
 				5A14830624F1496600EBB756 /* SearchViewController */,
 				5A1482F324F04B0B00EBB756 /* NearbyPlacesViewController.h */,
@@ -498,13 +487,55 @@
 			children = (
 				5A14829924E9440C00EBB756 /* SearchViewController.h */,
 				5A14829A24E9440C00EBB756 /* SearchViewController.m */,
-				5A324B9D24FEF87B0044A671 /* LocationModel.h */,
-				5A324B9E24FEF87B0044A671 /* LocationModel.m */,
 				5A1482FD24F124B200EBB756 /* SearchHeaderCell */,
 				5A14830524F136BB00EBB756 /* WeRecommendCell */,
 				5A1482FE24F124C300EBB756 /* SearchCell */,
 			);
 			path = SearchViewController;
+			sourceTree = "<group>";
+		};
+		5A324BA0250025110044A671 /* BookmarksModel */ = {
+			isa = PBXGroup;
+			children = (
+				5A324B9A24FBAEEB0044A671 /* BookmarksModel.h */,
+				5A324B9B24FBAEEB0044A671 /* BookmarksModel.m */,
+				5A324B9624FBAD340044A671 /* BookmarksObserver.h */,
+				5A324B9524FBAD260044A671 /* BookmarksObservable.h */,
+			);
+			path = BookmarksModel;
+			sourceTree = "<group>";
+		};
+		5A324BA12500251F0044A671 /* MapModel */ = {
+			isa = PBXGroup;
+			children = (
+				5A324B8F24FB00A60044A671 /* MapModel.h */,
+				5A324B9024FB00A60044A671 /* MapModel.m */,
+				5A324B8D24FAFF4F0044A671 /* MapItemsObservable.h */,
+				5A324B8E24FAFF630044A671 /* MapItemsObserver.h */,
+			);
+			path = MapModel;
+			sourceTree = "<group>";
+		};
+		5A324BA22500252D0044A671 /* IndexModel */ = {
+			isa = PBXGroup;
+			children = (
+				5A69921524F7DE51008FB47E /* IndexModel.h */,
+				5A69921624F7DE51008FB47E /* IndexModel.m */,
+				5A69922124F910F2008FB47E /* CategoriesObservable.h */,
+				5A69922424F91175008FB47E /* CategoriesObserver.h */,
+			);
+			path = IndexModel;
+			sourceTree = "<group>";
+		};
+		5A324BA3250025390044A671 /* SearchModel */ = {
+			isa = PBXGroup;
+			children = (
+				5A324B8824FAB9780044A671 /* SearchModel.h */,
+				5A324B8924FAB9780044A671 /* SearchModel.m */,
+				5A324B8B24FABA620044A671 /* SearchItemsObservable.h */,
+				5A324B8C24FAC1950044A671 /* SearchItemsObserver.h */,
+			);
+			path = SearchModel;
 			sourceTree = "<group>";
 		};
 		72F07A37AC1DE1BCFA8BD0F1 /* Pods */ = {
@@ -730,7 +761,6 @@
 				5A69921A24F7DF63008FB47E /* PathItem.m in Sources */,
 				5A1482F224EF005300EBB756 /* BookmarkCell.m in Sources */,
 				5A324B8A24FAB9780044A671 /* SearchModel.m in Sources */,
-				5A324B7E24F6E8820044A671 /* CategoriesRetriever.m in Sources */,
 				5A324B9F24FEF87B0044A671 /* LocationModel.m in Sources */,
 				5A14825E24E7ED9400EBB756 /* main.m in Sources */,
 				5A14830124F129E900EBB756 /* SearchItem.m in Sources */,

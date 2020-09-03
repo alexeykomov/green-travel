@@ -16,6 +16,7 @@
 #import "WeRecommendCell.h"
 #import "NearbyPlacesViewController.h"
 #import "SearchModel.h"
+#import "LocationModel.h"
 #import <CoreLocation/CoreLocation.h>
 
 @interface SearchViewController ()
@@ -24,8 +25,8 @@
 @property (strong, nonatomic) NSMutableArray<SearchItem *> *dataSourceFiltered;
 @property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) SearchModel *model;
+@property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) CLLocation *lastLocation;
-@property (strong, nonatomic) CLLocationManager *locationManager;
 @property (assign, nonatomic) BOOL locationIsEnabled;
 @property (assign, nonatomic) BOOL intentionToGoToNearbyPlaces;
 
@@ -43,10 +44,12 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 @implementation SearchViewController
 
-- (instancetype)initWithModel:(SearchModel *)model {
+- (instancetype)initWithModel:(SearchModel *)model
+                locationModel:(LocationModel *)locationModel{
     self = [super init];
     if (self) {
         _model = model;
+        _locationModel = locationModel;
     }
     return self;
 }
@@ -90,25 +93,14 @@ static const CGFloat kSearchRowHeight = 40.0;
     itemE.distance = 100.0;
     
     [self.dataSourceRecommendations addObjectsFromArray:@[itemA, itemB, itemС, itemD, itemE]];
-    self.locationManager =  [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
+    
+    [self.locationModel addObserver:self];
 }
 
-#pragma mark - Location manager
+#pragma mark - Location model
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-    __weak typeof(self) weakSelf = self;
-    [locations enumerateObjectsUsingBlock:^(CLLocation * _Nonnull location, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (idx == [locations count] - 1) {
-            weakSelf.lastLocation = location;
-        }
-    }];
-}
-
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+- (void)onAuthorizationStatusChange:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
-        self.locationIsEnabled = YES;
-        [manager startMonitoringSignificantLocationChanges];
         if (self.intentionToGoToNearbyPlaces) {
             NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
             [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
@@ -117,6 +109,13 @@ static const CGFloat kSearchRowHeight = 40.0;
     }
 }
 
+- (void)onLocationUpdate:(CLLocation *)lastLocation {
+    if (self.intentionToGoToNearbyPlaces) {
+        NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
+        [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
+        self.intentionToGoToNearbyPlaces = NO;
+    }
+}
 
 #pragma mark - Table view data source
 
@@ -168,10 +167,8 @@ static const CGFloat kSearchRowHeight = 40.0;
     DetailsViewController *detailsController = [[DetailsViewController alloc] init];
     if (indexPath.row == 0 && ![self isSearching]) {
         self.intentionToGoToNearbyPlaces = YES;
-        if([CLLocationManager significantLocationChangeMonitoringAvailable]) {
-            [self.locationManager requestWhenInUseAuthorization];
-        }
-        if (self.locationIsEnabled) {
+        [self.locationModel authorize];
+        if (self.locationModel.locationEnabled) {
             NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
             [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
             self.intentionToGoToNearbyPlaces = NO;

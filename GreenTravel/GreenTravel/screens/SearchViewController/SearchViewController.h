@@ -8,16 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "SearchItemsObserver.h"
+#import "LocationObserver.h"
 #import <CoreLocation/CoreLocation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class SearchModel;
+@class LocationModel;
 
+@interface SearchViewController : UITableViewController<UISearchResultsUpdating, SearchItemsObserver, CLLocationManagerDelegate, LocationObserver> 
 
-@interface SearchViewController : UITableViewController<UISearchResultsUpdating, SearchItemsObserver, CLLocationManagerDelegate>
-
-- (instancetype)initWithModel:(SearchModel *)model;
+- (instancetype)initWithModel:(SearchModel *)model
+                locationModel:(LocationModel *)locationModel;
 
 @end
 
