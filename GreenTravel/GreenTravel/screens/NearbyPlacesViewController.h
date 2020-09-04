@@ -7,10 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MapItemsObserver.h"
+@import Mapbox;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NearbyPlacesViewController : UIViewController
+@class MapModel;
+
+@interface NearbyPlacesViewController : UIViewController<MapItemsObserver, MGLMapViewDelegate>
+
+- (instancetype)initWithMapModel:(MapModel *)mapModel;
 
 @end
 

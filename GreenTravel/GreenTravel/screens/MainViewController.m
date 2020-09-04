@@ -49,7 +49,7 @@
     self.apiService = [[ApiService alloc] initWithSession:self.session model:self.indexModel];
     LocationModel *locationModel = [[LocationModel alloc] init];
     SearchModel *searchModel = [[SearchModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
-    MapModel *mapModel = [[MapModel alloc] initWithIndexModel:self.indexModel];
+    MapModel *mapModel = [[MapModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
     BookmarksModel *bookmarksModel = [[BookmarksModel alloc] initWithIndexModel:self.indexModel];
 
 #pragma mark - IndexViewController

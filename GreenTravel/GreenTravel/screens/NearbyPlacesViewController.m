@@ -10,12 +10,24 @@
 @import Mapbox;
 #import "StyleUtils.h"
 #import "Colors.h"
+#import "MapModel.h"
+#import "MapItemsObserver.h"
 
 @interface NearbyPlacesViewController ()
+
+@property (strong, nonatomic) MapModel *mapModel;
 
 @end
 
 @implementation NearbyPlacesViewController
+
+- (instancetype)initWithMapModel:(MapModel *)mapModel {
+    self = [super init];
+    if (self) {
+        _mapModel = mapModel;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -31,6 +43,8 @@
     MGLMapView *mapView = [[MGLMapView alloc] initWithFrame:CGRectZero styleURL:url];
     [self.view addSubview:mapView];
     
+    mapView.delegate = self;
+    
     mapView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
         [mapView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
@@ -41,6 +55,16 @@
     
     [mapView setCenterCoordinate:CLLocationCoordinate2DMake(53.893, 27.567)
                        zoomLevel:9.0 animated:NO];
+    [self.mapModel addObserver:self];  
+}
+
+- (void)onMapItemsUpdate:(NSArray<MapItem *> *)mapItems {
+    
+}
+
+- (void)mapView:(MGLMapView *)mapView didFinishLoadingStyle:(MGLStyle *)style {
+    MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
+    point.coordinate = mapView.centerCoordinate;
 }
 
 /*
