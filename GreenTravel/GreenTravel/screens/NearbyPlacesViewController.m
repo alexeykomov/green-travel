@@ -12,6 +12,7 @@
 #import "Colors.h"
 #import "MapModel.h"
 #import "MapItemsObserver.h"
+#import "MapItem.h"
 
 @interface NearbyPlacesViewController ()
 
@@ -63,8 +64,21 @@
 }
 
 - (void)mapView:(MGLMapView *)mapView didFinishLoadingStyle:(MGLStyle *)style {
-    MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
-    point.coordinate = mapView.centerCoordinate;
+    [self.mapModel.mapItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
+        point.coordinate = mapItem.coords;
+        
+        MGLShapeSource *shapeSource = [[MGLShapeSource alloc] initWithIdentifier:@"marker-source" shape:point options:nil];
+        MGLSymbolStyleLayer *shapeLayer = [[MGLSymbolStyleLayer alloc] initWithIdentifier:@"marker-style" source:shapeSource];
+        
+        [style setImage:[UIImage imageNamed:@"mappin"] forName:@"place-symbol"];
+        shapeLayer.iconImageName = [NSExpression expressionForConstantValue:@"place-symbol"];
+        
+        [style addSource:shapeSource];
+        [style addLayer:shapeLayer];
+    }];
+    
+    
 }
 
 /*

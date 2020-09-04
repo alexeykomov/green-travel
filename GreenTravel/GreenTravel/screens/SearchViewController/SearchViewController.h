@@ -15,11 +15,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class SearchModel;
 @class LocationModel;
+@class MapModel;
 
 @interface SearchViewController : UITableViewController<UISearchResultsUpdating, SearchItemsObserver, CLLocationManagerDelegate, LocationObserver> 
 
 - (instancetype)initWithModel:(SearchModel *)model
-                locationModel:(LocationModel *)locationModel;
+                locationModel:(LocationModel *)locationModel
+                     mapModel:(MapModel *)mapModel; 
 
 @end
 

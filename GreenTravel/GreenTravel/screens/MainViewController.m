@@ -54,7 +54,7 @@
 
 #pragma mark - IndexViewController
     
-    IndexViewController *indexController = [[IndexViewController alloc]   initWithApiService:self.apiService model:self.indexModel searchModel:searchModel locationModel:locationModel];
+    IndexViewController *indexController = [[IndexViewController alloc]   initWithApiService:self.apiService model:self.indexModel searchModel:searchModel locationModel:locationModel mapModel:mapModel];
     indexController.title = @"Главная";
     UINavigationController *indexViewControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:indexController];
     UIImage *indexImage;

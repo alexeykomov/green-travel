@@ -15,13 +15,15 @@ NS_ASSUME_NONNULL_BEGIN
 @class IndexModel;
 @class SearchModel;
 @class LocationModel;
+@class MapModel;
 
 @interface IndexViewController : UITableViewController<CategoriesObserver>
 
 - (instancetype) initWithApiService:(ApiService *)apiService
                               model:(IndexModel *)model
                         searchModel:(SearchModel *)searchModel
-                      locationModel:(LocationModel *)locationModel;
+                      locationModel:(LocationModel *)locationModel
+                           mapModel:(MapModel *)mapModel;
 
 @end
 

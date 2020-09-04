@@ -27,6 +27,7 @@
 @property (strong, nonatomic) IndexModel *model;
 @property (strong, nonatomic) SearchModel *searchModel;
 @property (strong, nonatomic) LocationModel *locationModel;
+@property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) UIBarButtonItem *originalBackButtonItem;
@@ -41,12 +42,14 @@ static CGFloat kTableRowHeight = 210.0;
 - (instancetype) initWithApiService:(ApiService *)apiService
                               model:(nonnull IndexModel *)model
                         searchModel:(SearchModel *)searchModel
-                      locationModel:(LocationModel *)locationModel{
+                      locationModel:(LocationModel *)locationModel
+                           mapModel:(MapModel *)mapModel{
     self = [super init];
     _apiService = apiService;
     _model = model;
     _searchModel = searchModel;
     _locationModel = locationModel;
+    _mapModel = mapModel;
     return self;
 }
 
@@ -85,7 +88,7 @@ static CGFloat kTableRowHeight = 210.0;
 
 - (void) onSearchPress:(id)sender {
     [self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil]];
-    [self.navigationController pushViewController:[[SearchViewController alloc] initWithModel:self.searchModel locationModel:self.locationModel] animated:NO];
+    [self.navigationController pushViewController:[[SearchViewController alloc] initWithModel:self.searchModel locationModel:self.locationModel mapModel:self.mapModel] animated:NO];
 }
 
 #pragma mark - Table data source
