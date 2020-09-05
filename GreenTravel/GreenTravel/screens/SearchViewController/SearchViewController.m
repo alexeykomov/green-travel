@@ -14,7 +14,7 @@
 #import "DetailsViewController.h"
 #import "SearchItem.h"
 #import "WeRecommendCell.h"
-#import "NearbyPlacesViewController.h"
+#import "MapViewController.h"
 #import "SearchModel.h"
 #import "LocationModel.h"
 #import <CoreLocation/CoreLocation.h>
@@ -107,7 +107,7 @@ static const CGFloat kSearchRowHeight = 40.0;
         if (self.locationModel.locationEnabled) {
             [self.locationModel startMonitoring];
             if (self.intentionToGoToNearbyPlaces) {
-                NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] initWithMapModel:self.mapModel showClosestPoints:YES];
+                MapViewController *nearbyPlacesViewController = [[MapViewController alloc] initWithMapModel:self.mapModel showClosestPoints:YES];
                 [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
                 self.intentionToGoToNearbyPlaces = NO;
             }
@@ -117,7 +117,7 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 - (void)onLocationUpdate:(CLLocation *)lastLocation {
     if (self.intentionToGoToNearbyPlaces) {
-        NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] init];
+        MapViewController *nearbyPlacesViewController = [[MapViewController alloc] init];
         [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
         self.intentionToGoToNearbyPlaces = NO;
     }
@@ -175,7 +175,7 @@ static const CGFloat kSearchRowHeight = 40.0;
         self.intentionToGoToNearbyPlaces = YES;
         [self.locationModel authorize];
         if (self.locationModel.locationEnabled) {
-            NearbyPlacesViewController *nearbyPlacesViewController = [[NearbyPlacesViewController alloc] initWithMapModel:self.mapModel showClosestPoints:YES];
+            MapViewController *nearbyPlacesViewController = [[MapViewController alloc] initWithMapModel:self.mapModel showClosestPoints:YES];
             [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
             self.intentionToGoToNearbyPlaces = NO;
         }
