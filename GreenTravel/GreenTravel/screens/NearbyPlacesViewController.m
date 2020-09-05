@@ -13,6 +13,7 @@
 #import "MapModel.h"
 #import "MapItemsObserver.h"
 #import "MapItem.h"
+#import "MapPinView.h"
 
 @interface NearbyPlacesViewController ()
 
@@ -56,29 +57,47 @@
     
     [mapView setCenterCoordinate:CLLocationCoordinate2DMake(53.893, 27.567)
                        zoomLevel:9.0 animated:NO];
-    [self.mapModel addObserver:self];  
+    [self.mapModel addObserver:self];
+}
+
+- (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView {
+    
+    NSMutableArray *mapAnnotations = [[NSMutableArray alloc] init];
+    NSArray<MapItem *> *closeItems = self.mapModel.closeMapItems;
+    [closeItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
+        point.coordinate = mapItem.coords;
+        point.title = mapItem.title;
+        [mapAnnotations addObject:point];
+    }];
+    
+    [mapView addAnnotations:mapAnnotations];
+    [mapView showAnnotations:mapAnnotations animated:YES];
 }
 
 - (void)onMapItemsUpdate:(NSArray<MapItem *> *)mapItems {
-    
+    NSLog(@"Map items: %@", mapItems);
 }
 
-- (void)mapView:(MGLMapView *)mapView didFinishLoadingStyle:(MGLStyle *)style {
-    [self.mapModel.mapItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
-        MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
-        point.coordinate = mapItem.coords;
-        
-        MGLShapeSource *shapeSource = [[MGLShapeSource alloc] initWithIdentifier:@"marker-source" shape:point options:nil];
-        MGLSymbolStyleLayer *shapeLayer = [[MGLSymbolStyleLayer alloc] initWithIdentifier:@"marker-style" source:shapeSource];
-        
-        [style setImage:[UIImage imageNamed:@"mappin"] forName:@"place-symbol"];
-        shapeLayer.iconImageName = [NSExpression expressionForConstantValue:@"place-symbol"];
-        
-        [style addSource:shapeSource];
-        [style addLayer:shapeLayer];
-    }];
+- (MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id<MGLAnnotation>)annotation {
+    if (![annotation isKindOfClass:[MGLPointAnnotation class]]) {
+        return nil;
+    }
+    NSString *reuseIdentifier = [NSString stringWithFormat:@"%f", annotation.coordinate.longitude];
     
+    MapPinView *mappin = [mapView dequeueReusableAnnotationViewWithIdentifier:reuseIdentifier];
     
+    if (!mappin) {
+        mappin = [[MapPinView alloc] initWithReuseIdentifier:reuseIdentifier];
+        mappin.bounds = CGRectMake(0, 0, 28, 35);
+        //mappin.backgroundColor = [Colors get].black;
+        
+    }
+    return mappin;
+}
+
+- (BOOL)mapView:(MGLMapView *)mapView annotationCanShowCallout:(id<MGLAnnotation>)annotation {
+    return YES;
 }
 
 /*

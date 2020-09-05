@@ -14,8 +14,6 @@
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-@property (strong, nonatomic) CLLocation *lastLocation;
-
 @end
 
 
@@ -63,7 +61,6 @@
         __weak typeof(self) weakSelf = self;
         [self.locationObservers enumerateObjectsUsingBlock:^(id<LocationObserver>  _Nonnull observer, NSUInteger idx, BOOL * _Nonnull stop) {
             [observer onAuthorizationStatusChange:status];
-            NSLog(@"Location: %@", manager.location);
         }];
     }
 }

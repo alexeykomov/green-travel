@@ -13,6 +13,7 @@
 #import "Category.h"
 #import "PlaceItem.h"
 #import "MapItem.h"
+#import <CoreLocation/CoreLocation.h>
 
 @interface MapModel ()
 
@@ -21,6 +22,10 @@
 @property (strong, nonatomic) NSMutableSet *uuids;
 
 @end
+
+static const CLLocationDistance kCloseDistance = 200.0;
+static const CLLocationDistance kMetersInKilometer = 1000.0;
+static const CLLocationDistance kLocationAccuracy = 500.0;
 
 @implementation MapModel
 
@@ -31,6 +36,7 @@
             self.indexModel = model;
             _locationModel = locationModel;
             self.mapItems = [[NSMutableArray alloc] init];
+            self.closeMapItems = [[NSMutableArray alloc] init];
             self.uuids = [[NSMutableSet alloc] init];
             self.mapItemsObservers = [[NSMutableArray alloc] init];
             [self.indexModel addObserver:self];
@@ -41,15 +47,16 @@
 
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
     [self fillMapItemsFromCategories:categories];
+    [self updateCloseItems];
     [self notifyObservers];
 }
 
 - (void)onLocationUpdate:(CLLocation *)lastLocation {
-    
+    [self updateCloseItems];
 }
 
 - (void)onAuthorizationStatusChange:(CLAuthorizationStatus)status {
-    
+    [self updateCloseItems];
 }
 
 - (void)fillMapItemsFromCategories:(NSArray<Category *> *)categories {
@@ -68,6 +75,24 @@
             }
         }];
     }];
+}
+
+- (void)updateCloseItems {
+    NSMutableArray<MapItem *> *closeItems = [[NSMutableArray alloc] init];
+    [self.mapItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (self.locationModel.lastLocation) {
+            CLLocation *lastLocation = self.locationModel.lastLocation;
+            NSLog(@"Last location: %@", lastLocation);
+            CLLocation *itemLocation = [[CLLocation alloc] initWithCoordinate:mapItem.coords altitude:0 horizontalAccuracy:kLocationAccuracy verticalAccuracy:kLocationAccuracy timestamp:NSDate.now];
+            CLLocationDistance distance = [lastLocation distanceFromLocation:itemLocation] / kMetersInKilometer;
+            NSLog(@"Distance: %f", distance);
+            if (distance <= kCloseDistance) {
+                [closeItems addObject:mapItem];
+            }
+        }
+    }];
+    [self.closeMapItems removeAllObjects];
+    [self.closeMapItems addObjectsFromArray:closeItems];
 }
 
 - (void)addObserver:(nonnull id<MapItemsObserver>)observer {

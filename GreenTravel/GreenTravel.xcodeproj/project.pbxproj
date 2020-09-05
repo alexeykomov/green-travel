@@ -79,6 +79,7 @@
 		5A69921A24F7DF63008FB47E /* PathItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921924F7DF63008FB47E /* PathItem.m */; };
 		5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921C24F7E11F008FB47E /* PlaceDetails.m */; };
 		5A69922024F7E134008FB47E /* PathDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921F24F7E134008FB47E /* PathDetails.m */; };
+		5AA75BFE2502D70900AE7331 /* MapPinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75BFD2502D70900AE7331 /* MapPinView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -223,6 +224,8 @@
 		5A69921F24F7E134008FB47E /* PathDetails.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PathDetails.m; sourceTree = "<group>"; };
 		5A69922124F910F2008FB47E /* CategoriesObservable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesObservable.h; sourceTree = "<group>"; };
 		5A69922424F91175008FB47E /* CategoriesObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesObserver.h; sourceTree = "<group>"; };
+		5AA75BFC2502D70900AE7331 /* MapPinView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapPinView.h; sourceTree = "<group>"; };
+		5AA75BFD2502D70900AE7331 /* MapPinView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapPinView.m; sourceTree = "<group>"; };
 		72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.debug.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.debug.xcconfig"; sourceTree = "<group>"; };
 		91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GreenTravel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.release.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.release.xcconfig"; sourceTree = "<group>"; };
@@ -351,6 +354,8 @@
 				5A14830624F1496600EBB756 /* SearchViewController */,
 				5A1482F324F04B0B00EBB756 /* NearbyPlacesViewController.h */,
 				5A1482F424F04B0B00EBB756 /* NearbyPlacesViewController.m */,
+				5AA75BFC2502D70900AE7331 /* MapPinView.h */,
+				5AA75BFD2502D70900AE7331 /* MapPinView.m */,
 				5A1482E424EC80FC00EBB756 /* DetailsViewController.h */,
 				5A1482E524EC80FC00EBB756 /* DetailsViewController.m */,
 				5A1482E724EC8C2C00EBB756 /* PlacesViewController.h */,
@@ -763,6 +768,7 @@
 				5A324B8A24FAB9780044A671 /* SearchModel.m in Sources */,
 				5A324B9F24FEF87B0044A671 /* LocationModel.m in Sources */,
 				5A14825E24E7ED9400EBB756 /* main.m in Sources */,
+				5AA75BFE2502D70900AE7331 /* MapPinView.m in Sources */,
 				5A14830124F129E900EBB756 /* SearchItem.m in Sources */,
 				5A14828324E7F92300EBB756 /* Colors.m in Sources */,
 				5A14828D24E8101A00EBB756 /* IndexViewController.m in Sources */,

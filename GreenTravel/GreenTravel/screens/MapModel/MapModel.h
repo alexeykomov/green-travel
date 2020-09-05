@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithIndexModel:(IndexModel *)model
                      locationModel:(LocationModel *)locationModel;
 @property (strong, nonatomic) NSMutableArray<MapItem *> *mapItems;
+@property (strong, nonatomic) NSMutableArray<MapItem *> *closeMapItems;
 @property (strong, nonatomic) NSMutableArray<id<MapItemsObserver>> *mapItemsObservers;
 
 @end
