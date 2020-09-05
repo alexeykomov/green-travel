@@ -82,7 +82,7 @@
     self.locationButton.layer.masksToBounds = YES;
     self.locationButton.layer.cornerRadius = 20.0;
     
-    UIImage *image = [UIImage imageNamed:@"noun_Location_403482_2"];
+    UIImage *image = [UIImage imageNamed:@"noun_Location_403482_3"];
     UIImageView *locationImageView = [[UIImageView alloc] initWithImage:[image imageWithTintColor:UIColor.systemBlueColor]];
     [self.locationButton addSubview:locationImageView];
     
