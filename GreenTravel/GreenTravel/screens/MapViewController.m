@@ -12,25 +12,31 @@
 #import "Colors.h"
 #import "MapModel.h"
 #import "MapItemsObserver.h"
+#import "LocationObserver.h"
 #import "MapItem.h"
 #import "MapPinView.h"
+#import "LocationModel.h"
 
 @interface MapViewController ()
 
 @property (strong, nonatomic) MapModel *mapModel;
+@property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) UIButton *locationButton;
 @property (strong, nonatomic) MGLMapView *mapView;
 @property (assign, nonatomic) BOOL showClosestPoints;
+@property (assign, nonatomic) BOOL intentionToFocusOnUserLocation;
 
 @end
 
 @implementation MapViewController
 
 - (instancetype)initWithMapModel:(MapModel *)mapModel
+                   locationModel:(LocationModel *)locationModel
                  showClosestPoints:(BOOL)showClosestPoints{
     self = [super init];
     if (self) {
         _mapModel = mapModel;
+        _locationModel = locationModel;
         _showClosestPoints = showClosestPoints; 
     }
     return self;
@@ -63,6 +69,7 @@
     [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(53.893, 27.567)
                        zoomLevel:9.0 animated:NO];
     [self.mapModel addObserver:self];
+    [self.locationModel addObserver:self];
     
     self.locationButton = [[UIButton alloc] init];
     [self.view addSubview:self.locationButton];
@@ -138,8 +145,29 @@
     return YES;
 }
 
+- (void)onAuthorizationStatusChange:(CLAuthorizationStatus)status {
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        if (self.locationModel.locationEnabled) {
+            [self.locationModel startMonitoring];
+        }
+        
+    }
+}
+
+- (void)onLocationUpdate:(CLLocation *)lastLocation {
+    if (self.intentionToFocusOnUserLocation) {
+        [self.mapView setCenterCoordinate:self.mapModel.lastLocation.coordinate animated:YES];
+        self.intentionToFocusOnUserLocation = NO;
+    }
+}
+
 - (void)onLocateMePress:(id)sender {
-    [self.mapView setCenterCoordinate:self.mapModel.lastLocation.coordinate animated:YES];
+    self.intentionToFocusOnUserLocation = YES;
+    [self.locationModel authorize];
+    
+    if (self.locationModel.locationEnabled && self.locationModel.lastLocation) {
+        [self.mapView setCenterCoordinate:self.mapModel.lastLocation.coordinate animated:YES];
+    }
 }
 
 /*

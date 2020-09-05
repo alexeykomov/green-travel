@@ -8,15 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "MapItemsObserver.h"
+#import "LocationObserver.h"
 @import Mapbox;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class MapModel;
+@class LocationModel;
 
-@interface MapViewController : UIViewController<MapItemsObserver, MGLMapViewDelegate>
+@interface MapViewController : UIViewController<MapItemsObserver, MGLMapViewDelegate, LocationObserver>
 
 - (instancetype)initWithMapModel:(MapModel *)mapModel
+                   locationModel:(LocationModel *)locationModel
                showClosestPoints:(BOOL)showClosestPoints;
 
 @end
