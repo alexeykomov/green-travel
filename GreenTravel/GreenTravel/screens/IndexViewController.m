@@ -17,6 +17,7 @@
 #import "SizeUtils.h"
 #import "PlacesTableViewCellConstants.h"
 #import "IndexModel.h"
+#import "DetailsModel.h"
 #import "SearchModel.h" 
 #import "ApiService.h"
 #import "LocationModel.h"
@@ -25,6 +26,7 @@
 
 @property (strong, nonatomic) ApiService *apiService;
 @property (strong, nonatomic) IndexModel *model;
+@property (strong, nonatomic) DetailsModel *detailsModel;
 @property (strong, nonatomic) SearchModel *searchModel;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) MapModel *mapModel;
@@ -37,19 +39,21 @@
 static NSString * const kCollectionCellId = @"collectionCellId";
 static CGFloat kTableRowHeight = 210.0;
 
-@implementation IndexViewController
+@implementation IndexViewController 
 
 - (instancetype) initWithApiService:(ApiService *)apiService
                               model:(nonnull IndexModel *)model
                         searchModel:(SearchModel *)searchModel
                       locationModel:(LocationModel *)locationModel
-                           mapModel:(MapModel *)mapModel{
+                           mapModel:(MapModel *)mapModel
+                       detailsModel:(DetailsModel *)detailsModel {
     self = [super init];
     _apiService = apiService;
     _model = model;
     _searchModel = searchModel;
     _locationModel = locationModel;
     _mapModel = mapModel;
+    _detailsModel = detailsModel;
     return self;
 }
 
@@ -149,7 +153,7 @@ static CGFloat kTableRowHeight = 210.0;
         [obj.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             __weak typeof(obj) weakItem = obj;
             obj.onPlaceCellPress = ^void() {
-                DetailsViewController *detailsViewController = [[DetailsViewController alloc] init];
+                DetailsViewController *detailsViewController = [[DetailsViewController alloc] initWithApiService:weakSelf.apiService detailsModel:weakSelf.detailsModel];
                 detailsViewController.item = weakItem;
                 [weakSelf.navigationController pushViewController:detailsViewController animated:YES];
             };

@@ -14,6 +14,7 @@
 #import "TextUtils.h"
 #import "ApiService.h"
 #import "IndexModel.h"
+#import "DetailsModel.h"
 #import "SearchModel.h"
 #import "MapModel.h"
 #import "BookmarksModel.h"
@@ -46,7 +47,8 @@
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     self.session = [NSURLSession sessionWithConfiguration:configuration];
     self.indexModel = [[IndexModel alloc] init];
-    self.apiService = [[ApiService alloc] initWithSession:self.session model:self.indexModel];
+    DetailsModel *detailsModel = [[DetailsModel alloc] initWithIndexModel:self.indexModel];
+    self.apiService = [[ApiService alloc] initWithSession:self.session model:self.indexModel detailsModel:detailsModel]; 
     LocationModel *locationModel = [[LocationModel alloc] init];
     SearchModel *searchModel = [[SearchModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
     MapModel *mapModel = [[MapModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
@@ -54,7 +56,7 @@
 
 #pragma mark - IndexViewController
     
-    IndexViewController *indexController = [[IndexViewController alloc]   initWithApiService:self.apiService model:self.indexModel searchModel:searchModel locationModel:locationModel mapModel:mapModel];
+    IndexViewController *indexController = [[IndexViewController alloc]   initWithApiService:self.apiService model:self.indexModel searchModel:searchModel locationModel:locationModel mapModel:mapModel detailsModel:detailsModel]; 
     indexController.title = @"Главная";
     UINavigationController *indexViewControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:indexController];
     UIImage *indexImage;

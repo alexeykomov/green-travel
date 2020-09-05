@@ -9,27 +9,32 @@
 #import "ApiService.h"
 #import "Category.h"
 #import "IndexModel.h"
+#import "DetailsModel.h"
 #import "PlaceItem.h"
+#import "PlaceDetails.h"
 #import <CoreLocation/CoreLocation.h>
 
 static NSString * const kGetCategoriesURL = @"http://192.168.0.13:3000/categories";
+static NSString * const kGetDetailsBaseURL = @"http://192.168.0.13:3000/details/%@";
 
 @interface ApiService ()
 
 @property (strong, nonatomic) NSURLSession *session;
 @property (strong, nonatomic) IndexModel *model;
+@property (strong, nonatomic) DetailsModel *detailsModel;
 
 @end
 
 @implementation ApiService
 
 - (instancetype) initWithSession:(NSURLSession *)session
-                           model:(IndexModel *)model {
+                           model:(IndexModel *)model
+                    detailsModel:(DetailsModel *)detailsModel {
     self = [super init];
     if (self) {
         _session = session;
         _model = model;
-        
+        _detailsModel = detailsModel;
     }
     return self;
 }
@@ -80,16 +85,16 @@ static NSString * const kGetCategoriesURL = @"http://192.168.0.13:3000/categorie
 }
 
 - (void)loadDetailsByUUID:(NSString *)uuid {
-    NSURLSessionDataTask *task = [self.session dataTaskWithURL:kGetCategoriesURL    completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        
-        NSArray *imagesFromAPI = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-        NSArray<Category *> *parsedItems = [[NSMutableArray alloc] init];
-        [imagesFromAPI enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSLog(@"Object from JSON: %@", obj);
-            Category *category = [[Category alloc] init];
-            //[parsedItems addObject:];
-        }];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:kGetDetailsBaseURL, uuid]];
+    __weak typeof(self) weakSelf = self;
+    NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSObject *detailsFromAPI = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        NSLog(@"Details from API: %@", detailsFromAPI);
+        PlaceDetails *parsedDetails = [[PlaceDetails alloc] init];
+        [weakSelf.detailsModel updateDetails:parsedDetails forUUID:uuid];
     }];
+    
+    [task resume];
 }
 
 @end

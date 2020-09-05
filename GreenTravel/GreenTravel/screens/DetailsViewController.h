@@ -7,13 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DetailsObserver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class PlaceItem;
+@class ApiService;
+@class DetailsModel;
 
-@interface DetailsViewController : UIViewController
+@interface DetailsViewController : UIViewController <DetailsObserver>
 
+- (instancetype)initWithApiService:(ApiService *)apiService
+                      detailsModel:(DetailsModel *)detailsModel;
 @property (strong, nonatomic) PlaceItem *item;
 
 @end

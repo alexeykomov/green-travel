@@ -79,6 +79,7 @@
 		5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921C24F7E11F008FB47E /* PlaceDetails.m */; };
 		5A69922024F7E134008FB47E /* PathDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921F24F7E134008FB47E /* PathDetails.m */; };
 		5AA75BFE2502D70900AE7331 /* MapPinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75BFD2502D70900AE7331 /* MapPinView.m */; };
+		5AA75C012504258300AE7331 /* DetailsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C002504258300AE7331 /* DetailsModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -223,6 +224,10 @@
 		5A69922424F91175008FB47E /* CategoriesObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesObserver.h; sourceTree = "<group>"; };
 		5AA75BFC2502D70900AE7331 /* MapPinView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapPinView.h; sourceTree = "<group>"; };
 		5AA75BFD2502D70900AE7331 /* MapPinView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapPinView.m; sourceTree = "<group>"; };
+		5AA75C002504258300AE7331 /* DetailsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsModel.m; sourceTree = "<group>"; };
+		5AA75C03250427FE00AE7331 /* DetailsObservable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsObservable.h; sourceTree = "<group>"; };
+		5AA75C042504280E00AE7331 /* DetailsObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsObserver.h; sourceTree = "<group>"; };
+		5AA75C0525042AF500AE7331 /* DetailsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsModel.h; sourceTree = "<group>"; };
 		72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.debug.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.debug.xcconfig"; sourceTree = "<group>"; };
 		91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GreenTravel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.release.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.release.xcconfig"; sourceTree = "<group>"; };
@@ -347,6 +352,7 @@
 				5A324BA22500252D0044A671 /* IndexModel */,
 				5A324BA12500251F0044A671 /* MapModel */,
 				5A324BA0250025110044A671 /* BookmarksModel */,
+				5AA75C02250425A400AE7331 /* DetailsModel */,
 				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
 				5A14830624F1496600EBB756 /* SearchViewController */,
 				5A1482F324F04B0B00EBB756 /* MapViewController.h */,
@@ -536,6 +542,17 @@
 				5A324B8C24FAC1950044A671 /* SearchItemsObserver.h */,
 			);
 			path = SearchModel;
+			sourceTree = "<group>";
+		};
+		5AA75C02250425A400AE7331 /* DetailsModel */ = {
+			isa = PBXGroup;
+			children = (
+				5AA75C0525042AF500AE7331 /* DetailsModel.h */,
+				5AA75C002504258300AE7331 /* DetailsModel.m */,
+				5AA75C03250427FE00AE7331 /* DetailsObservable.h */,
+				5AA75C042504280E00AE7331 /* DetailsObserver.h */,
+			);
+			path = DetailsModel;
 			sourceTree = "<group>";
 		};
 		72F07A37AC1DE1BCFA8BD0F1 /* Pods */ = {
@@ -756,6 +773,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AA75C012504258300AE7331 /* DetailsModel.m in Sources */,
 				5A324B9124FB00A60044A671 /* MapModel.m in Sources */,
 				5A14829E24E9501100EBB756 /* PlacesTableViewCell.m in Sources */,
 				5A69921A24F7DF63008FB47E /* PathItem.m in Sources */,

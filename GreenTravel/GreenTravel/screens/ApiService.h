@@ -11,11 +11,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class IndexModel;
+@class DetailsModel;
 @class Category;
 
 @interface ApiService : NSObject
 
-- (instancetype)initWithSession:(NSURLSession *)session model:(IndexModel *)model;
+- (instancetype)initWithSession:(NSURLSession *)session
+                          model:(IndexModel *)model
+                   detailsModel:(DetailsModel *)detailsModel;
 - (void)loadCategories;
 - (void)loadDetailsByUUID:(NSString *)uuid;
 
