@@ -88,9 +88,10 @@ static NSString * const kGetDetailsBaseURL = @"http://192.168.0.13:3000/details/
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:kGetDetailsBaseURL, uuid]];
     __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        NSObject *detailsFromAPI = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        NSDictionary *detailsFromAPI = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         NSLog(@"Details from API: %@", detailsFromAPI);
         PlaceDetails *parsedDetails = [[PlaceDetails alloc] init];
+        parsedDetails.images = detailsFromAPI[@"images"];
         [weakSelf.detailsModel updateDetails:parsedDetails forUUID:uuid];
     }];
     

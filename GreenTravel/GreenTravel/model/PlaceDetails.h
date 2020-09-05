@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PlaceDetails : NSObject
 
-@end
+@property (strong, nonatomic) NSArray<NSString *> *images;
+
+@end 
 
 NS_ASSUME_NONNULL_END

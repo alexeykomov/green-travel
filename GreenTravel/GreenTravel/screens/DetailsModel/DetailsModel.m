@@ -63,6 +63,7 @@
 }
 
 - (void)notifyObservers {
+    NSLog(@"notifyObservers");
     [self.detailsObservers enumerateObjectsUsingBlock:^(id<DetailsObserver>  _Nonnull observer, NSUInteger idx, BOOL * _Nonnull stop) {
         [observer onDetailsUpdate:self.itemUUIDToDetails items:self.itemUUIDToItem]; 
     }];

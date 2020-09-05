@@ -9,8 +9,10 @@
 #import "DetailsViewController.h"
 #import "Colors.h"
 #import "PlaceItem.h"
+#import "PlaceDetails.h"
 #import "ApiService.h"
 #import "DetailsModel.h"
+#import "ImageUtils.h"
 
 @interface DetailsViewController ()
 
@@ -117,8 +119,14 @@
 */
 
 - (void)onDetailsUpdate:(NSMutableDictionary<NSString *,PlaceDetails *> *)itemUUIDToDetails items:(NSMutableDictionary<NSString *,PlaceItem *> *)itemUUIDToItem {
-    if (!self.details && [itemUUIDToDetails valueForKey:self.item.uuid]) {
-        
+    PlaceDetails *details = itemUUIDToDetails[self.item.uuid];
+    __weak typeof(self) weakSelf = self;
+    if (!self.details && details) {
+        loadImage(details.images[0], ^(UIImage *image) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.previewImageView setImage:image];
+            });
+        });
     }
 }
 
