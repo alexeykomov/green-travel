@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class IndexModel;
 @class LocationModel;
 @protocol MapItemsObserver;
+@class CLLocation;
 
 @interface MapModel : NSObject<CategoriesObserver, MapItemsObservable, LocationObserver>
 
@@ -24,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
                      locationModel:(LocationModel *)locationModel;
 @property (strong, nonatomic) NSMutableArray<MapItem *> *mapItems;
 @property (strong, nonatomic) NSMutableArray<MapItem *> *closeMapItems;
+@property (strong, nonatomic) CLLocation *lastLocation; 
 @property (strong, nonatomic) NSMutableArray<id<MapItemsObserver>> *mapItemsObservers;
 
 @end

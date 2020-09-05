@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NearbyPlacesViewController : UIViewController<MapItemsObserver, MGLMapViewDelegate>
 
-- (instancetype)initWithMapModel:(MapModel *)mapModel;
+- (instancetype)initWithMapModel:(MapModel *)mapModel
+               showClosestPoints:(BOOL)showClosestPoints;
 
 @end
 

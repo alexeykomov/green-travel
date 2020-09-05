@@ -52,10 +52,12 @@ static const CLLocationDistance kLocationAccuracy = 500.0;
 }
 
 - (void)onLocationUpdate:(CLLocation *)lastLocation {
+    self.lastLocation = lastLocation;
     [self updateCloseItems];
 }
 
 - (void)onAuthorizationStatusChange:(CLAuthorizationStatus)status {
+    self.lastLocation = self.locationModel.lastLocation;
     [self updateCloseItems];
 }
 

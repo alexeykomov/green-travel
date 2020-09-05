@@ -18,15 +18,20 @@
 @interface NearbyPlacesViewController ()
 
 @property (strong, nonatomic) MapModel *mapModel;
+@property (strong, nonatomic) UIButton *locationButton;
+@property (strong, nonatomic) MGLMapView *mapView;
+@property (assign, nonatomic) BOOL showClosestPoints;
 
 @end
 
 @implementation NearbyPlacesViewController
 
-- (instancetype)initWithMapModel:(MapModel *)mapModel {
+- (instancetype)initWithMapModel:(MapModel *)mapModel
+                 showClosestPoints:(BOOL)showClosestPoints{
     self = [super init];
     if (self) {
         _mapModel = mapModel;
+        _showClosestPoints = showClosestPoints; 
     }
     return self;
 }
@@ -42,22 +47,55 @@
     configureNavigationBar(navigationBar);
     
     NSURL *url = [NSURL URLWithString:@"mapbox://styles/mapbox/streets-v11"];
-    MGLMapView *mapView = [[MGLMapView alloc] initWithFrame:CGRectZero styleURL:url];
-    [self.view addSubview:mapView];
+    self.mapView = [[MGLMapView alloc] initWithFrame:CGRectZero styleURL:url];
+    [self.view addSubview:self.mapView];
     
-    mapView.delegate = self;
+    self.mapView.delegate = self;
     
-    mapView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.mapView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [mapView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
-        [mapView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-        [mapView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-        [mapView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
+        [self.mapView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+        [self.mapView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [self.mapView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [self.mapView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
     ]];
     
-    [mapView setCenterCoordinate:CLLocationCoordinate2DMake(53.893, 27.567)
+    [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(53.893, 27.567)
                        zoomLevel:9.0 animated:NO];
     [self.mapModel addObserver:self];
+    
+    self.locationButton = [[UIButton alloc] init];
+    [self.view addSubview:self.locationButton];
+    
+    self.locationButton.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.locationButton.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:-100.0],
+        [self.locationButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-8.0],
+        [self.locationButton.widthAnchor constraintEqualToConstant:44.0],
+        [self.locationButton.heightAnchor constraintEqualToConstant:44.0],
+    ]];
+
+    
+    self.locationButton.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.7];
+    
+    self.locationButton.layer.masksToBounds = YES;
+    self.locationButton.layer.cornerRadius = 20.0;
+    
+    UIImage *image = [UIImage imageNamed:@"noun_Location_403482_2"];
+    UIImageView *locationImageView = [[UIImageView alloc] initWithImage:[image imageWithTintColor:UIColor.systemBlueColor]];
+    [self.locationButton addSubview:locationImageView];
+    
+    locationImageView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [locationImageView.centerXAnchor constraintEqualToAnchor:self.locationButton.centerXAnchor constant:-2.0],
+        [locationImageView.centerYAnchor constraintEqualToAnchor:self.locationButton.centerYAnchor constant:2.0],
+        [locationImageView.widthAnchor constraintEqualToConstant:26.0],
+        [locationImageView.heightAnchor constraintEqualToConstant:26.0],
+    ]];
+    
+    [self.locationButton addTarget:self action:@selector(onLocateMePress:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView {
@@ -98,6 +136,10 @@
 
 - (BOOL)mapView:(MGLMapView *)mapView annotationCanShowCallout:(id<MGLAnnotation>)annotation {
     return YES;
+}
+
+- (void)onLocateMePress:(id)sender {
+    [self.mapView setCenterCoordinate:self.mapModel.lastLocation.coordinate animated:YES];
 }
 
 /*
