@@ -84,7 +84,8 @@ NSPersistentContainer *_persistentContainer;
         NSArray<StoredPlaceItem *> *fetchResult = [ctx executeFetchRequest:fetchRequest error:&error];
         __block StoredPlaceItem *foundStoredPlaceItem;
         [fetchResult enumerateObjectsUsingBlock:^(StoredPlaceItem * _Nonnull storedPlaceItem, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (storedPlaceItem.uuid == placeItem.uuid) {
+            NSLog(@"StoredPlaceItem uuid: %@", storedPlaceItem.uuid);
+            if([storedPlaceItem.uuid isEqualToString:placeItem.uuid]){
                 foundStoredPlaceItem = storedPlaceItem;
             }
         }];
@@ -105,6 +106,7 @@ NSPersistentContainer *_persistentContainer;
         }
         if (foundStoredPlaceItem && !bookmark) {
             [ctx deleteObject:foundStoredPlaceItem];
+            [ctx save:&error];
         }
     }];
 }

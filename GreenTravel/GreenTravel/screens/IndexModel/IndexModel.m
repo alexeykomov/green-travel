@@ -28,6 +28,7 @@ static IndexModel *instance;
     if (self) {
         _categoriesObservers = [[NSMutableArray alloc] init];
         _bookmarksModel = bookmarksModel;
+        // TODO: IndexModel would benefit from subsribing to BookmarksModel updates
     }
     return self;
 }
