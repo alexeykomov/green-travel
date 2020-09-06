@@ -17,11 +17,13 @@
 #import "MapViewController.h"
 #import "SearchModel.h"
 #import "LocationModel.h"
+#import "DetailsModel.h"
+#import "ApiService.h"
 #import <CoreLocation/CoreLocation.h>
 
 @interface SearchViewController ()
 
-@property (strong, nonatomic) NSMutableArray<SearchItem *> *dataSourceRecommendations;
+@property (strong, nonatomic) NSMutableArray<NSString *> *dataSourceRecommendations;
 @property (strong, nonatomic) NSMutableArray<SearchItem *> *dataSourceFiltered;
 @property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) SearchModel *model;
@@ -30,6 +32,8 @@
 @property (strong, nonatomic) CLLocation *lastLocation;
 @property (assign, nonatomic) BOOL locationIsEnabled;
 @property (assign, nonatomic) BOOL intentionToGoToNearbyPlaces;
+@property (strong, nonatomic) DetailsModel *detailsModel;
+@property (strong, nonatomic) ApiService *apiService;
 
 @end
 
@@ -47,12 +51,17 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 - (instancetype)initWithModel:(SearchModel *)model
                 locationModel:(LocationModel *)locationModel
-                mapModel:(MapModel *)mapModel {
+                     mapModel:(MapModel *)mapModel
+                   apiService:(ApiService *)apiService
+                 detailsModel:(DetailsModel *)detailsModel
+{
     self = [super init];
     if (self) {
         _model = model;
         _locationModel = locationModel;
         _mapModel = mapModel;
+        _detailsModel = detailsModel;
+        _apiService = apiService;
     }
     return self;
 }
@@ -79,21 +88,11 @@ static const CGFloat kSearchRowHeight = 40.0;
     self.navigationItem.titleView = self.searchController.searchBar;
     self.definesPresentationContext = YES;
     
-    SearchItem *itemA = [[SearchItem alloc] init];
-    itemA.title = @"Беловежская пуща";
-    itemA.distance = 56.5;
-    SearchItem *itemB = [[SearchItem alloc] init];
-    itemB.title = @"Нарочанские озера";
-    itemB.distance = 100.0;
-    SearchItem *itemС = [[SearchItem alloc] init];
-    itemС.title = @"Ольшанские болота";
-    itemС.distance = 56.0;
-    SearchItem *itemD = [[SearchItem alloc] init];
-    itemD.title = @"Беловежская пуща";
-    itemD.distance = 56.5;
-    SearchItem *itemE = [[SearchItem alloc] init];
-    itemE.title = @"Нарочанские озера";
-    itemE.distance = 100.0;
+    NSString *itemA = @"96FD81D9-057B-4320-A2FC-75BE963B805E";
+    NSString *itemB = @"28B26157-D421-4BAC-A698-8D3EA2FC8ED2";
+    NSString *itemС = @"5E6859F1-717B-4C74-B4F0-5969F369328B";
+    NSString *itemD = @"15BFBBE1-E66F-4E0C-962B-6BC4D45E9FBF";
+    NSString *itemE = @"AA85EA51-1E79-4D39-834E-CEDB57C05DB6";
     
     [self.dataSourceRecommendations addObjectsFromArray:@[itemA, itemB, itemС, itemD, itemE]];
     
@@ -152,7 +151,12 @@ static const CGFloat kSearchRowHeight = 40.0;
     if ([self isSearching]) {
         item = self.dataSourceFiltered[indexPath.row];
     } else {
-        item = self.dataSourceRecommendations[indexPath.row - kDataSourceOrigOffset];
+        NSString *uuid = self.dataSourceRecommendations[indexPath.row - kDataSourceOrigOffset];
+        for (SearchItem *searchItem in self.model.searchItems) {
+            if ([searchItem.correspondingPlaceItem.uuid isEqualToString:uuid]) {
+                item = searchItem;
+            }
+        }
     }
     [cell update:item];
     return cell;
@@ -170,7 +174,7 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    DetailsViewController *detailsController = [[DetailsViewController alloc] init];
+    DetailsViewController *detailsController = [[DetailsViewController alloc] initWithApiService:self.apiService detailsModel:self.detailsModel mapModel:self.mapModel locationModel:self.locationModel];
     if (indexPath.row == 0 && ![self isSearching]) {
         self.intentionToGoToNearbyPlaces = YES;
         [self.locationModel authorize];
@@ -185,10 +189,17 @@ static const CGFloat kSearchRowHeight = 40.0;
         detailsController.item = self.dataSourceFiltered[indexPath.row].correspondingPlaceItem;
         self.searchController.searchBar.text = @"";
     } else {
-        detailsController.item = self.dataSourceRecommendations[indexPath.row - kDataSourceOrigOffset];
+        NSString *uuid = self.dataSourceRecommendations[indexPath.row - kDataSourceOrigOffset];
+        for (SearchItem *searchItem in self.model.searchItems) {
+            if ([searchItem.correspondingPlaceItem.uuid isEqualToString:uuid]) {
+                detailsController.item = searchItem.correspondingPlaceItem;
+            }
+        }
     }
     [self.navigationController pushViewController:detailsController animated:YES];
 }
+
+
 
 #pragma mark - Search
 

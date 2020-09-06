@@ -92,7 +92,7 @@ static CGFloat kTableRowHeight = 210.0;
 
 - (void) onSearchPress:(id)sender {
     [self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil]];
-    [self.navigationController pushViewController:[[SearchViewController alloc] initWithModel:self.searchModel locationModel:self.locationModel mapModel:self.mapModel] animated:NO];
+    [self.navigationController pushViewController:[[SearchViewController alloc] initWithModel:self.searchModel locationModel:self.locationModel mapModel:self.mapModel apiService:self.apiService detailsModel:self.detailsModel] animated:NO];
 }
 
 #pragma mark - Table data source
