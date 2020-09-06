@@ -355,24 +355,13 @@
 		5A14828424E800F200EBB756 /* screens */ = {
 			isa = PBXGroup;
 			children = (
-				5A14828824E80E3900EBB756 /* MainViewController.h */,
-				5A14828924E80E3900EBB756 /* MainViewController.m */,
-				5A14828B24E8101A00EBB756 /* IndexViewController.h */,
-				5A14828C24E8101A00EBB756 /* IndexViewController.m */,
-				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
+				5A5FB1A025057BF200EBAA8E /* MainViewController */,
+				5A5FB1A125057C0200EBAA8E /* IndexViewController */,
 				5A14830624F1496600EBB756 /* SearchViewController */,
-				5A1482F324F04B0B00EBB756 /* MapViewController.h */,
-				5A1482F424F04B0B00EBB756 /* MapViewController.m */,
-				5AA75BFC2502D70900AE7331 /* MapPinView.h */,
-				5AA75BFD2502D70900AE7331 /* MapPinView.m */,
-				5A1482E424EC80FC00EBB756 /* DetailsViewController.h */,
-				5A1482E524EC80FC00EBB756 /* DetailsViewController.m */,
-				5A1482E724EC8C2C00EBB756 /* PlacesViewController.h */,
-				5A1482E824EC8C2C00EBB756 /* PlacesViewController.m */,
-				5A14829124E8103400EBB756 /* BookmarksViewController.h */,
-				5A14829224E8103400EBB756 /* BookmarksViewController.m */,
-				5A1482F024EF005300EBB756 /* BookmarkCell.h */,
-				5A1482F124EF005300EBB756 /* BookmarkCell.m */,
+				5A5FB1A225057C4400EBAA8E /* MapViewController */,
+				5A5FB1A325057C5400EBAA8E /* DetailsViewController */,
+				5A5FB1A425057C6100EBAA8E /* PlacesViewController */,
+				5A5FB1A525057C6C00EBAA8E /* BookmarksViewController */,
 			);
 			path = screens;
 			sourceTree = "<group>";
@@ -606,6 +595,65 @@
 				5AA75C0C25051C8800AE7331 /* StoredPlaceItem+CoreDataProperties.m */,
 			);
 			path = managedobjects;
+			sourceTree = "<group>";
+		};
+		5A5FB1A025057BF200EBAA8E /* MainViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5A14828824E80E3900EBB756 /* MainViewController.h */,
+				5A14828924E80E3900EBB756 /* MainViewController.m */,
+			);
+			path = MainViewController;
+			sourceTree = "<group>";
+		};
+		5A5FB1A125057C0200EBAA8E /* IndexViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5A14828B24E8101A00EBB756 /* IndexViewController.h */,
+				5A14828C24E8101A00EBB756 /* IndexViewController.m */,
+				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
+			);
+			path = IndexViewController;
+			sourceTree = "<group>";
+		};
+		5A5FB1A225057C4400EBAA8E /* MapViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5A1482F324F04B0B00EBB756 /* MapViewController.h */,
+				5A1482F424F04B0B00EBB756 /* MapViewController.m */,
+				5AA75BFC2502D70900AE7331 /* MapPinView.h */,
+				5AA75BFD2502D70900AE7331 /* MapPinView.m */,
+			);
+			path = MapViewController;
+			sourceTree = "<group>";
+		};
+		5A5FB1A325057C5400EBAA8E /* DetailsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5A1482E424EC80FC00EBB756 /* DetailsViewController.h */,
+				5A1482E524EC80FC00EBB756 /* DetailsViewController.m */,
+			);
+			path = DetailsViewController;
+			sourceTree = "<group>";
+		};
+		5A5FB1A425057C6100EBAA8E /* PlacesViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5A1482E724EC8C2C00EBB756 /* PlacesViewController.h */,
+				5A1482E824EC8C2C00EBB756 /* PlacesViewController.m */,
+			);
+			path = PlacesViewController;
+			sourceTree = "<group>";
+		};
+		5A5FB1A525057C6C00EBAA8E /* BookmarksViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5A14829124E8103400EBB756 /* BookmarksViewController.h */,
+				5A14829224E8103400EBB756 /* BookmarksViewController.m */,
+				5A1482F024EF005300EBB756 /* BookmarkCell.h */,
+				5A1482F124EF005300EBB756 /* BookmarkCell.m */,
+			);
+			path = BookmarksViewController;
 			sourceTree = "<group>";
 		};
 		5AA75C02250425A400AE7331 /* DetailsModel */ = {
