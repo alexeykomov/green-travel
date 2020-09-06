@@ -39,9 +39,10 @@
         if (![weakSelf.itemUUIDs containsObject:item.uuid] &&
             item.bookmarked) {
             [weakSelf.itemUUIDs addObject:item.uuid];
-            self.bookmarkItems[item.uuid] = item;
+            weakSelf.bookmarkItems[item.uuid] = item;
         }
     }];
+    [self notifyObservers];
 }
 
 - (void)addObserver:(nonnull id<BookmarksObserver>)observer {

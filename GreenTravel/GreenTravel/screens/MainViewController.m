@@ -18,6 +18,7 @@
 #import "SearchModel.h"
 #import "MapModel.h"
 #import "BookmarksGroupModel.h"
+#import "BookmarksModel.h"
 #import "LocationModel.h"
 #import "CoreDataService.h"
 
@@ -55,11 +56,12 @@
     LocationModel *locationModel = [[LocationModel alloc] init];
     SearchModel *searchModel = [[SearchModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
     MapModel *mapModel = [[MapModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
-    BookmarksGroupModel *bookmarksModel = [[BookmarksGroupModel alloc] initWithIndexModel:self.indexModel];
+    BookmarksGroupModel *bookmarksGroupsModel = [[BookmarksGroupModel alloc] initWithIndexModel:self.indexModel];
+    BookmarksModel *bookmarksModel = [[BookmarksModel alloc] init]; 
 
 #pragma mark - IndexViewController
     
-    IndexViewController *indexController = [[IndexViewController alloc]   initWithApiService:self.apiService model:self.indexModel searchModel:searchModel locationModel:locationModel mapModel:mapModel detailsModel:detailsModel coreDataService:self.coreDataService];
+    IndexViewController *indexController = [[IndexViewController alloc]   initWithApiService:self.apiService model:self.indexModel searchModel:searchModel locationModel:locationModel mapModel:mapModel detailsModel:detailsModel coreDataService:self.coreDataService bookmarksModel:bookmarksModel];
     indexController.title = @"Главная";
     UINavigationController *indexViewControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:indexController];
     UIImage *indexImage;
@@ -104,7 +106,7 @@
     
 #pragma mark - BookmarksViewController
     
-    BookmarksViewController *bookmarksController = [[BookmarksViewController alloc] initWithModel:bookmarksModel];
+    BookmarksViewController *bookmarksController = [[BookmarksViewController alloc] initWithModel:bookmarksGroupsModel];
     bookmarksController.title = @"Закладки";
     UINavigationController *bookmarksControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:bookmarksController];
     UIImage *bookmarksImage;

@@ -93,7 +93,7 @@ NSPersistentContainer *_persistentContainer;
             return;
         }
         if (!foundStoredPlaceItem && bookmark) {
-            StoredPlaceItem *storedPlaceItem = [[StoredPlaceItem alloc] init];
+            StoredPlaceItem *storedPlaceItem = [[StoredPlaceItem alloc] initWithContext:ctx];
             storedPlaceItem.uuid = placeItem.uuid;
             storedPlaceItem.title = placeItem.title;
             CLLocationCoordinate2D coords = placeItem.coords;

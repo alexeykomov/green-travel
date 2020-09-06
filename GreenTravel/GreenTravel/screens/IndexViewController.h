@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MapModel;
 @class DetailsModel;
 @class CoreDataService;
+@class BookmarksModel;
 
 @interface IndexViewController : UITableViewController<CategoriesObserver>
 
@@ -27,7 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
                       locationModel:(LocationModel *)locationModel
                            mapModel:(MapModel *)mapModel
                        detailsModel:(DetailsModel *)detailsModel
-                    coreDataService:(CoreDataService *)coreDataService;
+                    coreDataService:(CoreDataService *)coreDataService
+                     bookmarksModel:(BookmarksModel *)bookmarksModel;
 
 @end
 
