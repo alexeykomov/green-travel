@@ -96,42 +96,45 @@
     #pragma mark - Title label
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.numberOfLines = 4;
+    [self.titleLabel setFont:[UIFont fontWithName:@"Montserrat-Semibold" size:20.0]];
     self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
 
     [self.contentView addSubview:self.titleLabel];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.titleLabel.topAnchor constraintEqualToAnchor:self.previewImageView.bottomAnchor constant:10.0],
-        [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:10.0],
-        [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-10.0],
+        [self.titleLabel.topAnchor constraintEqualToAnchor:self.previewImageView.bottomAnchor constant:29.0],
+        [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
+        [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
 
     ]];
     
     #pragma mark - Address label
     self.addressLabel = [[UILabel alloc] init];
     self.addressLabel.numberOfLines = 4;
+    [self.addressLabel setFont:[UIFont fontWithName:@"OpenSans-Regular" size:14.0]];
     self.addressLabel.translatesAutoresizingMaskIntoConstraints = NO;
 
     [self.contentView addSubview:self.addressLabel];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.addressLabel.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor constant:10.0],
-        [self.addressLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:10.0],
-        [self.addressLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-10.0],
+        [self.addressLabel.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor constant:8.0],
+        [self.addressLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
+        [self.addressLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
 
     ]];
     
     #pragma mark - Location label
     self.locationLabel = [[UILabel alloc] init];
     self.locationLabel.numberOfLines = 4;
+    [self.locationLabel setFont:[UIFont fontWithName:@"OpenSans-Regular" size:14.0]];
     self.locationLabel.translatesAutoresizingMaskIntoConstraints = NO;
 
     [self.contentView addSubview:self.locationLabel];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.locationLabel.topAnchor constraintEqualToAnchor:self.addressLabel.bottomAnchor constant:10.0],
-        [self.locationLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:10.0],
-        [self.locationLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-10.0],
+        [self.locationLabel.topAnchor constraintEqualToAnchor:self.addressLabel.bottomAnchor constant:0.0],
+        [self.locationLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
+        [self.locationLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
 
     ]];
     
@@ -139,32 +142,36 @@
     self.mapButton = [[UIButton alloc] init];
     self.mapButton.translatesAutoresizingMaskIntoConstraints = NO;
     self.mapButton.backgroundColor = [Colors get].apple;
-    [self.mapButton setTitle:@"Как добраться" forState:UIControlStateNormal];
+    self.mapButton.layer.cornerRadius = 8.0;
+    self.mapButton.layer.masksToBounds = YES;
+    [self.mapButton.titleLabel setFont:[UIFont fontWithName:@"OpenSans-Bold" size:14.0]];
+    [self.mapButton setAttributedTitle:getAttributedString(@"Как добраться", [Colors get].white, 14.0, UIFontWeightBold) forState:UIControlStateNormal];
 
     [self.contentView addSubview:self.mapButton];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.mapButton.topAnchor constraintEqualToAnchor:self.locationLabel.bottomAnchor constant:10.0],
-        [self.mapButton.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:10.0],
-        [self.mapButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-10.0],
-        [self.mapButton.widthAnchor constraintLessThanOrEqualToAnchor:self.view.widthAnchor constant:-20.0],
+        [self.mapButton.topAnchor constraintEqualToAnchor:self.locationLabel.bottomAnchor constant:20.0],
+        [self.mapButton.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
+        [self.mapButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
+        [self.mapButton.widthAnchor constraintLessThanOrEqualToConstant:343.0],
+        [self.mapButton.heightAnchor constraintEqualToConstant:48.0],
     ]];
     
     #pragma mark - Description text
     self.descriptionTextView = [[UITextView alloc] init];
+    [self.mapButton.titleLabel setFont:[UIFont fontWithName:@"OpenSans-Regular" size:16.0]];
     
     self.descriptionTextView.translatesAutoresizingMaskIntoConstraints = NO;
     self.descriptionTextView.editable = NO;
     self.descriptionTextView.scrollEnabled = NO;
     [self.contentView addSubview:self.descriptionTextView];
-
-    self.descriptionTextView.backgroundColor = [Colors get].blue;
+    
     
     [NSLayoutConstraint activateConstraints:@[
-        [self.descriptionTextView.topAnchor constraintEqualToAnchor:self.mapButton.bottomAnchor constant:10.0],
-        [self.descriptionTextView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:10.0],
-        [self.descriptionTextView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-10.0],
-        [self.descriptionTextView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-10.0],
+        [self.descriptionTextView.topAnchor constraintEqualToAnchor:self.mapButton.bottomAnchor constant:26.0],
+        [self.descriptionTextView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
+        [self.descriptionTextView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
+        [self.descriptionTextView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-31.0],
     ]];
     
     [self.detailsModel addObserver:self];
@@ -199,10 +206,10 @@
         });
     }
     dispatch_async(dispatch_get_main_queue(), ^{
-        weakSelf.titleLabel.text = item.title;
-        weakSelf.addressLabel.text = details.address;
-        weakSelf.locationLabel.text = [NSString stringWithFormat:@"%f° N, %f° E", item.coords.longitude, item.coords.latitude];
-        [weakSelf.descriptionTextView setText:details.sections[0]];
+        weakSelf.titleLabel.attributedText = getAttributedString(item.title, [Colors get].black, 20.0, UIFontWeightSemibold) ;
+        weakSelf.addressLabel.attributedText = getAttributedString(details.address, [Colors get].black, 14.0, UIFontWeightRegular) ;
+        weakSelf.locationLabel.attributedText = getAttributedString([NSString stringWithFormat:@"%f° N, %f° E", item.coords.longitude, item.coords.latitude], [Colors get].black, 14.0, UIFontWeightRegular);
+        [weakSelf.descriptionTextView setAttributedText:getAttributedString(details.sections[0], [Colors get].black, 16.0, UIFontWeightRegular)];
     });
     
 }
