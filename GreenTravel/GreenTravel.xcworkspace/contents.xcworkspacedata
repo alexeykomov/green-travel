@@ -2,16 +2,16 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/model/StoredPlaceItem+CoreDataProperties.h">
+      location = "group:/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceItem+CoreDataProperties.h">
    </FileRef>
    <FileRef
-      location = "group:/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/model/StoredPlaceItem+CoreDataClass.h">
+      location = "group:/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceItem+CoreDataClass.h">
    </FileRef>
    <FileRef
-      location = "group:/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/model/StoredPlaceItem+CoreDataClass.m">
+      location = "group:/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceItem+CoreDataClass.m">
    </FileRef>
    <FileRef
-      location = "group:/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/model/StoredPlaceItem+CoreDataProperties.m">
+      location = "group:/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceItem+CoreDataProperties.m">
    </FileRef>
    <FileRef
       location = "group:GreenTravel.xcodeproj">
