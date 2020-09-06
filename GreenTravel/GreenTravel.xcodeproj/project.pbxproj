@@ -299,9 +299,12 @@
 			isa = PBXGroup;
 			children = (
 				5A14829824E8915A00EBB756 /* app */,
+				5A5FB19C250579D500EBAA8E /* services */,
+				5A5FB19D250579E900EBAA8E /* models */,
 				5A14828424E800F200EBB756 /* screens */,
 				5A14824E24E7ED9100EBB756 /* ViewController.h */,
 				5A14824F24E7ED9100EBB756 /* ViewController.m */,
+				5A5FB19F25057A6300EBAA8E /* managedobjects */,
 				5A1482E324EC80AB00EBB756 /* model */,
 				5A14828024E7F91000EBB756 /* utilities */,
 				5A1482A724E9DD7600EBB756 /* fonts */,
@@ -356,20 +359,6 @@
 				5A14828924E80E3900EBB756 /* MainViewController.m */,
 				5A14828B24E8101A00EBB756 /* IndexViewController.h */,
 				5A14828C24E8101A00EBB756 /* IndexViewController.m */,
-				5A324B7F24F70B490044A671 /* ApiService.h */,
-				5A324B8024F70B490044A671 /* ApiService.m */,
-				5AA75C062505196D00AE7331 /* CoreDataService.h */,
-				5AA75C072505196D00AE7331 /* CoreDataService.m */,
-				5A324B9D24FEF87B0044A671 /* LocationModel.h */,
-				5A324B9E24FEF87B0044A671 /* LocationModel.m */,
-				5A324BA4250025AF0044A671 /* LocationObservable.h */,
-				5A324BA5250025B90044A671 /* LocationObserver.h */,
-				5A324BA3250025390044A671 /* SearchModel */,
-				5A324BA22500252D0044A671 /* IndexModel */,
-				5A324BA12500251F0044A671 /* MapModel */,
-				5A5FB1962505541F00EBAA8E /* BookmarksModel */,
-				5A324BA0250025110044A671 /* BookmarksGroupModel */,
-				5AA75C02250425A400AE7331 /* DetailsModel */,
 				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
 				5A14830624F1496600EBB756 /* SearchViewController */,
 				5A1482F324F04B0B00EBB756 /* MapViewController.h */,
@@ -474,10 +463,6 @@
 				5A69921F24F7E134008FB47E /* PathDetails.m */,
 				5A324B9724FBADDF0044A671 /* BookmarkItem.h */,
 				5A324B9824FBADDF0044A671 /* BookmarkItem.m */,
-				5AA75C0B25051C8800AE7331 /* StoredPlaceItem+CoreDataProperties.h */,
-				5AA75C0925051C8700AE7331 /* StoredPlaceItem+CoreDataClass.h */,
-				5AA75C0A25051C8800AE7331 /* StoredPlaceItem+CoreDataClass.m */,
-				5AA75C0C25051C8800AE7331 /* StoredPlaceItem+CoreDataProperties.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -574,6 +559,53 @@
 				5A5FB19B2505545A00EBAA8E /* BookmarksObservable.h */,
 			);
 			path = BookmarksModel;
+			sourceTree = "<group>";
+		};
+		5A5FB19C250579D500EBAA8E /* services */ = {
+			isa = PBXGroup;
+			children = (
+				5A324B7F24F70B490044A671 /* ApiService.h */,
+				5A324B8024F70B490044A671 /* ApiService.m */,
+				5AA75C062505196D00AE7331 /* CoreDataService.h */,
+				5AA75C072505196D00AE7331 /* CoreDataService.m */,
+			);
+			path = services;
+			sourceTree = "<group>";
+		};
+		5A5FB19D250579E900EBAA8E /* models */ = {
+			isa = PBXGroup;
+			children = (
+				5A5FB19E250579F800EBAA8E /* LocationModel */,
+				5A324BA3250025390044A671 /* SearchModel */,
+				5A324BA22500252D0044A671 /* IndexModel */,
+				5A324BA12500251F0044A671 /* MapModel */,
+				5A5FB1962505541F00EBAA8E /* BookmarksModel */,
+				5A324BA0250025110044A671 /* BookmarksGroupModel */,
+				5AA75C02250425A400AE7331 /* DetailsModel */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		5A5FB19E250579F800EBAA8E /* LocationModel */ = {
+			isa = PBXGroup;
+			children = (
+				5A324B9D24FEF87B0044A671 /* LocationModel.h */,
+				5A324B9E24FEF87B0044A671 /* LocationModel.m */,
+				5A324BA4250025AF0044A671 /* LocationObservable.h */,
+				5A324BA5250025B90044A671 /* LocationObserver.h */,
+			);
+			path = LocationModel;
+			sourceTree = "<group>";
+		};
+		5A5FB19F25057A6300EBAA8E /* managedobjects */ = {
+			isa = PBXGroup;
+			children = (
+				5AA75C0B25051C8800AE7331 /* StoredPlaceItem+CoreDataProperties.h */,
+				5AA75C0925051C8700AE7331 /* StoredPlaceItem+CoreDataClass.h */,
+				5AA75C0A25051C8800AE7331 /* StoredPlaceItem+CoreDataClass.m */,
+				5AA75C0C25051C8800AE7331 /* StoredPlaceItem+CoreDataProperties.m */,
+			);
+			path = managedobjects;
 			sourceTree = "<group>";
 		};
 		5AA75C02250425A400AE7331 /* DetailsModel */ = {
