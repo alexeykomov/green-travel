@@ -49,15 +49,15 @@
     
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     self.session = [NSURLSession sessionWithConfiguration:configuration];
-    self.indexModel = [[IndexModel alloc] init];
+    BookmarksModel *bookmarksModel = [[BookmarksModel alloc] init];
+    self.indexModel = [[IndexModel alloc] initWithBookmarksModel:bookmarksModel];
     DetailsModel *detailsModel = [[DetailsModel alloc] initWithIndexModel:self.indexModel];
     self.apiService = [[ApiService alloc] initWithSession:self.session model:self.indexModel detailsModel:detailsModel];
-    self.coreDataService = [[CoreDataService alloc] init];
+    self.coreDataService = [[CoreDataService alloc] initWithBookmarksModel:bookmarksModel];
     LocationModel *locationModel = [[LocationModel alloc] init];
     SearchModel *searchModel = [[SearchModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
     MapModel *mapModel = [[MapModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
     BookmarksGroupModel *bookmarksGroupsModel = [[BookmarksGroupModel alloc] initWithIndexModel:self.indexModel];
-    BookmarksModel *bookmarksModel = [[BookmarksModel alloc] init]; 
 
 #pragma mark - IndexViewController
     
