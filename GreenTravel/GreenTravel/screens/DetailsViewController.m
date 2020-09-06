@@ -13,12 +13,14 @@
 #import "ApiService.h"
 #import "DetailsModel.h"
 #import "ImageUtils.h"
+#import "TextUtils.h"
 
 @interface DetailsViewController ()
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) UILabel *titleLabel;
+@property (strong, nonatomic) UILabel *addressLabel;
 @property (strong, nonatomic) UILabel *locationLabel;
 @property (strong, nonatomic) UIImageView *previewImageView;
 @property (strong, nonatomic) UIButton *mapButton;
@@ -26,6 +28,7 @@
 @property (strong, nonatomic) ApiService *apiService;
 @property (strong, nonatomic) DetailsModel *detailsModel;
 @property (strong, nonatomic) PlaceDetails *details;
+@property (strong, nonatomic) NSLayoutConstraint *aspectRatioConstraint;
 
 @end
 
@@ -82,12 +85,12 @@
     
     [self.contentView addSubview:self.previewImageView];
     
+    self.aspectRatioConstraint = [self.previewImageView.heightAnchor constraintEqualToAnchor:self.previewImageView.widthAnchor multiplier:1];
     [NSLayoutConstraint activateConstraints:@[
         [self.previewImageView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0.0],
         [self.previewImageView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:0.0],
         [self.previewImageView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0.0],
-        [self.previewImageView.widthAnchor constraintEqualToConstant:50.0],
-        [self.previewImageView.heightAnchor constraintEqualToAnchor:self.view.widthAnchor]
+        self.aspectRatioConstraint,
     ]];
         
     #pragma mark - Title label
@@ -104,9 +107,69 @@
 
     ]];
     
-    [self.apiService loadDetailsByUUID:self.item.uuid];
+    #pragma mark - Address label
+    self.addressLabel = [[UILabel alloc] init];
+    self.addressLabel.numberOfLines = 4;
+    self.addressLabel.translatesAutoresizingMaskIntoConstraints = NO;
+
+    [self.contentView addSubview:self.addressLabel];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [self.addressLabel.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor constant:10.0],
+        [self.addressLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:10.0],
+        [self.addressLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-10.0],
+
+    ]];
+    
+    #pragma mark - Location label
+    self.locationLabel = [[UILabel alloc] init];
+    self.locationLabel.numberOfLines = 4;
+    self.locationLabel.translatesAutoresizingMaskIntoConstraints = NO;
+
+    [self.contentView addSubview:self.locationLabel];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [self.locationLabel.topAnchor constraintEqualToAnchor:self.addressLabel.bottomAnchor constant:10.0],
+        [self.locationLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:10.0],
+        [self.locationLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-10.0],
+
+    ]];
+    
+    #pragma mark - Go to map button
+    self.mapButton = [[UIButton alloc] init];
+    self.mapButton.translatesAutoresizingMaskIntoConstraints = NO;
+    self.mapButton.backgroundColor = [Colors get].apple;
+    [self.mapButton setTitle:@"Как добраться" forState:UIControlStateNormal];
+
+    [self.contentView addSubview:self.mapButton];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [self.mapButton.topAnchor constraintEqualToAnchor:self.locationLabel.bottomAnchor constant:10.0],
+        [self.mapButton.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:10.0],
+        [self.mapButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-10.0],
+        [self.mapButton.widthAnchor constraintLessThanOrEqualToAnchor:self.view.widthAnchor constant:-20.0],
+    ]];
+    
+    #pragma mark - Description text
+    self.descriptionTextView = [[UITextView alloc] init];
+    
+    self.descriptionTextView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.descriptionTextView.editable = NO;
+    self.descriptionTextView.scrollEnabled = NO;
+    [self.contentView addSubview:self.descriptionTextView];
+
+    self.descriptionTextView.backgroundColor = [Colors get].blue;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.descriptionTextView.topAnchor constraintEqualToAnchor:self.mapButton.bottomAnchor constant:10.0],
+        [self.descriptionTextView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:10.0],
+        [self.descriptionTextView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-10.0],
+        [self.descriptionTextView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-10.0],
+    ]];
+    
     [self.detailsModel addObserver:self];
-} 
+    [self.apiService loadDetailsByUUID:self.item.uuid];
+}
 
 /*
 #pragma mark - Navigation
@@ -120,14 +183,28 @@
 
 - (void)onDetailsUpdate:(NSMutableDictionary<NSString *,PlaceDetails *> *)itemUUIDToDetails items:(NSMutableDictionary<NSString *,PlaceItem *> *)itemUUIDToItem {
     PlaceDetails *details = itemUUIDToDetails[self.item.uuid];
+    PlaceItem *item = itemUUIDToItem[self.item.uuid];
     __weak typeof(self) weakSelf = self;
     if (!self.details && details) {
         loadImage(details.images[0], ^(UIImage *image) {
             dispatch_async(dispatch_get_main_queue(), ^{
+                CGFloat aspectRatio = image.size.height / image.size.width;
+                [NSLayoutConstraint deactivateConstraints:@[weakSelf.aspectRatioConstraint]];
+                weakSelf.aspectRatioConstraint = [weakSelf.previewImageView.heightAnchor constraintEqualToAnchor:weakSelf.previewImageView.widthAnchor multiplier:aspectRatio];
+                [NSLayoutConstraint activateConstraints:@[
+                    weakSelf.aspectRatioConstraint
+                ]];
                 [weakSelf.previewImageView setImage:image];
             });
         });
     }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.titleLabel.text = item.title;
+        weakSelf.addressLabel.text = details.address;
+        weakSelf.locationLabel.text = [NSString stringWithFormat:@"%f° N, %f° E", item.coords.longitude, item.coords.latitude];
+        [weakSelf.descriptionTextView setText:details.sections[0]];
+    });
+    
 }
 
 @end

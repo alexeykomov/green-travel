@@ -32,6 +32,7 @@ static Colors *instance;
         self.green = UIColorFromHEX(0x50A021);
         self.shamrock = UIColorFromHEX(0x35C7A4);
         self.yellow = UIColorFromHEX(0xF9CC78);
+        self.apple = UIColorFromHEX(0x4BA83B);
         self.pineTree = UIColorFromHEX(0x152702);
         self.heavyMetal = UIColorFromHEX(0x151614);
         self.yellowHighlighted = UIColorFromHEX(0xFDF4E3);

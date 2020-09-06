@@ -92,6 +92,14 @@ static NSString * const kGetDetailsBaseURL = @"http://192.168.0.13:3000/details/
         NSLog(@"Details from API: %@", detailsFromAPI);
         PlaceDetails *parsedDetails = [[PlaceDetails alloc] init];
         parsedDetails.images = detailsFromAPI[@"images"];
+        parsedDetails.address = detailsFromAPI[@"address"];
+        NSArray *sections = detailsFromAPI[@"sections"];
+        NSMutableArray *parsedSections = [[NSMutableArray alloc] init];
+//        [sections enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger section, BOOL * _Nonnull stop) {
+//
+//            [parsedSections addObject:section];
+//        }]
+        parsedDetails.sections = detailsFromAPI[@"sections"];
         [weakSelf.detailsModel updateDetails:parsedDetails forUUID:uuid];
     }];
     

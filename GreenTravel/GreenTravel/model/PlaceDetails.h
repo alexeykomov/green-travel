@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PlaceDetails : NSObject
 
 @property (strong, nonatomic) NSArray<NSString *> *images;
+@property (strong, nonatomic) NSString *address;
+@property (strong, nonatomic) NSArray<NSString *> *sections;
 
 @end 
 
