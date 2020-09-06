@@ -45,6 +45,11 @@
     [self notifyObservers];
 }
 
+- (void)updateBookmark:(PlaceItem *)placeItem bookmark:(BOOL)bookmark {
+    self.bookmarkItems[placeItem.uuid] = placeItem;
+    [self notifyObservers];
+}
+
 - (void)addObserver:(nonnull id<BookmarksObserver>)observer {
     [self.bookmarksObservers addObject:observer];
 }

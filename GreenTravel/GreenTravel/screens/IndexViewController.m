@@ -168,7 +168,7 @@ static CGFloat kTableRowHeight = 210.0;
             };
             placeItem.onFavoriteButtonPress = ^void() {
                 weakPlaceItem.bookmarked = !weakPlaceItem.bookmarked;
-                weakSelf.bookmarksModel;
+                [weakSelf.bookmarksModel updateBookmark:weakPlaceItem bookmark:weakPlaceItem.bookmarked];
                 [weakSelf.coreDataService updatePlaceItem:weakPlaceItem bookmark:weakPlaceItem.bookmarked];
             };
         }];

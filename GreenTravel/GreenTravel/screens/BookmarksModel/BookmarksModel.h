@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSMutableDictionary<NSString *, PlaceItem *> *bookmarkItems;
 @property (strong, nonatomic) NSMutableArray<id<BookmarksObserver>> *bookmarksObservers;
 - (void)fillItemsFromList:(NSArray<PlaceItem *> *)items;
+- (void)updateBookmark:(PlaceItem *)placeItem bookmark:(BOOL)bookmark;
 
 @end
 

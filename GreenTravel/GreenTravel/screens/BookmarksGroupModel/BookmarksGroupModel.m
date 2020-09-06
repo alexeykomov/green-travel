@@ -7,41 +7,46 @@
 //
 
 #import "BookmarksGroupModel.h"
-#import "Category.h"
+#import "BookmarksModel.h"
 #import "IndexModel.h"
 #import "BookmarksGroupObserver.h"
-#import "PlaceItem.h"
 #import "BookmarkItem.h"
+#import "Category.h"
+#import "PlaceItem.h"
 
-@interface BookmarksGroupModel()
+@interface BookmarksGroupModel ()
 
 @property (strong, nonatomic) IndexModel *indexModel;
-@property (strong, nonatomic) NSMutableDictionary<NSString*, NSNumber*> *categoryTypeToBookmark;
+@property (strong, nonatomic) BookmarksModel *bookmarksModel;
 @property (strong, nonatomic) NSMutableSet<NSString*> *itemUUIDs;
+@property (strong, nonatomic) NSMutableDictionary<NSString*, NSNumber*> *categoryTypeToBookmark;
 
 @end
 
-@implementation BookmarksGroupModel 
+@implementation BookmarksGroupModel
 
-- (instancetype)initWithIndexModel:(IndexModel *)model {
-        self = [super init];
-        if (self) {
-            self.indexModel = model;
-            self.bookmarkItems = [[NSMutableArray alloc] init];
-            self.categoryTypeToBookmark = [[NSMutableDictionary alloc] init];
-            self.itemUUIDs = [[NSMutableSet alloc] init];
-            self.bookmarksGroupObservers = [[NSMutableArray alloc] init];
-            [self.indexModel addObserver:self];
-        }
-        return self;
+- (instancetype)initWithIndexModel:(IndexModel *)indexModel
+                    bookmarksModel:(BookmarksModel *)bookmarksModel {
+    self = [super init];
+    if (self) {
+        _indexModel = indexModel;
+        _bookmarksModel = bookmarksModel;
+        _bookmarkItems = [[NSMutableArray alloc] init];
+        _categoryTypeToBookmark = [[NSMutableDictionary alloc] init];
+        _itemUUIDs = [[NSMutableSet alloc] init];
+        _bookmarksGroupObservers = [[NSMutableArray alloc] init];
+        [self.indexModel addObserver:self];
+        [self.bookmarksModel addObserver:self];
+    }
+    return self;
 }
 
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
-    [self fillMapItemsFromCategories:categories];
+    [self fillBookmarkItemsFromCategories:categories];
     [self notifyObservers];
 }
 
-- (void)fillMapItemsFromCategories:(NSArray<Category *> *)categories {
+- (void)fillBookmarkItemsFromCategories:(NSArray<Category *> *)categories {
     __weak typeof(self) weakSelf = self;
     [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
         if (!weakSelf.categoryTypeToBookmark[category.uuid] && [category.categories count] == 0) {
@@ -53,10 +58,10 @@
             bookmarkItem.uuid = category.uuid;
             [weakSelf.bookmarkItems addObject:bookmarkItem];
         }
-        [weakSelf fillMapItemsFromCategories:category.categories];
+        [weakSelf fillBookmarkItemsFromCategories:category.categories];
         [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
             if (![weakSelf.itemUUIDs containsObject:item.uuid] &&
-                item.bookmarked) {
+                !!self.bookmarksModel.bookmarkItems[item.uuid]) {
                 [weakSelf.itemUUIDs addObject:item.uuid];
                 weakSelf.categoryTypeToBookmark[category.uuid] = @([weakSelf.categoryTypeToBookmark[category.uuid] intValue] + 1);
             }
@@ -79,6 +84,11 @@
 
 - (void)removeObserver:(nonnull id<BookmarksGroupObserver>)observer {
     [self.bookmarksGroupObservers removeObject:observer];
+}
+
+- (void)onBookmarksUpdate:(nonnull NSDictionary<NSString *,PlaceItem *> *)bookmarkItems {
+    [self fillBookmarkItemsFromCategories:self.indexModel.categories];
+    [self notifyObservers];
 }
 
 @end
