@@ -46,7 +46,11 @@
 }
 
 - (void)updateBookmark:(PlaceItem *)placeItem bookmark:(BOOL)bookmark {
-    self.bookmarkItems[placeItem.uuid] = placeItem;
+    if (bookmark) {
+        self.bookmarkItems[placeItem.uuid] = placeItem;
+    } else {
+        [self.bookmarkItems removeObjectForKey:placeItem.uuid];
+    }
     [self notifyObservers];
 }
 
