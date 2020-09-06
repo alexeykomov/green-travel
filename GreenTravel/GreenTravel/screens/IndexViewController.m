@@ -153,7 +153,7 @@ static CGFloat kTableRowHeight = 210.0;
         [obj.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             __weak typeof(obj) weakItem = obj;
             obj.onPlaceCellPress = ^void() {
-                DetailsViewController *detailsViewController = [[DetailsViewController alloc] initWithApiService:weakSelf.apiService detailsModel:weakSelf.detailsModel];
+                DetailsViewController *detailsViewController = [[DetailsViewController alloc] initWithApiService:weakSelf.apiService detailsModel:weakSelf.detailsModel mapModel:weakSelf.mapModel locationModel:weakSelf.locationModel];
                 detailsViewController.item = weakItem;
                 [weakSelf.navigationController pushViewController:detailsViewController animated:YES];
             };

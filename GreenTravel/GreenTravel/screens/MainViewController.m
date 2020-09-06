@@ -79,7 +79,7 @@
     
 #pragma mark - MapViewController
     
-    MapViewController *mapController = [[MapViewController alloc] initWithMapModel:mapModel locationModel:locationModel showClosestPoints:NO];
+    MapViewController *mapController = [[MapViewController alloc] initWithMapModel:mapModel locationModel:locationModel showClosestPoints:NO mapItem:nil];
     mapController.title = @"Карта";
     UINavigationController *mapControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:mapController];
     UIImage *mapImage;

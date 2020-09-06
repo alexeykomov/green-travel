@@ -25,6 +25,7 @@
 @property (strong, nonatomic) MGLMapView *mapView;
 @property (assign, nonatomic) BOOL showClosestPoints;
 @property (assign, nonatomic) BOOL intentionToFocusOnUserLocation;
+@property (strong, nonatomic) MapItem *mapItem;
 
 @end
 
@@ -32,12 +33,14 @@
 
 - (instancetype)initWithMapModel:(MapModel *)mapModel
                    locationModel:(LocationModel *)locationModel
-                 showClosestPoints:(BOOL)showClosestPoints{
+               showClosestPoints:(BOOL)showClosestPoints
+                        mapItem:(nullable MapItem *)mapItem {
     self = [super init];
     if (self) {
         _mapModel = mapModel;
         _locationModel = locationModel;
-        _showClosestPoints = showClosestPoints; 
+        _showClosestPoints = showClosestPoints;
+        _mapItem = mapItem;
     }
     return self;
 }
@@ -46,7 +49,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.title = self.showClosestPoints ? @"Рядом" : @"Карта";
+    self.title = self.mapItem ? self.mapItem.title : self.showClosestPoints ?
+        @"Рядом" : @"Карта";
     self.view.backgroundColor = [Colors get].white;
     
     UINavigationBar *navigationBar = self.navigationController.navigationBar;
@@ -108,7 +112,9 @@
 - (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView {
     
     NSMutableArray *mapAnnotations = [[NSMutableArray alloc] init];
-    NSArray<MapItem *> *mapItems = self.showClosestPoints ? self.mapModel.closeMapItems : self.mapModel.mapItems;
+    NSArray<MapItem *> *mapItems = self.mapItem ? @[self.mapItem] :
+        self.showClosestPoints ? self.mapModel.closeMapItems :
+        self.mapModel.mapItems;
     [mapItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
         MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
         point.coordinate = mapItem.coords;

@@ -14,13 +14,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class MapModel;
+@class MapItem;
 @class LocationModel;
 
 @interface MapViewController : UIViewController<MapItemsObserver, MGLMapViewDelegate, LocationObserver>
 
 - (instancetype)initWithMapModel:(MapModel *)mapModel
                    locationModel:(LocationModel *)locationModel
-               showClosestPoints:(BOOL)showClosestPoints;
+               showClosestPoints:(BOOL)showClosestPoints
+                        mapItem:(nullable MapItem *)mapItem;
 
 @end
 

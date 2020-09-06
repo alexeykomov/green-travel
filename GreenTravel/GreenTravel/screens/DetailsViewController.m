@@ -12,8 +12,12 @@
 #import "PlaceDetails.h"
 #import "ApiService.h"
 #import "DetailsModel.h"
+#import "LocationModel.h"
+#import "MapModel.h"
+#import "MapItem.h"
 #import "ImageUtils.h"
 #import "TextUtils.h"
+#import "MapViewController.h"
 
 @interface DetailsViewController ()
 
@@ -26,6 +30,9 @@
 @property (strong, nonatomic) UIButton *mapButton;
 @property (strong, nonatomic) UITextView *descriptionTextView;
 @property (strong, nonatomic) ApiService *apiService;
+
+@property (strong, nonatomic) LocationModel *locationModel;
+@property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) DetailsModel *detailsModel;
 @property (strong, nonatomic) PlaceDetails *details;
 @property (strong, nonatomic) NSLayoutConstraint *aspectRatioConstraint;
@@ -36,11 +43,15 @@
 
 - (instancetype)initWithApiService:(ApiService *)apiService
                       detailsModel:(DetailsModel *)detailsModel
+                          mapModel:(MapModel *)mapModel
+                     locationModel:(LocationModel *)locationModel
 {
     self = [super init];
     if (self) {
         _apiService = apiService;
         _detailsModel = detailsModel;
+        _mapModel = mapModel;
+        _locationModel = locationModel;
     }
     return self;
 }
@@ -146,6 +157,8 @@
     self.mapButton.layer.masksToBounds = YES;
     [self.mapButton.titleLabel setFont:[UIFont fontWithName:@"OpenSans-Bold" size:14.0]];
     [self.mapButton setAttributedTitle:getAttributedString(@"Как добраться", [Colors get].white, 14.0, UIFontWeightBold) forState:UIControlStateNormal];
+    
+    [self.mapButton addTarget:self action:@selector(onMapButtonPress:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.contentView addSubview:self.mapButton];
 
@@ -212,6 +225,16 @@
         [weakSelf.descriptionTextView setAttributedText:getAttributedString(details.sections[0], [Colors get].black, 16.0, UIFontWeightRegular)];
     });
     
+}
+
+- (void)onMapButtonPress:(id)sender {
+    MapItem *mapItem = [[MapItem alloc] init];
+    mapItem.title = self.item.title;
+    mapItem.uuid = self.item.uuid;
+    mapItem.correspondingPlaceItem = self.item;
+    mapItem.coords = self.item.coords;
+    MapViewController *mapViewController = [[MapViewController alloc] initWithMapModel:self.mapModel locationModel:self.locationModel showClosestPoints:NO mapItem:mapItem];
+    [self.navigationController pushViewController:mapViewController animated:YES]; 
 }
 
 @end
