@@ -12,12 +12,12 @@
 #import "BookmarkCell.h"
 #import "Category.h"
 #import "PlacesViewController.h"
-#import "BookmarksModel.h"
+#import "BookmarksGroupModel.h"
 #import "BookmarkItem.h"
 
 @interface BookmarksViewController ()
 
-@property (strong, nonatomic) BookmarksModel *model;
+@property (strong, nonatomic) BookmarksGroupModel *model;
 
 @end
 
@@ -26,7 +26,7 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
 
 @implementation BookmarksViewController
 
-- (instancetype)initWithModel:(BookmarksModel *)model
+- (instancetype)initWithModel:(BookmarksGroupModel *)model
 {
     self = [super init];
     if (self) {

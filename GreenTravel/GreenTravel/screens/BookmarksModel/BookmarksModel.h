@@ -2,26 +2,26 @@
 //  BookmarksModel.h
 //  GreenTravel
 //
-//  Created by Alex K on 8/30/20.
+//  Created by Alex K on 9/6/20.
 //  Copyright © 2020 Alex K. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "CategoriesObserver.h"
-#import "BookmarksObservable.h"  
+#import "BookmarksObservable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class BookmarkItem;
+@class PlaceItem;
 
 @class IndexModel;
-@protocol BookmarksObserver;
+@protocol BookmarksGroupObserver;
 
-@interface BookmarksModel : NSObject<CategoriesObserver, BookmarksObservable>
+@interface BookmarksModel : NSObject<BookmarksObservable>
 
-- (instancetype)initWithIndexModel:(IndexModel *)model;
-@property (strong, nonatomic) NSMutableArray<BookmarkItem *> *bookmarkItems;
+- (instancetype)init;
+@property (strong, nonatomic) NSMutableDictionary<NSString *, PlaceItem *> *bookmarkItems;
 @property (strong, nonatomic) NSMutableArray<id<BookmarksObserver>> *bookmarksObservers;
+- (void)fillItemsFromList:(NSArray<PlaceItem *> *)items;
 
 @end
 

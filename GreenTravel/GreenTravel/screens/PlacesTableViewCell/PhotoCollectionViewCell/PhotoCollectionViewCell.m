@@ -86,6 +86,9 @@
 
 - (void)onFavoritePress:(id)sender {
     NSLog(@"Favorites button pressed.");
+    NSLog(@"item: %@", self.item);
+    self.item.onFavoriteButtonPress();
+    [self.favoritesButton setSelected:self.item.bookmarked];
 }
 
 - (void)onPlaceButtonPress:(id)sender {
@@ -93,8 +96,9 @@
 }
 
 - (void)updateItem:(PlaceItem *)item {
+    self.item = item;
     self.headerLabel.attributedText = getAttributedString(item.title, [Colors get].white, 16.0, UIFontWeightBold);
-    [self.favoritesButton setSelected:item.bokmarked];
+    [self.favoritesButton setSelected:item.bookmarked];
     loadImage(item.cover, ^(UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.placeholder setImage:image];

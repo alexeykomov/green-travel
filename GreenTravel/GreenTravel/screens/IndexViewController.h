@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class LocationModel;
 @class MapModel;
 @class DetailsModel;
+@class CoreDataService;
 
 @interface IndexViewController : UITableViewController<CategoriesObserver>
 
@@ -25,7 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
                         searchModel:(SearchModel *)searchModel
                       locationModel:(LocationModel *)locationModel
                            mapModel:(MapModel *)mapModel
-                       detailsModel:(DetailsModel *)detailsModel;
+                       detailsModel:(DetailsModel *)detailsModel
+                    coreDataService:(CoreDataService *)coreDataService;
 
 @end
 

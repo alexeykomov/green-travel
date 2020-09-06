@@ -1,8 +1,8 @@
 //
-//  SearchItemsObservable.h
+//  BookmarksObservable.h
 //  GreenTravel
 //
-//  Created by Alex K on 8/29/20.
+//  Created by Alex K on 9/6/20.
 //  Copyright © 2020 Alex K. All rights reserved.
 //
 
@@ -22,4 +22,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-

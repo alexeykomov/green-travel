@@ -17,8 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *cover;
 @property (assign, nonatomic) CLLocationCoordinate2D coords;
-@property (assign, nonatomic) BOOL bokmarked;
+@property (assign, nonatomic) BOOL bookmarked;
 @property (strong, nonatomic) void (^onPlaceCellPress)(void);
+@property (strong, nonatomic) void (^onFavoriteButtonPress)(void);
 
 @end 
 

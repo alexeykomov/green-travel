@@ -1,8 +1,8 @@
 //
-//  SearchItemsObserver.h
+//  BookmarksObserver.h
 //  GreenTravel
 //
-//  Created by Alex K on 8/29/20.
+//  Created by Alex K on 9/6/20.
 //  Copyright © 2020 Alex K. All rights reserved.
 //
 
@@ -10,11 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class BookmarkItem;
+@class PlaceItem;
 
 @protocol BookmarksObserver <NSObject>
 
-- (void)onBookmarksUpdate:(NSArray<BookmarkItem *>*)bookmarkItems;
+- (void)onBookmarksUpdate:(NSDictionary<NSString*, PlaceItem *>*)bookmarkItems;
 
 @end
 

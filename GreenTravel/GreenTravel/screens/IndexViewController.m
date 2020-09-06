@@ -21,6 +21,7 @@
 #import "SearchModel.h" 
 #import "ApiService.h"
 #import "LocationModel.h"
+#import "CoreDataService.h"
 
 @interface IndexViewController ()
 
@@ -30,6 +31,7 @@
 @property (strong, nonatomic) SearchModel *searchModel;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) MapModel *mapModel;
+@property (strong, nonatomic) CoreDataService *coreDataService;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) UIBarButtonItem *originalBackButtonItem;
@@ -46,7 +48,8 @@ static CGFloat kTableRowHeight = 210.0;
                         searchModel:(SearchModel *)searchModel
                       locationModel:(LocationModel *)locationModel
                            mapModel:(MapModel *)mapModel
-                       detailsModel:(DetailsModel *)detailsModel {
+                       detailsModel:(DetailsModel *)detailsModel
+                    coreDataService:(CoreDataService *)coreDataService {
     self = [super init];
     _apiService = apiService;
     _model = model;
@@ -54,6 +57,7 @@ static CGFloat kTableRowHeight = 210.0;
     _locationModel = locationModel;
     _mapModel = mapModel;
     _detailsModel = detailsModel;
+    _coreDataService = coreDataService;
     return self;
 }
 
@@ -82,6 +86,7 @@ static CGFloat kTableRowHeight = 210.0;
 
     [self.model addObserver:self];
     [self.apiService loadCategories];
+    [self.coreDataService fetchStoredPlaceItems];
 }
 
 #pragma mark - Lifecycle
@@ -150,12 +155,16 @@ static CGFloat kTableRowHeight = 210.0;
             };
         }];
 
-        [obj.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            __weak typeof(obj) weakItem = obj;
-            obj.onPlaceCellPress = ^void() {
+        [obj.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull placeItem, NSUInteger idx, BOOL * _Nonnull stop) {
+            __weak typeof(placeItem) weakPlaceItem = placeItem;
+            placeItem.onPlaceCellPress = ^void() {
                 DetailsViewController *detailsViewController = [[DetailsViewController alloc] initWithApiService:weakSelf.apiService detailsModel:weakSelf.detailsModel mapModel:weakSelf.mapModel locationModel:weakSelf.locationModel];
-                detailsViewController.item = weakItem;
+                detailsViewController.item = weakPlaceItem;
                 [weakSelf.navigationController pushViewController:detailsViewController animated:YES];
+            };
+            placeItem.onFavoriteButtonPress = ^void() {
+                weakPlaceItem.bookmarked = !weakPlaceItem.bookmarked;
+                [weakSelf.coreDataService updatePlaceItem:weakPlaceItem bookmark:weakPlaceItem.bookmarked];
             };
         }];
     }];

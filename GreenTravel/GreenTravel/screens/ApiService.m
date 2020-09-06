@@ -76,7 +76,7 @@ static NSString * const kGetDetailsBaseURL = @"http://192.168.0.13:3000/details/
         PlaceItem *placeItem = [[PlaceItem alloc] init];
         placeItem.title = obj[@"title"];
         placeItem.cover = obj[@"cover"];
-        placeItem.bokmarked = obj[@"bokmarked"];
+        placeItem.bookmarked = obj[@"bokmarked"];
         placeItem.coords = CLLocationCoordinate2DMake([obj[@"coords"][0] doubleValue], [obj[@"coords"][1] doubleValue]);
         placeItem.uuid = obj[@"uuid"];
         [mappedItems addObject:placeItem];
