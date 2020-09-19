@@ -58,7 +58,6 @@
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
         self.locationEnabled = YES;
-        __weak typeof(self) weakSelf = self;
         [self.locationObservers enumerateObjectsUsingBlock:^(id<LocationObserver>  _Nonnull observer, NSUInteger idx, BOOL * _Nonnull stop) {
             [observer onAuthorizationStatusChange:status];
         }];

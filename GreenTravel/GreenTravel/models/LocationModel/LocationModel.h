@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (assign, nonatomic) BOOL locationEnabled;
 @property (strong, nonatomic) NSMutableArray<id<LocationObserver>> *locationObservers;
-@property (strong, nonatomic) CLLocation *lastLocation;
+@property (strong, nonatomic, nullable) CLLocation *lastLocation;
 
 - (instancetype)init;
 - (void)authorize;
