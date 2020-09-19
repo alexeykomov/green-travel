@@ -179,6 +179,7 @@ static const CGFloat kSearchRowHeight = 40.0;
         self.intentionToGoToNearbyPlaces = YES;
         [self.locationModel authorize];
         if (self.locationModel.locationEnabled) {
+            [self.locationModel startMonitoring];
             MapViewController *nearbyPlacesViewController = [[MapViewController alloc] initWithMapModel:self.mapModel locationModel:self.locationModel showClosestPoints:YES mapItem:nil];
             [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
             self.intentionToGoToNearbyPlaces = NO;

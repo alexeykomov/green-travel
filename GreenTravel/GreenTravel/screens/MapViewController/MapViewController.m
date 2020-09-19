@@ -41,6 +41,7 @@
         _locationModel = locationModel;
         _showClosestPoints = showClosestPoints;
         _mapItem = mapItem;
+        _intentionToFocusOnUserLocation = showClosestPoints;
     }
     return self;
 }
@@ -156,9 +157,10 @@
         if (self.locationModel.locationEnabled) {
             [self.locationModel startMonitoring];
         }
-        
     }
 }
+
+#pragma mark - Location model
 
 - (void)onLocationUpdate:(CLLocation *)lastLocation {
     if (self.intentionToFocusOnUserLocation) {
@@ -167,23 +169,16 @@
     }
 }
 
+#pragma mark - Event listeners
+
 - (void)onLocateMePress:(id)sender {
     self.intentionToFocusOnUserLocation = YES;
     [self.locationModel authorize];
+    [self.locationModel startMonitoring];
     
     if (self.locationModel.locationEnabled && self.locationModel.lastLocation) {
         [self.mapView setCenterCoordinate:self.mapModel.lastLocation.coordinate animated:YES];
     }
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
