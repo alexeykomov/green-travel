@@ -18,9 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CoreDataService : NSObject
 
 @property (readonly, strong) NSPersistentContainer *persistentContainer;
-- (instancetype)initWithBookmarksModel:(BookmarksModel *)bookmarksModel;
 - (void)fetchStoredPlaceItems;
 - (void)updatePlaceItem:(PlaceItem *)placeItem bookmark:(BOOL)bookmark;
+- (void)loadCategoriesWithCompletion:(void(^)(NSArray<Category *>*))completion;
 - (void)saveCategories:(NSArray<Category *> *)categories;
 
 @end
