@@ -13,12 +13,14 @@
 #import "PlaceItem.h"
 #import "ApiService.h"
 #import "CoreDataService.h"
+#import "CategoryUtils.h"
 
 @interface IndexModel ()
 
-@property (strong, nonatomic) BookmarksModel *bookmarksModel;
 @property (strong, nonatomic) ApiService *apiService;
 @property (strong, nonatomic) CoreDataService *coreDataService;
+- (NSArray<Category *>*)mergeCategoriesOld:(NSArray<Category *>*)oldCategories
+                                   withNew:(NSArray<Category *>*)newCategories;
 
 @end
 
@@ -33,7 +35,6 @@ static IndexModel *instance;
     self = [super init];
     if (self) {
         _categoriesObservers = [[NSMutableArray alloc] init];
-        _bookmarksModel = bookmarksModel;
         _coreDataService = coreDataService;
         _apiService = apiService;
         // TODO: IndexModel would benefit from subsribing to BookmarksModel updates
@@ -43,28 +44,39 @@ static IndexModel *instance;
 
 - (void)loadCategories {
     __weak typeof(self) weakSelf = self;
-    
+    [self.coreDataService loadCategoriesWithCompletion:^(NSArray<Category *> * _Nonnull categories) {
+        [weakSelf updateCategories:categories];
+    }];
     [self.apiService loadCategoriesWithCompletion:^(NSArray<Category *>  * _Nonnull categories) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf updateCategories:categories];
-        [strongSelf.coreDataService saveCategories:categories];
+        NSArray<Category*> *newCategories = [strongSelf mergeCategoriesOld:strongSelf.categories
+                                                                   withNew:categories];
+        if (!isCategoriesEqual(strongSelf.categories, newCategories)) {
+            [strongSelf updateCategories:newCategories];
+            [strongSelf.coreDataService saveCategories:newCategories];
+        }
     }];
+}
+
+- (NSArray<Category *>*)mergeCategoriesOld:(NSArray<Category *>*)oldCategories
+                                   withNew:(NSArray<Category *>*)newCategories {
+    NSMutableSet *uuids = [[NSMutableSet alloc] init];
+    traverseCategories(oldCategories, ^(Category *category, PlaceItem *item) {
+        if (item.bookmarked) {
+            [uuids addObject:item.uuid];
+        }
+    });
+    traverseCategories(newCategories, ^(Category *category, PlaceItem *item) {
+        if ([uuids containsObject:item.uuid]) {
+            item.bookmarked = YES;
+        }
+    });
+    return newCategories;
 }
 
 - (void)updateCategories:(NSArray<Category *> *)categories {
     self.categories = categories;
-    [self fillItemsWithBookmarks:self.categories];
     [self notifyObservers];
-}
-
-- (void)fillItemsWithBookmarks:(NSArray<Category *>*)categories {
-    __weak typeof(self) weakSelf = self;
-    [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
-        [weakSelf fillItemsWithBookmarks:category.categories];
-        [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-            item.bookmarked = !!weakSelf.bookmarksModel.bookmarkItems[item.uuid];
-        }];
-    }];
 }
 
 - (void)addObserver:(nonnull id<CategoriesObserver>)observer {

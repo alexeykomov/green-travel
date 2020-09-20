@@ -4,8 +4,8 @@
         <attribute name="coverURL" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
-        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="StoredCategory" inverseName="parent" inverseEntity="StoredCategory"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="StoredPlaceItem" inverseName="parent" inverseEntity="StoredPlaceItem"/>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="StoredCategory" inverseName="parent" inverseEntity="StoredCategory"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="StoredPlaceItem" inverseName="parent" inverseEntity="StoredPlaceItem"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StoredCategory" inverseName="categories" inverseEntity="StoredCategory"/>
     </entity>
     <entity name="StoredPlaceItem" representedClassName="StoredPlaceItem" syncable="YES">

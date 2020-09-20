@@ -9,6 +9,7 @@
 #import "CoreDataService.h"
 #import <CoreData/CoreData.h>
 #import "StoredPlaceItem+CoreDataProperties.h"
+#import "StoredCategory+CoreDataProperties.h"
 #import "PlaceItem.h"
 #import "Category.h"
 #import "BookmarksModel.h"
@@ -19,22 +20,9 @@
 NSPersistentContainer *_persistentContainer;
 }
 
-@property (strong, nonatomic) dispatch_queue_global_t queue;
-@property (strong, nonatomic) BookmarksModel *bookmarksModel;
-
 @end
 
 @implementation CoreDataService
-
-- (instancetype)initWithBookmarksModel:(BookmarksModel *)bookmarksModel
-{
-    self = [super init];
-    if (self) {
-        _queue = dispatch_get_global_queue(QOS_CLASS_UTILITY, 0);
-        _bookmarksModel = bookmarksModel;
-    }
-    return self;
-}
 
 - (NSPersistentContainer *)persistentContainer {
     @synchronized (self) {
@@ -71,14 +59,11 @@ NSPersistentContainer *_persistentContainer;
             item.cover = storedPlaceItem.coverURL;
             [outputResult addObject:item];
         }];
-        [weakSelf.bookmarksModel fillItemsFromList:outputResult];
     }];
 }
 
 - (void)updatePlaceItem:(PlaceItem *)placeItem bookmark:(BOOL)bookmark {
-    __weak typeof(self) weakSelf = self;
-    
-    [weakSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
+    [self.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
         NSFetchRequest *fetchRequest = [StoredPlaceItem fetchRequest];
         NSError *error;
         NSArray<StoredPlaceItem *> *fetchResult = [ctx executeFetchRequest:fetchRequest error:&error];
@@ -111,9 +96,62 @@ NSPersistentContainer *_persistentContainer;
     }];
 }
 
+- (void)loadCategoriesWithCompletion:(void(^)(NSArray<Category *>*))completion {
+    __weak typeof(self) weakSelf = self;
+    [self.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
+        NSFetchRequest *fetchRequest = [StoredCategory fetchRequest];
+        NSError *error;
+        NSArray<StoredCategory *> *fetchResult = [ctx executeFetchRequest:fetchRequest error:&error];
+        NSMutableArray<Category *> *categories = [weakSelf mapStoredCategoriesToCategories:fetchResult];
+        completion(categories);
+    }];
+}
+
+- (NSMutableArray<Category *>*)mapStoredCategoriesToCategories:(NSArray<StoredCategory *>*)storedCategories {
+    NSMutableArray<Category *> *categories = [[NSMutableArray alloc] init];
+    __weak typeof(self) weakSelf = self;
+    [storedCategories enumerateObjectsUsingBlock:^(StoredCategory * _Nonnull storedCategory, NSUInteger idx, BOOL * _Nonnull stop) {
+        Category *category = [[Category alloc] init];
+        category.title = storedCategory.title;
+        category.uuid = storedCategory.uuid;
+        category.cover = storedCategory.coverURL;
+        NSMutableArray *items = [[NSMutableArray alloc] init];
+        [storedCategory.items enumerateObjectsUsingBlock:^(StoredPlaceItem * _Nonnull storedItem, NSUInteger idx, BOOL * _Nonnull stop) {
+            PlaceItem *item = [[PlaceItem alloc] init];
+            item.title = storedItem.title;
+            CLLocationCoordinate2D coords;
+            [storedItem.coords getBytes:&coords length:sizeof(coords)];
+            item.coords = coords;
+            item.cover = storedItem.coverURL;
+            item.bookmarked = storedItem.bookmarked;
+            [items addObject:item];
+        }];
+        category.items = items;
+        category.categories = [weakSelf mapStoredCategoriesToCategories:storedCategory.categories.array];
+        [categories addObject:category];
+    }];
+    return categories;
+}
+
 - (void)saveCategories:(NSArray<Category *> *)categories {
-    [categories enumerateObjectsUsingBlock:^(Category * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        *stop = YES;
+    __weak typeof(self) weakSelf = self;
+    [weakSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
+        [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
+            StoredCategory *storedCategory = [[StoredCategory alloc] initWithContext:ctx];
+            storedCategory.title = category.title;
+            [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+                StoredPlaceItem *storedItem = [[StoredPlaceItem alloc] initWithContext:ctx];
+                storedItem.title = item.title;
+                CLLocationCoordinate2D coords = item.coords;
+                NSData *coordsAsData = [NSData dataWithBytes:&coords
+                                                      length:sizeof(item.coords)];
+                storedItem.coords = coordsAsData;
+                storedItem.coverURL = item.cover;
+                storedItem.uuid = item.uuid;
+                [storedCategory addItemsObject:storedItem];
+            }];
+            [weakSelf saveCategories:category.categories];
+        }];
     }];
 }
 
