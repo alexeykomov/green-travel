@@ -11,26 +11,44 @@
 #import "BookmarksModel.h"
 #import "Category.h"
 #import "PlaceItem.h"
+#import "ApiService.h"
+#import "CoreDataService.h"
 
 @interface IndexModel ()
 
 @property (strong, nonatomic) BookmarksModel *bookmarksModel;
+@property (strong, nonatomic) ApiService *apiService;
+@property (strong, nonatomic) CoreDataService *coreDataService;
 
 @end
 
-@implementation IndexModel 
+@implementation IndexModel
  
 static IndexModel *instance;
 
-- (instancetype)initWithBookmarksModel:(BookmarksModel *)bookmarksModel
+- (instancetype)initWithApiService:(ApiService *)apiService
+                   coreDataService:(CoreDataService *)coreDataService
+                    bookmarksModel:(BookmarksModel *)bookmarksModel;
 {
     self = [super init];
     if (self) {
         _categoriesObservers = [[NSMutableArray alloc] init];
         _bookmarksModel = bookmarksModel;
+        _coreDataService = coreDataService;
+        _apiService = apiService;
         // TODO: IndexModel would benefit from subsribing to BookmarksModel updates
     }
     return self;
+}
+
+- (void)loadCategories {
+    __weak typeof(self) weakSelf = self;
+    
+    [self.apiService loadCategoriesWithCompletion:^(NSArray<Category *>  * _Nonnull categories) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf updateCategories:categories];
+        [strongSelf.coreDataService saveCategories:categories];
+    }];
 }
 
 - (void)updateCategories:(NSArray<Category *> *)categories {

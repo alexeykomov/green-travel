@@ -20,7 +20,6 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
 @interface ApiService ()
 
 @property (strong, nonatomic) NSURLSession *session;
-@property (strong, nonatomic) IndexModel *model;
 @property (strong, nonatomic) DetailsModel *detailsModel;
 
 @end
@@ -28,29 +27,24 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
 @implementation ApiService
 
 - (instancetype) initWithSession:(NSURLSession *)session
-                           model:(IndexModel *)model
                     detailsModel:(DetailsModel *)detailsModel {
     self = [super init];
     if (self) {
         _session = session;
-        _model = model;
         _detailsModel = detailsModel;
     }
     return self;
 }
 
-- (void)loadCategories {
-    
+- (void)loadCategoriesWithCompletion:(void(^)(NSArray<Category *>*))completion {
     NSURL *url = [NSURL URLWithString:kGetCategoriesURL];
     __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        
         NSArray *categories = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         NSLog(@"Error when loading categories: %@", error);
         NSArray<Category *> *mappedCategories = [[weakSelf mapCategoriesFromJSON:categories] copy];
-        [weakSelf.model updateCategories:mappedCategories];
+        completion(mappedCategories);
     }];
-    
     [task resume];
 }
 

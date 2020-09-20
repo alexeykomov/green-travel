@@ -52,7 +52,7 @@
     BookmarksModel *bookmarksModel = [[BookmarksModel alloc] init];
     self.indexModel = [[IndexModel alloc] initWithBookmarksModel:bookmarksModel];
     DetailsModel *detailsModel = [[DetailsModel alloc] initWithIndexModel:self.indexModel];
-    self.apiService = [[ApiService alloc] initWithSession:self.session model:self.indexModel detailsModel:detailsModel];
+    self.apiService = [[ApiService alloc] initWithSession:self.session detailsModel:detailsModel];
     self.coreDataService = [[CoreDataService alloc] initWithBookmarksModel:bookmarksModel];
     LocationModel *locationModel = [[LocationModel alloc] init];
     SearchModel *searchModel = [[SearchModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
