@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithBookmarksModel:(BookmarksModel *)bookmarksModel;
 - (void)fetchStoredPlaceItems;
 - (void)updatePlaceItem:(PlaceItem *)placeItem bookmark:(BOOL)bookmark;
+- (void)saveCategories:(NSArray<Category *> *)categories;
 
 @end
 

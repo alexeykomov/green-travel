@@ -89,7 +89,7 @@ static CGFloat kTableRowHeight = 210.0;
     self.tableView.alwaysBounceVertical = YES;
 
     [self.model addObserver:self];
-    [self.apiService loadCategories];
+    [self.model loadCategories];
     [self.coreDataService fetchStoredPlaceItems];
 }
 

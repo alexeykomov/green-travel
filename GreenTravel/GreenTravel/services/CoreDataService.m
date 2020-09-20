@@ -111,4 +111,10 @@ NSPersistentContainer *_persistentContainer;
     }];
 }
 
+- (void)saveCategories:(NSArray<Category *> *)categories {
+    [categories enumerateObjectsUsingBlock:^(Category * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        *stop = YES;
+    }];
+}
+
 @end

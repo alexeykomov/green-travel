@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class PathDetails;
 @class CategoriesObserver;
 @class BookmarksModel;
+@class ApiService;
+@class CoreDataService;
 
 @interface IndexModel : NSObject<CategoriesObservable>
 
@@ -28,7 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSDictionary<NSString *, Category *> *categoryByUUID;
 @property (strong, nonatomic) NSDictionary<NSString *, PlaceDetails *> *placesByUUID;
 @property (strong, nonatomic) NSDictionary<NSString *, PathDetails *> *pathsByUUID;
-- (instancetype)initWithBookmarksModel:(BookmarksModel *)bookmarksModel;
+- (instancetype)initWithApiService:(ApiService *)apiService coreDataService:(CoreDataService *)coreDataService bookmarksModel:(BookmarksModel *)bookmarksModel;
+- (void)loadCategories;
 - (void)updateCategories:(NSArray<Category *> *)categories;
 
 @end
