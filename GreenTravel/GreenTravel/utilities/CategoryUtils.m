@@ -9,6 +9,8 @@
 #import "CategoryUtils.h"
 #import "Category.h"
 #import "PlaceItem.h"
+#import "StoredPlaceItem+CoreDataProperties.h"
+#import "StoredCategory+CoreDataProperties.h"
 
 void traverseCategories(NSArray<Category *> *categories, void(^onCategoryAndItem)(Category*, PlaceItem*)) {
     [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -18,8 +20,18 @@ void traverseCategories(NSArray<Category *> *categories, void(^onCategoryAndItem
         }];
         traverseCategories(category.categories, onCategoryAndItem);
     }];
-    
 }
+
+void traverseStoredCategories(NSArray<StoredCategory *> *categories, void(^onCategoryAndItem)(StoredCategory*, StoredPlaceItem*)) {
+    [categories enumerateObjectsUsingBlock:^(StoredCategory * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
+        onCategoryAndItem(category, nil);
+        [category.items enumerateObjectsUsingBlock:^(StoredPlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+            onCategoryAndItem(category, item);
+        }];
+        traverseStoredCategories(category.categories, onCategoryAndItem);
+    }];
+}
+
 
 BOOL isItemsEqual(NSArray<PlaceItem *> *itemsA, NSArray<PlaceItem *> *itemsB) {
     if ([itemsA count] != [itemsB count]) {
