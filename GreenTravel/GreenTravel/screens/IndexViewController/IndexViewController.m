@@ -90,7 +90,6 @@ static CGFloat kTableRowHeight = 210.0;
 
     [self.model addObserver:self];
     [self.model loadCategories];
-    [self.coreDataService fetchStoredPlaceItems];
 }
 
 #pragma mark - Lifecycle

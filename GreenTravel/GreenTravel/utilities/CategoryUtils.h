@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 @class Category;
 @class PlaceItem;
+@class StoredCategory;
+@class StoredPlaceItem;
 
 void traverseCategories(NSArray<Category *> *categories, void(^onCategoryAndItem)(Category*, PlaceItem*));
+void traverseStoredCategories(NSArray<StoredCategory *> *categories, void(^onCategoryAndItem)(StoredCategory*, StoredPlaceItem*));
 BOOL isCategoriesEqual(NSArray<Category *> *categoriesA, NSArray<Category *> *categoriesB);

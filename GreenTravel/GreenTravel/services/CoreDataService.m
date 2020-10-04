@@ -10,9 +10,11 @@
 #import <CoreData/CoreData.h>
 #import "StoredPlaceItem+CoreDataProperties.h"
 #import "StoredCategory+CoreDataProperties.h"
+
 #import "PlaceItem.h"
 #import "Category.h"
 #import "BookmarksModel.h"
+#import "CategoryUtils.h"
 
 @interface CoreDataService ()
 
@@ -41,58 +43,18 @@ NSPersistentContainer *_persistentContainer;
     return _persistentContainer;
 }
 
-- (void)fetchStoredPlaceItems {
-    __weak typeof(self) weakSelf = self;
-    
-    [self.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
-        NSFetchRequest *fetchRequest = [StoredPlaceItem fetchRequest];
-        NSError *error;
-        NSArray<StoredPlaceItem *> *fetchResult = [ctx executeFetchRequest:fetchRequest error:&error];
-        NSMutableArray<PlaceItem *> *outputResult = [[NSMutableArray alloc] init];
-        [fetchResult enumerateObjectsUsingBlock:^(StoredPlaceItem * _Nonnull storedPlaceItem, NSUInteger idx, BOOL * _Nonnull stop) {
-            PlaceItem *item = [[PlaceItem alloc] init];
-            item.bookmarked = YES;
-            item.uuid = storedPlaceItem.uuid;
-            CLLocationCoordinate2D coords;
-            [storedPlaceItem.coords getBytes:&coords length:sizeof(coords)];
-            item.coords = coords;
-            item.cover = storedPlaceItem.coverURL;
-            [outputResult addObject:item];
-        }];
-    }];
-}
-
 - (void)updatePlaceItem:(PlaceItem *)placeItem bookmark:(BOOL)bookmark {
     [self.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
-        NSFetchRequest *fetchRequest = [StoredPlaceItem fetchRequest];
+        NSFetchRequest *fetchRequest = [StoredCategory fetchRequest];
         NSError *error;
-        NSArray<StoredPlaceItem *> *fetchResult = [ctx executeFetchRequest:fetchRequest error:&error];
-        __block StoredPlaceItem *foundStoredPlaceItem;
-        [fetchResult enumerateObjectsUsingBlock:^(StoredPlaceItem * _Nonnull storedPlaceItem, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSLog(@"StoredPlaceItem uuid: %@", storedPlaceItem.uuid);
+        NSArray<StoredCategory *> *fetchResult = [ctx executeFetchRequest:fetchRequest error:&error];
+        traverseStoredCategories(fetchResult,
+                                 ^(StoredCategory *category, StoredPlaceItem *storedPlaceItem) {
             if([storedPlaceItem.uuid isEqualToString:placeItem.uuid]){
-                foundStoredPlaceItem = storedPlaceItem;
+                storedPlaceItem.bookmarked = bookmark;
             }
-        }];
-        if (foundStoredPlaceItem && bookmark) {
-            // Do nothing, item is already in db.
-            return;
-        }
-        if (!foundStoredPlaceItem && bookmark) {
-            StoredPlaceItem *storedPlaceItem = [[StoredPlaceItem alloc] initWithContext:ctx];
-            storedPlaceItem.uuid = placeItem.uuid;
-            storedPlaceItem.title = placeItem.title;
-            CLLocationCoordinate2D coords = placeItem.coords;
-            NSData *coordsAsData = [NSData dataWithBytes:&coords
-                                                  length:sizeof(placeItem.coords)];
-            storedPlaceItem.coords = coordsAsData;
-            storedPlaceItem.bookmarked = YES;
-            [ctx save:&error];
-        }
-        if (foundStoredPlaceItem && !bookmark) {
-            [ctx deleteObject:foundStoredPlaceItem];
-            [ctx save:&error];
-        }
+        });
+        [ctx save:&error];
     }];
 }
 
@@ -136,6 +98,7 @@ NSPersistentContainer *_persistentContainer;
 - (void)saveCategories:(NSArray<Category *> *)categories {
     __weak typeof(self) weakSelf = self;
     [weakSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
+        NSError *error;
         [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
             StoredCategory *storedCategory = [[StoredCategory alloc] initWithContext:ctx];
             storedCategory.title = category.title;
@@ -152,6 +115,7 @@ NSPersistentContainer *_persistentContainer;
             }];
             [weakSelf saveCategories:category.categories];
         }];
+        [ctx save:&error];
     }];
 }
 
