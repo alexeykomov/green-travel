@@ -20,18 +20,15 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
 @interface ApiService ()
 
 @property (strong, nonatomic) NSURLSession *session;
-@property (strong, nonatomic) DetailsModel *detailsModel;
 
 @end
 
 @implementation ApiService
 
-- (instancetype) initWithSession:(NSURLSession *)session
-                    detailsModel:(DetailsModel *)detailsModel {
+- (instancetype) initWithSession:(NSURLSession *)session {
     self = [super init];
     if (self) {
         _session = session;
-        _detailsModel = detailsModel;
     }
     return self;
 }
@@ -78,7 +75,7 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
     return mappedItems;
 }
 
-- (void)loadDetailsByUUID:(NSString *)uuid {
+- (void)loadDetailsByUUID:(NSString *)uuid withCompletion:(void(^)(PlaceDetails*))completion{
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:kGetDetailsBaseURL, uuid]];
     __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -94,7 +91,7 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
 //            [parsedSections addObject:section];
 //        }]
         parsedDetails.sections = detailsFromAPI[@"sections"];
-        [weakSelf.detailsModel updateDetails:parsedDetails forUUID:uuid];
+        completion(parsedDetails);
     }];
     
     [task resume];

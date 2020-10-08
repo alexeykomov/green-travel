@@ -30,7 +30,6 @@ static IndexModel *instance;
 
 - (instancetype)initWithApiService:(ApiService *)apiService
                    coreDataService:(CoreDataService *)coreDataService
-                    bookmarksModel:(BookmarksModel *)bookmarksModel;
 {
     self = [super init];
     if (self) {
