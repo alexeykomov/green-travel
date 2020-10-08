@@ -50,9 +50,9 @@
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     self.session = [NSURLSession sessionWithConfiguration:configuration];
     BookmarksModel *bookmarksModel = [[BookmarksModel alloc] init];
-    self.indexModel = [[IndexModel alloc] initWithBookmarksModel:bookmarksModel];
+    self.indexModel = [[IndexModel alloc] initWithApiService:self.apiService coreDataService:self.coreDataService];
     DetailsModel *detailsModel = [[DetailsModel alloc] initWithIndexModel:self.indexModel];
-    self.apiService = [[ApiService alloc] initWithSession:self.session detailsModel:detailsModel];
+    self.apiService = [[ApiService alloc] initWithSession:self.session];
     self.coreDataService = [[CoreDataService alloc] init];
     LocationModel *locationModel = [[LocationModel alloc] init];
     SearchModel *searchModel = [[SearchModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
