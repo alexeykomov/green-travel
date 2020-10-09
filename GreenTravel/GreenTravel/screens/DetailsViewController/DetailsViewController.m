@@ -188,7 +188,9 @@
     ]];
     
     [self.detailsModel addObserver:self];
-    [self.apiService loadDetailsByUUID:self.item.uuid];
+    [self.apiService loadDetailsByUUID:self.item.uuid  withCompletion:^(PlaceDetails * _Nonnull details) {
+        
+    }];
 }
 
 /*

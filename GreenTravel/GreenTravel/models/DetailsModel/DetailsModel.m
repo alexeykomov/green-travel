@@ -12,17 +12,23 @@
 #import "DetailsObserver.h"
 #import "PlaceItem.h"
 #import "BookmarkItem.h"
+#import "ApiService.h"
+#import "CoreDataService.h"
 
 @interface DetailsModel()
 
 @property (strong, nonatomic) IndexModel *indexModel;
 @property (strong, nonatomic) NSMutableSet<NSString*> *itemUUIDs;
+@property (strong, nonatomic) ApiService *apiService;
+@property (strong, nonatomic) CoreDataService *coreDataService;
 
 @end
 
 @implementation DetailsModel
 
-- (instancetype)initWithIndexModel:(IndexModel *)model {
+- (instancetype)initWithIndexModel:(IndexModel *)model
+                        apiService:(nonnull ApiService *)apiService
+                   coreDataService:(nonnull CoreDataService *)coreDataService {
         self = [super init];
         if (self) {
             _indexModel = model;
@@ -30,6 +36,8 @@
             _detailsObservers = [[NSMutableArray alloc] init];
             _itemUUIDToItem = [[NSMutableDictionary alloc] init];
             _itemUUIDToDetails = [[NSMutableDictionary alloc] init];
+            _apiService = apiService;
+            _coreDataService = coreDataService;
             [self.indexModel addObserver:self];
         }
         return self;
@@ -56,6 +64,12 @@
 - (void)updateDetails:(PlaceDetails *)details forUUID:(NSString *)uuid {
     [self.itemUUIDToDetails setValue:details forKey:uuid];
     [self notifyObservers];
+}
+
+- (void)loadDetailsByUUID:(NSString *)uuid {
+    [self.apiService loadDetailsByUUID:uuid withCompletion:^(PlaceDetails * _Nonnull details) {
+        
+    }];
 }
 
 - (void)addObserver:(nonnull id<DetailsObserver>)observer {
