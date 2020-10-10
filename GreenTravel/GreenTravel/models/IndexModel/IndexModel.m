@@ -19,6 +19,7 @@
 
 @property (strong, nonatomic) ApiService *apiService;
 @property (strong, nonatomic) CoreDataService *coreDataService;
+@property (assign, nonatomic) BOOL loaded;
 - (NSArray<Category *>*)mergeCategoriesOld:(NSArray<Category *>*)oldCategories
                                    withNew:(NSArray<Category *>*)newCategories;
 
@@ -42,6 +43,10 @@ static IndexModel *instance;
 }
 
 - (void)loadCategories {
+    if (self.loaded) {
+        return;
+    }
+    NSLog(@"loadCategories");
     __weak typeof(self) weakSelf = self;
     [self.coreDataService loadCategoriesWithCompletion:^(NSArray<Category *> * _Nonnull categories) {
         [weakSelf updateCategories:categories];
@@ -54,6 +59,7 @@ static IndexModel *instance;
             [strongSelf.coreDataService saveCategories:newCategories];
         }
     }];
+    self.loaded = YES;
 }
 
 - (NSArray<Category *>*)mergeCategoriesOld:(NSArray<Category *>*)oldCategories

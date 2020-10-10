@@ -22,6 +22,8 @@
 NSPersistentContainer *_persistentContainer;
 }
 
+@property (strong, nonatomic) NSManagedObjectContext *ctx;
+
 @end
 
 @implementation CoreDataService
@@ -38,6 +40,8 @@ NSPersistentContainer *_persistentContainer;
                 abort();
               }
             }];
+            
+            _ctx = _persistentContainer.newBackgroundContext;
         }
     }
     return _persistentContainer;
@@ -62,6 +66,7 @@ NSPersistentContainer *_persistentContainer;
     __weak typeof(self) weakSelf = self;
     [self.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
         NSFetchRequest *fetchRequest = [StoredCategory fetchRequest];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"parent == %@", nil];
         NSError *error;
         NSArray<StoredCategory *> *fetchResult = [ctx executeFetchRequest:fetchRequest error:&error];
         NSMutableArray<Category *> *categories = [weakSelf mapStoredCategoriesToCategories:fetchResult];
@@ -81,6 +86,7 @@ NSPersistentContainer *_persistentContainer;
         [storedCategory.items enumerateObjectsUsingBlock:^(StoredPlaceItem * _Nonnull storedItem, NSUInteger idx, BOOL * _Nonnull stop) {
             PlaceItem *item = [[PlaceItem alloc] init];
             item.title = storedItem.title;
+            item.uuid = storedItem.uuid;
             CLLocationCoordinate2D coords;
             [storedItem.coords getBytes:&coords length:sizeof(coords)];
             item.coords = coords;
@@ -97,25 +103,51 @@ NSPersistentContainer *_persistentContainer;
 
 - (void)saveCategories:(NSArray<Category *> *)categories {
     __weak typeof(self) weakSelf = self;
-    [weakSelf.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
+    [self.ctx performBlockAndWait:^{
         NSError *error;
-        [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
-            StoredCategory *storedCategory = [[StoredCategory alloc] initWithContext:ctx];
-            storedCategory.title = category.title;
-            [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-                StoredPlaceItem *storedItem = [[StoredPlaceItem alloc] initWithContext:ctx];
-                storedItem.title = item.title;
-                CLLocationCoordinate2D coords = item.coords;
-                NSData *coordsAsData = [NSData dataWithBytes:&coords
-                                                      length:sizeof(item.coords)];
-                storedItem.coords = coordsAsData;
-                storedItem.coverURL = item.cover;
-                storedItem.uuid = item.uuid;
-                [storedCategory addItemsObject:storedItem];
-            }];
-            [weakSelf saveCategories:category.categories];
+        
+        NSFetchRequest *fetchRequest = [StoredCategory fetchRequest];
+        NSArray<StoredCategory *> *fetchResult = [weakSelf.ctx executeFetchRequest:fetchRequest error:&error];
+        NSLog(@"Fetch result before deletion: %lu", (unsigned long)fetchResult.count);
+        [fetchResult enumerateObjectsUsingBlock:^(StoredCategory * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [weakSelf.ctx deleteObject:obj];
         }];
-        [ctx save:&error];
+        [weakSelf.ctx save:&error];
+        fetchResult = [weakSelf.ctx executeFetchRequest:fetchRequest error:&error];
+        NSLog(@"Fetch result after deletion: %lu", (unsigned long)fetchResult.count);
+        
+        if ([categories count]) {
+            [weakSelf saveCategoriesWithinBlock:categories parentCategory:nil];
+        }
+        [weakSelf.ctx save:&error];
+    }];
+}
+
+- (void)saveCategoriesWithinBlock:(NSArray<Category *> *)categories
+        parentCategory:(StoredCategory *)parentCategory {
+    __weak typeof(self) weakSelf = self;
+    [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
+        StoredCategory *storedCategory = [NSEntityDescription insertNewObjectForEntityForName:@"StoredCategory" inManagedObjectContext:weakSelf.ctx];
+        storedCategory.title = category.title;
+        storedCategory.uuid = category.uuid;
+        storedCategory.coverURL = category.cover;
+        storedCategory.parent = parentCategory;
+        NSLog(@"Stored cagegory: %@", parentCategory);
+        [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+            StoredPlaceItem *storedItem = [NSEntityDescription insertNewObjectForEntityForName:@"StoredPlaceItem" inManagedObjectContext:weakSelf.ctx];
+            storedItem.title = item.title;
+            CLLocationCoordinate2D coords = item.coords;
+            NSData *coordsAsData = [NSData dataWithBytes:&coords
+                                                  length:sizeof(item.coords)];
+            storedItem.coords = coordsAsData;
+            storedItem.coverURL = item.cover;
+            storedItem.uuid = item.uuid;
+            [storedCategory addItemsObject:storedItem];
+        }];
+        [parentCategory addCategoriesObject:storedCategory];
+        if ([category.categories count]) {
+            [weakSelf saveCategoriesWithinBlock:category.categories parentCategory:storedCategory];
+        }
     }];
 }
 

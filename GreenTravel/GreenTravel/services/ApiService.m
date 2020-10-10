@@ -37,6 +37,10 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
     NSURL *url = [NSURL URLWithString:kGetCategoriesURL];
     __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (!data) {
+            return;
+        }
+        
         NSArray *categories = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         NSLog(@"Error when loading categories: %@", error);
         NSArray<Category *> *mappedCategories = [[weakSelf mapCategoriesFromJSON:categories] copy];
@@ -79,6 +83,10 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:kGetDetailsBaseURL, uuid]];
     __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (!data) {
+            return;
+        }
+        
         NSDictionary *detailsFromAPI = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         NSLog(@"Details from API: %@", detailsFromAPI);
         PlaceDetails *parsedDetails = [[PlaceDetails alloc] init];
