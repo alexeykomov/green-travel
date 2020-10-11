@@ -153,7 +153,7 @@ static const CGFloat kSpacing = 12.0;
         return;
     }
     
-    PlacesViewController *placesViewController = [[PlacesViewController alloc] init];
+    PlacesViewController *placesViewController = [[PlacesViewController alloc] initWithBookmarked:YES];
     placesViewController.category = bookmarkItem.correspondingCategory;
     [self.navigationController pushViewController:placesViewController animated:YES];
 }

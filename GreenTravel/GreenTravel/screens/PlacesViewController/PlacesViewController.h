@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PlacesViewController : UICollectionViewController
 
 @property (strong, nonatomic) Category *category;
+- (instancetype)initWithBookmarked:(BOOL)bookmarked;
 
 @end
 

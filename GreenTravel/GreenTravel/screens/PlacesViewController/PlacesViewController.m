@@ -14,6 +14,9 @@
 
 @interface PlacesViewController ()
 
+@property (assign, nonatomic) BOOL bookmarked;
+@property (strong, nonatomic) NSArray<PlaceItem *> *bookmarkedItems;
+
 @end
 
 @implementation PlacesViewController
@@ -21,13 +24,21 @@
 static NSString * const kPhotoCellId = @"photoCellId";
 static const CGFloat kCellAspectRatio = 324.0 / 144.0;
 
-- (instancetype)init
+- (instancetype)init {
+    self = [self initWithBookmarked:NO];
+    if (self) {
+    }
+    return self;
+}
+
+- (instancetype)initWithBookmarked:(BOOL)bookmarked
 {
     self = [super init];
     if (self) {
         UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         self = [self initWithCollectionViewLayout:flowLayout];
+        _bookmarked = bookmarked;
     }
     return self;
 }
@@ -43,6 +54,11 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
     self.collectionView.alwaysBounceVertical = YES;
     
     self.title = self.category.title;
+    if (self.bookmarked) {
+        NSArray *bookmarked = [self.category.items
+                               filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"bookmarked == YES"]];
+        self.bookmarkedItems = bookmarked;
+    }
     [self.collectionView reloadData];
     
     // Do any additional setup after loading the view.
@@ -73,6 +89,9 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
     if (howManyCategories > 0) {
         return howManyCategories;
     }
+    if (self.bookmarked) {
+        return [self.bookmarkedItems count];
+    }
     return [self.category.items count];
 }
 
@@ -81,7 +100,8 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
     
     if ([self.category.categories count] > 0) {
         [cell updateCategory:self.category.categories[indexPath.row]];
-        
+    } else if (self.bookmarked) {
+        [cell updateItem:self.bookmarkedItems[indexPath.row]];
     } else {
         [cell updateItem:self.category.items[indexPath.row]];
     }
@@ -108,7 +128,12 @@ static const CGFloat kSpacing = 12.0;
         category.onPlaceCellPress();
         return;
     }
-    PlaceItem *item = self.category.items[indexPath.row];
+    PlaceItem *item;
+    if (self.bookmarked) {
+        item = self.bookmarkedItems[indexPath.row];
+    } else {
+        item = self.category.items[indexPath.row];
+    }
     item.onPlaceCellPress();
 }
 
@@ -126,34 +151,5 @@ static const CGFloat kSpacing = 12.0;
     }
     return UIEdgeInsetsMake(kInset, kInset, kInset, kInset);
 }
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
 
 @end
