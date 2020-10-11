@@ -18,6 +18,10 @@
 @interface BookmarksViewController ()
 
 @property (strong, nonatomic) BookmarksGroupModel *model;
+@property (strong, nonatomic) ApiService *apiService;
+@property (strong, nonatomic) DetailsModel *detailsModel;
+@property (strong, nonatomic) MapModel *mapModel;
+@property (strong, nonatomic) LocationModel *locationModel;
 
 @end
 
@@ -27,6 +31,10 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
 @implementation BookmarksViewController
 
 - (instancetype)initWithModel:(BookmarksGroupModel *)model
+                   apiService:(ApiService *)apiService
+                 detailsModel:(DetailsModel *)detailsModel
+                     mapModel:(MapModel *)mapModel
+                locationModel:(LocationModel *)locationModel
 {
     self = [super init];
     if (self) {
@@ -34,6 +42,10 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
         self = [self initWithCollectionViewLayout:layout];
         _model = model;
+        _apiService = apiService;
+        _detailsModel = detailsModel;
+        _mapModel = mapModel;
+        _locationModel = locationModel;
     }
     return self;
 }
@@ -153,7 +165,12 @@ static const CGFloat kSpacing = 12.0;
         return;
     }
     
-    PlacesViewController *placesViewController = [[PlacesViewController alloc] initWithBookmarked:YES];
+    PlacesViewController *placesViewController =
+    [[PlacesViewController alloc] initWithApiService:self.apiService
+                                        detailsModel:self.detailsModel
+                                            mapModel:self.mapModel
+                                       locationModel:self.locationModel
+                                          bookmarked:YES];
     placesViewController.category = bookmarkItem.correspondingCategory;
     [self.navigationController pushViewController:placesViewController animated:YES];
 }

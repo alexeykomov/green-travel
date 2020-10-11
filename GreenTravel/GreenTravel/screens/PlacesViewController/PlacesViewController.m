@@ -11,27 +11,33 @@
 #import "PhotoCollectionViewCell.h"
 #import "Colors.h"
 #import "PlaceItem.h"
+#import "DetailsViewController.h"
+#import "DetailsModel.h"
+#import "MapModel.h"
+#import "LocationModel.h"
+#import "CategoryUtils.h"
 
 @interface PlacesViewController ()
 
 @property (assign, nonatomic) BOOL bookmarked;
 @property (strong, nonatomic) NSArray<PlaceItem *> *bookmarkedItems;
+@property (strong, nonatomic) ApiService *apiService;
+@property (strong, nonatomic) DetailsModel *detailsModel;
+@property (strong, nonatomic) MapModel *mapModel;
+@property (strong, nonatomic) LocationModel *locationModel;
 
 @end
 
-@implementation PlacesViewController
+@implementation PlacesViewController 
 
 static NSString * const kPhotoCellId = @"photoCellId";
 static const CGFloat kCellAspectRatio = 324.0 / 144.0;
 
-- (instancetype)init {
-    self = [self initWithBookmarked:NO];
-    if (self) {
-    }
-    return self;
-}
-
-- (instancetype)initWithBookmarked:(BOOL)bookmarked
+- (instancetype)initWithApiService:(ApiService *)apiService
+                      detailsModel:(DetailsModel *)detailsModel
+                          mapModel:(MapModel *)mapModel
+                     locationModel:(LocationModel *)locationModel
+                        bookmarked:(BOOL)bookmarked
 {
     self = [super init];
     if (self) {
@@ -39,6 +45,10 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         self = [self initWithCollectionViewLayout:flowLayout];
         _bookmarked = bookmarked;
+        _apiService = apiService;
+        _detailsModel = detailsModel;
+        _mapModel = mapModel;
+        _locationModel = locationModel;
     }
     return self;
 }
@@ -60,8 +70,10 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
         self.bookmarkedItems = bookmarked;
     }
     [self.collectionView reloadData];
-    
-    // Do any additional setup after loading the view.
+    traverseCategories(@[self.category], ^(Category *category, PlaceItem *item) {
+        category.onPlaceCellPress = ^{};
+        item.onPlaceCellPress = ^{};
+    });
 }
 
 /*
@@ -118,14 +130,23 @@ static const CGFloat kSpacing = 12.0;
     CGFloat baseWidth = self.view.bounds.size.width;
     
     return CGSizeMake((baseWidth - kInset * 2),
-    ((baseWidth - kInset * 2) / kCellAspectRatio));
+                      ((baseWidth - kInset * 2) / kCellAspectRatio));
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Did select item at index path: %@", indexPath);
     if ([self.category.categories count] > 0) {
         Category *category = self.category.categories[indexPath.row];
-        category.onPlaceCellPress();
+        
+        PlacesViewController *placesViewController =
+        [[PlacesViewController alloc] initWithApiService:self.apiService
+                                            detailsModel:self.detailsModel
+                                                mapModel:self.mapModel
+                                           locationModel:self.locationModel
+                                              bookmarked:NO];
+        placesViewController.category = category;
+        [self.navigationController pushViewController:placesViewController animated:YES];
+        
         return;
     }
     PlaceItem *item;
@@ -134,7 +155,9 @@ static const CGFloat kSpacing = 12.0;
     } else {
         item = self.category.items[indexPath.row];
     }
-    item.onPlaceCellPress();
+    DetailsViewController *detailsViewController = [[DetailsViewController alloc] initWithApiService:self.apiService detailsModel:self.detailsModel mapModel:self.mapModel locationModel:self.locationModel];
+    detailsViewController.item = item;
+    [self.navigationController pushViewController:detailsViewController animated:YES];
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
@@ -150,6 +173,14 @@ static const CGFloat kSpacing = 12.0;
         return UIEdgeInsetsMake(0, kInset, kInset, kInset);
     }
     return UIEdgeInsetsMake(kInset, kInset, kInset, kInset);
+}
+
+- (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {
+     
+}
+
+- (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
+    
 }
 
 @end

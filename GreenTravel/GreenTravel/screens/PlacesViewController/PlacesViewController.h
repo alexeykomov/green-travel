@@ -7,16 +7,27 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CategoriesObserver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class Category;
 @class PlaceItem;
+@class ApiService;
+@class DetailsModel;
+@class MapModel;
+@class LocationModel;
 
-@interface PlacesViewController : UICollectionViewController
+
+@interface PlacesViewController : UICollectionViewController<CategoriesObserver> 
 
 @property (strong, nonatomic) Category *category;
-- (instancetype)initWithBookmarked:(BOOL)bookmarked;
+- (instancetype)initWithApiService:(ApiService *)apiService
+                      detailsModel:(DetailsModel *)detailsModel
+                          mapModel:(MapModel *)mapModel
+                     locationModel:(LocationModel *)locationModel
+                        bookmarked:(BOOL)bookmarked;
+
 
 @end
 

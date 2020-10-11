@@ -107,7 +107,12 @@
     
 #pragma mark - BookmarksViewController
     
-    BookmarksViewController *bookmarksController = [[BookmarksViewController alloc] initWithModel:bookmarksGroupsModel];
+    BookmarksViewController *bookmarksController =
+    [[BookmarksViewController alloc] initWithModel:bookmarksGroupsModel
+                                        apiService:self.apiService
+                                      detailsModel:detailsModel
+                                          mapModel:mapModel
+                                     locationModel:locationModel];
     bookmarksController.title = @"Закладки";
     UINavigationController *bookmarksControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:bookmarksController];
     UIImage *bookmarksImage;

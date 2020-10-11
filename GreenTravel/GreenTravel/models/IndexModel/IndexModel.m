@@ -52,7 +52,6 @@ static IndexModel *instance;
         __strong typeof(self) strongSelf = weakSelf;
         [strongSelf updateCategories:categories];
         [strongSelf.apiService loadCategoriesWithCompletion:^(NSArray<Category *>  * _Nonnull categories) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
             NSArray<Category*> *newCategories = [strongSelf mergeCategoriesOld:strongSelf.categories withNew:categories];
             if (!isCategoriesEqual(strongSelf.categories, newCategories)) {
                 [strongSelf updateCategories:newCategories];

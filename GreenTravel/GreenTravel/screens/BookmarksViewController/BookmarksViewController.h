@@ -12,10 +12,19 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class BookmarksGroupModel;
+@class ApiService;
+@class DetailsModel;
+@class MapModel;
+@class LocationModel;
 
 @interface BookmarksViewController : UICollectionViewController<UICollectionViewDelegateFlowLayout, BookmarksGroupObserver>
 
-- (instancetype)initWithModel:(BookmarksGroupModel *)model;
+- (instancetype)initWithModel:(BookmarksGroupModel *)model
+                   apiService:(ApiService *)apiService
+                 detailsModel:(DetailsModel *)detailsModel
+                     mapModel:(MapModel *)mapModel
+                locationModel:(LocationModel *)locationModel;
+
 
 @end
 

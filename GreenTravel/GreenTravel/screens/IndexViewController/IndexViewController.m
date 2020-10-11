@@ -94,6 +94,10 @@ static CGFloat kTableRowHeight = 210.0;
 
 #pragma mark - Lifecycle
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self fillNavigationListeners:self.model.categories];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [self.navigationItem setBackBarButtonItem:self.originalBackButtonItem];
 }
@@ -147,7 +151,11 @@ static CGFloat kTableRowHeight = 210.0;
     [categories enumerateObjectsUsingBlock:^(Category * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         __weak typeof(obj) weakCategory = obj;
         obj.onAllButtonPress = ^void() {
-            PlacesViewController *placesViewController = [[PlacesViewController alloc] init];
+            PlacesViewController *placesViewController =
+            [[PlacesViewController alloc] initWithApiService:weakSelf.apiService
+                                                detailsModel:weakSelf.detailsModel
+                                                    mapModel:weakSelf.mapModel
+                                               locationModel:weakSelf.locationModel bookmarked:NO];
             placesViewController.category = weakCategory;
             [weakSelf.navigationController pushViewController:placesViewController animated:YES];
         };
@@ -156,7 +164,12 @@ static CGFloat kTableRowHeight = 210.0;
         [obj.categories enumerateObjectsUsingBlock:^(Category * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             __weak typeof(obj) weakCategory = obj;
             obj.onPlaceCellPress = ^void() {
-                PlacesViewController *placesViewController = [[PlacesViewController alloc] init];
+                PlacesViewController *placesViewController =
+                [[PlacesViewController alloc] initWithApiService:weakSelf.apiService
+                                                    detailsModel:weakSelf.detailsModel
+                                                        mapModel:weakSelf.mapModel
+                                                   locationModel:weakSelf.locationModel
+                                                      bookmarked:NO];
                 placesViewController.category = weakCategory;
                 [weakSelf.navigationController pushViewController:placesViewController animated:YES];
             };
