@@ -138,6 +138,10 @@ static CGFloat kTableRowHeight = 210.0;
     });
 }
 
+- (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {
+}
+
+
 - (void)fillNavigationListeners:(NSArray<Category *> *)categories {
     __weak typeof(self) weakSelf = self;
     [categories enumerateObjectsUsingBlock:^(Category * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -157,7 +161,7 @@ static CGFloat kTableRowHeight = 210.0;
                 [weakSelf.navigationController pushViewController:placesViewController animated:YES];
             };
         }];
-
+        
         [obj.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull placeItem, NSUInteger idx, BOOL * _Nonnull stop) {
             __weak typeof(placeItem) weakPlaceItem = placeItem;
             placeItem.onPlaceCellPress = ^void() {
@@ -166,9 +170,8 @@ static CGFloat kTableRowHeight = 210.0;
                 [weakSelf.navigationController pushViewController:detailsViewController animated:YES];
             };
             placeItem.onFavoriteButtonPress = ^void() {
-                weakPlaceItem.bookmarked = !weakPlaceItem.bookmarked;
-                [weakSelf.bookmarksModel updateBookmark:weakPlaceItem bookmark:weakPlaceItem.bookmarked];
-                [weakSelf.coreDataService updatePlaceItem:weakPlaceItem bookmark:weakPlaceItem.bookmarked];
+                [weakSelf.model bookmarkItem:weakPlaceItem
+                                    bookmark:!weakPlaceItem.bookmarked];
             };
         }];
     }];

@@ -79,6 +79,12 @@ static IndexModel *instance;
     return newCategories;
 }
 
+- (void)bookmarkItem:(PlaceItem *)item bookmark:(BOOL)bookmark {
+    item.bookmarked = bookmark;
+    [self.coreDataService updatePlaceItem:item bookmark:bookmark];
+    [self notifyObserversOfBookmarkUpdate:item bookmark:bookmark];
+}
+
 - (void)updateCategories:(NSArray<Category *> *)categories {
     self.categories = categories;
     [self notifyObservers];
@@ -92,6 +98,12 @@ static IndexModel *instance;
     __weak typeof(self) weakSelf = self;
     [self.categoriesObservers enumerateObjectsUsingBlock:^(id<CategoriesObserver>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj onCategoriesUpdate:weakSelf.categories];
+    }];
+}
+
+- (void)notifyObserversOfBookmarkUpdate:(PlaceItem *)item bookmark:(BOOL)bookmark {
+    [self.categoriesObservers enumerateObjectsUsingBlock:^(id<CategoriesObserver>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj onBookmarkUpdate:item bookmark:bookmark];
     }];
 }
 

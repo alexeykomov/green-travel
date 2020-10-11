@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSDictionary<NSString *, PathDetails *> *pathsByUUID;
 - (instancetype)initWithApiService:(ApiService *)apiService coreDataService:(CoreDataService *)coreDataService;
 - (void)loadCategories;
+- (void)bookmarkItem:(PlaceItem *)item bookmark:(BOOL)bookmark;
 - (void)updateCategories:(NSArray<Category *> *)categories;
 
 @end

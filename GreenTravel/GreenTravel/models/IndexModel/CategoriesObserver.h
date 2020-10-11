@@ -11,10 +11,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class Category;
+@class PlaceItem;
 
 @protocol CategoriesObserver <NSObject>
 
 - (void)onCategoriesUpdate:(NSArray<Category *>*)categories;
+- (void)onBookmarkUpdate:(PlaceItem *)item
+                bookmark:(BOOL)bookmark;
 
 @end
 

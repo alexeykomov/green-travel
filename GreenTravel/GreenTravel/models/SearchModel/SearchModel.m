@@ -47,6 +47,9 @@
     [self notifyObservers];
 }
 
+- (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {
+}
+
 - (void)fillSearchItemsFromCategories:(NSArray<Category *>*)categories {
     __weak typeof(self) weakSelf = self;
     [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {

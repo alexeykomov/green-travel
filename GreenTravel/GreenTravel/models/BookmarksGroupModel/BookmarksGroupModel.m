@@ -43,8 +43,16 @@
     [self notifyObservers];
 }
 
+- (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark { 
+    [self fillBookmarkItemsFromCategories:self.indexModel.categories];
+    [self notifyObservers];
+}
+
 - (void)fillBookmarkItemsFromCategories:(NSArray<Category *> *)categories {
     __weak typeof(self) weakSelf = self;
+    self.bookmarkItems = [[NSMutableArray alloc] init];
+    self.categoryTypeToBookmark = [[NSMutableDictionary alloc] init];
+    self.itemUUIDs = [[NSMutableSet alloc] init];
     traverseCategories(categories, ^(Category *category, PlaceItem *item) {
         __strong typeof(self) strongSelf = weakSelf;
         if (!strongSelf.categoryTypeToBookmark[category.uuid] && [category.categories count] == 0) {

@@ -51,6 +51,9 @@ static const CLLocationDistance kLocationAccuracy = 500.0;
     [self notifyObservers];
 }
 
+- (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {
+}
+
 - (void)onLocationUpdate:(CLLocation *)lastLocation {
     self.lastLocation = lastLocation;
     [self updateCloseItems];
