@@ -52,6 +52,7 @@ NSPersistentContainer *_persistentContainer;
         NSFetchRequest *fetchRequest = [StoredCategory fetchRequest];
         NSError *error;
         NSArray<StoredCategory *> *fetchResult = [ctx executeFetchRequest:fetchRequest error:&error];
+        fetchRequest.predicate = [NSPredicate predicateWithFormat:@"parent == %@", nil];
         traverseStoredCategories(fetchResult,
                                  ^(StoredCategory *category, StoredPlaceItem *storedPlaceItem) {
             if([storedPlaceItem.uuid isEqualToString:placeItem.uuid]){
@@ -142,6 +143,7 @@ NSPersistentContainer *_persistentContainer;
             storedItem.coords = coordsAsData;
             storedItem.coverURL = item.cover;
             storedItem.uuid = item.uuid;
+            storedItem.bookmarked = item.bookmarked;
             [storedCategory addItemsObject:storedItem];
         }];
         [parentCategory addCategoriesObject:storedCategory];

@@ -13,11 +13,11 @@
 #import "BookmarkItem.h"
 #import "Category.h"
 #import "PlaceItem.h"
+#import "CategoryUtils.h"
 
 @interface BookmarksGroupModel ()
 
 @property (strong, nonatomic) IndexModel *indexModel;
-@property (strong, nonatomic) BookmarksModel *bookmarksModel;
 @property (strong, nonatomic) NSMutableSet<NSString*> *itemUUIDs;
 @property (strong, nonatomic) NSMutableDictionary<NSString*, NSNumber*> *categoryTypeToBookmark;
 
@@ -25,18 +25,15 @@
 
 @implementation BookmarksGroupModel
 
-- (instancetype)initWithIndexModel:(IndexModel *)indexModel
-                    bookmarksModel:(BookmarksModel *)bookmarksModel {
+- (instancetype)initWithIndexModel:(IndexModel *)indexModel {
     self = [super init];
     if (self) {
         _indexModel = indexModel;
-        _bookmarksModel = bookmarksModel;
         _bookmarkItems = [[NSMutableArray alloc] init];
         _categoryTypeToBookmark = [[NSMutableDictionary alloc] init];
         _itemUUIDs = [[NSMutableSet alloc] init];
         _bookmarksGroupObservers = [[NSMutableArray alloc] init];
         [self.indexModel addObserver:self];
-        [self.bookmarksModel addObserver:self];
     }
     return self;
 }
@@ -48,25 +45,23 @@
 
 - (void)fillBookmarkItemsFromCategories:(NSArray<Category *> *)categories {
     __weak typeof(self) weakSelf = self;
-    [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (!weakSelf.categoryTypeToBookmark[category.uuid] && [category.categories count] == 0) {
-            weakSelf.categoryTypeToBookmark[category.uuid] = @0;
+    traverseCategories(categories, ^(Category *category, PlaceItem *item) {
+        __strong typeof(self) strongSelf = weakSelf;
+        if (!strongSelf.categoryTypeToBookmark[category.uuid] && [category.categories count] == 0) {
+            strongSelf.categoryTypeToBookmark[category.uuid] = @0;
             BookmarkItem *bookmarkItem = [[BookmarkItem alloc] init];
             bookmarkItem.correspondingCategory = category;
             bookmarkItem.howMany = 0;
             bookmarkItem.title = category.title;
             bookmarkItem.uuid = category.uuid;
-            [weakSelf.bookmarkItems addObject:bookmarkItem];
+            [strongSelf.bookmarkItems addObject:bookmarkItem];
         }
-        [weakSelf fillBookmarkItemsFromCategories:category.categories];
-        [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (![weakSelf.itemUUIDs containsObject:item.uuid] &&
-                !!self.bookmarksModel.bookmarkItems[item.uuid]) {
-                [weakSelf.itemUUIDs addObject:item.uuid];
-                weakSelf.categoryTypeToBookmark[category.uuid] = @([weakSelf.categoryTypeToBookmark[category.uuid] intValue] + 1);
-            }
-        }];
-    }];
+        if (item && item.bookmarked && ![strongSelf.itemUUIDs containsObject:item.uuid]) {
+            [strongSelf.itemUUIDs addObject:item.uuid];
+            strongSelf.categoryTypeToBookmark[category.uuid] = @([strongSelf.categoryTypeToBookmark[category.uuid] intValue] + 1);
+        }
+    });
+    
     [self.bookmarkItems enumerateObjectsUsingBlock:^(BookmarkItem * _Nonnull bookmarkItem, NSUInteger idx, BOOL * _Nonnull stop) {
         bookmarkItem.howMany = [weakSelf.categoryTypeToBookmark[bookmarkItem.uuid] intValue];
     }];

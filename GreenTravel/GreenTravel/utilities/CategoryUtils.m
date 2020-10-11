@@ -28,7 +28,7 @@ void traverseStoredCategories(NSArray<StoredCategory *> *categories, void(^onCat
         [category.items enumerateObjectsUsingBlock:^(StoredPlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
             onCategoryAndItem(category, item);
         }];
-        traverseStoredCategories(category.categories, onCategoryAndItem);
+        traverseStoredCategories(category.categories.array, onCategoryAndItem);
     }];
 }
 

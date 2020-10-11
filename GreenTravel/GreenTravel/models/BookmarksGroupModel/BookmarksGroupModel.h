@@ -16,13 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 @class BookmarkItem;
 
 @class IndexModel;
-@class BookmarksModel;
 @protocol BookmarksGroupObserver;
 
 @interface BookmarksGroupModel : NSObject<CategoriesObserver, BookmarksGroupObservable, BookmarksObserver>
 
-- (instancetype)initWithIndexModel:(IndexModel *)model
-                    bookmarksModel:(BookmarksModel *)bookmarksModel;
+- (instancetype)initWithIndexModel:(IndexModel *)model;
 @property (strong, nonatomic) NSMutableArray<BookmarkItem *> *bookmarkItems;
 @property (strong, nonatomic) NSMutableArray<id<BookmarksGroupObserver>> *bookmarksGroupObservers;
 

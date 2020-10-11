@@ -49,15 +49,16 @@ static IndexModel *instance;
     NSLog(@"loadCategories");
     __weak typeof(self) weakSelf = self;
     [self.coreDataService loadCategoriesWithCompletion:^(NSArray<Category *> * _Nonnull categories) {
-        [weakSelf updateCategories:categories];
-    }];
-    [self.apiService loadCategoriesWithCompletion:^(NSArray<Category *>  * _Nonnull categories) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        NSArray<Category*> *newCategories = [strongSelf mergeCategoriesOld:strongSelf.categories withNew:categories];
-        if (!isCategoriesEqual(strongSelf.categories, newCategories)) {
-            [strongSelf updateCategories:newCategories];
-            [strongSelf.coreDataService saveCategories:newCategories];
-        }
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf updateCategories:categories];
+        [strongSelf.apiService loadCategoriesWithCompletion:^(NSArray<Category *>  * _Nonnull categories) {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            NSArray<Category*> *newCategories = [strongSelf mergeCategoriesOld:strongSelf.categories withNew:categories];
+            if (!isCategoriesEqual(strongSelf.categories, newCategories)) {
+                [strongSelf updateCategories:newCategories];
+                [strongSelf.coreDataService saveCategories:newCategories];
+            }
+        }];
     }];
     self.loaded = YES;
 }
