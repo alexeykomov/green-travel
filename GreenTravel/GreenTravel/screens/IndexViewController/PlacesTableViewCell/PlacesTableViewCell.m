@@ -151,6 +151,10 @@ static NSString * const kPhotoCellId = @"photoCellId";
     item.onPlaceCellPress();
 }
 
+- (void)prepareForReuse {
+    [super prepareForReuse];
+}
+
 - (void)onAllButtonPress:(id)sender {
     self.item.onAllButtonPress();
 }

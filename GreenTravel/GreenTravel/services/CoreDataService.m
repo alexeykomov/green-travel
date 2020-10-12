@@ -120,7 +120,6 @@ NSPersistentContainer *_persistentContainer;
         if ([categories count]) {
             [weakSelf saveCategoriesWithinBlock:categories parentCategory:nil];
         }
-        [weakSelf.ctx save:&error];
     }];
 }
 
@@ -128,6 +127,7 @@ NSPersistentContainer *_persistentContainer;
         parentCategory:(StoredCategory *)parentCategory {
     __weak typeof(self) weakSelf = self;
     [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSError *error;
         StoredCategory *storedCategory = [NSEntityDescription insertNewObjectForEntityForName:@"StoredCategory" inManagedObjectContext:weakSelf.ctx];
         storedCategory.title = category.title;
         storedCategory.uuid = category.uuid;
@@ -150,6 +150,7 @@ NSPersistentContainer *_persistentContainer;
         if ([category.categories count]) {
             [weakSelf saveCategoriesWithinBlock:category.categories parentCategory:storedCategory];
         }
+        [weakSelf.ctx save:&error];
     }];
 }
 
