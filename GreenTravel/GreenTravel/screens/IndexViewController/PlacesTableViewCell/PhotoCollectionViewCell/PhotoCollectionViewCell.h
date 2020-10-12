@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PhotoCollectionViewCell : UICollectionViewCell
 
 - (void)updateItem:(PlaceItem *)item;
+- (void)updateBookmark:(BOOL)bookmark;
 - (void)updateCategory:(Category *)category;
 
 @end

@@ -12,6 +12,7 @@
 #import "Colors.h"
 #import "PlaceItem.h"
 #import "DetailsViewController.h"
+#import "IndexModel.h"
 #import "DetailsModel.h"
 #import "MapModel.h"
 #import "LocationModel.h"
@@ -20,20 +21,22 @@
 @interface PlacesViewController ()
 
 @property (assign, nonatomic) BOOL bookmarked;
-@property (strong, nonatomic) NSArray<PlaceItem *> *bookmarkedItems;
+@property (strong, nonatomic) NSMutableArray<PlaceItem *> *bookmarkedItems;
 @property (strong, nonatomic) ApiService *apiService;
 @property (strong, nonatomic) DetailsModel *detailsModel;
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) LocationModel *locationModel;
+@property (strong, nonatomic) IndexModel *indexModel;
 
 @end
 
-@implementation PlacesViewController 
+@implementation PlacesViewController
 
 static NSString * const kPhotoCellId = @"photoCellId";
 static const CGFloat kCellAspectRatio = 324.0 / 144.0;
 
-- (instancetype)initWithApiService:(ApiService *)apiService
+- (instancetype)initWithIndexModel:(IndexModel *)indexModel
+                        apiService:(ApiService *)apiService
                       detailsModel:(DetailsModel *)detailsModel
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel
@@ -45,6 +48,7 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         self = [self initWithCollectionViewLayout:flowLayout];
         _bookmarked = bookmarked;
+        _indexModel = indexModel;
         _apiService = apiService;
         _detailsModel = detailsModel;
         _mapModel = mapModel;
@@ -64,12 +68,23 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
     self.collectionView.alwaysBounceVertical = YES;
     
     self.title = self.category.title;
-    if (self.bookmarked) {
-        NSArray *bookmarked = [self.category.items
-                               filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"bookmarked == YES"]];
-        self.bookmarkedItems = bookmarked;
+    
+    if (!self.bookmarked) {
+        [self.collectionView reloadData];
     }
-    [self.collectionView reloadData];
+    [self.indexModel addObserver:self];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    if (self.bookmarked) {
+        self.bookmarkedItems = [[NSMutableArray alloc] initWithArray:[self.category.items
+        filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"bookmarked == YES"]]];
+        [self.collectionView reloadData];
+        if ([self.bookmarkedItems count] == 0) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+    
     traverseCategories(@[self.category], ^(Category *category, PlaceItem *item) {
         category.onPlaceCellPress = ^{};
         item.onPlaceCellPress = ^{};
@@ -139,7 +154,8 @@ static const CGFloat kSpacing = 12.0;
         Category *category = self.category.categories[indexPath.row];
         
         PlacesViewController *placesViewController =
-        [[PlacesViewController alloc] initWithApiService:self.apiService
+        [[PlacesViewController alloc] initWithIndexModel:self.indexModel
+                                              apiService:self.apiService
                                             detailsModel:self.detailsModel
                                                 mapModel:self.mapModel
                                            locationModel:self.locationModel
@@ -176,7 +192,30 @@ static const CGFloat kSpacing = 12.0;
 }
 
 - (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {
-     
+    NSUInteger foundIndex = [self.bookmarkedItems indexOfObjectPassingTest:^BOOL(PlaceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [obj.uuid isEqualToString:item.uuid];
+    }];
+    if (foundIndex == NSNotFound) {
+        return;
+    }
+    NSIndexPath *indexPathOfFoundIndex =  [NSIndexPath indexPathForItem:foundIndex inSection:0];
+    PhotoCollectionViewCell *cell = (PhotoCollectionViewCell *) [self.collectionView cellForItemAtIndexPath:indexPathOfFoundIndex];
+    [cell updateBookmark:bookmark];
+    if (!self.bookmarked) {
+        return;
+    }
+    if (!bookmark) {
+        __weak typeof(self) weakSelf = self;
+        [self.collectionView performBatchUpdates:^{
+            [weakSelf.bookmarkedItems removeObjectAtIndex:indexPathOfFoundIndex.item];
+            [weakSelf.collectionView deleteItemsAtIndexPaths:@[indexPathOfFoundIndex]];
+        } completion:^(BOOL finished) {
+        }];
+    }
+    
+    if ([self.bookmarkedItems count] == 0) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {

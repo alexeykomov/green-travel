@@ -88,7 +88,7 @@
     NSLog(@"Favorites button pressed.");
     NSLog(@"item: %@", self.item);
     self.item.onFavoriteButtonPress();
-    [self.favoritesButton setSelected:self.item.bookmarked];
+    //[self.favoritesButton setSelected:self.item.bookmarked];
 }
 
 - (void)onPlaceButtonPress:(id)sender {
@@ -104,7 +104,10 @@
             [self.placeholder setImage:image];
         });
     });
-    
+}
+
+- (void)updateBookmark:(BOOL)bookmark {
+    [self.favoritesButton setSelected:bookmark];
 }
 
 - (void)updateCategory:(Category *)category {

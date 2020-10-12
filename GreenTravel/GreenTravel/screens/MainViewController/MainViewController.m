@@ -109,6 +109,7 @@
     
     BookmarksViewController *bookmarksController =
     [[BookmarksViewController alloc] initWithModel:bookmarksGroupsModel
+                                        indexModel:self.indexModel
                                         apiService:self.apiService
                                       detailsModel:detailsModel
                                           mapModel:mapModel

@@ -17,12 +17,14 @@ NS_ASSUME_NONNULL_BEGIN
 @class DetailsModel;
 @class MapModel;
 @class LocationModel;
+@class IndexModel;
 
 
 @interface PlacesViewController : UICollectionViewController<CategoriesObserver> 
 
 @property (strong, nonatomic) Category *category;
-- (instancetype)initWithApiService:(ApiService *)apiService
+- (instancetype)initWithIndexModel:(IndexModel *)indexModel
+                        apiService:(ApiService *)apiService
                       detailsModel:(DetailsModel *)detailsModel
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel

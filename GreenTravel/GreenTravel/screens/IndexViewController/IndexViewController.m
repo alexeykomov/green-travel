@@ -152,7 +152,8 @@ static CGFloat kTableRowHeight = 210.0;
         __weak typeof(obj) weakCategory = obj;
         obj.onAllButtonPress = ^void() {
             PlacesViewController *placesViewController =
-            [[PlacesViewController alloc] initWithApiService:weakSelf.apiService
+            [[PlacesViewController alloc] initWithIndexModel:weakSelf.model
+                                                  apiService:weakSelf.apiService
                                                 detailsModel:weakSelf.detailsModel
                                                     mapModel:weakSelf.mapModel
                                                locationModel:weakSelf.locationModel bookmarked:NO];
@@ -165,7 +166,8 @@ static CGFloat kTableRowHeight = 210.0;
             __weak typeof(obj) weakCategory = obj;
             obj.onPlaceCellPress = ^void() {
                 PlacesViewController *placesViewController =
-                [[PlacesViewController alloc] initWithApiService:weakSelf.apiService
+                [[PlacesViewController alloc] initWithIndexModel:weakSelf.model
+                                                      apiService:weakSelf.apiService
                                                     detailsModel:weakSelf.detailsModel
                                                         mapModel:weakSelf.mapModel
                                                    locationModel:weakSelf.locationModel

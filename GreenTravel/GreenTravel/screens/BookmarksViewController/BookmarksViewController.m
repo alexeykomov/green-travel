@@ -14,6 +14,7 @@
 #import "PlacesViewController.h"
 #import "BookmarksGroupModel.h"
 #import "BookmarkItem.h"
+#import "IndexModel.h"
 
 @interface BookmarksViewController ()
 
@@ -22,6 +23,7 @@
 @property (strong, nonatomic) DetailsModel *detailsModel;
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) LocationModel *locationModel;
+@property (strong, nonatomic) IndexModel *indexModel;
 
 @end
 
@@ -31,6 +33,7 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
 @implementation BookmarksViewController
 
 - (instancetype)initWithModel:(BookmarksGroupModel *)model
+                   indexModel:(IndexModel *)indexModel
                    apiService:(ApiService *)apiService
                  detailsModel:(DetailsModel *)detailsModel
                      mapModel:(MapModel *)mapModel
@@ -42,6 +45,7 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
         self = [self initWithCollectionViewLayout:layout];
         _model = model;
+        _indexModel = indexModel;
         _apiService = apiService;
         _detailsModel = detailsModel;
         _mapModel = mapModel;
@@ -166,7 +170,8 @@ static const CGFloat kSpacing = 12.0;
     }
     
     PlacesViewController *placesViewController =
-    [[PlacesViewController alloc] initWithApiService:self.apiService
+    [[PlacesViewController alloc] initWithIndexModel:self.indexModel
+                                          apiService:self.apiService
                                         detailsModel:self.detailsModel
                                             mapModel:self.mapModel
                                        locationModel:self.locationModel
