@@ -70,6 +70,9 @@
 }
 
 - (void)addObserver:(nonnull id<SearchItemsObserver>)observer {
+    if ([self.searchItemsObservers containsObject:observer]) {
+        return;
+    }
     [self.searchItemsObservers addObject:observer];
 }
 

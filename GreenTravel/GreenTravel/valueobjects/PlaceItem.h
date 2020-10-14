@@ -11,11 +11,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class Category;
+
 @interface PlaceItem : NSObject
 
 @property (strong, nonatomic) NSString *uuid;
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *cover;
+@property (weak, nonatomic) Category *category;
 @property (assign, nonatomic) CLLocationCoordinate2D coords;
 @property (assign, nonatomic) BOOL bookmarked;
 @property (strong, nonatomic) void (^onPlaceCellPress)(void);

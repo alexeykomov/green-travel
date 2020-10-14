@@ -192,9 +192,16 @@ static const CGFloat kSpacing = 12.0;
 }
 
 - (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {
-    NSUInteger foundIndex = [self.bookmarkedItems indexOfObjectPassingTest:^BOOL(PlaceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    NSUInteger foundIndex = NSNotFound;
+    BOOL(^indexOfObjectPassingTest)(PlaceItem *, NSUInteger , BOOL*) = ^BOOL(PlaceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         return [obj.uuid isEqualToString:item.uuid];
-    }];
+    };
+    if (self.bookmarked) {
+        foundIndex = [self.bookmarkedItems indexOfObjectPassingTest:indexOfObjectPassingTest];
+    } else {
+        foundIndex = [self.category.items indexOfObjectPassingTest:indexOfObjectPassingTest];
+    }
+    
     if (foundIndex == NSNotFound) {
         return;
     }

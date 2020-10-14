@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PlacesTableViewCell : UITableViewCell<UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
 
+@property (strong, nonatomic) UICollectionView *collectionView;
 - (void)update:(Category *)item; 
 
 @end

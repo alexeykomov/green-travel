@@ -76,6 +76,9 @@
 }
 
 - (void)addObserver:(nonnull id<DetailsObserver>)observer {
+    if ([self.detailsObservers containsObject:observer]) {
+        return;
+    }
     [self.detailsObservers addObject:observer];
 }
 

@@ -56,7 +56,7 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
         Category *category = [[Category alloc] init];
         category.title = obj[@"title"];
         category.categories = [self mapCategoriesFromJSON:obj[@"categories"]];
-        category.items = [self mapItemsFromJSON:obj[@"items"]];
+        category.items = [self mapItemsFromJSON:obj[@"items"] category:category];
         category.cover = obj[@"cover"];
         category.uuid = obj[@"uuid"];
         [mappedCategories addObject:category];
@@ -64,13 +64,15 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
     return mappedCategories;
 }
 
-- (NSArray<PlaceItem *>*)mapItemsFromJSON:(NSArray *)items {
+- (NSArray<PlaceItem *>*)mapItemsFromJSON:(NSArray *)items
+                                 category:(Category *)category{
     NSMutableArray<PlaceItem *> *mappedItems = [[NSMutableArray alloc] init];
     [items enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSLog(@"Object from JSON: %@", obj);
         PlaceItem *placeItem = [[PlaceItem alloc] init];
         placeItem.title = obj[@"title"];
         placeItem.cover = obj[@"cover"];
+        placeItem.category = category;
         placeItem.bookmarked = obj[@"bokmarked"];
         placeItem.coords = CLLocationCoordinate2DMake([obj[@"coords"][0] doubleValue], [obj[@"coords"][1] doubleValue]);
         placeItem.uuid = obj[@"uuid"];

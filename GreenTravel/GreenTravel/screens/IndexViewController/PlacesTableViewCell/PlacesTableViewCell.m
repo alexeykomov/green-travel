@@ -20,7 +20,6 @@ static NSString * const kPhotoCellId = @"photoCellId";
 
 @property (strong, nonatomic) UILabel *headerLabel;
 @property (strong, nonatomic) UIButton *allButton;
-@property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray<PlaceItem *> *dataSourceItems;
 @property (strong, nonatomic) NSArray<Category *> *dataSourceCategories;
 @property (strong, nonatomic) Category *item;

@@ -8,6 +8,7 @@
 #import "TextUtils.h"
 #import "IndexViewController.h"
 #import "PlacesTableViewCell.h"
+#import "PhotoCollectionViewCell.h"
 #import "PlaceItem.h"
 #import "Category.h"
 #import "DetailsViewController.h"
@@ -143,6 +144,21 @@ static CGFloat kTableRowHeight = 210.0;
 }
 
 - (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {
+    NSIndexSet *indexes = [self.model.categories indexesOfObjectsPassingTest:^BOOL(Category * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [obj.uuid isEqualToString:item.category.uuid];
+    }];
+    [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+        NSIndexPath *indexPathOfFoundCategory =  [NSIndexPath indexPathForRow:idx inSection:0];
+        PlacesTableViewCell *cell = (PlacesTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPathOfFoundCategory];
+        NSIndexSet *indexes = [self.model.categories[idx].items indexesOfObjectsPassingTest:^BOOL(PlaceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            return [obj.uuid isEqualToString:item.uuid];
+        }];
+        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            NSIndexPath *indexPathOfFoundItem =  [NSIndexPath indexPathForRow:idx inSection:0];
+            PhotoCollectionViewCell *photoCollectionViewCell = (PhotoCollectionViewCell *) [cell.collectionView cellForItemAtIndexPath:indexPathOfFoundItem];
+            [photoCollectionViewCell updateBookmark:bookmark];
+        }];
+    }];
 }
 
 

@@ -88,6 +88,7 @@ NSPersistentContainer *_persistentContainer;
             PlaceItem *item = [[PlaceItem alloc] init];
             item.title = storedItem.title;
             item.uuid = storedItem.uuid;
+            item.category = category;
             CLLocationCoordinate2D coords;
             [storedItem.coords getBytes:&coords length:sizeof(coords)];
             item.coords = coords;

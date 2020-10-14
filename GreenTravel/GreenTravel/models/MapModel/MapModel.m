@@ -101,6 +101,9 @@ static const CLLocationDistance kLocationAccuracy = 500.0;
 }
 
 - (void)addObserver:(nonnull id<MapItemsObserver>)observer {
+    if ([self.mapItemsObservers containsObject:observer]) {
+        return;
+    }
     [self.mapItemsObservers addObject:observer];
 }
 

@@ -55,6 +55,9 @@
 }
 
 - (void)addObserver:(nonnull id<BookmarksObserver>)observer {
+    if ([self.bookmarksObservers containsObject:observer]) {
+           return;
+       }
     [self.bookmarksObservers addObject:observer];
 }
 

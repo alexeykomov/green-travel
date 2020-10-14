@@ -31,6 +31,9 @@
 }
 
 - (void)addObserver:(nonnull id<LocationObserver>)observer {
+    if ([self.locationObservers containsObject:observer]) {
+        return;
+    }
     [self.locationObservers addObject:observer];
 }
 

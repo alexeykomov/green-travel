@@ -76,6 +76,9 @@
 }
 
 - (void)addObserver:(nonnull id<BookmarksGroupObserver>)observer {
+    if ([self.bookmarksGroupObservers containsObject:observer]) {
+        return;
+    }
     [self.bookmarksGroupObservers addObject:observer];
 }
 

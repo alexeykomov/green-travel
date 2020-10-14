@@ -107,6 +107,7 @@
 }
 
 - (void)updateBookmark:(BOOL)bookmark {
+    NSLog(@"updateBookmark");
     [self.favoritesButton setSelected:bookmark];
 }
 

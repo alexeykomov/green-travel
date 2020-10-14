@@ -90,6 +90,9 @@ static IndexModel *instance;
 }
 
 - (void)addObserver:(nonnull id<CategoriesObserver>)observer {
+    if ([self.categoriesObservers containsObject:observer]) {
+        return;
+    }
     [self.categoriesObservers addObject:observer];
 }
 
@@ -101,6 +104,7 @@ static IndexModel *instance;
 }
 
 - (void)notifyObserversOfBookmarkUpdate:(PlaceItem *)item bookmark:(BOOL)bookmark {
+    
     [self.categoriesObservers enumerateObjectsUsingBlock:^(id<CategoriesObserver>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj onBookmarkUpdate:item bookmark:bookmark];
     }];
