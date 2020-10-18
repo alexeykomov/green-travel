@@ -13,12 +13,15 @@
 #import "SearchItem.h"
 #import "PlaceItem.h"
 #import "LocationModel.h"
+#import "CoreDataService.h"
+#import "CategoryUtils.h"
 
 @interface SearchModel ()
 
 @property (strong, nonatomic) IndexModel *indexModel;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) NSMutableSet *uuids;
+@property (strong, nonatomic) CoreDataService *coreDataService;
 
 @end
 
@@ -26,12 +29,14 @@
 
 - (instancetype)initWithIndexModel:(IndexModel *)model
                      locationModel:(LocationModel *)locationModel
+                   coreDataService:(CoreDataService *)coreDataService
 {
     self = [super init];
     if (self) {
         _indexModel = model;
         _locationModel = locationModel;
         self.searchItems = [[NSMutableArray alloc] init];
+        self.searchHistoryItems = [[NSMutableArray alloc] init];
         self.uuids = [[NSMutableSet alloc] init];
         self.searchItemsObservers = [[NSMutableArray alloc] init];
         [self.indexModel addObserver:self];
@@ -47,8 +52,7 @@
     [self notifyObservers];
 }
 
-- (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {
-}
+- (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {}
 
 - (void)fillSearchItemsFromCategories:(NSArray<Category *>*)categories {
     __weak typeof(self) weakSelf = self;
@@ -82,6 +86,12 @@
     }];
 }
 
+- (void)notifyObserversOfSearchHistoryUpdate {
+    [self.searchItemsObservers enumerateObjectsUsingBlock:^(id<SearchItemsObserver>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj onSearchHistoryItemsUpdate:self.searchHistoryItems];
+    }];
+}
+
 - (void)removeObserver:(nonnull id<SearchItemsObserver>)observer {
     [self.searchItemsObservers removeObject:observer];
 }
@@ -97,6 +107,53 @@
 
 - (void)onAuthorizationStatusChange:(CLAuthorizationStatus)status {
     
+}
+
+- (void)fillSearchItemsWithCategories {
+    __weak typeof(self) weakSelf = self;
+    traverseCategories(self.indexModel.categories, ^(Category *category, PlaceItem *item) {
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf.searchHistoryItems enumerateObjectsUsingBlock:^(SearchItem * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([item.uuid isEqualToString:searchItem.correspondingPlaceItem.uuid]) {
+                searchItem.correspondingPlaceItem.category = category;
+            }
+        }];
+    });
+}
+
+- (void)loadSearchItems {
+    __weak typeof(self) weakSelf = self;
+    [self.coreDataService loadSearchItemsWithCompletion:^(NSArray<SearchItem *> * _Nonnull searchItems) {
+        __strong typeof(self) strongSelf = weakSelf;
+        strongSelf.searchHistoryItems = [[NSMutableArray alloc] initWithArray:searchItems];
+        [strongSelf fillSearchItemsWithCategories];
+        [strongSelf notifyObserversOfSearchHistoryUpdate];
+    }];
+}
+
+- (void)addSearchHistoryItem:(SearchItem *)searchItem {
+    NSUInteger foundIndex = [self findIndexOfSearchHistoryItem:searchItem];
+    if (foundIndex != NSNotFound) {
+        [self.searchHistoryItems removeObjectAtIndex:foundIndex];
+    }
+    [self.searchHistoryItems addObject:searchItem];
+    [self.coreDataService addSearchItem:searchItem];
+}
+
+- (void)removeSearchHistoryItem:(SearchItem *)searchItem {
+    NSUInteger foundIndex = [self findIndexOfSearchHistoryItem:searchItem];
+    if (foundIndex == NSNotFound) {
+        return;
+    }
+    [self.searchHistoryItems removeObjectAtIndex:foundIndex];
+    [self.coreDataService removeSearchItem:searchItem];
+}
+
+- (NSUInteger)findIndexOfSearchHistoryItem:(SearchItem *)searchItem {
+    NSUInteger foundIndex = [self.searchHistoryItems indexOfObjectPassingTest:^BOOL(SearchItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [obj.correspondingPlaceItem.uuid isEqualToString:searchItem.correspondingPlaceItem.uuid];
+    }];
+    return foundIndex;
 }
 
 @end

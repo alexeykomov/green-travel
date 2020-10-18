@@ -10,9 +10,11 @@
 #import <CoreData/CoreData.h>
 #import "StoredPlaceItem+CoreDataProperties.h"
 #import "StoredCategory+CoreDataProperties.h"
+#import "StoredSearchItem+CoreDataProperties.h"
 
 #import "PlaceItem.h"
 #import "Category.h"
+#import "SearchItem.h"
 #import "BookmarksModel.h"
 #import "CategoryUtils.h"
 
@@ -47,6 +49,8 @@ NSPersistentContainer *_persistentContainer;
     return _persistentContainer;
 }
 
+#pragma mark - PlaceItem
+
 - (void)updatePlaceItem:(PlaceItem *)placeItem bookmark:(BOOL)bookmark {
     [self.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
         NSFetchRequest *fetchRequest = [StoredCategory fetchRequest];
@@ -63,6 +67,8 @@ NSPersistentContainer *_persistentContainer;
     }];
 }
 
+#pragma mark - Categories
+
 - (void)loadCategoriesWithCompletion:(void(^)(NSArray<Category *>*))completion {
     __weak typeof(self) weakSelf = self;
     [self.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
@@ -75,29 +81,40 @@ NSPersistentContainer *_persistentContainer;
     }];
 }
 
+- (PlaceItem *)mapStoredPlaceItemToPlaceItem:(StoredPlaceItem *)storedItem
+                                withCategory:(Category *)category {
+    PlaceItem *item = [[PlaceItem alloc] init];
+    item.title = storedItem.title;
+    item.uuid = storedItem.uuid;
+    item.category = category;
+    CLLocationCoordinate2D coords;
+    [storedItem.coords getBytes:&coords length:sizeof(coords)];
+    item.coords = coords;
+    item.cover = storedItem.coverURL;
+    item.bookmarked = storedItem.bookmarked;
+    return item;
+}
+
+- (Category *)mapStoredCategoryToCategory:(StoredCategory *)storedCategory {
+    Category *category = [[Category alloc] init];
+    category.title = storedCategory.title;
+    category.uuid = storedCategory.uuid;
+    category.cover = storedCategory.coverURL;
+    NSMutableArray *items = [[NSMutableArray alloc] init];
+    [storedCategory.items enumerateObjectsUsingBlock:^(StoredPlaceItem * _Nonnull storedItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        [items addObject:[self mapStoredPlaceItemToPlaceItem:storedItem withCategory:category]];
+    }];
+    category.items = items;
+    category.categories = [self mapStoredCategoriesToCategories:storedCategory.categories.array];
+    return category;
+}
+    
+
 - (NSMutableArray<Category *>*)mapStoredCategoriesToCategories:(NSArray<StoredCategory *>*)storedCategories {
     NSMutableArray<Category *> *categories = [[NSMutableArray alloc] init];
     __weak typeof(self) weakSelf = self;
     [storedCategories enumerateObjectsUsingBlock:^(StoredCategory * _Nonnull storedCategory, NSUInteger idx, BOOL * _Nonnull stop) {
-        Category *category = [[Category alloc] init];
-        category.title = storedCategory.title;
-        category.uuid = storedCategory.uuid;
-        category.cover = storedCategory.coverURL;
-        NSMutableArray *items = [[NSMutableArray alloc] init];
-        [storedCategory.items enumerateObjectsUsingBlock:^(StoredPlaceItem * _Nonnull storedItem, NSUInteger idx, BOOL * _Nonnull stop) {
-            PlaceItem *item = [[PlaceItem alloc] init];
-            item.title = storedItem.title;
-            item.uuid = storedItem.uuid;
-            item.category = category;
-            CLLocationCoordinate2D coords;
-            [storedItem.coords getBytes:&coords length:sizeof(coords)];
-            item.coords = coords;
-            item.cover = storedItem.coverURL;
-            item.bookmarked = storedItem.bookmarked;
-            [items addObject:item];
-        }];
-        category.items = items;
-        category.categories = [weakSelf mapStoredCategoriesToCategories:storedCategory.categories.array];
+        Category *category = [weakSelf mapStoredCategoryToCategory:storedCategory];
         [categories addObject:category];
     }];
     return categories;
@@ -152,6 +169,73 @@ NSPersistentContainer *_persistentContainer;
             [weakSelf saveCategoriesWithinBlock:category.categories parentCategory:storedCategory];
         }
         [weakSelf.ctx save:&error];
+    }];
+}
+
+#pragma mark - Search items
+ 
+- (void)addSearchItem:(SearchItem *)searchItem {
+    __weak typeof(self) weakSelf = self;
+    [self.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
+        __strong typeof(self) strongSelf = weakSelf;
+        NSError *error;
+        // Delete dublicate.
+        [strongSelf removeSearchItem:searchItem];
+        // Request place item.
+        NSFetchRequest *fetchRequestItem = [StoredPlaceItem fetchRequest];
+        fetchRequestItem.predicate = [NSPredicate predicateWithFormat:@"uuid == %@",
+                                  searchItem.correspondingPlaceItem.uuid];
+        NSArray<StoredPlaceItem *> *fetchResultItem = [ctx executeFetchRequest:fetchRequestItem error:&error];
+        StoredPlaceItem *item = [fetchResultItem firstObject];
+        // Request order.
+        NSFetchRequest *fetchRequestSearchItem = [StoredSearchItem fetchRequest];
+        NSSortDescriptor *sortByOrder = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:NO];
+        fetchRequestSearchItem.sortDescriptors = @[sortByOrder];
+        NSArray<StoredSearchItem *> *fetchResultSearchItem = [ctx executeFetchRequest:fetchRequestSearchItem error:&error];
+        int order = [fetchResultSearchItem firstObject].order;
+        // Create new search item.
+        StoredSearchItem *storedSearchItem = [NSEntityDescription insertNewObjectForEntityForName:@"StoredCategory" inManagedObjectContext:ctx];
+        storedSearchItem.order = order + 1;
+        storedSearchItem.correspondingPlaceItem = item;
+        [ctx save:&error];
+    }];
+}
+
+- (void)removeSearchItem:(SearchItem *)searchItem {
+    __weak typeof(self) weakSelf = self;
+    [self.ctx performBlockAndWait:^{
+        __strong typeof(self) strongSelf = weakSelf;
+        NSError *error;
+        NSFetchRequest *fetchRequestSearchItem = [StoredSearchItem fetchRequest];
+        fetchRequestSearchItem.predicate = [NSPredicate predicateWithFormat:@"uuid == %@",
+                                  searchItem.correspondingPlaceItem.uuid];
+        NSArray<StoredSearchItem *> *fetchResultSearchItem = [strongSelf.ctx
+                                                              executeFetchRequest:fetchRequestSearchItem
+                                                              error:&error];
+        [weakSelf.ctx deleteObject:[fetchResultSearchItem firstObject]];
+    }];
+    
+}
+
+- (void)loadSearchItemsWithCompletion:(void (^)(NSArray<SearchItem *> * _Nonnull))completion {
+    __weak typeof(self) weakSelf = self;
+    [self.ctx performBlockAndWait:^{
+        __strong typeof(self) strongSelf = weakSelf;
+        NSError *error;
+        NSMutableArray *searchItems = [[NSMutableArray alloc] init];
+        NSFetchRequest *fetchRequestSearchItem = [StoredSearchItem fetchRequest];
+        NSSortDescriptor *sortByOrder = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:NO];
+        fetchRequestSearchItem.sortDescriptors = @[sortByOrder];
+        NSArray<StoredSearchItem *> *fetchResultSearchItem = [strongSelf.ctx executeFetchRequest:fetchRequestSearchItem error:&error];
+        [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            PlaceItem *placeItem = [self mapStoredPlaceItemToPlaceItem:obj.correspondingPlaceItem
+                                                          withCategory:nil];
+            SearchItem *searchItem = [[SearchItem alloc] init];
+            searchItem.title = obj.correspondingPlaceItem.title;
+            searchItem.correspondingPlaceItem = placeItem;
+            [searchItems addObject:searchItem];
+        }];
+        completion(searchItems);
     }];
 }
 

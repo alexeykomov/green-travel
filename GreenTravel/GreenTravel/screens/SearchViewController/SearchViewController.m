@@ -19,11 +19,12 @@
 #import "LocationModel.h"
 #import "DetailsModel.h"
 #import "ApiService.h"
+#import "CoreDataService.h"
 #import <CoreLocation/CoreLocation.h>
 
 @interface SearchViewController ()
 
-@property (strong, nonatomic) NSMutableArray<NSString *> *dataSourceRecommendations;
+@property (strong, nonatomic) NSMutableArray<NSString *> *dataSourceHistory;
 @property (strong, nonatomic) NSMutableArray<SearchItem *> *dataSourceFiltered;
 @property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) SearchModel *model;
@@ -34,6 +35,8 @@
 @property (assign, nonatomic) BOOL intentionToGoToNearbyPlaces;
 @property (strong, nonatomic) DetailsModel *detailsModel;
 @property (strong, nonatomic) ApiService *apiService;
+@property (strong, nonatomic) CoreDataService *coreDataService;
+@property (assign, nonatomic) SearchItem *itemToSaveToHistory;
 
 @end
 
@@ -53,6 +56,7 @@ static const CGFloat kSearchRowHeight = 40.0;
                 locationModel:(LocationModel *)locationModel
                      mapModel:(MapModel *)mapModel
                    apiService:(ApiService *)apiService
+              coreDataService:(CoreDataService *)coreDataService
                  detailsModel:(DetailsModel *)detailsModel
 {
     self = [super init];
@@ -70,7 +74,7 @@ static const CGFloat kSearchRowHeight = 40.0;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.dataSourceRecommendations = [[NSMutableArray alloc] init];
+    self.dataSourceHistory = [[NSMutableArray alloc] init];
     self.dataSourceFiltered = [[NSMutableArray alloc] init];
     
     self.tableView.backgroundColor = [Colors get].white;
@@ -88,15 +92,9 @@ static const CGFloat kSearchRowHeight = 40.0;
     self.navigationItem.titleView = self.searchController.searchBar;
     self.definesPresentationContext = YES;
     
-    NSString *itemA = @"96FD81D9-057B-4320-A2FC-75BE963B805E";
-    NSString *itemB = @"28B26157-D421-4BAC-A698-8D3EA2FC8ED2";
-    NSString *itemС = @"5E6859F1-717B-4C74-B4F0-5969F369328B";
-    NSString *itemD = @"15BFBBE1-E66F-4E0C-962B-6BC4D45E9FBF";
-    NSString *itemE = @"AA85EA51-1E79-4D39-834E-CEDB57C05DB6";
-    
-    [self.dataSourceRecommendations addObjectsFromArray:@[itemA, itemB, itemС, itemD, itemE]];
-    
     [self.locationModel addObserver:self];
+    [self.model addObserver:self];
+    [self.model loadSearchItems];
 }
 
 #pragma mark - Location model
@@ -122,6 +120,13 @@ static const CGFloat kSearchRowHeight = 40.0;
     }
 }
 
+#pragma mark - SearchModel
+- (void)onSearchHistoryItemsUpdate:(NSArray<SearchItem *> *)searchHistoryItems {
+    if (![self isSearching]) {
+        [self.tableView reloadData];
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -132,7 +137,7 @@ static const CGFloat kSearchRowHeight = 40.0;
     if ([self isSearching]) {
         return [self.dataSourceFiltered count];
     }
-    return [self.dataSourceRecommendations count] + kDataSourceOrigOffset;
+    return [self.model.searchHistoryItems count] + kDataSourceOrigOffset;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -140,7 +145,7 @@ static const CGFloat kSearchRowHeight = 40.0;
         SearchHeaderCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kSearchHeaderCellId];
         return cell;
     }
-    if (indexPath.row == 1 && ![self isSearching]) {
+    if (indexPath.row == 1 && ![self isSearching] && [self.model.searchHistoryItems count] > 0) {
         WeRecommendCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kWeRecommendCellId];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.userInteractionEnabled = NO;
@@ -150,15 +155,14 @@ static const CGFloat kSearchRowHeight = 40.0;
     SearchItem *item;
     if ([self isSearching]) {
         item = self.dataSourceFiltered[indexPath.row];
-    } else {
-        NSString *uuid = self.dataSourceRecommendations[indexPath.row - kDataSourceOrigOffset];
-        for (SearchItem *searchItem in self.model.searchItems) {
-            if ([searchItem.correspondingPlaceItem.uuid isEqualToString:uuid]) {
-                item = searchItem;
-            }
-        }
+        [cell update:item];
+        return cell;
     }
-    [cell update:item];
+    if ([self.model.searchHistoryItems count]) {
+        item = self.model.searchHistoryItems[indexPath.row - kDataSourceOrigOffset];
+        [cell update:item];
+        return cell;
+    }
     return cell;
 }
 
@@ -187,20 +191,27 @@ static const CGFloat kSearchRowHeight = 40.0;
         return;
     }
     if ([self isSearching]) {
-        detailsController.item = self.dataSourceFiltered[indexPath.row].correspondingPlaceItem;
+        SearchItem *searchItem = self.dataSourceFiltered[indexPath.row];
+        detailsController.item = searchItem.correspondingPlaceItem;
+        self.itemToSaveToHistory = searchItem;
         self.searchController.searchBar.text = @"";
     } else {
-        NSString *uuid = self.dataSourceRecommendations[indexPath.row - kDataSourceOrigOffset];
-        for (SearchItem *searchItem in self.model.searchItems) {
-            if ([searchItem.correspondingPlaceItem.uuid isEqualToString:uuid]) {
-                detailsController.item = searchItem.correspondingPlaceItem;
-            }
-        }
+        SearchItem *searchItem = self.model.searchHistoryItems[indexPath.row -
+                                                               kDataSourceOrigOffset];
+        detailsController.item = searchItem.correspondingPlaceItem;
     }
     [self.navigationController pushViewController:detailsController animated:YES];
 }
 
-
+#pragma mark - Lifecycle
+- (void)viewDidDisappear:(BOOL)animated {
+    [self.locationModel removeObserver:self];
+    [self.model removeObserver:self];
+    if (self.itemToSaveToHistory) {
+        [self.model addSearchHistoryItem:self.itemToSaveToHistory];
+        self.itemToSaveToHistory = nil;
+    }
+}
 
 #pragma mark - Search
 
@@ -233,16 +244,6 @@ static const CGFloat kSearchRowHeight = 40.0;
     [self.navigationController.view setNeedsLayout];
     [self.navigationController.view layoutIfNeeded];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)onSearchItemsUpdate:(nonnull NSArray<SearchItem *> *)searchItems {
     [self.tableView reloadData];

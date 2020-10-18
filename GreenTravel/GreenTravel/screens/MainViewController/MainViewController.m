@@ -56,7 +56,10 @@
     DetailsModel *detailsModel = [[DetailsModel alloc] initWithIndexModel:self.indexModel apiService:self.apiService coreDataService:self.coreDataService];
     
     LocationModel *locationModel = [[LocationModel alloc] init];
-    SearchModel *searchModel = [[SearchModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
+    SearchModel *searchModel = [[SearchModel alloc]
+                                initWithIndexModel:self.indexModel
+                                locationModel:locationModel
+                                coreDataService:self.coreDataService];
     MapModel *mapModel = [[MapModel alloc] initWithIndexModel:self.indexModel locationModel:locationModel];
     BookmarksGroupModel *bookmarksGroupsModel = [[BookmarksGroupModel alloc] initWithIndexModel:self.indexModel];
 

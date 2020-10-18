@@ -22,6 +22,7 @@
 
     // Configure the view for the selected state
 }
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -43,7 +44,7 @@
     ]];
     
     [header setFont:[UIFont fontWithName:@"Montserrat-Bold" size:16.0]];
-    header.attributedText = getAttributedString(@"Мы рекомендуем", [Colors get].black, 16.0, UIFontWeightBold);
+    header.attributedText = getAttributedString(@"История поиска", [Colors get].black, 16.0, UIFontWeightBold);
 }
 
 @end

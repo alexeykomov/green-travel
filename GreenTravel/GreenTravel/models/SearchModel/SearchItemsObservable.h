@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addObserver:(id<SearchItemsObserver>)observer;
 - (void)removeObserver:(id<SearchItemsObserver>)observer;
 - (void)notifyObservers;
+- (void)notifyObserversOfSearchHistoryUpdate;
 
 @end
 

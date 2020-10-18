@@ -17,12 +17,19 @@ NS_ASSUME_NONNULL_BEGIN
 @class IndexModel;
 @protocol SearchItemsObserver;
 @class LocationModel;
+@class CoreDataService;
 
 @interface SearchModel : NSObject<CategoriesObserver, SearchItemsObservable, LocationObserver>
 
-- (instancetype)initWithIndexModel:(IndexModel *)model locationModel:(LocationModel *)locationModel;
+- (instancetype)initWithIndexModel:(IndexModel *)model
+                     locationModel:(LocationModel *)locationModel
+                   coreDataService:(CoreDataService *)coreDataService;
 @property (strong, nonatomic) NSMutableArray<SearchItem *> *searchItems;
-@property (strong, nonatomic) NSMutableArray<id<SearchItemsObserver>> *searchItemsObservers; 
+@property (strong, nonatomic) NSMutableArray<SearchItem *> *searchHistoryItems;
+@property (strong, nonatomic) NSMutableArray<id<SearchItemsObserver>> *searchItemsObservers;
+- (void)loadSearchItems;
+- (void)addSearchHistoryItem:(SearchItem *)searchItem;
+- (void)removeSearchHistoryItem:(SearchItem *)searchItem;
 
 @end
 

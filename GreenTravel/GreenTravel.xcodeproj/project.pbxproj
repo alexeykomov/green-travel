@@ -87,6 +87,8 @@
 		5AA75BFE2502D70900AE7331 /* MapPinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75BFD2502D70900AE7331 /* MapPinView.m */; };
 		5AA75C012504258300AE7331 /* DetailsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C002504258300AE7331 /* DetailsModel.m */; };
 		5AA75C082505196D00AE7331 /* CoreDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C072505196D00AE7331 /* CoreDataService.m */; };
+		5AF2C68D253C589300B8B3BD /* StoredSearchItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AF2C68B253C589300B8B3BD /* StoredSearchItem+CoreDataClass.m */; };
+		5AF2C68E253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AF2C68C253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -251,6 +253,10 @@
 		5AA75C0525042AF500AE7331 /* DetailsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsModel.h; sourceTree = "<group>"; };
 		5AA75C062505196D00AE7331 /* CoreDataService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataService.h; sourceTree = "<group>"; };
 		5AA75C072505196D00AE7331 /* CoreDataService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreDataService.m; sourceTree = "<group>"; };
+		5AF2C689253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StoredSearchItem+CoreDataProperties.h"; sourceTree = SOURCE_ROOT; };
+		5AF2C68A253C589300B8B3BD /* StoredSearchItem+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StoredSearchItem+CoreDataClass.h"; sourceTree = SOURCE_ROOT; };
+		5AF2C68B253C589300B8B3BD /* StoredSearchItem+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StoredSearchItem+CoreDataClass.m"; sourceTree = SOURCE_ROOT; };
+		5AF2C68C253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StoredSearchItem+CoreDataProperties.m"; sourceTree = SOURCE_ROOT; };
 		72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.debug.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.debug.xcconfig"; sourceTree = "<group>"; };
 		91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GreenTravel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.release.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.release.xcconfig"; sourceTree = "<group>"; };
@@ -600,6 +606,10 @@
 		5A5FB19F25057A6300EBAA8E /* managedobjects */ = {
 			isa = PBXGroup;
 			children = (
+				5AF2C689253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.h */,
+				5AF2C68A253C589300B8B3BD /* StoredSearchItem+CoreDataClass.h */,
+				5AF2C68B253C589300B8B3BD /* StoredSearchItem+CoreDataClass.m */,
+				5AF2C68C253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.m */,
 				5A2EBDA22529EE030078AF72 /* StoredPlaceItem+CoreDataProperties.h */,
 				5A2EBDA62529EE040078AF72 /* StoredPlaceItem+CoreDataClass.h */,
 				5A2EBDA12529EE030078AF72 /* StoredPlaceItem+CoreDataClass.m */,
@@ -926,6 +936,7 @@
 				5A1482A124E9527700EBB756 /* PhotoCollectionViewCell.m in Sources */,
 				5A14828A24E80E3900EBB756 /* MainViewController.m in Sources */,
 				5A2EBDA82529EE040078AF72 /* StoredPlaceItem+CoreDataClass.m in Sources */,
+				5AF2C68E253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.m in Sources */,
 				5A1482E624EC80FC00EBB756 /* DetailsViewController.m in Sources */,
 				5A14830424F136B800EBB756 /* WeRecommendCell.m in Sources */,
 				5AA75C082505196D00AE7331 /* CoreDataService.m in Sources */,
@@ -942,6 +953,7 @@
 				5A14829324E8103400EBB756 /* BookmarksViewController.m in Sources */,
 				5A1482EF24EDC8E500EBB756 /* StyleUtils.m in Sources */,
 				5A14830924F3083E00EBB756 /* PlacesTableViewCellConstants.m in Sources */,
+				5AF2C68D253C589300B8B3BD /* StoredSearchItem+CoreDataClass.m in Sources */,
 				5A1482FB24F0717300EBB756 /* SearchCell.m in Sources */,
 				5A14829B24E9440C00EBB756 /* SearchViewController.m in Sources */,
 				5A14825624E7ED9100EBB756 /* GreenTravel.xcdatamodeld in Sources */,

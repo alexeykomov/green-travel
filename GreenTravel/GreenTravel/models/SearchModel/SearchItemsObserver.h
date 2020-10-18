@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol SearchItemsObserver <NSObject>
 
 - (void)onSearchItemsUpdate:(NSArray<SearchItem *>*)searchItems;
+- (void)onSearchHistoryItemsUpdate:(NSArray<SearchItem *>*)searchHistoryItems;
 
 @end
 
