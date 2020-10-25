@@ -53,6 +53,7 @@ static IndexModel *instance;
         [strongSelf updateCategories:categories];
         [strongSelf.apiService loadCategoriesWithCompletion:^(NSArray<Category *>  * _Nonnull categories) {
             NSArray<Category*> *newCategories = [strongSelf mergeCategoriesOld:strongSelf.categories withNew:categories];
+            
             if (!isCategoriesEqual(strongSelf.categories, newCategories)) {
                 [strongSelf updateCategories:newCategories];
                 [strongSelf.coreDataService saveCategories:newCategories];

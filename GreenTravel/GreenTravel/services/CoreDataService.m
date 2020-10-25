@@ -189,13 +189,12 @@ NSPersistentContainer *_persistentContainer;
         StoredPlaceItem *item = [fetchResultItem firstObject];
         // Request order.
         NSFetchRequest *fetchRequestSearchItem = [StoredSearchItem fetchRequest];
-        NSSortDescriptor *sortByOrder = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:NO];
-        fetchRequestSearchItem.sortDescriptors = @[sortByOrder];
-        NSArray<StoredSearchItem *> *fetchResultSearchItem = [ctx executeFetchRequest:fetchRequestSearchItem error:&error];
-        int order = [fetchResultSearchItem firstObject].order;
+        NSUInteger count = [strongSelf.ctx
+                            countForFetchRequest:fetchRequestSearchItem
+                            error:&error];
         // Create new search item.
-        StoredSearchItem *storedSearchItem = [NSEntityDescription insertNewObjectForEntityForName:@"StoredCategory" inManagedObjectContext:ctx];
-        storedSearchItem.order = order + 1;
+        StoredSearchItem *storedSearchItem = [NSEntityDescription insertNewObjectForEntityForName:@"StoredSearchItem" inManagedObjectContext:ctx];
+        storedSearchItem.order = count;
         storedSearchItem.correspondingPlaceItem = item;
         [ctx save:&error];
     }];
@@ -203,19 +202,44 @@ NSPersistentContainer *_persistentContainer;
 
 - (void)removeSearchItem:(SearchItem *)searchItem {
     __weak typeof(self) weakSelf = self;
+    __block StoredSearchItem *foundItem;
     [self.ctx performBlockAndWait:^{
         __strong typeof(self) strongSelf = weakSelf;
         NSError *error;
         NSFetchRequest *fetchRequestSearchItem = [StoredSearchItem fetchRequest];
-        fetchRequestSearchItem.predicate = [NSPredicate predicateWithFormat:@"uuid == %@",
+        fetchRequestSearchItem.predicate = [NSPredicate predicateWithFormat:@"correspondingPlaceItem.uuid == %@",
                                   searchItem.correspondingPlaceItem.uuid];
         NSArray<StoredSearchItem *> *fetchResultSearchItem = [strongSelf.ctx
                                                               executeFetchRequest:fetchRequestSearchItem
                                                               error:&error];
-        [weakSelf.ctx deleteObject:[fetchResultSearchItem firstObject]];
+        foundItem = [fetchResultSearchItem firstObject];
+        if (foundItem) {
+            [weakSelf.ctx deleteObject:foundItem];
+            [weakSelf.ctx save:&error];
+        }
     }];
+    if (foundItem) {
+        [weakSelf reoder];
+    }
     
 }
+
+- (void)reoder {
+    __weak typeof(self) weakSelf = self;
+    [self.ctx performBlockAndWait:^{
+        NSError *error;
+        NSFetchRequest *fetchRequestSearchItem = [StoredSearchItem fetchRequest];
+        NSSortDescriptor *sortByOrder = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
+        fetchRequestSearchItem.sortDescriptors = @[sortByOrder];
+        NSArray<StoredSearchItem *> *fetchResultSearchItem = [weakSelf.ctx executeFetchRequest:fetchRequestSearchItem error:&error];
+        [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSLog(@"Item: %@, order was: %hd, order became: %lu", obj.correspondingPlaceItem.title, obj.order, (unsigned long)idx);
+            obj.order = idx;
+        }];
+        [weakSelf.ctx save:&error];
+    }];
+}
+
 
 - (void)loadSearchItemsWithCompletion:(void (^)(NSArray<SearchItem *> * _Nonnull))completion {
     __weak typeof(self) weakSelf = self;
@@ -230,6 +254,7 @@ NSPersistentContainer *_persistentContainer;
         [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             PlaceItem *placeItem = [self mapStoredPlaceItemToPlaceItem:obj.correspondingPlaceItem
                                                           withCategory:nil];
+            NSLog(@"Order: %hd", obj.order);
             SearchItem *searchItem = [[SearchItem alloc] init];
             searchItem.title = obj.correspondingPlaceItem.title;
             searchItem.correspondingPlaceItem = placeItem;

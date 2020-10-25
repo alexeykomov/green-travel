@@ -91,10 +91,37 @@ static const CGFloat kSearchRowHeight = 40.0;
     self.searchController.searchBar.placeholder = kPlaceholderSearch;
     self.navigationItem.titleView = self.searchController.searchBar;
     self.definesPresentationContext = YES;
-    
-    [self.locationModel addObserver:self];
+}
+
+#pragma mark - Lifecycle
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     [self.model addObserver:self];
+    [self.locationModel addObserver:self];
     [self.model loadSearchItems];
+    
+    [self.navigationController.view setNeedsLayout];
+    [self.navigationController.view layoutIfNeeded];
+}
+
+// This fixes situation when next view in the navigation stack doesn't adapt to
+// navigation bar of variable height. https://stackoverflow.com/a/47976999
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController.view setNeedsLayout];
+    [self.navigationController.view layoutIfNeeded];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self.searchController setActive:NO];
+    [self.locationModel removeObserver:self];
+    [self.model removeObserver:self];
+    if (self.itemToSaveToHistory) {
+        [self.model addSearchHistoryItem:self.itemToSaveToHistory];
+        self.itemToSaveToHistory = nil;
+    }
 }
 
 #pragma mark - Location model
@@ -203,13 +230,21 @@ static const CGFloat kSearchRowHeight = 40.0;
     [self.navigationController pushViewController:detailsController animated:YES];
 }
 
-#pragma mark - Lifecycle
-- (void)viewDidDisappear:(BOOL)animated {
-    [self.locationModel removeObserver:self];
-    [self.model removeObserver:self];
-    if (self.itemToSaveToHistory) {
-        [self.model addSearchHistoryItem:self.itemToSaveToHistory];
-        self.itemToSaveToHistory = nil;
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (![self isSearching] && indexPath.row >= kDataSourceOrigOffset) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        if (![self isSearching] && indexPath.row >= kDataSourceOrigOffset) {
+            SearchItem *searchItem = self.model.searchHistoryItems[indexPath.row -kDataSourceOrigOffset];
+            [self.model removeSearchHistoryItem:searchItem];
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     }
 }
 
@@ -234,15 +269,6 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 - (BOOL)isSearching {
     return self.searchController.isActive && ![self isSearchBarEmpty];
-}
-
-#pragma mark - Lifecycle
-// This fixes situation when view underlying in the stack doesn't adapt to
-// navigation bar of variable height. https://stackoverflow.com/a/47976999
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.navigationController.view setNeedsLayout];
-    [self.navigationController.view layoutIfNeeded];
 }
 
 - (void)onSearchItemsUpdate:(nonnull NSArray<SearchItem *> *)searchItems {

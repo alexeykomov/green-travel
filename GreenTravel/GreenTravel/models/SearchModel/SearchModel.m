@@ -35,6 +35,7 @@
     if (self) {
         _indexModel = model;
         _locationModel = locationModel;
+        _coreDataService = coreDataService;
         self.searchItems = [[NSMutableArray alloc] init];
         self.searchHistoryItems = [[NSMutableArray alloc] init];
         self.uuids = [[NSMutableSet alloc] init];
