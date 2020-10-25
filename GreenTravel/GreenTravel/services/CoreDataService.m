@@ -127,13 +127,12 @@ NSPersistentContainer *_persistentContainer;
         
         NSFetchRequest *fetchRequest = [StoredCategory fetchRequest];
         NSArray<StoredCategory *> *fetchResult = [weakSelf.ctx executeFetchRequest:fetchRequest error:&error];
-        NSLog(@"Fetch result before deletion: %lu", (unsigned long)fetchResult.count);
+        
         [fetchResult enumerateObjectsUsingBlock:^(StoredCategory * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [weakSelf.ctx deleteObject:obj];
         }];
         [weakSelf.ctx save:&error];
         fetchResult = [weakSelf.ctx executeFetchRequest:fetchRequest error:&error];
-        NSLog(@"Fetch result after deletion: %lu", (unsigned long)fetchResult.count);
         
         if ([categories count]) {
             [weakSelf saveCategoriesWithinBlock:categories parentCategory:nil];
@@ -151,7 +150,6 @@ NSPersistentContainer *_persistentContainer;
         storedCategory.uuid = category.uuid;
         storedCategory.coverURL = category.cover;
         storedCategory.parent = parentCategory;
-        NSLog(@"Stored cagegory: %@", parentCategory);
         [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
             StoredPlaceItem *storedItem = [NSEntityDescription insertNewObjectForEntityForName:@"StoredPlaceItem" inManagedObjectContext:weakSelf.ctx];
             storedItem.title = item.title;
@@ -221,7 +219,6 @@ NSPersistentContainer *_persistentContainer;
     if (foundItem) {
         [weakSelf reoder];
     }
-    
 }
 
 - (void)reoder {
@@ -233,13 +230,11 @@ NSPersistentContainer *_persistentContainer;
         fetchRequestSearchItem.sortDescriptors = @[sortByOrder];
         NSArray<StoredSearchItem *> *fetchResultSearchItem = [weakSelf.ctx executeFetchRequest:fetchRequestSearchItem error:&error];
         [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSLog(@"Item: %@, order was: %hd, order became: %lu", obj.correspondingPlaceItem.title, obj.order, (unsigned long)idx);
             obj.order = idx;
         }];
         [weakSelf.ctx save:&error];
     }];
 }
-
 
 - (void)loadSearchItemsWithCompletion:(void (^)(NSArray<SearchItem *> * _Nonnull))completion {
     __weak typeof(self) weakSelf = self;
@@ -254,7 +249,6 @@ NSPersistentContainer *_persistentContainer;
         [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             PlaceItem *placeItem = [self mapStoredPlaceItemToPlaceItem:obj.correspondingPlaceItem
                                                           withCategory:nil];
-            NSLog(@"Order: %hd", obj.order);
             SearchItem *searchItem = [[SearchItem alloc] init];
             searchItem.title = obj.correspondingPlaceItem.title;
             searchItem.correspondingPlaceItem = placeItem;
