@@ -21,7 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithMapModel:(MapModel *)mapModel
                    locationModel:(LocationModel *)locationModel
-               showClosestPoints:(BOOL)showClosestPoints
                         mapItem:(nullable MapItem *)mapItem;
 
 @end

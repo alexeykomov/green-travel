@@ -9,7 +9,6 @@
 #import "SearchViewController.h"
 #import "Colors.h"
 #import "PlaceItem.h"
-#import "SearchHeaderCell.h"
 #import "SearchCell.h"
 #import "DetailsViewController.h"
 #import "SearchItem.h"
@@ -32,7 +31,6 @@
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) CLLocation *lastLocation;
 @property (assign, nonatomic) BOOL locationIsEnabled;
-@property (assign, nonatomic) BOOL intentionToGoToNearbyPlaces;
 @property (strong, nonatomic) DetailsModel *detailsModel;
 @property (strong, nonatomic) ApiService *apiService;
 @property (strong, nonatomic) CoreDataService *coreDataService;
@@ -42,12 +40,10 @@
 
 static NSString * const kPlaceholderSearch = @"";
 
-static NSString * const kSearchHeaderCellId = @"searchHeaderCellId";
 static NSString * const kWeRecommendCellId = @"weRecommendCellId";
 static NSString * const kSearchCellId = @"searchCellId";
-static const int kDataSourceOrigOffset = 2;
-static const CGFloat kSearchHeaderRowHeight = 95.0;
-static const CGFloat kWeRecommendRowHeight = 30.0;
+static const int kDataSourceOrigOffset = 1;
+static const CGFloat kWeRecommendRowHeight = 40.0;
 static const CGFloat kSearchRowHeight = 40.0;
 
 @implementation SearchViewController
@@ -80,7 +76,6 @@ static const CGFloat kSearchRowHeight = 40.0;
     self.tableView.backgroundColor = [Colors get].white;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.alwaysBounceVertical = YES;
-    [self.tableView registerClass:[SearchHeaderCell class] forCellReuseIdentifier:kSearchHeaderCellId];
     [self.tableView registerClass:[WeRecommendCell class] forCellReuseIdentifier:kWeRecommendCellId];
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:kSearchCellId];
     
@@ -124,34 +119,15 @@ static const CGFloat kSearchRowHeight = 40.0;
     }
 }
 
-#pragma mark - Location model
-
-- (void)onAuthorizationStatusChange:(CLAuthorizationStatus)status {
-    if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
-        if (self.locationModel.locationEnabled) {
-            [self.locationModel startMonitoring];
-            if (self.intentionToGoToNearbyPlaces) {
-                MapViewController *nearbyPlacesViewController = [[MapViewController alloc] initWithMapModel:self.mapModel locationModel:self.locationModel showClosestPoints:YES mapItem:nil];
-                [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
-                self.intentionToGoToNearbyPlaces = NO;
-            }
-        }
-    }
-}
-
-- (void)onLocationUpdate:(CLLocation *)lastLocation {
-    if (self.intentionToGoToNearbyPlaces) {
-        MapViewController *nearbyPlacesViewController = [[MapViewController alloc] init];
-        [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
-        self.intentionToGoToNearbyPlaces = NO;
-    }
-}
-
 #pragma mark - SearchModel
 - (void)onSearchHistoryItemsUpdate:(NSArray<SearchItem *> *)searchHistoryItems {
     if (![self isSearching]) {
         [self.tableView reloadData];
     }
+}
+
+- (void)onSearchItemsUpdate:(nonnull NSArray<SearchItem *> *)searchItems {
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
@@ -168,11 +144,7 @@ static const CGFloat kSearchRowHeight = 40.0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 0 && ![self isSearching]) {
-        SearchHeaderCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kSearchHeaderCellId];
-        return cell;
-    }
-    if (indexPath.row == 1 && ![self isSearching] && [self.model.searchHistoryItems count] > 0) {
+    if (indexPath.row == 0 && ![self isSearching] && [self.model.searchHistoryItems count] > 0) {
         WeRecommendCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kWeRecommendCellId];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.userInteractionEnabled = NO;
@@ -195,9 +167,6 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0 && ![self isSearching]) {
-        return kSearchHeaderRowHeight;
-    }
-    if (indexPath.row == 1 && ![self isSearching]) {
         return kWeRecommendRowHeight;
     }
     return kSearchRowHeight;
@@ -206,17 +175,6 @@ static const CGFloat kSearchRowHeight = 40.0;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     DetailsViewController *detailsController = [[DetailsViewController alloc] initWithApiService:self.apiService detailsModel:self.detailsModel mapModel:self.mapModel locationModel:self.locationModel];
-    if (indexPath.row == 0 && ![self isSearching]) {
-        self.intentionToGoToNearbyPlaces = YES;
-        [self.locationModel authorize];
-        if (self.locationModel.locationEnabled) {
-            [self.locationModel startMonitoring];
-            MapViewController *nearbyPlacesViewController = [[MapViewController alloc] initWithMapModel:self.mapModel locationModel:self.locationModel showClosestPoints:YES mapItem:nil];
-            [self.navigationController pushViewController:nearbyPlacesViewController animated:YES];
-            self.intentionToGoToNearbyPlaces = NO;
-        }
-        return;
-    }
     if ([self isSearching]) {
         SearchItem *searchItem = self.dataSourceFiltered[indexPath.row];
         detailsController.item = searchItem.correspondingPlaceItem;
@@ -269,10 +227,6 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 - (BOOL)isSearching {
     return self.searchController.isActive && ![self isSearchBarEmpty];
-}
-
-- (void)onSearchItemsUpdate:(nonnull NSArray<SearchItem *> *)searchItems {
-    [self.tableView reloadData];
 }
 
 @end

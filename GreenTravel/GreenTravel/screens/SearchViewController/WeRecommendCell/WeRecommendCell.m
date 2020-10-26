@@ -34,11 +34,11 @@
 - (void)setUp {
     UILabel *header = [[UILabel alloc] init];
     [self addSubview:header];
-    
+    //self.backgroundColor = [Colors get].blue;
     header.translatesAutoresizingMaskIntoConstraints = NO;
     
     [NSLayoutConstraint activateConstraints:@[
-        [header.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [header.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
         [header.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
         [header.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
     ]];
