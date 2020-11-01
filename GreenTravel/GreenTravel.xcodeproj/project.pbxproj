@@ -86,6 +86,8 @@
 		5AA75BFE2502D70900AE7331 /* MapPinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75BFD2502D70900AE7331 /* MapPinView.m */; };
 		5AA75C012504258300AE7331 /* DetailsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C002504258300AE7331 /* DetailsModel.m */; };
 		5AA75C082505196D00AE7331 /* CoreDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C072505196D00AE7331 /* CoreDataService.m */; };
+		5AEA97F1254F4F8B0037A51D /* StoredPlaceDetails+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA97ED254F4F8B0037A51D /* StoredPlaceDetails+CoreDataClass.m */; };
+		5AEA97F2254F4F8B0037A51D /* StoredPlaceDetails+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA97EF254F4F8B0037A51D /* StoredPlaceDetails+CoreDataProperties.m */; };
 		5AF2C68D253C589300B8B3BD /* StoredSearchItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AF2C68B253C589300B8B3BD /* StoredSearchItem+CoreDataClass.m */; };
 		5AF2C68E253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AF2C68C253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.m */; };
 /* End PBXBuildFile section */
@@ -250,6 +252,10 @@
 		5AA75C0525042AF500AE7331 /* DetailsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsModel.h; sourceTree = "<group>"; };
 		5AA75C062505196D00AE7331 /* CoreDataService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataService.h; sourceTree = "<group>"; };
 		5AA75C072505196D00AE7331 /* CoreDataService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreDataService.m; sourceTree = "<group>"; };
+		5AEA97ED254F4F8B0037A51D /* StoredPlaceDetails+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "StoredPlaceDetails+CoreDataClass.m"; path = "/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceDetails+CoreDataClass.m"; sourceTree = "<absolute>"; };
+		5AEA97EE254F4F8B0037A51D /* StoredPlaceDetails+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "StoredPlaceDetails+CoreDataClass.h"; path = "/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceDetails+CoreDataClass.h"; sourceTree = "<absolute>"; };
+		5AEA97EF254F4F8B0037A51D /* StoredPlaceDetails+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "StoredPlaceDetails+CoreDataProperties.m"; path = "/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceDetails+CoreDataProperties.m"; sourceTree = "<absolute>"; };
+		5AEA97F0254F4F8B0037A51D /* StoredPlaceDetails+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "StoredPlaceDetails+CoreDataProperties.h"; path = "/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceDetails+CoreDataProperties.h"; sourceTree = "<absolute>"; };
 		5AF2C689253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StoredSearchItem+CoreDataProperties.h"; sourceTree = SOURCE_ROOT; };
 		5AF2C68A253C589300B8B3BD /* StoredSearchItem+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StoredSearchItem+CoreDataClass.h"; sourceTree = SOURCE_ROOT; };
 		5AF2C68B253C589300B8B3BD /* StoredSearchItem+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StoredSearchItem+CoreDataClass.m"; sourceTree = SOURCE_ROOT; };
@@ -593,6 +599,10 @@
 		5A5FB19F25057A6300EBAA8E /* managedobjects */ = {
 			isa = PBXGroup;
 			children = (
+				5AEA97F0254F4F8B0037A51D /* StoredPlaceDetails+CoreDataProperties.h */,
+				5AEA97EE254F4F8B0037A51D /* StoredPlaceDetails+CoreDataClass.h */,
+				5AEA97ED254F4F8B0037A51D /* StoredPlaceDetails+CoreDataClass.m */,
+				5AEA97EF254F4F8B0037A51D /* StoredPlaceDetails+CoreDataProperties.m */,
 				5AF2C689253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.h */,
 				5AF2C68A253C589300B8B3BD /* StoredSearchItem+CoreDataClass.h */,
 				5AF2C68B253C589300B8B3BD /* StoredSearchItem+CoreDataClass.m */,
@@ -900,6 +910,7 @@
 				5AA75C012504258300AE7331 /* DetailsModel.m in Sources */,
 				5A324B9124FB00A60044A671 /* MapModel.m in Sources */,
 				5A14829E24E9501100EBB756 /* PlacesTableViewCell.m in Sources */,
+				5AEA97F2254F4F8B0037A51D /* StoredPlaceDetails+CoreDataProperties.m in Sources */,
 				5A69921A24F7DF63008FB47E /* PathItem.m in Sources */,
 				5A1482F224EF005300EBB756 /* BookmarkCell.m in Sources */,
 				5A324B8A24FAB9780044A671 /* SearchModel.m in Sources */,
@@ -929,6 +940,7 @@
 				5A324B9C24FBAEEB0044A671 /* BookmarksGroupModel.m in Sources */,
 				5A1482F524F04B0B00EBB756 /* MapViewController.m in Sources */,
 				5A1482E924EC8C2C00EBB756 /* PlacesViewController.m in Sources */,
+				5AEA97F1254F4F8B0037A51D /* StoredPlaceDetails+CoreDataClass.m in Sources */,
 				5A1482CE24EB091300EBB756 /* PlaceItem.m in Sources */,
 				5A2EBDAA2529EE040078AF72 /* StoredPlaceItem+CoreDataProperties.m in Sources */,
 				5A5FB1E12517EAB800EBAA8E /* CategoryUtils.m in Sources */,

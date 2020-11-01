@@ -70,9 +70,17 @@
 }
 
 - (void)loadDetailsByUUID:(NSString *)uuid {
-    [self.apiService loadDetailsByUUID:uuid withCompletion:^(PlaceDetails * _Nonnull details) {
-        
+    __weak typeof(self) weakSelf = self;
+    [self.coreDataService loadDetailsByUUID:uuid withCompletion:^(PlaceDetails * _Nonnull details) {
+        [weakSelf updateDetails:details forUUID:uuid];
+        [self.apiService loadDetailsByUUID:uuid withCompletion:^(PlaceDetails * _Nonnull newDetails) {
+            if (!isCategoriesEqual(details, newDetails)) {
+                [weakSelf updateDetails:details forUUID:uuid];
+                [strongSelf.coreDataService savePlaceDetails:details];
+            }
+        }];
     }];
+    
 }
 
 - (void)addObserver:(nonnull id<DetailsObserver>)observer {

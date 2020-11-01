@@ -29,8 +29,11 @@
 @property (strong, nonatomic) UIImageView *previewImageView;
 @property (strong, nonatomic) UIButton *mapButton;
 @property (strong, nonatomic) UITextView *descriptionTextView;
+@property (strong, nonatomic) UIView *activityIndicatorContainerView;
+@property (strong, nonatomic) UIActivityIndicatorView *activityIndicatorView;
 @property (strong, nonatomic) ApiService *apiService;
 
+@property (assign, nonatomic) BOOL ready;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) DetailsModel *detailsModel;
@@ -179,7 +182,6 @@
     self.descriptionTextView.scrollEnabled = NO;
     [self.contentView addSubview:self.descriptionTextView];
     
-    
     [NSLayoutConstraint activateConstraints:@[
         [self.descriptionTextView.topAnchor constraintEqualToAnchor:self.mapButton.bottomAnchor constant:26.0],
         [self.descriptionTextView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
@@ -187,21 +189,35 @@
         [self.descriptionTextView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-31.0],
     ]];
     
+#pragma mark - Activity indicator
+    self.activityIndicatorContainerView = [[UIView alloc] init];
+    self.activityIndicatorContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.activityIndicatorContainerView.backgroundColor = [Colors get].white;
+    [self.view addSubview:self.activityIndicatorContainerView];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.activityIndicatorContainerView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+        [self.activityIndicatorContainerView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [self.activityIndicatorContainerView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [self.activityIndicatorContainerView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
+    ]];
+    
+    self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.activityIndicatorView.hidesWhenStopped = YES;
+    self.activityIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.activityIndicatorContainerView addSubview:self.activityIndicatorView];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.activityIndicatorView.centerXAnchor constraintEqualToAnchor:self.activityIndicatorContainerView.centerXAnchor],
+        [self.activityIndicatorView.centerYAnchor constraintEqualToAnchor:self.activityIndicatorContainerView.centerYAnchor]
+    ]];
+    
     [self.detailsModel addObserver:self];
-    [self.apiService loadDetailsByUUID:self.item.uuid  withCompletion:^(PlaceDetails * _Nonnull details) {
-        
-    }];
+#pragma mark - Load data
+    [self.detailsModel loadDetailsByUUID:self.item.uuid];
+    if (!self.ready) {
+        [self.activityIndicatorView startAnimating];
+        [self.activityIndicatorView setHidden:NO];
+    }
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)onDetailsUpdate:(NSMutableDictionary<NSString *,PlaceDetails *> *)itemUUIDToDetails items:(NSMutableDictionary<NSString *,PlaceItem *> *)itemUUIDToItem {
     PlaceDetails *details = itemUUIDToDetails[self.item.uuid];
@@ -220,13 +236,18 @@
             });
         });
     }
+    NSAttributedString *html = getAttributedStringFromHTML(details.sections[0]);
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.ready) {
+            self.ready = YES;
+            [self.activityIndicatorContainerView setHidden:YES];
+            [self.activityIndicatorView stopAnimating];
+        }
         weakSelf.titleLabel.attributedText = getAttributedString(item.title, [Colors get].black, 20.0, UIFontWeightSemibold) ;
-        weakSelf.addressLabel.attributedText = getAttributedString(details.address, [Colors get].black, 14.0, UIFontWeightRegular) ;
+        weakSelf.addressLabel.attributedText = getAttributedString(details.address, [Colors get].black, 14.0, UIFontWeightRegular);
         weakSelf.locationLabel.attributedText = getAttributedString([NSString stringWithFormat:@"%f° N, %f° E", item.coords.longitude, item.coords.latitude], [Colors get].black, 14.0, UIFontWeightRegular);
-        [weakSelf.descriptionTextView setAttributedText:getAttributedString(details.sections[0], [Colors get].black, 16.0, UIFontWeightRegular)];
+        [weakSelf.descriptionTextView setAttributedText:html];
     });
-    
 }
 
 - (void)onMapButtonPress:(id)sender {

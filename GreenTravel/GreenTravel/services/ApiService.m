@@ -101,7 +101,10 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
 //            [parsedSections addObject:section];
 //        }]
         parsedDetails.sections = detailsFromAPI[@"sections"];
-        completion(parsedDetails);
+        //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            completion(parsedDetails);
+        //});
+        
     }];
     
     [task resume];

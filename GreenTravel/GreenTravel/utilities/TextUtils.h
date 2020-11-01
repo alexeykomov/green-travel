@@ -15,3 +15,5 @@ NSDictionary<NSAttributedStringKey, id>* getTextAttributes(UIColor* color, CGFlo
 NSAttributedString* getAttributedString(NSString *text, UIColor* color, CGFloat size, UIFontWeight weight);
 
 NSString* getUsefulTimeComponents(NSString *duration);
+
+NSAttributedString* getAttributedStringFromHTML(NSString *html);

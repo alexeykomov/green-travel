@@ -16,9 +16,25 @@ NSDictionary<NSAttributedStringKey, id>* getTextAttributes(UIColor* color, CGFlo
     };
 };
 
+static NSString * const kFontStyle = @"font-family:-apple-system,'Helvetica Neue',sans-serif;font-size:16px;font-weight:400;";
+
 NSAttributedString* getAttributedString(NSString *text, UIColor* color, CGFloat size, UIFontWeight weight) {
     return [[NSAttributedString alloc] initWithString:text attributes:getTextAttributes(color, size, weight)];
 }
+
+NSAttributedString* getAttributedStringFromHTML(NSString *html) {
+    NSError *error;
+    NSString *htmlWpappedWithStyles = [NSString stringWithFormat:@"<section style=\"%@\">%@</section>", kFontStyle, html];
+    NSData *data = [htmlWpappedWithStyles dataUsingEncoding:NSUTF8StringEncoding];
+    NSAttributedString *result = [[NSAttributedString alloc] initWithData:data
+                                     options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                               NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)
+                                     }
+                          documentAttributes:nil
+                                       error:&error];
+    return result;
+}
+
 
 NSString* getUsefulTimeComponents(NSString *duration) {
     NSArray<NSString*> *components = [duration componentsSeparatedByString:@":"];

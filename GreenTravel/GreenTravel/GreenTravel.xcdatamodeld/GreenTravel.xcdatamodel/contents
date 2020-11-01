@@ -8,6 +8,12 @@
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="StoredPlaceItem" inverseName="parent" inverseEntity="StoredPlaceItem"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StoredCategory" inverseName="categories" inverseEntity="StoredCategory"/>
     </entity>
+    <entity name="StoredPlaceDetails" representedClassName="StoredPlaceDetails" syncable="YES">
+        <attribute name="address" optional="YES" attributeType="String"/>
+        <attribute name="descriptionText" optional="YES" attributeType="Binary"/>
+        <attribute name="imageURLs" optional="YES" attributeType="String"/>
+        <attribute name="uuid" optional="YES" attributeType="String"/>
+    </entity>
     <entity name="StoredPlaceItem" representedClassName="StoredPlaceItem" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String"/>
         <attribute name="bookmarked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -29,5 +35,6 @@
         <element name="StoredCategory" positionX="-63" positionY="54" width="128" height="133"/>
         <element name="StoredPlaceItem" positionX="-63" positionY="-18" width="128" height="193"/>
         <element name="StoredSearchItem" positionX="-54" positionY="72" width="128" height="88"/>
+        <element name="StoredPlaceDetails" positionX="-54" positionY="72" width="128" height="28"/>
     </elements>
 </model>

@@ -12,6 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class PlaceItem;
+@class PlaceDetails;
 @class Category;
 @class BookmarksModel;
 @class SearchItem;
@@ -26,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadSearchItemsWithCompletion:(void(^)(NSArray<SearchItem *>*))completion;
 - (void)addSearchItem:(SearchItem *)searchItem;
 - (void)removeSearchItem:(SearchItem *)searchItem;
+- (void)loadDetailsByUUID:(NSString *)uuid withCompletion:(void(^)(PlaceDetails *))completion;
 
 @end
 

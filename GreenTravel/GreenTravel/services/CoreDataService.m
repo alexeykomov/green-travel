@@ -11,12 +11,14 @@
 #import "StoredPlaceItem+CoreDataProperties.h"
 #import "StoredCategory+CoreDataProperties.h"
 #import "StoredSearchItem+CoreDataProperties.h"
+#import "StoredPlaceDetails+CoreDataProperties.h"
 
 #import "PlaceItem.h"
 #import "Category.h"
 #import "SearchItem.h"
 #import "BookmarksModel.h"
 #import "CategoryUtils.h"
+#import "PlaceDetails.h"
 
 @interface CoreDataService ()
 
@@ -255,6 +257,25 @@ NSPersistentContainer *_persistentContainer;
             [searchItems addObject:searchItem];
         }];
         completion(searchItems);
+    }];
+}
+
+- (void)loadDetailsByUUID:(NSString *)uuid withCompletion:(void (^)(PlaceDetails * _Nonnull))completion {
+    __weak typeof(self) weakSelf = self;
+    [self.ctx performBlockAndWait:^{
+        __strong typeof(self) strongSelf = weakSelf;
+        NSError *error;
+        NSFetchRequest *fetchRequestSearchItem = [StoredPlaceDetails fetchRequest];
+        fetchRequestSearchItem.predicate = [NSPredicate predicateWithFormat:@"uuid == %@", uuid];
+        NSArray<StoredPlaceDetails *> *fetchResult = [strongSelf.ctx executeFetchRequest:fetchRequestSearchItem error:&error];
+        StoredPlaceDetails *storedDetails = [fetchResult firstObject];
+        if (storedDetails) {
+            PlaceDetails *details = [[PlaceDetails alloc] init];
+            details.address = storedDetails.address;
+            details.images = [storedDetails.imageURLs componentsSeparatedByString:@","];
+            details.sections = @[[[NSString alloc] initWithData:storedDetails.descriptionText encoding:NSUTF8StringEncoding]];
+            completion(details);
+        }
     }];
 }
 
