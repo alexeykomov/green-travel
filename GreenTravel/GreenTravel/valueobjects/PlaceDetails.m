@@ -10,4 +10,24 @@
 
 @implementation PlaceDetails
 
+- (BOOL)isEqual:(id)other
+{
+    if (other == self) {
+        return YES;
+    } else if (![super isEqual:other]) {
+        return NO;
+    } else if ([other isKindOfClass:PlaceDetails.class]) {
+        PlaceDetails *otherDetails = (PlaceDetails *)other;
+        return [self.address isEqualToString:otherDetails.address] &&
+        [self.images isEqualToArray:otherDetails.images] &&
+        [self.descriptionHTML isEqualToString:otherDetails.descriptionHTML];
+    } else {
+        return NO;
+    }
+}
+
+- (NSUInteger)hash {
+    return self.address.hash + self.images.hash + self.descriptionHTML.hash;
+}
+
 @end

@@ -19,6 +19,7 @@
 #import "BookmarksModel.h"
 #import "CategoryUtils.h"
 #import "PlaceDetails.h"
+#import "TextUtils.h"
 
 @interface CoreDataService ()
 
@@ -219,11 +220,11 @@ NSPersistentContainer *_persistentContainer;
         }
     }];
     if (foundItem) {
-        [weakSelf reoder];
+        [weakSelf reorder];
     }
 }
 
-- (void)reoder {
+- (void)reorder {
     __weak typeof(self) weakSelf = self;
     [self.ctx performBlockAndWait:^{
         NSError *error;
@@ -260,7 +261,7 @@ NSPersistentContainer *_persistentContainer;
     }];
 }
 
-- (void)loadDetailsByUUID:(NSString *)uuid withCompletion:(void (^)(PlaceDetails * _Nonnull))completion {
+- (void)loadDetailsByUUID:(NSString *)uuid withCompletion:(void (^)(PlaceDetails *))completion {
     __weak typeof(self) weakSelf = self;
     [self.ctx performBlockAndWait:^{
         __strong typeof(self) strongSelf = weakSelf;
@@ -273,9 +274,33 @@ NSPersistentContainer *_persistentContainer;
             PlaceDetails *details = [[PlaceDetails alloc] init];
             details.address = storedDetails.address;
             details.images = [storedDetails.imageURLs componentsSeparatedByString:@","];
-            details.sections = @[[[NSString alloc] initWithData:storedDetails.descriptionText encoding:NSUTF8StringEncoding]];
+            details.descriptionHTML = storedDetails.descriptionHTML;
             completion(details);
+            return;
         }
+        completion(nil);
+    }];
+}
+
+- (void)savePlaceDetails:(PlaceDetails *)details forUUID:(NSString *)uuid {
+    __weak typeof(self) weakSelf = self;
+    [self.ctx performBlockAndWait:^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        NSError *error;
+        NSFetchRequest *fetchRequestSearchItem = [StoredPlaceDetails fetchRequest];
+        fetchRequestSearchItem.predicate = [NSPredicate predicateWithFormat:@"uuid == %@", uuid];
+        NSArray<StoredPlaceDetails *> *fetchResult = [strongSelf.ctx executeFetchRequest:fetchRequestSearchItem error:&error];
+        StoredPlaceDetails *storedDetails = [fetchResult firstObject];
+        if (storedDetails) {
+            [strongSelf.ctx deleteObject:storedDetails];
+            [strongSelf.ctx save:&error];
+        };
+        storedDetails = [NSEntityDescription insertNewObjectForEntityForName:@"StoredPlaceDetails" inManagedObjectContext:strongSelf.ctx];
+        storedDetails.uuid = uuid;
+        storedDetails.address = details.address;
+        storedDetails.descriptionHTML = details.descriptionHTML;
+        storedDetails.imageURLs = [details.images componentsJoinedByString:@","];
+        [strongSelf.ctx save:&error];
     }];
 }
 

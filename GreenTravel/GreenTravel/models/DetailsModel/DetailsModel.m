@@ -14,6 +14,7 @@
 #import "BookmarkItem.h"
 #import "ApiService.h"
 #import "CoreDataService.h"
+#import "PlaceDetails.h"
 
 @interface DetailsModel()
 
@@ -72,15 +73,17 @@
 - (void)loadDetailsByUUID:(NSString *)uuid {
     __weak typeof(self) weakSelf = self;
     [self.coreDataService loadDetailsByUUID:uuid withCompletion:^(PlaceDetails * _Nonnull details) {
-        [weakSelf updateDetails:details forUUID:uuid];
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (details) {
+            [weakSelf updateDetails:details forUUID:uuid];
+        }
         [self.apiService loadDetailsByUUID:uuid withCompletion:^(PlaceDetails * _Nonnull newDetails) {
-            if (!isCategoriesEqual(details, newDetails)) {
-                [weakSelf updateDetails:details forUUID:uuid];
-                [strongSelf.coreDataService savePlaceDetails:details];
+            if (![details isEqual:newDetails]) {
+                [strongSelf updateDetails:newDetails forUUID:uuid];
+                [strongSelf.coreDataService savePlaceDetails:newDetails forUUID:uuid];
             }
         }];
     }];
-    
 }
 
 - (void)addObserver:(nonnull id<DetailsObserver>)observer {

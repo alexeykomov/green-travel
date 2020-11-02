@@ -236,7 +236,7 @@
             });
         });
     }
-    NSAttributedString *html = getAttributedStringFromHTML(details.sections[0]);
+    NSAttributedString *html = getAttributedStringFromHTML(details.descriptionHTML);
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.ready) {
             self.ready = YES;

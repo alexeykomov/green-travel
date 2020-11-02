@@ -10,7 +10,7 @@
     </entity>
     <entity name="StoredPlaceDetails" representedClassName="StoredPlaceDetails" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String"/>
-        <attribute name="descriptionText" optional="YES" attributeType="Binary"/>
+        <attribute name="descriptionHTML" optional="YES" attributeType="String"/>
         <attribute name="imageURLs" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
     </entity>
@@ -35,6 +35,6 @@
         <element name="StoredCategory" positionX="-63" positionY="54" width="128" height="133"/>
         <element name="StoredPlaceItem" positionX="-63" positionY="-18" width="128" height="193"/>
         <element name="StoredSearchItem" positionX="-54" positionY="72" width="128" height="88"/>
-        <element name="StoredPlaceDetails" positionX="-54" positionY="72" width="128" height="28"/>
+        <element name="StoredPlaceDetails" positionX="-54" positionY="72" width="128" height="103"/>
     </elements>
 </model>

@@ -13,6 +13,7 @@
 #import "PlaceItem.h"
 #import "PlaceDetails.h"
 #import <CoreLocation/CoreLocation.h>
+#import "TextUtils.h"
 
 static NSString * const kGetCategoriesURL = @"http://localhost:3000/categories";
 static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@";
@@ -88,19 +89,12 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
         if (!data) {
             return;
         }
-        
         NSDictionary *detailsFromAPI = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         NSLog(@"Details from API: %@", detailsFromAPI);
         PlaceDetails *parsedDetails = [[PlaceDetails alloc] init];
         parsedDetails.images = detailsFromAPI[@"images"];
         parsedDetails.address = detailsFromAPI[@"address"];
-        NSArray *sections = detailsFromAPI[@"sections"];
-        NSMutableArray *parsedSections = [[NSMutableArray alloc] init];
-//        [sections enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger section, BOOL * _Nonnull stop) {
-//
-//            [parsedSections addObject:section];
-//        }]
-        parsedDetails.sections = detailsFromAPI[@"sections"];
+        parsedDetails.descriptionHTML = [detailsFromAPI[@"sections"] firstObject];
         //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             completion(parsedDetails);
         //});

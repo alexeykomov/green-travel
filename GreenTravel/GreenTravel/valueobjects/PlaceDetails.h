@@ -12,9 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PlaceDetails : NSObject
 
+@property (strong, nonatomic) NSString *uuid;
 @property (strong, nonatomic) NSArray<NSString *> *images;
 @property (strong, nonatomic) NSString *address;
-@property (strong, nonatomic) NSArray<NSString *> *sections;
+@property (strong, nonatomic) NSString *descriptionHTML;
+- (BOOL)isEqual:(id)object;
+@property (readonly) NSUInteger hash;
 
 @end 
 
