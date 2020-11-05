@@ -72,18 +72,21 @@
 
 - (void)loadDetailsByUUID:(NSString *)uuid {
     __weak typeof(self) weakSelf = self;
-    [self.coreDataService loadDetailsByUUID:uuid withCompletion:^(PlaceDetails * _Nonnull details) {
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (details) {
-            [weakSelf updateDetails:details forUUID:uuid];
-        }
-        [self.apiService loadDetailsByUUID:uuid withCompletion:^(PlaceDetails * _Nonnull newDetails) {
-            if (![details isEqual:newDetails]) {
-                [strongSelf updateDetails:newDetails forUUID:uuid];
-                [strongSelf.coreDataService savePlaceDetails:newDetails forUUID:uuid];
+        [self.coreDataService loadDetailsByUUID:uuid withCompletion:^(PlaceDetails * _Nonnull details) {
+            if (details) {
+                [weakSelf updateDetails:details forUUID:uuid];
             }
+            [self.apiService loadDetailsByUUID:uuid withCompletion:^(PlaceDetails * _Nonnull newDetails) {
+                if (![details isEqual:newDetails]) {
+                    [strongSelf updateDetails:newDetails forUUID:uuid];
+                    [strongSelf.coreDataService savePlaceDetails:newDetails forUUID:uuid];
+                }
+            }];
         }];
-    }];
+    });
+    
 }
 
 - (void)addObserver:(nonnull id<DetailsObserver>)observer {

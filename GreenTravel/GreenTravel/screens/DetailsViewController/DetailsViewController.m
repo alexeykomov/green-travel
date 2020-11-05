@@ -27,8 +27,10 @@
 @property (strong, nonatomic) UILabel *addressLabel;
 @property (strong, nonatomic) UILabel *locationLabel;
 @property (strong, nonatomic) UIImageView *previewImageView;
-@property (strong, nonatomic) UIButton *mapButton;
+@property (strong, nonatomic) UIButton *mapButtonTop;
+@property (strong, nonatomic) UIButton *mapButtonBottom;
 @property (strong, nonatomic) UITextView *descriptionTextView;
+@property (strong, nonatomic) UILabel *interestingLabel;
 @property (strong, nonatomic) UIView *activityIndicatorContainerView;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicatorView;
 @property (strong, nonatomic) ApiService *apiService;
@@ -152,41 +154,82 @@
 
     ]];
     
-    #pragma mark - Go to map button
-    self.mapButton = [[UIButton alloc] init];
-    self.mapButton.translatesAutoresizingMaskIntoConstraints = NO;
-    self.mapButton.backgroundColor = [Colors get].apple;
-    self.mapButton.layer.cornerRadius = 8.0;
-    self.mapButton.layer.masksToBounds = YES;
-    [self.mapButton.titleLabel setFont:[UIFont fontWithName:@"OpenSans-Bold" size:14.0]];
-    [self.mapButton setAttributedTitle:getAttributedString(@"Как добраться", [Colors get].white, 14.0, UIFontWeightBold) forState:UIControlStateNormal];
+    #pragma mark - Map button top
+    self.mapButtonTop = [[UIButton alloc] init];
+    self.mapButtonTop.translatesAutoresizingMaskIntoConstraints = NO;
+    self.mapButtonTop.backgroundColor = [Colors get].apple;
+    self.mapButtonTop.layer.cornerRadius = 8.0;
+    self.mapButtonTop.layer.masksToBounds = YES;
+    [self.mapButtonTop.titleLabel setFont:[UIFont fontWithName:@"OpenSans-Bold" size:14.0]];
+    [self.mapButtonTop setAttributedTitle:getAttributedString(@"Как добраться", [Colors get].white, 14.0, UIFontWeightBold) forState:UIControlStateNormal];
     
-    [self.mapButton addTarget:self action:@selector(onMapButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+    [self.mapButtonTop addTarget:self action:@selector(onMapButtonPress:) forControlEvents:UIControlEventTouchUpInside];
 
-    [self.contentView addSubview:self.mapButton];
+    [self.contentView addSubview:self.mapButtonTop];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.mapButton.topAnchor constraintEqualToAnchor:self.locationLabel.bottomAnchor constant:20.0],
-        [self.mapButton.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
-        [self.mapButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
-        [self.mapButton.widthAnchor constraintLessThanOrEqualToConstant:343.0],
-        [self.mapButton.heightAnchor constraintEqualToConstant:48.0],
+        [self.mapButtonTop.topAnchor constraintEqualToAnchor:self.locationLabel.bottomAnchor constant:20.0],
+        [self.mapButtonTop.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
+        [self.mapButtonTop.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
+        [self.mapButtonTop.widthAnchor constraintLessThanOrEqualToConstant:343.0],
+        [self.mapButtonTop.heightAnchor constraintEqualToConstant:48.0],
     ]];
     
     #pragma mark - Description text
     self.descriptionTextView = [[UITextView alloc] init];
-    [self.mapButton.titleLabel setFont:[UIFont fontWithName:@"OpenSans-Regular" size:16.0]];
-    
+
+    self.descriptionTextView.backgroundColor = [Colors get].apple;
+
     self.descriptionTextView.translatesAutoresizingMaskIntoConstraints = NO;
     self.descriptionTextView.editable = NO;
     self.descriptionTextView.scrollEnabled = NO;
     [self.contentView addSubview:self.descriptionTextView];
-    
+
     [NSLayoutConstraint activateConstraints:@[
-        [self.descriptionTextView.topAnchor constraintEqualToAnchor:self.mapButton.bottomAnchor constant:26.0],
+        [self.descriptionTextView.topAnchor constraintEqualToAnchor:self.mapButtonTop.bottomAnchor constant:26.0],
         [self.descriptionTextView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
         [self.descriptionTextView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
-        [self.descriptionTextView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-31.0],
+    ]];
+        
+    #pragma mark - "Will be interesting" label
+    self.interestingLabel = [[UILabel alloc] init];
+
+    self.interestingLabel.numberOfLines = 2;
+    [self.interestingLabel setFont:[UIFont fontWithName:@"Montserrat-SemiBold" size:20.0]];
+    self.interestingLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.interestingLabel.attributedText =
+    getAttributedString(@"Будет интересно", [Colors get].black, 20.0,
+                        UIFontWeightSemibold);
+
+    [self.contentView addSubview:self.interestingLabel];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [self.interestingLabel.topAnchor constraintEqualToAnchor:self.descriptionTextView.bottomAnchor constant:32.0],
+        [self.interestingLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
+        [self.interestingLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
+
+    ]];
+        
+    #pragma mark - Map button bottom
+    self.mapButtonBottom = [[UIButton alloc] init];
+    self.mapButtonBottom.translatesAutoresizingMaskIntoConstraints = NO;
+    self.mapButtonBottom.backgroundColor = [Colors get].apple;
+    self.mapButtonBottom.layer.cornerRadius = 8.0;
+    self.mapButtonBottom.layer.masksToBounds = YES;
+    [self.mapButtonBottom.titleLabel setFont:[UIFont fontWithName:@"OpenSans-Bold" size:14.0]];
+    [self.mapButtonBottom setAttributedTitle:getAttributedString(@"Как добраться", [Colors get].white, 14.0, UIFontWeightBold) forState:UIControlStateNormal];
+
+    [self.mapButtonBottom addTarget:self action:@selector(onMapButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+
+    [self.contentView addSubview:self.mapButtonBottom];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [self.mapButtonBottom.topAnchor constraintEqualToAnchor:self.interestingLabel.bottomAnchor constant:32.0],
+        [self.mapButtonBottom.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
+        [self.mapButtonBottom.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
+        [self.mapButtonBottom.widthAnchor constraintLessThanOrEqualToConstant:343.0],
+        [self.mapButtonBottom.heightAnchor constraintEqualToConstant:48.0],
+        [self.mapButtonBottom.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-37.5],
     ]];
     
 #pragma mark - Activity indicator
@@ -243,7 +286,7 @@
             [self.activityIndicatorContainerView setHidden:YES];
             [self.activityIndicatorView stopAnimating];
         }
-        weakSelf.titleLabel.attributedText = getAttributedString(item.title, [Colors get].black, 20.0, UIFontWeightSemibold) ;
+        weakSelf.titleLabel.attributedText = getAttributedString(item.title, [Colors get].black, 20.0, UIFontWeightSemibold);
         weakSelf.addressLabel.attributedText = getAttributedString(details.address, [Colors get].black, 14.0, UIFontWeightRegular);
         weakSelf.locationLabel.attributedText = getAttributedString([NSString stringWithFormat:@"%f° N, %f° E", item.coords.longitude, item.coords.latitude], [Colors get].black, 14.0, UIFontWeightRegular);
         [weakSelf.descriptionTextView setAttributedText:html];
