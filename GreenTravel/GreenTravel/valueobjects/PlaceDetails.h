@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class CategoryUUIDToRelatedItemUUIDs;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PlaceDetails : NSObject
@@ -18,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *descriptionHTML;
 - (BOOL)isEqual:(id)object;
 @property (readonly) NSUInteger hash;
+@property (strong, nonatomic) NSArray<CategoryUUIDToRelatedItemUUIDs *> *categoryIdToItems;
 
 @end 
 

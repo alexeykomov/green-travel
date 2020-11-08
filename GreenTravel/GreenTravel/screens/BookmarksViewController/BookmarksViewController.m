@@ -175,7 +175,7 @@ static const CGFloat kSpacing = 12.0;
                                         detailsModel:self.detailsModel
                                             mapModel:self.mapModel
                                        locationModel:self.locationModel
-                                          bookmarked:YES];
+                                          bookmarked:YES allowedItemUUIDs:nil];
     placesViewController.category = bookmarkItem.correspondingCategory;
     [self.navigationController pushViewController:placesViewController animated:YES];
 }

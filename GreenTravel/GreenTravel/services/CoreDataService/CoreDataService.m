@@ -275,6 +275,7 @@ NSPersistentContainer *_persistentContainer;
             details.address = storedDetails.address;
             details.images = [storedDetails.imageURLs componentsSeparatedByString:@","];
             details.descriptionHTML = storedDetails.descriptionHTML;
+            details.categoryIdToItems = @[];
             completion(details);
             return;
         }

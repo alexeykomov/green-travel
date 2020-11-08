@@ -28,8 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
                       detailsModel:(DetailsModel *)detailsModel
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel
-                        bookmarked:(BOOL)bookmarked;
-
+                        bookmarked:(BOOL)bookmarked
+                  allowedItemUUIDs:(nullable NSOrderedSet<NSString *> *) allowedItemUUIDs;
 
 @end
 

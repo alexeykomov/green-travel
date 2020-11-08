@@ -18,10 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 @class ApiService;
 @class DetailsModel;
 @class CoreDataService;
+@class IndexModel;
 
 @interface SearchViewController : UITableViewController<UISearchResultsUpdating, SearchItemsObserver, CLLocationManagerDelegate>
 
 - (instancetype)initWithModel:(SearchModel *)model
+                   indexModel:(IndexModel *)indexModel
                 locationModel:(LocationModel *)locationModel
                      mapModel:(MapModel *)mapModel
                    apiService:(ApiService *)apiService

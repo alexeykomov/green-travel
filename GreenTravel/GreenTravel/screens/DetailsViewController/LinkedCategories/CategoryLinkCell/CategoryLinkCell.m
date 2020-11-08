@@ -1,0 +1,84 @@
+//
+//  CategoryLinkCell.m
+//  GreenTravel
+//
+//  Created by Alex K on 11/7/20.
+//  Copyright © 2020 Alex K. All rights reserved.
+//
+
+#import "CategoryLinkCell.h"
+#import "Colors.h"
+#import "TextUtils.h"
+#import "Category.h"
+
+@interface CategoryLinkCell ()
+
+@property (strong, nonatomic) UIImageView *icon;
+@property (strong, nonatomic) UILabel *title;
+@property (strong, nonatomic) UIImageView *chevron;
+
+@end
+
+@implementation CategoryLinkCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        [self setUp];
+    }
+    return self;
+}
+
+- (void)setUp {
+#pragma mark - Image
+    self.icon = [[UIImageView alloc] init];
+    [self addSubview:self.icon];
+    
+    self.icon.contentMode = UIViewContentModeScaleAspectFill;
+    self.icon.translatesAutoresizingMaskIntoConstraints = NO;
+    self.icon.backgroundColor = [Colors get].blue;
+    
+    self.icon.layer.cornerRadius = 16.0;
+    self.icon.layer.masksToBounds = YES;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.icon.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+        [self.icon.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
+        [self.icon.widthAnchor constraintEqualToConstant:32.0],
+        [self.icon.heightAnchor constraintEqualToConstant:32.0],
+    ]];
+    
+#pragma mark - Header label
+    self.title = [[UILabel alloc] init];
+    [self addSubview:self.title];
+    
+    self.title.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.title setFont:[UIFont fontWithName:@"OpenSans-Regular" size:16.0]];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.title.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+        [self.title.leadingAnchor constraintEqualToAnchor:self.icon.trailingAnchor constant:10.0],
+    ]];
+    
+#pragma mark - Chevron
+    self.chevron = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
+    [self addSubview:self.chevron];
+    
+    self.chevron.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.chevron.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+        [self.chevron.leadingAnchor constraintEqualToAnchor:self.title.trailingAnchor constant:10.0],
+        [self.chevron.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-19.0],
+    ]];
+}
+
+- (void)update:(Category *)category {
+    self.title.attributedText = getAttributedString(category.title, [Colors get].black, 16.0, UIFontWeightRegular);
+    //[self.icon setImage:[UIImage imageNamed:category.icon]];
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+}
+@end

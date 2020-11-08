@@ -27,6 +27,7 @@
 @property (strong, nonatomic) NSMutableArray<SearchItem *> *dataSourceFiltered;
 @property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) SearchModel *model;
+@property (strong, nonatomic) IndexModel *indexModel;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) CLLocation *lastLocation;
@@ -49,6 +50,7 @@ static const CGFloat kSearchRowHeight = 40.0;
 @implementation SearchViewController
 
 - (instancetype)initWithModel:(SearchModel *)model
+                indexModel:(IndexModel *)indexModel
                 locationModel:(LocationModel *)locationModel
                      mapModel:(MapModel *)mapModel
                    apiService:(ApiService *)apiService
@@ -58,6 +60,7 @@ static const CGFloat kSearchRowHeight = 40.0;
     self = [super init];
     if (self) {
         _model = model;
+        _indexModel = indexModel;
         _locationModel = locationModel;
         _mapModel = mapModel;
         _detailsModel = detailsModel;
@@ -174,7 +177,7 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    DetailsViewController *detailsController = [[DetailsViewController alloc] initWithApiService:self.apiService detailsModel:self.detailsModel mapModel:self.mapModel locationModel:self.locationModel];
+    DetailsViewController *detailsController = [[DetailsViewController alloc] initWithApiService:self.apiService detailsModel:self.detailsModel indexModel:self.indexModel mapModel:self.mapModel locationModel:self.locationModel];
     if ([self isSearching]) {
         SearchItem *searchItem = self.dataSourceFiltered[indexPath.row];
         detailsController.item = searchItem.correspondingPlaceItem;

@@ -18,6 +18,7 @@
 #import "ImageUtils.h"
 #import "TextUtils.h"
 #import "MapViewController.h"
+#import "LinkedCategoriesView.h"
 
 @interface DetailsViewController ()
 
@@ -31,6 +32,8 @@
 @property (strong, nonatomic) UIButton *mapButtonBottom;
 @property (strong, nonatomic) UITextView *descriptionTextView;
 @property (strong, nonatomic) UILabel *interestingLabel;
+@property (strong, nonatomic) LinkedCategoriesView *linkedCategoriesView;
+@property (strong, nonatomic) NSLayoutConstraint *linkedCategoriesViewHeightConstraint;
 @property (strong, nonatomic) UIView *activityIndicatorContainerView;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicatorView;
 @property (strong, nonatomic) ApiService *apiService;
@@ -38,6 +41,7 @@
 @property (assign, nonatomic) BOOL ready;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) MapModel *mapModel;
+@property (strong, nonatomic) IndexModel *indexModel;
 @property (strong, nonatomic) DetailsModel *detailsModel;
 @property (strong, nonatomic) PlaceDetails *details;
 @property (strong, nonatomic) NSLayoutConstraint *aspectRatioConstraint;
@@ -48,6 +52,7 @@
 
 - (instancetype)initWithApiService:(ApiService *)apiService
                       detailsModel:(DetailsModel *)detailsModel
+                      indexModel:(IndexModel *)indexModel
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel
 {
@@ -56,6 +61,7 @@
         _apiService = apiService;
         _detailsModel = detailsModel;
         _mapModel = mapModel;
+        _indexModel = indexModel;
         _locationModel = locationModel;
     }
     return self;
@@ -178,7 +184,7 @@
     #pragma mark - Description text
     self.descriptionTextView = [[UITextView alloc] init];
 
-    self.descriptionTextView.backgroundColor = [Colors get].apple;
+    //self.descriptionTextView.backgroundColor = [Colors get].apple;
 
     self.descriptionTextView.translatesAutoresizingMaskIntoConstraints = NO;
     self.descriptionTextView.editable = NO;
@@ -209,6 +215,33 @@
         [self.interestingLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
 
     ]];
+    
+    #pragma mark - Linked items
+    __weak typeof(self) weakSelf = self;
+    self.linkedCategoriesView =
+    [[LinkedCategoriesView alloc] initWithIndexModel:self.indexModel
+                                          apiService:self.apiService
+                                        detailsModel:self.detailsModel
+                                            mapModel:self.mapModel
+                                       locationModel:self.locationModel
+                          pushToNavigationController:^(PlacesViewController * _Nonnull placesViewController) {
+        [weakSelf.navigationController pushViewController:(UIViewController *)placesViewController
+                                                 animated:YES];
+    }];
+
+    self.linkedCategoriesView.backgroundColor = [Colors get].apple;
+    
+    self.linkedCategoriesView.scrollEnabled = NO;
+    self.linkedCategoriesView.alwaysBounceVertical = NO;
+    self.linkedCategoriesView.translatesAutoresizingMaskIntoConstraints = NO;
+
+    [self.contentView addSubview:self.linkedCategoriesView];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.linkedCategoriesView.topAnchor constraintEqualToAnchor:self.interestingLabel.bottomAnchor constant:18.0],
+        [self.linkedCategoriesView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0],
+        [self.linkedCategoriesView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0],
+    ]];
         
     #pragma mark - Map button bottom
     self.mapButtonBottom = [[UIButton alloc] init];
@@ -224,7 +257,7 @@
     [self.contentView addSubview:self.mapButtonBottom];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.mapButtonBottom.topAnchor constraintEqualToAnchor:self.interestingLabel.bottomAnchor constant:32.0],
+        [self.mapButtonBottom.topAnchor constraintEqualToAnchor:self.linkedCategoriesView.bottomAnchor constant:32.0],
         [self.mapButtonBottom.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
         [self.mapButtonBottom.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
         [self.mapButtonBottom.widthAnchor constraintLessThanOrEqualToConstant:343.0],
@@ -290,6 +323,17 @@
         weakSelf.addressLabel.attributedText = getAttributedString(details.address, [Colors get].black, 14.0, UIFontWeightRegular);
         weakSelf.locationLabel.attributedText = getAttributedString([NSString stringWithFormat:@"%f° N, %f° E", item.coords.longitude, item.coords.latitude], [Colors get].black, 14.0, UIFontWeightRegular);
         [weakSelf.descriptionTextView setAttributedText:html];
+        [weakSelf.linkedCategoriesView update:details.categoryIdToItems];
+        
+        if (weakSelf.linkedCategoriesViewHeightConstraint) {
+            [NSLayoutConstraint deactivateConstraints:@[weakSelf.linkedCategoriesViewHeightConstraint]];
+        }
+        weakSelf.linkedCategoriesViewHeightConstraint = [weakSelf.linkedCategoriesView.heightAnchor constraintEqualToConstant:[details.categoryIdToItems count] * 46.0];
+        [NSLayoutConstraint activateConstraints:@[
+            weakSelf.linkedCategoriesViewHeightConstraint
+        ]];
+        [weakSelf.linkedCategoriesView layoutIfNeeded];
+        
     });
 }
 

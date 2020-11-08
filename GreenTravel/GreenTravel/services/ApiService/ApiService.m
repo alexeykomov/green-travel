@@ -14,6 +14,7 @@
 #import "PlaceDetails.h"
 #import <CoreLocation/CoreLocation.h>
 #import "TextUtils.h"
+#import "CategoryUUIDToRelatedItemUUIDs.h"
 
 static NSString * const kGetCategoriesURL = @"http://localhost:3000/categories";
 static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@";
@@ -84,7 +85,6 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
 
 - (void)loadDetailsByUUID:(NSString *)uuid withCompletion:(void(^)(PlaceDetails*))completion{
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:kGetDetailsBaseURL, uuid]];
-    __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (!data) {
             return;
@@ -95,10 +95,20 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
         parsedDetails.images = detailsFromAPI[@"images"];
         parsedDetails.address = detailsFromAPI[@"address"];
         parsedDetails.descriptionHTML = [detailsFromAPI[@"sections"] firstObject];
-        //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            completion(parsedDetails);
-        //});
+        NSMutableArray *categoryIdToItems = [[NSMutableArray alloc] init];
         
+        NSArray<NSArray*> *linkedCategoriesFromAPI = (NSArray<NSArray*>*) detailsFromAPI[@"linkedCategories"];
+        [linkedCategoriesFromAPI enumerateObjectsUsingBlock:^(NSArray * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *categoryId = obj[0];
+            NSArray<NSString *> *linkedItemIds = [obj[1] copy];
+            CategoryUUIDToRelatedItemUUIDs *categoryUUIDToRelatedItemUUIDs = [[CategoryUUIDToRelatedItemUUIDs alloc] init];
+            categoryUUIDToRelatedItemUUIDs.categoryUUID = categoryId;
+            categoryUUIDToRelatedItemUUIDs.relatedItemUUIDs = [[NSOrderedSet alloc] initWithArray:linkedItemIds];
+            [categoryIdToItems addObject:categoryUUIDToRelatedItemUUIDs];
+        }];
+        parsedDetails.categoryIdToItems = categoryIdToItems;
+        
+        completion(parsedDetails);
     }];
     
     [task resume];

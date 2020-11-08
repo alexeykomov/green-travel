@@ -8,9 +8,27 @@
 
 #import <UIKit/UIKit.h>
 
+@class Category;
+@class ApiService;
+@class DetailsModel;
+@class MapModel;
+@class LocationModel;
+@class IndexModel;
+@class CategoryUUIDToRelatedItemUUIDs;
+@class PlacesViewController;
+
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LinkedCategoriesView : UITableView<UITableViewDataSource>
+@interface LinkedCategoriesView : UITableView<UITableViewDataSource, UITableViewDelegate>
+
+- (instancetype)initWithIndexModel:(IndexModel *)indexModel
+                     apiService:(nonnull ApiService *)apiService
+                   detailsModel:(nonnull DetailsModel *)detailsModel
+                       mapModel:(nonnull MapModel *)mapModel
+                  locationModel:(nonnull LocationModel *)locationModel
+     pushToNavigationController:(void(^)(PlacesViewController *))pushToNavigationController;
+
+- (void)update:(NSArray<CategoryUUIDToRelatedItemUUIDs *>*)categoryIdToItems;
 
 @end
 

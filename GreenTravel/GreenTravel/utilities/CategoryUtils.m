@@ -65,3 +65,24 @@ BOOL isCategoriesEqual(NSArray<Category *> *categoriesA, NSArray<Category *> *ca
     return equal;
 }
 
+NSMutableDictionary<NSString *, Category *>* flattenCategoriesTreeIntoCategoriesMap(NSArray<Category *> *categories) {
+    NSMutableDictionary *flatCategories = [[NSMutableDictionary alloc] init];
+    traverseCategories(categories, ^(Category *category, PlaceItem *placeItem) {
+        if (flatCategories[category.uuid]) {
+            return;
+        }
+        [flatCategories setValue:category forKey:category.uuid];
+    });
+    return flatCategories;
+}
+
+NSMutableDictionary<NSString *, PlaceItem *>* flattenCategoriesTreeIntoItemsMap(NSArray<Category *> *categories) {
+    NSMutableDictionary *flatCategories = [[NSMutableDictionary alloc] init];
+    traverseCategories(categories, ^(Category *category, PlaceItem *placeItem) {
+        if (flatCategories[category.uuid]) {
+            return;
+        }
+        [flatCategories setValue:category forKey:category.uuid];
+    });
+    return flatCategories;
+}

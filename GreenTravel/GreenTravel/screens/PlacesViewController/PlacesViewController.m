@@ -41,6 +41,7 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel
                         bookmarked:(BOOL)bookmarked
+                  allowedItemUUIDs:(NSOrderedSet<NSString *> *)allowedItemUUIDs;
 {
     self = [super init];
     if (self) {
@@ -159,7 +160,8 @@ static const CGFloat kSpacing = 12.0;
                                             detailsModel:self.detailsModel
                                                 mapModel:self.mapModel
                                            locationModel:self.locationModel
-                                              bookmarked:NO];
+                                              bookmarked:NO
+                                        allowedItemUUIDs:nil];
         placesViewController.category = category;
         [self.navigationController pushViewController:placesViewController animated:YES];
         
@@ -171,7 +173,7 @@ static const CGFloat kSpacing = 12.0;
     } else {
         item = self.category.items[indexPath.row];
     }
-    DetailsViewController *detailsViewController = [[DetailsViewController alloc] initWithApiService:self.apiService detailsModel:self.detailsModel mapModel:self.mapModel locationModel:self.locationModel];
+    DetailsViewController *detailsViewController = [[DetailsViewController alloc] initWithApiService:self.apiService detailsModel:self.detailsModel indexModel:self.indexModel mapModel:self.mapModel locationModel:self.locationModel];
     detailsViewController.item = item;
     [self.navigationController pushViewController:detailsViewController animated:YES];
 }

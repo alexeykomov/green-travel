@@ -16,11 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
 @class DetailsModel;
 @class MapModel;
 @class LocationModel;
+@class IndexModel;
 
 @interface DetailsViewController : UIViewController <DetailsObserver>
 
 - (instancetype)initWithApiService:(ApiService *)apiService
                       detailsModel:(DetailsModel *)detailsModel
+                        indexModel:(IndexModel *)indexModel
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel;
 @property (strong, nonatomic) PlaceItem *item;
