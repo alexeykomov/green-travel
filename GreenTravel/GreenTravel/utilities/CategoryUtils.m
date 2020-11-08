@@ -77,12 +77,12 @@ NSMutableDictionary<NSString *, Category *>* flattenCategoriesTreeIntoCategories
 }
 
 NSMutableDictionary<NSString *, PlaceItem *>* flattenCategoriesTreeIntoItemsMap(NSArray<Category *> *categories) {
-    NSMutableDictionary *flatCategories = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *flatItems = [[NSMutableDictionary alloc] init];
     traverseCategories(categories, ^(Category *category, PlaceItem *placeItem) {
-        if (flatCategories[category.uuid]) {
+        if (!placeItem || flatItems[placeItem.uuid]) {
             return;
         }
-        [flatCategories setValue:category forKey:category.uuid];
+        [flatItems setValue:placeItem forKey:placeItem.uuid];
     });
-    return flatCategories;
+    return flatItems;
 }

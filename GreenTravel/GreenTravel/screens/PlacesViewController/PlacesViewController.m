@@ -27,6 +27,8 @@
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) IndexModel *indexModel;
+@property (strong, nonatomic) NSOrderedSet<NSString *> *allowedItemUUIDs;
+@property (strong, nonatomic) NSMutableArray<PlaceItem *> *allowedItems;
 
 @end
 
@@ -54,6 +56,7 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
         _detailsModel = detailsModel;
         _mapModel = mapModel;
         _locationModel = locationModel;
+        _allowedItemUUIDs = allowedItemUUIDs;
     }
     return self;
 }
@@ -85,7 +88,14 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
             [self.navigationController popViewControllerAnimated:YES];
         }
     }
-    
+    if (self.allowedItemUUIDs) {
+        __weak typeof(self) weakSelf = self;
+        self.allowedItems = [[NSMutableArray alloc] init];
+        NSDictionary<NSString*, PlaceItem*> *flatItems = flattenCategoriesTreeIntoItemsMap(self.indexModel.categories);
+        [self.allowedItemUUIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull itemUUID, NSUInteger idx, BOOL * _Nonnull stop) {
+            [weakSelf.allowedItems addObject:flatItems[itemUUID]];
+        }];
+    }
     traverseCategories(@[self.category], ^(Category *category, PlaceItem *item) {
         category.onPlaceCellPress = ^{};
         item.onPlaceCellPress = ^{};
@@ -120,6 +130,9 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
     if (self.bookmarked) {
         return [self.bookmarkedItems count];
     }
+    if (self.allowedItemUUIDs) {
+        return [self.allowedItemUUIDs count];
+    }
     return [self.category.items count];
 }
 
@@ -130,6 +143,8 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
         [cell updateCategory:self.category.categories[indexPath.row]];
     } else if (self.bookmarked) {
         [cell updateItem:self.bookmarkedItems[indexPath.row]];
+    } else if (self.allowedItemUUIDs) {
+        [cell updateItem:self.allowedItems[indexPath.row]];
     } else {
         [cell updateItem:self.category.items[indexPath.row]];
     }
@@ -170,6 +185,8 @@ static const CGFloat kSpacing = 12.0;
     PlaceItem *item;
     if (self.bookmarked) {
         item = self.bookmarkedItems[indexPath.row];
+    } else if (self.allowedItems) {
+        item = self.allowedItems[indexPath.row];
     } else {
         item = self.category.items[indexPath.row];
     }
