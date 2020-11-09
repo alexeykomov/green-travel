@@ -8,11 +8,16 @@
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="StoredPlaceItem" inverseName="parent" inverseEntity="StoredPlaceItem"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StoredCategory" inverseName="categories" inverseEntity="StoredCategory"/>
     </entity>
+    <entity name="StoredCategoryUUIDToRelatedItemUUIDs" representedClassName="StoredCategoryUUIDToRelatedItemUUIDs" syncable="YES" codeGenerationType="class">
+        <attribute name="uuid" optional="YES" attributeType="String"/>
+        <relationship name="relatedItemUUIDs" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="StoredRelatedItemUUID"/>
+    </entity>
     <entity name="StoredPlaceDetails" representedClassName="StoredPlaceDetails" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String"/>
         <attribute name="descriptionHTML" optional="YES" attributeType="String"/>
         <attribute name="imageURLs" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
+        <relationship name="linkedCategories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="StoredCategoryUUIDToRelatedItemUUIDs"/>
     </entity>
     <entity name="StoredPlaceItem" representedClassName="StoredPlaceItem" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String"/>
@@ -26,6 +31,9 @@
         <attribute name="uuid" optional="YES" attributeType="String"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StoredCategory" inverseName="items" inverseEntity="StoredCategory"/>
     </entity>
+    <entity name="StoredRelatedItemUUID" representedClassName="StoredRelatedItemUUID" syncable="YES" codeGenerationType="class">
+        <attribute name="uuid" optional="YES" attributeType="String"/>
+    </entity>
     <entity name="StoredSearchItem" representedClassName="StoredSearchItem" syncable="YES">
         <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
@@ -33,8 +41,10 @@
     </entity>
     <elements>
         <element name="StoredCategory" positionX="-63" positionY="54" width="128" height="133"/>
+        <element name="StoredPlaceDetails" positionX="-54" positionY="72" width="128" height="118"/>
         <element name="StoredPlaceItem" positionX="-63" positionY="-18" width="128" height="193"/>
         <element name="StoredSearchItem" positionX="-54" positionY="72" width="128" height="88"/>
-        <element name="StoredPlaceDetails" positionX="-54" positionY="72" width="128" height="103"/>
+        <element name="StoredCategoryUUIDToRelatedItemUUIDs" positionX="-45" positionY="81" width="128" height="73"/>
+        <element name="StoredRelatedItemUUID" positionX="-36" positionY="90" width="128" height="58"/>
     </elements>
 </model>
