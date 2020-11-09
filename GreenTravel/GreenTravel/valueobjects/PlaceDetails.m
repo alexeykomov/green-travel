@@ -14,8 +14,6 @@
 {
     if (other == self) {
         return YES;
-    } else if (![super isEqual:other]) {
-        return NO;
     } else if ([other isKindOfClass:PlaceDetails.class]) {
         PlaceDetails *otherDetails = (PlaceDetails *)other;
         return [self.address isEqualToString:otherDetails.address] &&
@@ -23,7 +21,7 @@
         [self.descriptionHTML isEqualToString:otherDetails.descriptionHTML] &&
         [self.categoryIdToItems isEqualToArray:otherDetails.categoryIdToItems];
     } else {
-        return NO;
+        return [super isEqual:other];
     }
 }
 
