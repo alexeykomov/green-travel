@@ -2,18 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:GreenTravel/managedobjects/StoredPlaceDetails+CoreDataProperties.h">
-   </FileRef>
-   <FileRef
-      location = "group:GreenTravel/managedobjects/StoredPlaceDetails+CoreDataClass.h">
-   </FileRef>
-   <FileRef
-      location = "group:GreenTravel/managedobjects/StoredPlaceDetails+CoreDataClass.m">
-   </FileRef>
-   <FileRef
-      location = "group:GreenTravel/managedobjects/StoredPlaceDetails+CoreDataProperties.m">
-   </FileRef>
-   <FileRef
       location = "group:GreenTravel.xcodeproj">
    </FileRef>
    <FileRef

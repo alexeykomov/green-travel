@@ -12,6 +12,8 @@
 #import "StoredCategory+CoreDataProperties.h"
 #import "StoredSearchItem+CoreDataProperties.h"
 #import "StoredPlaceDetails+CoreDataProperties.h"
+#import "StoredCategoryUUIDToRelatedItemUUIDs+CoreDataProperties.h"
+#import "StoredRelatedItemUUID+CoreDataProperties.h"
 
 #import "PlaceItem.h"
 #import "Category.h"
@@ -20,6 +22,7 @@
 #import "CategoryUtils.h"
 #import "PlaceDetails.h"
 #import "TextUtils.h"
+#import "CategoryUUIDToRelatedItemUUIDs.h"
 
 @interface CoreDataService ()
 
@@ -275,7 +278,20 @@ NSPersistentContainer *_persistentContainer;
             details.address = storedDetails.address;
             details.images = [storedDetails.imageURLs componentsSeparatedByString:@","];
             details.descriptionHTML = storedDetails.descriptionHTML;
-            details.categoryIdToItems = @[];
+            
+            NSMutableArray<CategoryUUIDToRelatedItemUUIDs *> *categoryIdToItems = [[NSMutableArray alloc] init];
+            [storedDetails.linkedCategories enumerateObjectsUsingBlock:^(StoredCategoryUUIDToRelatedItemUUIDs * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                CategoryUUIDToRelatedItemUUIDs *categoryUUIDToRelatedItemUUIDs = [[CategoryUUIDToRelatedItemUUIDs alloc] init];
+                categoryUUIDToRelatedItemUUIDs.categoryUUID = obj.uuid;
+                NSMutableArray<NSString *> *relatedItemUUIDs = [[NSMutableArray alloc] init];
+                [obj.relatedItemUUIDs enumerateObjectsUsingBlock:^(StoredRelatedItemUUID * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    [relatedItemUUIDs addObject:obj.uuid];
+                }];
+                categoryUUIDToRelatedItemUUIDs.relatedItemUUIDs = [[NSOrderedSet alloc] initWithArray:relatedItemUUIDs];
+                [categoryIdToItems addObject:categoryUUIDToRelatedItemUUIDs];
+            }];
+            details.categoryIdToItems = categoryIdToItems;
+
             completion(details);
             return;
         }
@@ -301,6 +317,18 @@ NSPersistentContainer *_persistentContainer;
         storedDetails.address = details.address;
         storedDetails.descriptionHTML = details.descriptionHTML;
         storedDetails.imageURLs = [details.images componentsJoinedByString:@","];
+        // Save linked categories.
+        [details.categoryIdToItems enumerateObjectsUsingBlock:^(CategoryUUIDToRelatedItemUUIDs * _Nonnull categoryUUIDToRelatedItemUUIDs, NSUInteger idx, BOOL * _Nonnull stop) {
+            StoredCategoryUUIDToRelatedItemUUIDs *relatedCategoryUUIDs = [NSEntityDescription insertNewObjectForEntityForName:@"StoredCategoryUUIDToRelatedItemUUIDs" inManagedObjectContext:strongSelf.ctx];
+            relatedCategoryUUIDs.uuid = categoryUUIDToRelatedItemUUIDs.categoryUUID;
+            [categoryUUIDToRelatedItemUUIDs.relatedItemUUIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                StoredRelatedItemUUID *relatedItemUUID = [NSEntityDescription insertNewObjectForEntityForName:@"StoredRelatedItemUUID" inManagedObjectContext:strongSelf.ctx];
+                relatedItemUUID.uuid = obj;
+                [relatedCategoryUUIDs addRelatedItemUUIDsObject:relatedItemUUID];
+            }];
+            
+            [storedDetails addLinkedCategoriesObject:relatedCategoryUUIDs];
+        }];
         [strongSelf.ctx save:&error];
     }];
 }

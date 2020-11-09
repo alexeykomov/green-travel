@@ -2,7 +2,7 @@
 //  StoredPlaceDetails+CoreDataProperties.m
 //  
 //
-//  Created by Alex K on 11/5/20.
+//  Created by Alex K on 11/9/20.
 //
 //
 
@@ -14,9 +14,10 @@
 	return [NSFetchRequest fetchRequestWithEntityName:@"StoredPlaceDetails"];
 }
 
-@dynamic imageURLs;
-@dynamic descriptionHTML;
 @dynamic address;
+@dynamic descriptionHTML;
+@dynamic imageURLs;
 @dynamic uuid;
+@dynamic linkedCategories;
 
 @end
