@@ -8,6 +8,7 @@
 
 #import "TextUtils.h"
 #import <UIKit/UIKit.h>
+#import "NSMutableAttributedString+ChangeableFont.h"
 
 NSDictionary<NSAttributedStringKey, id>* getTextAttributes(UIColor* color, CGFloat size, UIFontWeight weight) {
     return @{
@@ -26,12 +27,14 @@ NSAttributedString* getAttributedStringFromHTML(NSString *html) {
     NSError *error;
     NSString *htmlWpappedWithStyles = [NSString stringWithFormat:@"<section style=\"%@\">%@</section>", kInlineStyle, html];
     NSData *data = [htmlWpappedWithStyles dataUsingEncoding:NSUTF8StringEncoding];
-    NSAttributedString *result = [[NSAttributedString alloc] initWithData:data
+    NSMutableAttributedString *result = [[NSMutableAttributedString alloc] initWithData:data
                                      options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
                                                NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)
                                      }
                           documentAttributes:nil
                                        error:&error];
+    UIFontDescriptor *fontDescriptor = [[[UIFontDescriptor alloc] init] fontDescriptorWithFamily:@"OpenSans"];
+    [result setFont:[UIFont fontWithDescriptor:fontDescriptor size:12.0]];
     return result;
 }
 

@@ -25,7 +25,7 @@
 
 - (NSUInteger)hash
 {
-    return self.categoryUUID.hash + self.relatedItemUUIDs.hash;
+    return self.categoryUUID.hash ^ self.relatedItemUUIDs.hash;
 }
 
 @end

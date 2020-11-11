@@ -26,7 +26,7 @@
 }
 
 - (NSUInteger)hash {
-    return self.address.hash + self.images.hash + self.descriptionHTML.hash + self.categoryIdToItems.hash;
+    return self.address.hash ^ self.images.hash ^ self.descriptionHTML.hash ^ self.categoryIdToItems.hash;
 }
 
 @end
