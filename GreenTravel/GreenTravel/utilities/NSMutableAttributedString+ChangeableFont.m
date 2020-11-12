@@ -18,7 +18,7 @@
             UIFont *font = (UIFont *)value;
             UIFontDescriptor *newFontDescriptor = [[[font fontDescriptor] fontDescriptorWithFamily:aFont.familyName] fontDescriptorWithSymbolicTraits:font.fontDescriptor.symbolicTraits];
             
-            UIFont *newFont = [UIFont fontWithDescriptor:newFontDescriptor size:aFont.pointSize];
+            UIFont *newFont = [UIFont fontWithDescriptor:newFontDescriptor size:font.pointSize];
             [self removeAttribute:NSFontAttributeName range:range];
             [self addAttribute:NSFontAttributeName value:newFont range:range];
         }

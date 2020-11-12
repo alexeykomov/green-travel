@@ -17,7 +17,7 @@ NSDictionary<NSAttributedStringKey, id>* getTextAttributes(UIColor* color, CGFlo
     };
 };
 
-static NSString * const kInlineStyle = @"font-family:-apple-system,'Helvetica Neue',sans-serif;font-size:16px;font-weight:400;";
+static NSString * const kInlineStyle = @"font-family:'Open Sans',-apple-system,'Helvetica Neue',sans-serif;font-size:16px;font-weight:400;";
 
 NSAttributedString* getAttributedString(NSString *text, UIColor* color, CGFloat size, UIFontWeight weight) {
     return [[NSAttributedString alloc] initWithString:text attributes:getTextAttributes(color, size, weight)];
@@ -33,8 +33,6 @@ NSAttributedString* getAttributedStringFromHTML(NSString *html) {
                                      }
                           documentAttributes:nil
                                        error:&error];
-    UIFontDescriptor *fontDescriptor = [[[UIFontDescriptor alloc] init] fontDescriptorWithFamily:@"OpenSans"];
-    [result setFont:[UIFont fontWithDescriptor:fontDescriptor size:12.0]];
     return result;
 }
 
