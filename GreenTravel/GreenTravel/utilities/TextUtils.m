@@ -8,7 +8,6 @@
 
 #import "TextUtils.h"
 #import <UIKit/UIKit.h>
-#import "NSMutableAttributedString+ChangeableFont.h"
 
 NSDictionary<NSAttributedStringKey, id>* getTextAttributes(UIColor* color, CGFloat size, UIFontWeight weight) {
     return @{
