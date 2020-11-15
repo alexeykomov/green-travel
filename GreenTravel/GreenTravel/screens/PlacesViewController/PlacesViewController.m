@@ -77,6 +77,7 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
         [self.collectionView reloadData];
     }
     [self.indexModel addObserver:self];
+    [self.indexModel addObserverBookmarks:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

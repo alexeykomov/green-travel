@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CategoriesObserver.h"
+#import "BookmarksObserver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class IndexModel;
 
 
-@interface PlacesViewController : UICollectionViewController<CategoriesObserver> 
+@interface PlacesViewController : UICollectionViewController<CategoriesObserver, BookmarksObserver>
 
 @property (strong, nonatomic) Category *category;
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel
