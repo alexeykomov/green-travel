@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "CategoriesObservable.h"
 #import "CategoriesObserver.h"
+#import "BookmarksObservable.h"
+#import "BookmarksObserver.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,14 +20,14 @@ NS_ASSUME_NONNULL_BEGIN
 @class PathItem;
 @class PlaceDetails;
 @class PathDetails;
-@class CategoriesObserver;
 @class BookmarksModel;
 @class ApiService;
 @class CoreDataService;
 
-@interface IndexModel : NSObject<CategoriesObservable>
+@interface IndexModel : NSObject<CategoriesObservable, BookmarksObservable> 
 
-@property (strong, nonatomic) NSMutableArray<id<CategoriesObserver>> *categoriesObservers; 
+@property (strong, nonatomic) NSMutableArray<id<CategoriesObserver>> *categoriesObservers;
+@property (strong, nonatomic) NSMutableArray<id<BookmarksObserver>> *bookmarksObservers;
 @property (strong, nonatomic) NSArray<Category *> *categories;
 @property (strong, nonatomic) NSArray<PlaceItem *> *searchItems;
 @property (strong, nonatomic) NSDictionary<NSString *, Category *> *categoryByUUID;

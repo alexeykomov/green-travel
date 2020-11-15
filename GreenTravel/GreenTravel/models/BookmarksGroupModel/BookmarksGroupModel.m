@@ -7,7 +7,6 @@
 //
 
 #import "BookmarksGroupModel.h"
-#import "BookmarksModel.h"
 #import "IndexModel.h"
 #import "BookmarksGroupObserver.h"
 #import "BookmarkItem.h"

@@ -19,8 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addObserver:(id<CategoriesObserver>)observer;
 - (void)removeObserver:(id<CategoriesObserver>)observer;
 - (void)notifyObservers;
-- (void)notifyObserversOfBookmarkUpdate:(PlaceItem *)item 
-                               bookmark:(BOOL)bookmark;
 
 @end
 

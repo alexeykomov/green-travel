@@ -18,7 +18,6 @@
 #import "PlaceItem.h"
 #import "Category.h"
 #import "SearchItem.h"
-#import "BookmarksModel.h"
 #import "CategoryUtils.h"
 #import "PlaceDetails.h"
 #import "TextUtils.h"

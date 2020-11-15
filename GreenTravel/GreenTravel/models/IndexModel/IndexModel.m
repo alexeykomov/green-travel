@@ -8,7 +8,7 @@
 
 #import "IndexModel.h"
 #import "CategoriesObserver.h"
-#import "BookmarksModel.h"
+#import "BookmarksObserver.h"
 #import "Category.h"
 #import "PlaceItem.h"
 #import "ApiService.h"
@@ -35,9 +35,9 @@ static IndexModel *instance;
     self = [super init];
     if (self) {
         _categoriesObservers = [[NSMutableArray alloc] init];
+        _bookmarksObservers = [[NSMutableArray alloc] init];
         _coreDataService = coreDataService;
         _apiService = apiService;
-        // TODO: IndexModel would benefit from subsribing to BookmarksModel updates
     }
     return self;
 }
@@ -82,7 +82,7 @@ static IndexModel *instance;
 - (void)bookmarkItem:(PlaceItem *)item bookmark:(BOOL)bookmark {
     item.bookmarked = bookmark;
     [self.coreDataService updatePlaceItem:item bookmark:bookmark];
-    [self notifyObserversOfBookmarkUpdate:item bookmark:bookmark];
+    [self notifyObserversBookmarks:item bookmark:bookmark];
 }
 
 - (void)updateCategories:(NSArray<Category *> *)categories {
@@ -104,16 +104,34 @@ static IndexModel *instance;
     }];
 }
 
-- (void)notifyObserversOfBookmarkUpdate:(PlaceItem *)item bookmark:(BOOL)bookmark {
-    
-    [self.categoriesObservers enumerateObjectsUsingBlock:^(id<CategoriesObserver>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+- (void)removeObserver:(nonnull id<CategoriesObserver>)observer {
+    if ([self.categoriesObservers containsObject:observer]) {
+        return;
+    }
+    [self.categoriesObservers removeObject:observer];
+}
+
+- (void)notifyObserversBookmarks:(PlaceItem *)item bookmark:(BOOL)bookmark {
+    [self.bookmarksObservers enumerateObjectsUsingBlock:^(id<BookmarksObserver>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj onBookmarkUpdate:item bookmark:bookmark];
     }];
 }
 
-- (void)removeObserver:(nonnull id<CategoriesObserver>)observer {
-    [self.categoriesObservers removeObject:observer];
+- (void)addObserverBookmarks:(nonnull id<BookmarksObserver>)observer {
+    if ([self.bookmarksObservers containsObject:observer]) {
+        return;
+    }
+    [self.bookmarksObservers addObject:observer];
 }
+
+- (void)removeObserverBookmarks:(nonnull id<BookmarksObserver>)observer {
+    if ([self.bookmarksObservers containsObject:observer]) {
+        return;
+    }
+    [self.bookmarksObservers removeObject:observer];
+}
+
+
 
 @end
 

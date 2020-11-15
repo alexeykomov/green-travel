@@ -18,7 +18,6 @@
 #import "SearchModel.h"
 #import "MapModel.h"
 #import "BookmarksGroupModel.h"
-#import "BookmarksModel.h"
 #import "LocationModel.h"
 #import "CoreDataService.h"
 
@@ -51,7 +50,6 @@
     self.session = [NSURLSession sessionWithConfiguration:configuration];
     self.apiService = [[ApiService alloc] initWithSession:self.session];
     self.coreDataService = [[CoreDataService alloc] init];
-    BookmarksModel *bookmarksModel = [[BookmarksModel alloc] init];
     self.indexModel = [[IndexModel alloc] initWithApiService:self.apiService coreDataService:self.coreDataService];
     DetailsModel *detailsModel = [[DetailsModel alloc] initWithIndexModel:self.indexModel apiService:self.apiService coreDataService:self.coreDataService];
     
@@ -65,7 +63,7 @@
 
 #pragma mark - IndexViewController
     
-    IndexViewController *indexController = [[IndexViewController alloc]   initWithApiService:self.apiService model:self.indexModel searchModel:searchModel locationModel:locationModel mapModel:mapModel detailsModel:detailsModel coreDataService:self.coreDataService bookmarksModel:bookmarksModel];
+    IndexViewController *indexController = [[IndexViewController alloc]   initWithApiService:self.apiService model:self.indexModel searchModel:searchModel locationModel:locationModel mapModel:mapModel detailsModel:detailsModel coreDataService:self.coreDataService];
     indexController.title = @"Главная";
     UINavigationController *indexViewControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:indexController];
     UIImage *indexImage;

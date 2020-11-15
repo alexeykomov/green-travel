@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DetailsObserver.h"
+#import "BookmarksObserver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class LocationModel;
 @class IndexModel;
 
-@interface DetailsViewController : UIViewController <DetailsObserver>
+@interface DetailsViewController : UIViewController <DetailsObserver, BookmarksObserver>
 
 - (instancetype)initWithApiService:(ApiService *)apiService
                       detailsModel:(DetailsModel *)detailsModel

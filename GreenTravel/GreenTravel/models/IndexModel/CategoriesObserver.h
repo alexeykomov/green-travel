@@ -16,8 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol CategoriesObserver <NSObject>
 
 - (void)onCategoriesUpdate:(NSArray<Category *>*)categories;
-- (void)onBookmarkUpdate:(PlaceItem *)item
-                bookmark:(BOOL)bookmark;
 
 @end
 

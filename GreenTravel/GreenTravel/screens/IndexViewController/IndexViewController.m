@@ -22,7 +22,6 @@
 #import "SearchModel.h"
 #import "ApiService.h"
 #import "LocationModel.h"
-#import "BookmarksModel.h"
 #import "CoreDataService.h"
 
 @interface IndexViewController ()
@@ -30,7 +29,6 @@
 @property (strong, nonatomic) ApiService *apiService;
 @property (strong, nonatomic) IndexModel *model;
 @property (strong, nonatomic) DetailsModel *detailsModel;
-@property (strong, nonatomic) BookmarksModel *bookmarksModel;
 @property (strong, nonatomic) SearchModel *searchModel;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) MapModel *mapModel;
@@ -53,7 +51,7 @@ static CGFloat kTableRowHeight = 210.0;
                            mapModel:(MapModel *)mapModel
                        detailsModel:(DetailsModel *)detailsModel
                     coreDataService:(CoreDataService *)coreDataService
-                     bookmarksModel:(BookmarksModel *)bookmarksModel{
+{
     self = [super init];
     _apiService = apiService;
     _model = model;
@@ -62,7 +60,6 @@ static CGFloat kTableRowHeight = 210.0;
     _mapModel = mapModel;
     _detailsModel = detailsModel;
     _coreDataService = coreDataService;
-    _bookmarksModel = bookmarksModel;
     return self;
 }
 
@@ -90,6 +87,7 @@ static CGFloat kTableRowHeight = 210.0;
     self.tableView.alwaysBounceVertical = YES;
 
     [self.model addObserver:self];
+    [self.model addObserverBookmarks:self];
     [self.model loadCategories];
 }
 

@@ -319,8 +319,9 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
         [self.activityIndicatorView.centerXAnchor constraintEqualToAnchor:self.activityIndicatorContainerView.centerXAnchor],
         [self.activityIndicatorView.centerYAnchor constraintEqualToAnchor:self.activityIndicatorContainerView.centerYAnchor]
     ]];
-    
+#pragma mark - Add observers
     [self.detailsModel addObserver:self];
+    [self.indexModel addObserverBookmarks:self];
 #pragma mark - Load data
     [self.detailsModel loadDetailsByUUID:self.item.uuid];
     if (!self.ready) {
@@ -328,6 +329,8 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
         [self.activityIndicatorView setHidden:NO];
     }
 }
+
+#pragma mark - Observers
 
 - (void)onDetailsUpdate:(NSMutableDictionary<NSString *,PlaceDetails *> *)itemUUIDToDetails items:(NSMutableDictionary<NSString *,PlaceItem *> *)itemUUIDToItem {
     PlaceDetails *details = itemUUIDToDetails[self.item.uuid];
@@ -369,6 +372,12 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
         [weakSelf.linkedCategoriesView layoutIfNeeded];
         
     });
+}
+
+- (void)onBookmarkUpdate:(PlaceItem *)item bookmark:(BOOL)bookmark {
+    if ([self.item.uuid isEqualToString:item.uuid]) {
+        [self.bookmarkButton setSelected:bookmark];
+    }
 }
 
 - (void)onMapButtonPress:(id)sender {

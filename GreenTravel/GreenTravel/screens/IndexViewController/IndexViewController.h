@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CategoriesObserver.h"
+#import "BookmarksObserver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,9 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class MapModel;
 @class DetailsModel;
 @class CoreDataService;
-@class BookmarksModel;
 
-@interface IndexViewController : UITableViewController<CategoriesObserver>
+@interface IndexViewController : UITableViewController<CategoriesObserver, BookmarksObserver>
 
 - (instancetype) initWithApiService:(ApiService *)apiService
                               model:(IndexModel *)model
@@ -28,8 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
                       locationModel:(LocationModel *)locationModel
                            mapModel:(MapModel *)mapModel
                        detailsModel:(DetailsModel *)detailsModel
-                    coreDataService:(CoreDataService *)coreDataService
-                     bookmarksModel:(BookmarksModel *)bookmarksModel;
+                    coreDataService:(CoreDataService *)coreDataService;
 
 @end
 
