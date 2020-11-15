@@ -20,10 +20,13 @@
 #import "TextUtils.h"
 #import "MapViewController.h"
 #import "LinkedCategoriesView.h"
+#import "BannerView.h"
 
 @interface DetailsViewController ()
 
 @property (strong, nonatomic) UIScrollView *scrollView;
+@property (strong, nonatomic) BannerView *copiedBannerView;
+@property (strong, nonatomic) NSLayoutConstraint *copiedBannerViewTopConstraint;
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UILabel *addressLabel;
@@ -39,6 +42,9 @@
 @property (strong, nonatomic) UIView *activityIndicatorContainerView;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicatorView;
 @property (strong, nonatomic) ApiService *apiService;
+@property (strong, nonatomic) NSTimer *bannerHideTimer;
+@property (strong, nonatomic) UIViewPropertyAnimator *bannerShowAnimator;
+@property (strong, nonatomic) UIViewPropertyAnimator *bannerHideAnimator;
 
 @property (assign, nonatomic) BOOL ready;
 @property (strong, nonatomic) LocationModel *locationModel;
@@ -76,7 +82,7 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [Colors get].white;
     self.title = self.item.title;
-
+        
     #pragma mark - Scroll view
     self.scrollView = [[UIScrollView alloc] init];
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -124,7 +130,7 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
     
     self.bookmarkButton.backgroundColor = [Colors get].white;
     self.bookmarkButton.contentMode = UIViewContentModeScaleAspectFill;
-    self.bookmarkButton.layer.cornerRadius = 19.0;
+    self.bookmarkButton.layer.cornerRadius = 22.0;
     self.bookmarkButton.layer.masksToBounds = YES;
     UIImage *imageNotSelected = [UIImage systemImageNamed:@"bookmark"];
     UIImage *imageSelected = [UIImage systemImageNamed:@"bookmark.fill"];
@@ -142,8 +148,8 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
     [NSLayoutConstraint activateConstraints:@[
         [self.bookmarkButton.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:32.0],
         [self.bookmarkButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
-        [self.bookmarkButton.widthAnchor constraintEqualToConstant:38.0],
-        [self.bookmarkButton.heightAnchor constraintEqualToConstant:38.0],
+        [self.bookmarkButton.widthAnchor constraintEqualToConstant:44.0],
+        [self.bookmarkButton.heightAnchor constraintEqualToConstant:44.0],
     ]];
         
     #pragma mark - Title label
@@ -319,9 +325,34 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
         [self.activityIndicatorView.centerXAnchor constraintEqualToAnchor:self.activityIndicatorContainerView.centerXAnchor],
         [self.activityIndicatorView.centerYAnchor constraintEqualToAnchor:self.activityIndicatorContainerView.centerYAnchor]
     ]];
+    
+#pragma mark - "Copied" banner
+    self.copiedBannerView = [[BannerView alloc] init];
+    self.copiedBannerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.copiedBannerView];
+    
+    self.copiedBannerViewTopConstraint = [self.copiedBannerView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor constant:-44.0];
+    [NSLayoutConstraint activateConstraints:@[
+        self.copiedBannerViewTopConstraint,
+        [self.copiedBannerView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+        [self.copiedBannerView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+        [self.copiedBannerView.heightAnchor constraintEqualToConstant:44.0]
+    ]];
+    
+    UILabel *bannerLabel = [[UILabel alloc] init];
+    [bannerLabel setAttributedText:getAttributedString(@"Скопировано", [Colors get].white, 12.0, UIFontWeightBold)];
+    bannerLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.copiedBannerView addSubview:bannerLabel];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [bannerLabel.leadingAnchor constraintEqualToAnchor:self.copiedBannerView.leadingAnchor constant:10.0],
+        [bannerLabel.centerYAnchor constraintEqualToAnchor:self.copiedBannerView.centerYAnchor],
+    ]];
+    
 #pragma mark - Add observers
     [self.detailsModel addObserver:self];
     [self.indexModel addObserverBookmarks:self];
+    
 #pragma mark - Load data
     [self.detailsModel loadDetailsByUUID:self.item.uuid];
     if (!self.ready) {
@@ -358,7 +389,7 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
         }
         weakSelf.titleLabel.attributedText = getAttributedString(item.title, [Colors get].black, 20.0, UIFontWeightSemibold);
         weakSelf.addressLabel.attributedText = getAttributedString(details.address, [Colors get].black, 14.0, UIFontWeightRegular);
-        [weakSelf.locationButton setAttributedTitle:getAttributedString([NSString stringWithFormat:@"%f° N, %f° E", item.coords.longitude, item.coords.latitude], [Colors get].royalBlue, 14.0, UIFontWeightRegular) forState:UIControlStateNormal];
+        [weakSelf.locationButton setAttributedTitle:getAttributedString([NSString stringWithFormat:@"%f° N, %f° E", item.coords.latitude, item.coords.longitude], [Colors get].royalBlue, 14.0, UIFontWeightRegular) forState:UIControlStateNormal];
         [weakSelf.descriptionTextView setAttributedText:html];
         [weakSelf.linkedCategoriesView update:details.categoryIdToItems];
         
@@ -391,8 +422,49 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
 }
 
 - (void)onLocationButtonPress:(id)sender {
-    NSURL *geoURL = [NSURL URLWithString:[NSString stringWithFormat:@"geo:%f,%f", self.item.coords.latitude, self.item.coords.longitude]];
-    [[UIApplication sharedApplication] openURL:geoURL options:@{} completionHandler:^(BOOL success) {}];
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = [NSString stringWithFormat:@"%f,%f", self.item.coords.latitude, self.item.coords.longitude];
+    
+    [self cancelBanner];
+    
+    __weak typeof(self) weakSelf = self;
+    self.bannerShowAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:0.4 curve:UIViewAnimationCurveEaseIn animations:^{
+        weakSelf.copiedBannerViewTopConstraint.constant = 0;
+        [weakSelf.view layoutIfNeeded];
+    }];
+    [self.bannerShowAnimator startAnimation];
+    self.bannerHideTimer =
+    [NSTimer scheduledTimerWithTimeInterval:5.4
+                                     target:self
+                                   selector:@selector(onBannerTimerFire:)
+                                   userInfo:nil
+                                    repeats:NO];
+}
+
+- (void)cancelBanner {
+    [self.bannerShowAnimator stopAnimation:YES];
+    self.bannerShowAnimator = nil;
+    //[self.bannerHideAnimator stopAnimation:YES];
+    //self.bannerHideAnimator = nil;
+    [self.bannerHideTimer invalidate];
+    self.bannerHideTimer = nil;
+    self.copiedBannerViewTopConstraint.constant = -44.0;
+    [self.view layoutIfNeeded];
+}
+
+- (void)onBannerTimerFire:(id)sender {
+    NSLog(@"Timer fired.");
+    [self.bannerHideTimer invalidate];
+    self.bannerHideTimer = nil;
+    //self.copiedBannerViewTopConstraint.constant = -44.0;
+    [self.view layoutIfNeeded];
+    
+    __weak typeof(self) weakSelf = self;
+    self.bannerHideAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:0.4 curve:UIViewAnimationCurveEaseIn animations:^{
+        weakSelf.copiedBannerViewTopConstraint.constant = -44.0;
+        [weakSelf.view layoutIfNeeded];
+    }];
+    [self.bannerHideAnimator startAnimation];
 }
 
 - (void)onBookmarkButtonPress:(id)sender {
