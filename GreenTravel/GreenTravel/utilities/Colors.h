@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) UIColor *yellowHighlighted;
 @property (strong, nonatomic) UIColor *heavyMetal;
 @property (strong, nonatomic) UIColor *grey;
+@property (strong, nonatomic) UIColor *royalBlue;
+@property (strong, nonatomic) UIColor *logCabin;
 
 + (instancetype)get;
 

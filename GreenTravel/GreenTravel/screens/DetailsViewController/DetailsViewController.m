@@ -14,6 +14,7 @@
 #import "DetailsModel.h"
 #import "LocationModel.h"
 #import "MapModel.h"
+#import "IndexModel.h"
 #import "MapItem.h"
 #import "ImageUtils.h"
 #import "TextUtils.h"
@@ -26,7 +27,8 @@
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UILabel *addressLabel;
-@property (strong, nonatomic) UILabel *locationLabel;
+@property (strong, nonatomic) UIButton *bookmarkButton;
+@property (strong, nonatomic) UIButton *locationButton;
 @property (strong, nonatomic) UIImageView *previewImageView;
 @property (strong, nonatomic) UIButton *mapButtonTop;
 @property (strong, nonatomic) UIButton *mapButtonBottom;
@@ -47,6 +49,8 @@
 @property (strong, nonatomic) NSLayoutConstraint *aspectRatioConstraint;
 
 @end
+
+static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
 
 @implementation DetailsViewController
 
@@ -107,12 +111,39 @@
     
     [self.contentView addSubview:self.previewImageView];
     
-    self.aspectRatioConstraint = [self.previewImageView.heightAnchor constraintEqualToAnchor:self.previewImageView.widthAnchor multiplier:1];
+    self.aspectRatioConstraint = [self.previewImageView.heightAnchor constraintEqualToAnchor:self.previewImageView.widthAnchor multiplier:kPreviewImageAspectRatio];
     [NSLayoutConstraint activateConstraints:@[
         [self.previewImageView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0.0],
         [self.previewImageView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:0.0],
         [self.previewImageView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0.0],
         self.aspectRatioConstraint,
+    ]];
+    
+    #pragma mark - Bookmark button
+    self.bookmarkButton = [[UIButton alloc] init];
+    
+    self.bookmarkButton.backgroundColor = [Colors get].white;
+    self.bookmarkButton.contentMode = UIViewContentModeScaleAspectFill;
+    self.bookmarkButton.layer.cornerRadius = 19.0;
+    self.bookmarkButton.layer.masksToBounds = YES;
+    UIImage *imageNotSelected = [UIImage systemImageNamed:@"bookmark"];
+    UIImage *imageSelected = [UIImage systemImageNamed:@"bookmark.fill"];
+    [self.bookmarkButton setImage:imageNotSelected forState:UIControlStateNormal];
+    [self.bookmarkButton setImage:imageSelected forState:UIControlStateSelected];
+    self.bookmarkButton.tintColor = [Colors get].logCabin;
+    [self.bookmarkButton setSelected:self.item.bookmarked];
+    
+    [self.bookmarkButton addTarget:self action:@selector(onBookmarkButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+
+    self.bookmarkButton.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self.contentView addSubview:self.bookmarkButton];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.bookmarkButton.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:32.0],
+        [self.bookmarkButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
+        [self.bookmarkButton.widthAnchor constraintEqualToConstant:38.0],
+        [self.bookmarkButton.heightAnchor constraintEqualToConstant:38.0],
     ]];
         
     #pragma mark - Title label
@@ -145,24 +176,25 @@
 
     ]];
     
-    #pragma mark - Location label
-    self.locationLabel = [[UILabel alloc] init];
-    self.locationLabel.numberOfLines = 4;
-    [self.locationLabel setFont:[UIFont fontWithName:@"OpenSans-Regular" size:14.0]];
-    self.locationLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    #pragma mark - Location button
+    self.locationButton = [[UIButton alloc] init];
+    [self.locationButton.titleLabel setFont:[UIFont fontWithName:@"OpenSans-Regular" size:14.0]];
+    
+    [self.locationButton addTarget:self action:@selector(onLocationButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.locationButton.translatesAutoresizingMaskIntoConstraints = NO;
 
-    [self.contentView addSubview:self.locationLabel];
+    [self.contentView addSubview:self.locationButton];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.locationLabel.topAnchor constraintEqualToAnchor:self.addressLabel.bottomAnchor constant:0.0],
-        [self.locationLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
-        [self.locationLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
+        [self.locationButton.topAnchor constraintEqualToAnchor:self.addressLabel.bottomAnchor constant:3.0],
+        [self.locationButton.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
+        //[self.locationButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
 
     ]];
     
     #pragma mark - Map button top
     self.mapButtonTop = [[UIButton alloc] init];
-    self.mapButtonTop.translatesAutoresizingMaskIntoConstraints = NO;
     self.mapButtonTop.backgroundColor = [Colors get].apple;
     self.mapButtonTop.layer.cornerRadius = 8.0;
     self.mapButtonTop.layer.masksToBounds = YES;
@@ -171,10 +203,12 @@
     
     [self.mapButtonTop addTarget:self action:@selector(onMapButtonPress:) forControlEvents:UIControlEventTouchUpInside];
 
+    self.mapButtonTop.translatesAutoresizingMaskIntoConstraints = NO;
+    
     [self.contentView addSubview:self.mapButtonTop];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.mapButtonTop.topAnchor constraintEqualToAnchor:self.locationLabel.bottomAnchor constant:20.0],
+        [self.mapButtonTop.topAnchor constraintEqualToAnchor:self.locationButton.bottomAnchor constant:20.0],
         [self.mapButtonTop.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
         [self.mapButtonTop.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
         [self.mapButtonTop.widthAnchor constraintLessThanOrEqualToConstant:343.0],
@@ -302,12 +336,12 @@
     if (!self.details && details) {
         loadImage(details.images[0], ^(UIImage *image) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                CGFloat aspectRatio = image.size.height / image.size.width;
-                [NSLayoutConstraint deactivateConstraints:@[weakSelf.aspectRatioConstraint]];
-                weakSelf.aspectRatioConstraint = [weakSelf.previewImageView.heightAnchor constraintEqualToAnchor:weakSelf.previewImageView.widthAnchor multiplier:aspectRatio];
-                [NSLayoutConstraint activateConstraints:@[
-                    weakSelf.aspectRatioConstraint
-                ]];
+//                CGFloat aspectRatio = image.size.height / image.size.width;
+//                [NSLayoutConstraint deactivateConstraints:@[weakSelf.aspectRatioConstraint]];
+//                weakSelf.aspectRatioConstraint = [weakSelf.previewImageView.heightAnchor constraintEqualToAnchor:weakSelf.previewImageView.widthAnchor multiplier:aspectRatio];
+//                [NSLayoutConstraint activateConstraints:@[
+//                    weakSelf.aspectRatioConstraint
+//                ]];
                 [weakSelf.previewImageView setImage:image];
             });
         });
@@ -321,7 +355,7 @@
         }
         weakSelf.titleLabel.attributedText = getAttributedString(item.title, [Colors get].black, 20.0, UIFontWeightSemibold);
         weakSelf.addressLabel.attributedText = getAttributedString(details.address, [Colors get].black, 14.0, UIFontWeightRegular);
-        weakSelf.locationLabel.attributedText = getAttributedString([NSString stringWithFormat:@"%f° N, %f° E", item.coords.longitude, item.coords.latitude], [Colors get].black, 14.0, UIFontWeightRegular);
+        [weakSelf.locationButton setAttributedTitle:getAttributedString([NSString stringWithFormat:@"%f° N, %f° E", item.coords.longitude, item.coords.latitude], [Colors get].royalBlue, 14.0, UIFontWeightRegular) forState:UIControlStateNormal];
         [weakSelf.descriptionTextView setAttributedText:html];
         [weakSelf.linkedCategoriesView update:details.categoryIdToItems];
         
@@ -345,6 +379,15 @@
     mapItem.coords = self.item.coords;
     MapViewController *mapViewController = [[MapViewController alloc] initWithMapModel:self.mapModel locationModel:self.locationModel mapItem:mapItem];
     [self.navigationController pushViewController:mapViewController animated:YES]; 
+}
+
+- (void)onLocationButtonPress:(id)sender {
+    NSURL *geoURL = [NSURL URLWithString:[NSString stringWithFormat:@"geo:%f,%f", self.item.coords.latitude, self.item.coords.longitude]];
+    [[UIApplication sharedApplication] openURL:geoURL options:@{} completionHandler:^(BOOL success) {}];
+}
+
+- (void)onBookmarkButtonPress:(id)sender {
+    [self.indexModel bookmarkItem:self.item bookmark:!self.item.bookmarked];
 }
 
 @end

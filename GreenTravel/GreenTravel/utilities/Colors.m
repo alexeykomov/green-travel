@@ -37,6 +37,8 @@ static Colors *instance;
         self.heavyMetal = UIColorFromHEX(0x151614);
         self.yellowHighlighted = UIColorFromHEX(0xFDF4E3);
         self.grey = UIColorFromHEX(0x757a7e);
+        self.royalBlue = UIColorFromHEX(0x2F80ED);
+        self.logCabin = UIColorFromHEX(0x0A0B0A);
     }
     return self;
 }

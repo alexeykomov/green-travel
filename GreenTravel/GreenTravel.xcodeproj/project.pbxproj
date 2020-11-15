@@ -130,6 +130,8 @@
 		5A0C84B32559C89600165D22 /* StoredCategoryUUIDToRelatedItemUUIDs+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StoredCategoryUUIDToRelatedItemUUIDs+CoreDataClass.m"; sourceTree = "<group>"; };
 		5A0C84B42559C89600165D22 /* StoredRelatedItemUUID+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StoredRelatedItemUUID+CoreDataClass.m"; sourceTree = "<group>"; };
 		5A0C84B52559C89600165D22 /* StoredPlaceDetails+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StoredPlaceDetails+CoreDataProperties.h"; sourceTree = "<group>"; };
+		5A0C84DE25612C6E00165D22 /* BookmarksObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarksObserver.h; sourceTree = "<group>"; };
+		5A0C84DF25612C7900165D22 /* BookmarksObservable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarksObservable.h; sourceTree = "<group>"; };
 		5A14824524E7ED9100EBB756 /* GreenTravel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenTravel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A14824824E7ED9100EBB756 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5A14824924E7ED9100EBB756 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -560,6 +562,8 @@
 				5A69921624F7DE51008FB47E /* IndexModel.m */,
 				5A69922124F910F2008FB47E /* CategoriesObservable.h */,
 				5A69922424F91175008FB47E /* CategoriesObserver.h */,
+				5A0C84DF25612C7900165D22 /* BookmarksObservable.h */,
+				5A0C84DE25612C6E00165D22 /* BookmarksObserver.h */,
 			);
 			path = IndexModel;
 			sourceTree = "<group>";

@@ -40,6 +40,17 @@
     
     self.icon.layer.cornerRadius = 16.0;
     self.icon.layer.masksToBounds = YES;
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = CGRectMake(0, 0, 32.0, 32.0);
+    gradient.colors = @[(__bridge id)[Colors get].green.CGColor, (__bridge id)[Colors get].shamrock.CGColor];
+    gradient.startPoint = CGPointMake(0.0, 0.5);
+    gradient.endPoint = CGPointMake(1.0, 0.5);
+    UIGraphicsBeginImageContext(gradient.frame.size);
+    [gradient renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [self.icon setImage:image];
     
     [NSLayoutConstraint activateConstraints:@[
         [self.icon.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
@@ -62,6 +73,7 @@
     
 #pragma mark - Chevron
     self.chevron = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
+    self.chevron.tintColor = [Colors get].black;
     [self addSubview:self.chevron];
     
     self.chevron.translatesAutoresizingMaskIntoConstraints = NO;

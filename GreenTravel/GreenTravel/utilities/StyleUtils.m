@@ -14,7 +14,7 @@
 UIImage* getGradientImageToFillRect(CGRect rect) {
     CAGradientLayer *gradient = [[CAGradientLayer alloc] init];
     gradient.frame = rect;
-    gradient.colors = @[(id)[Colors get].green.CGColor, (id)[Colors get].shamrock.CGColor];
+    gradient.colors = @[(__bridge id)[Colors get].green.CGColor, (__bridge id)[Colors get].shamrock.CGColor];
     gradient.startPoint = CGPointMake(0, 0);
     gradient.endPoint = CGPointMake(1, 0);
     
