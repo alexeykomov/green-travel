@@ -71,6 +71,7 @@
 		5A14830124F129E900EBB756 /* SearchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830024F129E900EBB756 /* SearchItem.m */; };
 		5A14830424F136B800EBB756 /* WeRecommendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830324F136B800EBB756 /* WeRecommendCell.m */; };
 		5A14830924F3083E00EBB756 /* PlacesTableViewCellConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830824F3083D00EBB756 /* PlacesTableViewCellConstants.m */; };
+		5A225EA9256927A300D71977 /* GalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A225EA8256927A200D71977 /* GalleryView.m */; };
 		5A2EBDA72529EE040078AF72 /* StoredCategory+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A2EBDA02529EE030078AF72 /* StoredCategory+CoreDataClass.m */; };
 		5A2EBDA82529EE040078AF72 /* StoredPlaceItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A2EBDA12529EE030078AF72 /* StoredPlaceItem+CoreDataClass.m */; };
 		5A2EBDA92529EE040078AF72 /* StoredCategory+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A2EBDA32529EE040078AF72 /* StoredCategory+CoreDataProperties.m */; };
@@ -92,6 +93,7 @@
 		5AA75BFE2502D70900AE7331 /* MapPinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75BFD2502D70900AE7331 /* MapPinView.m */; };
 		5AA75C012504258300AE7331 /* DetailsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C002504258300AE7331 /* DetailsModel.m */; };
 		5AA75C082505196D00AE7331 /* CoreDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C072505196D00AE7331 /* CoreDataService.m */; };
+		5AAB5A192569484B00D52F53 /* SlideCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAB5A182569484B00D52F53 /* SlideCollectionViewCell.m */; };
 		5AEA97F92554A1FD0037A51D /* LinkedCategoriesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA97F82554A1FD0037A51D /* LinkedCategoriesView.m */; };
 		5AEA98042556A8AC0037A51D /* ApiServiceDataMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA98032556A8AC0037A51D /* ApiServiceDataMapper.m */; };
 		5AEA980A2556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA98092556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.m */; };
@@ -218,6 +220,8 @@
 		5A14830324F136B800EBB756 /* WeRecommendCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeRecommendCell.m; sourceTree = "<group>"; };
 		5A14830724F3083D00EBB756 /* PlacesTableViewCellConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlacesTableViewCellConstants.h; sourceTree = "<group>"; };
 		5A14830824F3083D00EBB756 /* PlacesTableViewCellConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlacesTableViewCellConstants.m; sourceTree = "<group>"; };
+		5A225EA7256927A200D71977 /* GalleryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GalleryView.h; sourceTree = "<group>"; };
+		5A225EA8256927A200D71977 /* GalleryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GalleryView.m; sourceTree = "<group>"; };
 		5A2EBD9F2529EE030078AF72 /* StoredCategory+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StoredCategory+CoreDataProperties.h"; sourceTree = SOURCE_ROOT; };
 		5A2EBDA02529EE030078AF72 /* StoredCategory+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StoredCategory+CoreDataClass.m"; sourceTree = SOURCE_ROOT; };
 		5A2EBDA12529EE030078AF72 /* StoredPlaceItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StoredPlaceItem+CoreDataClass.m"; sourceTree = SOURCE_ROOT; };
@@ -272,6 +276,8 @@
 		5AA75C0525042AF500AE7331 /* DetailsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsModel.h; sourceTree = "<group>"; };
 		5AA75C062505196D00AE7331 /* CoreDataService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreDataService.h; sourceTree = "<group>"; };
 		5AA75C072505196D00AE7331 /* CoreDataService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreDataService.m; sourceTree = "<group>"; };
+		5AAB5A172569484B00D52F53 /* SlideCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SlideCollectionViewCell.h; sourceTree = "<group>"; };
+		5AAB5A182569484B00D52F53 /* SlideCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SlideCollectionViewCell.m; sourceTree = "<group>"; };
 		5AEA97F72554A1FD0037A51D /* LinkedCategoriesView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkedCategoriesView.h; sourceTree = "<group>"; };
 		5AEA97F82554A1FD0037A51D /* LinkedCategoriesView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkedCategoriesView.m; sourceTree = "<group>"; };
 		5AEA98022556A8AC0037A51D /* ApiServiceDataMapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApiServiceDataMapper.h; sourceTree = "<group>"; };
@@ -531,6 +537,16 @@
 			path = SearchViewController;
 			sourceTree = "<group>";
 		};
+		5A225EAD256927A800D71977 /* GalleryView */ = {
+			isa = PBXGroup;
+			children = (
+				5A225EA7256927A200D71977 /* GalleryView.h */,
+				5A225EA8256927A200D71977 /* GalleryView.m */,
+				5AAB5A1D2569587300D52F53 /* SlieCollectionViewCell */,
+			);
+			path = GalleryView;
+			sourceTree = "<group>";
+		};
 		5A324BA0250025110044A671 /* BookmarksGroupModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -676,6 +692,7 @@
 			children = (
 				5A1482E424EC80FC00EBB756 /* DetailsViewController.h */,
 				5A1482E524EC80FC00EBB756 /* DetailsViewController.m */,
+				5A225EAD256927A800D71977 /* GalleryView */,
 				5A0C84E62561CA9F00165D22 /* BannerView.h */,
 				5A0C84E72561CA9F00165D22 /* BannerView.m */,
 				5AEA97F62554A0650037A51D /* LinkedCategories */,
@@ -712,6 +729,15 @@
 				5AA75C042504280E00AE7331 /* DetailsObserver.h */,
 			);
 			path = DetailsModel;
+			sourceTree = "<group>";
+		};
+		5AAB5A1D2569587300D52F53 /* SlieCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				5AAB5A172569484B00D52F53 /* SlideCollectionViewCell.h */,
+				5AAB5A182569484B00D52F53 /* SlideCollectionViewCell.m */,
+			);
+			path = SlieCollectionViewCell;
 			sourceTree = "<group>";
 		};
 		5AEA97F62554A0650037A51D /* LinkedCategories */ = {
@@ -971,6 +997,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A225EA9256927A300D71977 /* GalleryView.m in Sources */,
 				5AA75C012504258300AE7331 /* DetailsModel.m in Sources */,
 				5AEA98132556CD3F0037A51D /* CategoryLinkCell.m in Sources */,
 				5A324B9124FB00A60044A671 /* MapModel.m in Sources */,
@@ -1026,6 +1053,7 @@
 				5A1482FB24F0717300EBB756 /* SearchCell.m in Sources */,
 				5A14829B24E9440C00EBB756 /* SearchViewController.m in Sources */,
 				5A14825624E7ED9100EBB756 /* GreenTravel.xcdatamodeld in Sources */,
+				5AAB5A192569484B00D52F53 /* SlideCollectionViewCell.m in Sources */,
 				5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */,
 				5A324B9424FB00D70044A671 /* MapItem.m in Sources */,
 				5A0C84B82559C89600165D22 /* StoredCategoryUUIDToRelatedItemUUIDs+CoreDataProperties.m in Sources */,

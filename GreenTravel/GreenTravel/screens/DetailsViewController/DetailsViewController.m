@@ -21,6 +21,7 @@
 #import "MapViewController.h"
 #import "LinkedCategoriesView.h"
 #import "BannerView.h"
+#import "GalleryView.h"
 
 @interface DetailsViewController ()
 
@@ -32,7 +33,7 @@
 @property (strong, nonatomic) UILabel *addressLabel;
 @property (strong, nonatomic) UIButton *bookmarkButton;
 @property (strong, nonatomic) UIButton *locationButton;
-@property (strong, nonatomic) UIImageView *previewImageView;
+@property (strong, nonatomic) GalleryView *imageGalleryView;
 @property (strong, nonatomic) UIButton *mapButtonTop;
 @property (strong, nonatomic) UIButton *mapButtonBottom;
 @property (strong, nonatomic) UITextView *descriptionTextView;
@@ -109,19 +110,18 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
     ]];
         
     #pragma mark - Preview image
-    self.previewImageView = [[UIImageView alloc] init];
-    self.previewImageView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.previewImageView.backgroundColor = [Colors get].black;
-    self.previewImageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.previewImageView.layer.masksToBounds = YES;
+    self.imageGalleryView = [[GalleryView alloc] initWithFrame:CGRectZero aspectRatio:kPreviewImageAspectRatio];
+    self.imageGalleryView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.imageGalleryView.backgroundColor = [Colors get].black;
+    self.imageGalleryView.layer.masksToBounds = YES;
     
-    [self.contentView addSubview:self.previewImageView];
+    [self.contentView addSubview:self.imageGalleryView];
     
-    self.aspectRatioConstraint = [self.previewImageView.heightAnchor constraintEqualToAnchor:self.previewImageView.widthAnchor multiplier:kPreviewImageAspectRatio];
+    self.aspectRatioConstraint = [self.imageGalleryView.heightAnchor constraintEqualToAnchor:self.imageGalleryView.widthAnchor multiplier:kPreviewImageAspectRatio];
     [NSLayoutConstraint activateConstraints:@[
-        [self.previewImageView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0.0],
-        [self.previewImageView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:0.0],
-        [self.previewImageView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0.0],
+        [self.imageGalleryView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0.0],
+        [self.imageGalleryView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:0.0],
+        [self.imageGalleryView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0.0],
         self.aspectRatioConstraint,
     ]];
     
@@ -161,7 +161,7 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
     [self.contentView addSubview:self.titleLabel];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.titleLabel.topAnchor constraintEqualToAnchor:self.previewImageView.bottomAnchor constant:29.0],
+        [self.titleLabel.topAnchor constraintEqualToAnchor:self.imageGalleryView.bottomAnchor constant:29.0],
         [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
         [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
 
@@ -376,7 +376,7 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
 //                [NSLayoutConstraint activateConstraints:@[
 //                    weakSelf.aspectRatioConstraint
 //                ]];
-                [weakSelf.previewImageView setImage:image];
+                [weakSelf.imageGalleryView setUpWithPictureURLs:details.images];
             });
         });
     }
