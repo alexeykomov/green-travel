@@ -8,12 +8,15 @@
 
 #import "GalleryView.h"
 #import "SlideCollectionViewCell.h"
+#import "Colors.h"
 
 @interface GalleryView ()
 
+@property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) NSArray<NSString *> *imageURLs;
 @property (assign, nonatomic) CGFloat aspectRatio;
+@property (assign, nonatomic) CGFloat indexOfScrolledItem;
 
 @end
 
@@ -41,6 +44,17 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
         [self registerClass:SlideCollectionViewCell.class forCellWithReuseIdentifier:kSlideCellIdentifier];
         self.dataSource = self;
         self.delegate = self;
+        self.backgroundColor = [Colors get].white;
+        
+        self.pageControl = [[UIPageControl alloc] init];
+        [self addSubview:self.pageControl];
+        self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
+        [NSLayoutConstraint activateConstraints:@[
+            [self.pageControl.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
+            [self.pageControl.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+            [self.pageControl.heightAnchor constraintEqualToConstant:50.0],
+            [self.pageControl.widthAnchor constraintEqualToConstant:150.0],
+        ]];
     }
     return self;
 }
@@ -48,6 +62,8 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
 - (void)setUpWithPictureURLs:(NSArray<NSString *>*)pictureURLs {
     self.imageURLs = [[NSArray alloc] initWithArray:pictureURLs];
     [self reloadData];
+    [self.pageControl setNumberOfPages:[self.imageURLs count]];
+    [self.pageControl setCurrentPage:0];
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -69,5 +85,20 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
     return 0.0;
 }
 
+#pragma mark - Scroll view delegate
+
+- (CGFloat)getIndexOfScrolledItem {
+    CGFloat indexOfScrolledItem = self.contentOffset.x / self.frame.size.width;
+    return indexOfScrolledItem;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    self.indexOfScrolledItem = [self getIndexOfScrolledItem];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat indexOfScrolledItem = [self getIndexOfScrolledItem];
+    [self.pageControl setCurrentPage:(int) indexOfScrolledItem];
+}
 
 @end

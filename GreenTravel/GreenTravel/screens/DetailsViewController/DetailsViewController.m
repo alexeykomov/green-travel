@@ -112,7 +112,6 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
     #pragma mark - Preview image
     self.imageGalleryView = [[GalleryView alloc] initWithFrame:CGRectZero aspectRatio:kPreviewImageAspectRatio];
     self.imageGalleryView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.imageGalleryView.backgroundColor = [Colors get].black;
     self.imageGalleryView.layer.masksToBounds = YES;
     
     [self.contentView addSubview:self.imageGalleryView];
@@ -469,6 +468,12 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
 
 - (void)onBookmarkButtonPress:(id)sender {
     [self.indexModel bookmarkItem:self.item bookmark:!self.item.bookmarked];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [self.imageGalleryView reloadData]; 
+    CGPoint pointToScrollTo = CGPointMake(self.imageGalleryView.indexOfScrolledItem * size.width, 0);
+    [self.imageGalleryView setContentOffset:pointToScrollTo];
 }
 
 @end
