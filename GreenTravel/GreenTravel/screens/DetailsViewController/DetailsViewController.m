@@ -58,6 +58,7 @@
 @end
 
 static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
+static const CGFloat kPagerHeight = 20.0;
 
 @implementation DetailsViewController
 
@@ -110,13 +111,16 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
     ]];
         
     #pragma mark - Preview image
-    self.imageGalleryView = [[GalleryView alloc] initWithFrame:CGRectZero aspectRatio:kPreviewImageAspectRatio];
+    self.imageGalleryView = [[GalleryView alloc] initWithFrame:CGRectZero aspectRatio:kPreviewImageAspectRatio pageControlHeight:kPagerHeight];
     self.imageGalleryView.translatesAutoresizingMaskIntoConstraints = NO;
     self.imageGalleryView.layer.masksToBounds = YES;
     
     [self.contentView addSubview:self.imageGalleryView];
     
-    self.aspectRatioConstraint = [self.imageGalleryView.heightAnchor constraintEqualToAnchor:self.imageGalleryView.widthAnchor multiplier:kPreviewImageAspectRatio];
+    self.aspectRatioConstraint = [self.imageGalleryView.heightAnchor
+                                  constraintEqualToAnchor:self.imageGalleryView.widthAnchor
+                                  multiplier:kPreviewImageAspectRatio
+                                  constant:kPagerHeight];
     [NSLayoutConstraint activateConstraints:@[
         [self.imageGalleryView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0.0],
         [self.imageGalleryView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:0.0],
@@ -471,9 +475,9 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    [self.imageGalleryView reloadData]; 
+    [self.imageGalleryView.collectionView reloadData];
     CGPoint pointToScrollTo = CGPointMake(self.imageGalleryView.indexOfScrolledItem * size.width, 0);
-    [self.imageGalleryView setContentOffset:pointToScrollTo];
+    [self.imageGalleryView.collectionView setContentOffset:pointToScrollTo];
 }
 
 @end

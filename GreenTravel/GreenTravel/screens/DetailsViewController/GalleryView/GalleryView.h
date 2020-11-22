@@ -10,12 +10,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GalleryView : UICollectionView<UICollectionViewDelegate,
+@interface GalleryView : UIView<UICollectionViewDelegate,
     UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
 
+@property (strong, nonatomic) UICollectionView *collectionView;
 @property (assign, readonly, nonatomic) CGFloat indexOfScrolledItem;
 
-- (instancetype)initWithFrame:(CGRect)frame aspectRatio:(CGFloat)aspectRatio;
+- (instancetype)initWithFrame:(CGRect)frame
+                  aspectRatio:(CGFloat)aspectRatio
+            pageControlHeight:(CGFloat)pageControlHeight;
 - (void)setUpWithPictureURLs:(NSArray<NSString *>*)pictureURLs;
 
 @end
