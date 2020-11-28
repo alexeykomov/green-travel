@@ -13,6 +13,8 @@
 
 @interface GalleryView ()
 
+@property (strong, nonatomic) UIScrollView *scrollView;
+@property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) NSArray<NSString *> *imageURLs;
 @property (assign, nonatomic) CGFloat aspectRatio;
@@ -36,7 +38,7 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
                   aspectRatio:(CGFloat)aspectRatio
             pageControlHeight:(CGFloat)pageControlHeight
 {
-    
+
     self = [super initWithFrame:frame];
     if (self) {
         [self setUp:aspectRatio pageControlHeight:pageControlHeight];
@@ -46,7 +48,7 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
 
 - (void)setUp:(CGFloat)aspectRatio pageControlHeight:(CGFloat)pageControlHeight {
     self.aspectRatio = aspectRatio;
-    
+
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
@@ -58,24 +60,44 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
         [self.collectionView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
         [self.collectionView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-pageControlHeight],
     ]];
-    
+
     [self.collectionView setPagingEnabled:YES];
     self.collectionView.showsHorizontalScrollIndicator = NO;
     [self.collectionView registerClass:SlideCollectionViewCell.class forCellWithReuseIdentifier:kSlideCellIdentifier];
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
     self.collectionView.backgroundColor = [Colors get].white;
-    
+
+    self.scrollView = [[UIScrollView alloc] init];
+    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addSubview:self.scrollView];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.scrollView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
+        [self.scrollView.widthAnchor constraintEqualToConstant:88.0],
+        [self.scrollView.heightAnchor constraintEqualToConstant:50.0],
+        [self.scrollView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:15.0],
+    ]];
+
+    self.contentView = [[UIScrollView alloc] init];
+    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.scrollView addSubview:self.contentView];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.contentView.topAnchor constraintEqualToAnchor:self.scrollView.topAnchor],
+        [self.contentView.leadingAnchor constraintEqualToAnchor:self.scrollView.leadingAnchor],
+        [self.contentView.trailingAnchor constraintEqualToAnchor:self.scrollView.trailingAnchor],
+        [self.contentView.bottomAnchor constraintEqualToAnchor:self.scrollView.bottomAnchor],
+        [self.contentView.heightAnchor constraintEqualToConstant:50.0]
+    ]];
+
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.pageIndicatorTintColor = [Colors get].milkyGrey;
-    
-    [self addSubview:self.pageControl];
+    [self.contentView addSubview:self.pageControl];
     self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [self.pageControl.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
-        [self.pageControl.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:15.0],
-        [self.pageControl.heightAnchor constraintEqualToConstant:50.0],
-        [self.pageControl.widthAnchor constraintEqualToConstant:150.0],
+        [self.pageControl.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
+        [self.pageControl.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:0.0],
+        [self.pageControl.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:0.0],
+        [self.pageControl.heightAnchor constraintEqualToAnchor:self.contentView.heightAnchor],
     ]];
 }
 
@@ -139,7 +161,17 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     CGFloat indexOfScrolledItem = [self getIndexOfScrolledItem];
     self.indexOfScrolledItem = indexOfScrolledItem;
-    [self.pageControl setCurrentPage:(int) indexOfScrolledItem];
+    NSInteger prevPage = self.pageControl.currentPage;
+		NSInteger currentPage = (NSInteger) indexOfScrolledItem;
+		[self.pageControl setCurrentPage:currentPage];
+		int indexToShow = indexOfScrolledItem;
+		if (indexToShow < self.pageControl.numberOfPages - 1 && prevPage < currentPage) {
+				indexToShow++;
+		}
+		if (indexToShow > 0 && prevPage > currentPage) {
+				indexToShow--;
+		}
+		[self.scrollView scrollRectToVisible:self.pageControl.subviews[(int) indexToShow].frame animated:YES];
     [self updateDots];
 }
 
