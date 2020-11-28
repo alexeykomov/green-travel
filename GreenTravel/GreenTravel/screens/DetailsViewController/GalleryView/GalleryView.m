@@ -9,6 +9,7 @@
 #import "GalleryView.h"
 #import "SlideCollectionViewCell.h"
 #import "Colors.h"
+#import "StyleUtils.h"
 
 @interface GalleryView ()
 
@@ -66,8 +67,8 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
     self.collectionView.backgroundColor = [Colors get].white;
     
     self.pageControl = [[UIPageControl alloc] init];
-    self.pageControl.pageIndicatorTintColor = [Colors get].grey;
-    self.pageControl.currentPageIndicatorTintColor = [Colors get].black;
+    self.pageControl.pageIndicatorTintColor = [Colors get].milkyGrey;
+    
     [self addSubview:self.pageControl];
     self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
@@ -83,6 +84,28 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
     [self.collectionView reloadData];
     [self.pageControl setNumberOfPages:[self.imageURLs count]];
     [self.pageControl setCurrentPage:0];
+    [self updateDots];
+}
+
+- (void)updateDots {
+    if (@available(iOS 14.0, *)) {
+        for (int pageIndex = 0; pageIndex < [self.imageURLs count]; pageIndex++) {
+            [self.pageControl setIndicatorImage:getGradientImageToFillRect(CGRectMake(0, 0, 8, 8)) forPage:pageIndex];
+        }
+    } else {
+        NSInteger dotIndex = 0;
+        for (UIView *dotView in self.pageControl.subviews) {
+            for (CALayer *layer in dotView.layer.sublayers) {
+                if ([layer isKindOfClass:CAGradientLayer.class]) {
+                    [layer removeFromSuperlayer];
+                }
+            }
+            if (dotIndex == self.pageControl.currentPage) {
+                insertGradientLayer(dotView, dotView.layer.cornerRadius);
+            }
+            dotIndex++;
+        }
+    }
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -117,6 +140,7 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
     CGFloat indexOfScrolledItem = [self getIndexOfScrolledItem];
     self.indexOfScrolledItem = indexOfScrolledItem;
     [self.pageControl setCurrentPage:(int) indexOfScrolledItem];
+    [self updateDots];
 }
 
 @end

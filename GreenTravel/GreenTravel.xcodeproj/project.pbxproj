@@ -542,7 +542,7 @@
 			children = (
 				5A225EA7256927A200D71977 /* GalleryView.h */,
 				5A225EA8256927A200D71977 /* GalleryView.m */,
-				5AAB5A1D2569587300D52F53 /* SlieCollectionViewCell */,
+				5AAB5A1D2569587300D52F53 /* SlideCollectionViewCell */,
 			);
 			path = GalleryView;
 			sourceTree = "<group>";
@@ -693,8 +693,7 @@
 				5A1482E424EC80FC00EBB756 /* DetailsViewController.h */,
 				5A1482E524EC80FC00EBB756 /* DetailsViewController.m */,
 				5A225EAD256927A800D71977 /* GalleryView */,
-				5A0C84E62561CA9F00165D22 /* BannerView.h */,
-				5A0C84E72561CA9F00165D22 /* BannerView.m */,
+				5A606B802572605B0020B0B1 /* BannerView */,
 				5AEA97F62554A0650037A51D /* LinkedCategories */,
 			);
 			path = DetailsViewController;
@@ -720,6 +719,15 @@
 			path = BookmarksViewController;
 			sourceTree = "<group>";
 		};
+		5A606B802572605B0020B0B1 /* BannerView */ = {
+			isa = PBXGroup;
+			children = (
+				5A0C84E62561CA9F00165D22 /* BannerView.h */,
+				5A0C84E72561CA9F00165D22 /* BannerView.m */,
+			);
+			path = BannerView;
+			sourceTree = "<group>";
+		};
 		5AA75C02250425A400AE7331 /* DetailsModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -731,13 +739,13 @@
 			path = DetailsModel;
 			sourceTree = "<group>";
 		};
-		5AAB5A1D2569587300D52F53 /* SlieCollectionViewCell */ = {
+		5AAB5A1D2569587300D52F53 /* SlideCollectionViewCell */ = {
 			isa = PBXGroup;
 			children = (
 				5AAB5A172569484B00D52F53 /* SlideCollectionViewCell.h */,
 				5AAB5A182569484B00D52F53 /* SlideCollectionViewCell.m */,
 			);
-			path = SlieCollectionViewCell;
+			path = SlideCollectionViewCell;
 			sourceTree = "<group>";
 		};
 		5AEA97F62554A0650037A51D /* LinkedCategories */ = {

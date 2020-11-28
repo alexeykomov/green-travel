@@ -49,7 +49,7 @@ static NSString * const kPhotoCellId = @"photoCellId";
 
 - (void)setUp {
     self.headerLabel = [[UILabel alloc] init];
-    [self addSubview:self.headerLabel];
+    [self.contentView addSubview:self.headerLabel];
     [self.headerLabel setFont:[UIFont fontWithName:@"Montserrat-Bold" size:12.0]];
     
     self.headerLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -68,7 +68,7 @@ static NSString * const kPhotoCellId = @"photoCellId";
     self.collectionView.alwaysBounceHorizontal = YES;
     self.collectionView.showsHorizontalScrollIndicator = NO;
     
-    [self addSubview:self.collectionView];
+    [self.contentView addSubview:self.collectionView];
     self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
         [self.collectionView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:0.0],
@@ -78,7 +78,7 @@ static NSString * const kPhotoCellId = @"photoCellId";
     ]];
     
     self.allButton = [[UIButton alloc] init];
-    [self addSubview:self.allButton];
+    [self.contentView addSubview:self.allButton];
     [self.allButton.titleLabel setFont:[UIFont fontWithName:@"Montserrat-Semibold" size:12.0]];
     [self.allButton setAttributedTitle:getAttributedString(@"Все", [Colors get].green, 12.0, UIFontWeightSemibold) forState:UIControlStateNormal];
     [self.allButton addTarget:self action:@selector(onAllButtonPress:) forControlEvents:UIControlEventTouchUpInside];

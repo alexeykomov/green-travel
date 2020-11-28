@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+void insertGradientLayer(UIView *view, CGFloat cornerRadius);
 UIImage* getGradientImageToFillRect(CGRect rect);
 void configureNavigationBar(UINavigationBar *navigationBar);
 void drawShadow(UIView *view);

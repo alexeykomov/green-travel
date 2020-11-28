@@ -8,6 +8,7 @@
 
 #import "BannerView.h"
 #import "Colors.h"
+#import "StyleUtils.h"
 
 @interface BannerView ()
 
@@ -29,15 +30,7 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
-    
-    self.gradient.frame = self.bounds;
-    self.gradient.colors = @[(__bridge id)[Colors get].green.CGColor, (__bridge id)[Colors get].shamrock.CGColor];
-    self.gradient.startPoint = CGPointMake(0, 0);
-    self.gradient.endPoint = CGPointMake(1, 0);
-    if (!self.gradient.superlayer) {
-        [self.layer insertSublayer:self.gradient atIndex:0];
-    }
-    
+    insertGradientLayer(self, 0.0);
 }
 
 - (instancetype)initWithFrame:(CGRect)frame

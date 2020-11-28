@@ -11,6 +11,25 @@
 #import "TextUtils.h"
 
 
+CAGradientLayer* createGradientLayer(UIView *view) {
+    CAGradientLayer *gradient = [[CAGradientLayer alloc] init];
+    gradient.frame = view.bounds;
+    gradient.colors = @[(__bridge id)[Colors get].green.CGColor, (__bridge id)[Colors get].shamrock.CGColor];
+    gradient.startPoint = CGPointMake(0, 0);
+    gradient.endPoint = CGPointMake(1, 0);
+    return gradient;
+}
+
+void insertGradientLayer(UIView *view, CGFloat cornerRadius) {
+    CAGradientLayer *gradient = createGradientLayer(view);
+    if (cornerRadius) {
+        gradient.cornerRadius = cornerRadius;
+    }
+    if (!gradient.superlayer) {
+        [view.layer insertSublayer:gradient atIndex:0];
+    }
+}
+
 UIImage* getGradientImageToFillRect(CGRect rect) {
     CAGradientLayer *gradient = [[CAGradientLayer alloc] init];
     gradient.frame = rect;
