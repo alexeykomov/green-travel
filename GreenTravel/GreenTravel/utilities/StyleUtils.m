@@ -30,12 +30,15 @@ void insertGradientLayer(UIView *view, CGFloat cornerRadius) {
     }
 }
 
-UIImage* getGradientImageToFillRect(CGRect rect) {
+UIImage* getGradientImageToFillRectWithRadius(CGRect rect, CGFloat cornerRadius) {
     CAGradientLayer *gradient = [[CAGradientLayer alloc] init];
     gradient.frame = rect;
     gradient.colors = @[(__bridge id)[Colors get].green.CGColor, (__bridge id)[Colors get].shamrock.CGColor];
     gradient.startPoint = CGPointMake(0, 0);
     gradient.endPoint = CGPointMake(1, 0);
+    if (cornerRadius) {
+        gradient.cornerRadius = cornerRadius;
+    }
     
     UIImage* gradientImage;
     UIGraphicsBeginImageContext(gradient.frame.size);
@@ -45,6 +48,10 @@ UIImage* getGradientImageToFillRect(CGRect rect) {
     gradientImage = [UIGraphicsGetImageFromCurrentImageContext() resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
     UIGraphicsEndImageContext();
     return gradientImage;
+}
+
+UIImage* getGradientImageToFillRect(CGRect rect) {
+    return getGradientImageToFillRectWithRadius(rect, 0.0);
 }
 
 void configureNavigationBar(UINavigationBar *navigationBar) {

@@ -11,5 +11,6 @@
 
 void insertGradientLayer(UIView *view, CGFloat cornerRadius);
 UIImage* getGradientImageToFillRect(CGRect rect);
+UIImage* getGradientImageToFillRectWithRadius(CGRect rect, CGFloat cornerRadius);
 void configureNavigationBar(UINavigationBar *navigationBar);
 void drawShadow(UIView *view);

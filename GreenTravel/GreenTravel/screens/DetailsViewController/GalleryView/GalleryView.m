@@ -68,37 +68,48 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
     self.collectionView.delegate = self;
     self.collectionView.backgroundColor = [Colors get].white;
 
-    self.scrollView = [[UIScrollView alloc] init];
-    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self addSubview:self.scrollView];
-    [NSLayoutConstraint activateConstraints:@[
-        [self.scrollView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
-        [self.scrollView.widthAnchor constraintEqualToConstant:88.0],
-        [self.scrollView.heightAnchor constraintEqualToConstant:50.0],
-        [self.scrollView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:15.0],
-    ]];
-
-    self.contentView = [[UIScrollView alloc] init];
-    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.scrollView addSubview:self.contentView];
-    [NSLayoutConstraint activateConstraints:@[
-        [self.contentView.topAnchor constraintEqualToAnchor:self.scrollView.topAnchor],
-        [self.contentView.leadingAnchor constraintEqualToAnchor:self.scrollView.leadingAnchor],
-        [self.contentView.trailingAnchor constraintEqualToAnchor:self.scrollView.trailingAnchor],
-        [self.contentView.bottomAnchor constraintEqualToAnchor:self.scrollView.bottomAnchor],
-        [self.contentView.heightAnchor constraintEqualToConstant:50.0]
-    ]];
-
+#pragma mark - Page control
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.pageIndicatorTintColor = [Colors get].milkyGrey;
-    [self.contentView addSubview:self.pageControl];
     self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
-    [NSLayoutConstraint activateConstraints:@[
-        [self.pageControl.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
-        [self.pageControl.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:0.0],
-        [self.pageControl.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:0.0],
-        [self.pageControl.heightAnchor constraintEqualToAnchor:self.contentView.heightAnchor],
-    ]];
+    
+    if (@available(iOS 14.0, *)) {
+        self.pageControl.currentPageIndicatorTintColor = [Colors get].green;
+        self.pageControl.allowsContinuousInteraction = YES;
+        [self addSubview:self.pageControl];
+        [NSLayoutConstraint activateConstraints:@[
+            [self.pageControl.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
+            [self.pageControl.heightAnchor constraintEqualToConstant:50.0],
+            [self.pageControl.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:15.0],
+        ]];
+    } else {
+        self.scrollView = [[UIScrollView alloc] init];
+        self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:self.scrollView];
+        [NSLayoutConstraint activateConstraints:@[
+            [self.scrollView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
+            [self.scrollView.widthAnchor constraintEqualToConstant:88.0],
+            [self.scrollView.heightAnchor constraintEqualToConstant:50.0],
+            [self.scrollView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:15.0],
+        ]];
+        self.contentView = [[UIScrollView alloc] init];
+        self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.scrollView addSubview:self.contentView];
+        [NSLayoutConstraint activateConstraints:@[
+            [self.contentView.topAnchor constraintEqualToAnchor:self.scrollView.topAnchor],
+            [self.contentView.leadingAnchor constraintEqualToAnchor:self.scrollView.leadingAnchor],
+            [self.contentView.trailingAnchor constraintEqualToAnchor:self.scrollView.trailingAnchor],
+            [self.contentView.bottomAnchor constraintEqualToAnchor:self.scrollView.bottomAnchor],
+            [self.contentView.heightAnchor constraintEqualToConstant:50.0]
+        ]];
+        [self.contentView addSubview:self.pageControl];
+        [NSLayoutConstraint activateConstraints:@[
+            [self.pageControl.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
+            [self.pageControl.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:0.0],
+            [self.pageControl.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:0.0],
+            [self.pageControl.heightAnchor constraintEqualToAnchor:self.contentView.heightAnchor],
+        ]];
+    }
 }
 
 - (void)setUpWithPictureURLs:(NSArray<NSString *>*)pictureURLs {
@@ -106,15 +117,11 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
     [self.collectionView reloadData];
     [self.pageControl setNumberOfPages:[self.imageURLs count]];
     [self.pageControl setCurrentPage:0];
-    [self updateDots];
+    [self updateAfterSettingCurrentPage:0 prevPage:0 currentPage:0];
 }
 
-- (void)updateDots {
-    if (@available(iOS 14.0, *)) {
-        for (int pageIndex = 0; pageIndex < [self.imageURLs count]; pageIndex++) {
-            [self.pageControl setIndicatorImage:getGradientImageToFillRect(CGRectMake(0, 0, 8, 8)) forPage:pageIndex];
-        }
-    } else {
+- (void)updateBeforeSettingCurrentPage {
+    if (__builtin_available(iOS 14.0, *)) {} else {
         NSInteger dotIndex = 0;
         for (UIView *dotView in self.pageControl.subviews) {
             for (CALayer *layer in dotView.layer.sublayers) {
@@ -122,6 +129,26 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
                     [layer removeFromSuperlayer];
                 }
             }
+            dotIndex++;
+        }
+    }
+}
+
+- (void)updateAfterSettingCurrentPage:(NSInteger)indexOfScrolledItem
+          prevPage:(NSInteger)prevPage
+       currentPage:(NSInteger)currentPage {
+    if (__builtin_available(iOS 14.0, *)) {} else {
+        NSInteger indexToShow = indexOfScrolledItem;
+        if (indexToShow < self.pageControl.numberOfPages - 2 && prevPage < currentPage) {
+                indexToShow+=2;
+        }
+        if (indexToShow > 1 && prevPage > currentPage) {
+                indexToShow-=2;
+        }
+        [self.scrollView scrollRectToVisible:self.pageControl.subviews[indexToShow].frame animated:YES];
+    
+        int dotIndex = 0;
+        for (UIView *dotView in self.pageControl.subviews) {
             if (dotIndex == self.pageControl.currentPage) {
                 insertGradientLayer(dotView, dotView.layer.cornerRadius);
             }
@@ -163,16 +190,12 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
     self.indexOfScrolledItem = indexOfScrolledItem;
     NSInteger prevPage = self.pageControl.currentPage;
 		NSInteger currentPage = (NSInteger) indexOfScrolledItem;
+    [self updateBeforeSettingCurrentPage];
 		[self.pageControl setCurrentPage:currentPage];
-		int indexToShow = indexOfScrolledItem;
-		if (indexToShow < self.pageControl.numberOfPages - 1 && prevPage < currentPage) {
-				indexToShow++;
-		}
-		if (indexToShow > 0 && prevPage > currentPage) {
-				indexToShow--;
-		}
-		[self.scrollView scrollRectToVisible:self.pageControl.subviews[(int) indexToShow].frame animated:YES];
-    [self updateDots];
+    [self updateAfterSettingCurrentPage:indexOfScrolledItem
+                               prevPage:prevPage
+                            currentPage:currentPage];
 }
 
 @end
+ 
