@@ -334,22 +334,12 @@ static const CGFloat kPagerHeight = 20.0;
     self.copiedBannerView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.copiedBannerView];
     
-    self.copiedBannerViewTopConstraint = [self.copiedBannerView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor constant:-44.0];
+    self.copiedBannerViewTopConstraint = [self.copiedBannerView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor constant:-56.0];
     [NSLayoutConstraint activateConstraints:@[
         self.copiedBannerViewTopConstraint,
         [self.copiedBannerView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
         [self.copiedBannerView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
-        [self.copiedBannerView.heightAnchor constraintEqualToConstant:44.0]
-    ]];
-    
-    UILabel *bannerLabel = [[UILabel alloc] init];
-    [bannerLabel setAttributedText:getAttributedString(@"Скопировано", [Colors get].white, 12.0, UIFontWeightBold)];
-    bannerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.copiedBannerView addSubview:bannerLabel];
-    
-    [NSLayoutConstraint activateConstraints:@[
-        [bannerLabel.leadingAnchor constraintEqualToAnchor:self.copiedBannerView.leadingAnchor constant:10.0],
-        [bannerLabel.centerYAnchor constraintEqualToAnchor:self.copiedBannerView.centerYAnchor],
+        [self.copiedBannerView.heightAnchor constraintEqualToConstant:56.0]
     ]];
     
 #pragma mark - Add observers
@@ -464,7 +454,7 @@ static const CGFloat kPagerHeight = 20.0;
     
     __weak typeof(self) weakSelf = self;
     self.bannerHideAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:0.4 curve:UIViewAnimationCurveEaseIn animations:^{
-        weakSelf.copiedBannerViewTopConstraint.constant = -44.0;
+        weakSelf.copiedBannerViewTopConstraint.constant = -56.0;
         [weakSelf.view layoutIfNeeded];
     }];
     [self.bannerHideAnimator startAnimation];
