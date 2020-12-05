@@ -21,6 +21,8 @@
 @property (strong, nonatomic) UILabel *headerLabel;
 @property (strong, nonatomic) UIButton *favoritesButton;
 @property (strong, nonatomic) UIImageView *placeholder;
+@property (strong, nonatomic) SDWebImageCombinedOperation *loadImageOperation;
+
 
 
 @end
@@ -114,7 +116,7 @@
 - (void)updateCategory:(Category *)category {
      self.headerLabel.attributedText = getAttributedString(category.title, [Colors get].white, 16.0, UIFontWeightBold);
     [self.favoritesButton setHidden:YES];
-    loadImage(category.cover, ^(UIImage *image) {
+    self.loadImageOperation = loadImage(category.cover, ^(UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.placeholder setImage:image];
         });
@@ -123,6 +125,7 @@
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    [self.loadImageOperation cancel];
 }
 
 @end

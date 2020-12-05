@@ -15,6 +15,7 @@
 #import "SizeUtils.h"
 
 static NSString * const kPhotoCellId = @"photoCellId";
+static NSInteger kMaximalNumberOfItemsInCell = 10;
 
 @interface PlacesTableViewCell ()
 
@@ -93,9 +94,9 @@ static NSString * const kPhotoCellId = @"photoCellId";
 - (void)update:(Category *)item {
     self.headerLabel.attributedText = getAttributedString([item.title uppercaseString], [Colors get].black, 12.0, UIFontWeightBold);
     if ([item.categories count] > 0) {
-        self.dataSourceCategories = item.categories;
+        self.dataSourceCategories = [item.categories subarrayWithRange:NSMakeRange(0, MIN([item.categories count], kMaximalNumberOfItemsInCell))];
     } else {
-        self.dataSourceItems = item.items;
+        self.dataSourceItems = [item.items subarrayWithRange:NSMakeRange(0, MIN([item.items count], kMaximalNumberOfItemsInCell))];
     }
     self.item = item;
     [self.collectionView reloadData];
@@ -152,6 +153,8 @@ static NSString * const kPhotoCellId = @"photoCellId";
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    self.dataSourceCategories = @[];
+    self.dataSourceItems = @[];
 }
 
 - (void)onAllButtonPress:(id)sender {

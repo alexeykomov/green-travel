@@ -16,7 +16,7 @@
 #import "TextUtils.h"
 #import "CategoryUUIDToRelatedItemUUIDs.h"
 
-static NSString * const kGetCategoriesURL = @"http://localhost:3000/categories";
+static NSString * const kGetCategoriesURL = @"http://ecsc00a0916b.epam.com:3001/api/v1/object?mobile=true";
 static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@";
 
 @interface ApiService ()
@@ -54,14 +54,15 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
 - (NSArray<Category *>*)mapCategoriesFromJSON:(NSArray *)categories {
     NSMutableArray<Category *> *mappedCategories = [[NSMutableArray alloc] init];
     [categories enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSLog(@"Object from JSON: %@", obj);
         Category *category = [[Category alloc] init];
-        category.title = obj[@"title"];
-        category.categories = [self mapCategoriesFromJSON:obj[@"categories"]];
-        category.items = [self mapItemsFromJSON:obj[@"items"] category:category];
-        category.cover = obj[@"cover"];
-        category.uuid = obj[@"uuid"];
-        [mappedCategories addObject:category];
+        category.categories = [self mapCategoriesFromJSON:obj[@"children"]];
+        category.items = [self mapItemsFromJSON:obj[@"objects"] category:category];
+        if ([category.categories count] > 0 || [category.items count] > 0) {
+            category.title = obj[@"name"];
+            category.cover = obj[@"cover"];
+            category.uuid = obj[@"_id"];
+            [mappedCategories addObject:category];
+        }
     }];
     return mappedCategories;
 }
@@ -70,17 +71,33 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
                                  category:(Category *)category{
     NSMutableArray<PlaceItem *> *mappedItems = [[NSMutableArray alloc] init];
     [items enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSLog(@"Object from JSON: %@", obj);
+        
         PlaceItem *placeItem = [[PlaceItem alloc] init];
-        placeItem.title = obj[@"title"];
+        placeItem.title = obj[@"name"];
         placeItem.cover = obj[@"cover"];
         placeItem.category = category;
-        placeItem.bookmarked = obj[@"bokmarked"];
-        placeItem.coords = CLLocationCoordinate2DMake([obj[@"coords"][0] doubleValue], [obj[@"coords"][1] doubleValue]);
-        placeItem.uuid = obj[@"uuid"];
+        placeItem.details = [self mapDetailsFromJSON:obj];
+        placeItem.coords = [self mapPointCoordsFromJSON:obj];
+        placeItem.uuid = obj[@"_id"];
         [mappedItems addObject:placeItem];
     }];
     return mappedItems;
+}
+
+- (CLLocationCoordinate2D)mapPointCoordsFromJSON:(NSDictionary *)item {
+    return CLLocationCoordinate2DMake([item[@"location"][@"coordinates"][0] doubleValue], [item[@"location"][@"coordinates"][1] doubleValue]);
+}
+
+- (PlaceDetails *)mapDetailsFromJSON:(NSDictionary *)item {
+    PlaceDetails *details = [[PlaceDetails alloc] init];
+    NSMutableArray *imageURLs = [[NSMutableArray alloc] init];
+    [item[@"images"] enumerateObjectsUsingBlock:^(id  _Nonnull imageURL, NSUInteger idx, BOOL * _Nonnull stop) {
+        [imageURLs addObject:imageURL];
+    }];
+    details.images = [imageURLs copy];
+    details.address = item[@"adress"];
+    details.descriptionHTML = item[@"description"];
+    return details;
 }
 
 - (void)loadDetailsByUUID:(NSString *)uuid withCompletion:(void(^)(PlaceDetails*))completion{

@@ -12,6 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class Category;
+@class PlaceDetails;
 
 @interface PlaceItem : NSObject
 
@@ -21,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) Category *category;
 @property (assign, nonatomic) CLLocationCoordinate2D coords;
 @property (assign, nonatomic) BOOL bookmarked;
+@property (strong, nonatomic) PlaceDetails *details;
 @property (strong, nonatomic) void (^onPlaceCellPress)(void);
 @property (strong, nonatomic) void (^onFavoriteButtonPress)(void);
 
