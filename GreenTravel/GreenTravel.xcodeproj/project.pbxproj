@@ -75,7 +75,6 @@
 		5A2EBDA72529EE040078AF72 /* StoredCategory+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A2EBDA02529EE030078AF72 /* StoredCategory+CoreDataClass.m */; };
 		5A2EBDA82529EE040078AF72 /* StoredPlaceItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A2EBDA12529EE030078AF72 /* StoredPlaceItem+CoreDataClass.m */; };
 		5A2EBDA92529EE040078AF72 /* StoredCategory+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A2EBDA32529EE040078AF72 /* StoredCategory+CoreDataProperties.m */; };
-		5A2EBDAA2529EE040078AF72 /* StoredPlaceItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A2EBDA52529EE040078AF72 /* StoredPlaceItem+CoreDataProperties.m */; };
 		5A324B7B24F6E3CB0044A671 /* Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B7A24F6E3CB0044A671 /* Category.m */; };
 		5A324B8124F70B490044A671 /* ApiService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B8024F70B490044A671 /* ApiService.m */; };
 		5A324B8424F860420044A671 /* ImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B8324F860420044A671 /* ImageUtils.m */; };
@@ -86,6 +85,7 @@
 		5A324B9C24FBAEEB0044A671 /* BookmarksGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B9B24FBAEEB0044A671 /* BookmarksGroupModel.m */; };
 		5A324B9F24FEF87B0044A671 /* LocationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A324B9E24FEF87B0044A671 /* LocationModel.m */; };
 		5A5FB1E12517EAB800EBAA8E /* CategoryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A5FB1E02517EAB800EBAA8E /* CategoryUtils.m */; };
+		5A606B92257D0B900020B0B1 /* StoredPlaceItem+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A606B91257D0B8F0020B0B1 /* StoredPlaceItem+CoreDataProperties.m */; };
 		5A69921724F7DE51008FB47E /* IndexModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921624F7DE51008FB47E /* IndexModel.m */; };
 		5A69921A24F7DF63008FB47E /* PathItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921924F7DF63008FB47E /* PathItem.m */; };
 		5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921C24F7E11F008FB47E /* PlaceDetails.m */; };
@@ -225,10 +225,8 @@
 		5A2EBD9F2529EE030078AF72 /* StoredCategory+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StoredCategory+CoreDataProperties.h"; sourceTree = SOURCE_ROOT; };
 		5A2EBDA02529EE030078AF72 /* StoredCategory+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StoredCategory+CoreDataClass.m"; sourceTree = SOURCE_ROOT; };
 		5A2EBDA12529EE030078AF72 /* StoredPlaceItem+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StoredPlaceItem+CoreDataClass.m"; sourceTree = SOURCE_ROOT; };
-		5A2EBDA22529EE030078AF72 /* StoredPlaceItem+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StoredPlaceItem+CoreDataProperties.h"; sourceTree = SOURCE_ROOT; };
 		5A2EBDA32529EE040078AF72 /* StoredCategory+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StoredCategory+CoreDataProperties.m"; sourceTree = SOURCE_ROOT; };
 		5A2EBDA42529EE040078AF72 /* StoredCategory+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StoredCategory+CoreDataClass.h"; sourceTree = SOURCE_ROOT; };
-		5A2EBDA52529EE040078AF72 /* StoredPlaceItem+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "StoredPlaceItem+CoreDataProperties.m"; sourceTree = SOURCE_ROOT; };
 		5A2EBDA62529EE040078AF72 /* StoredPlaceItem+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StoredPlaceItem+CoreDataClass.h"; sourceTree = SOURCE_ROOT; };
 		5A324B7924F6E3CB0044A671 /* Category.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Category.h; sourceTree = "<group>"; };
 		5A324B7A24F6E3CB0044A671 /* Category.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Category.m; sourceTree = "<group>"; };
@@ -258,6 +256,8 @@
 		5A324BA5250025B90044A671 /* LocationObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationObserver.h; sourceTree = "<group>"; };
 		5A5FB1DF2517EAB800EBAA8E /* CategoryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoryUtils.h; sourceTree = "<group>"; };
 		5A5FB1E02517EAB800EBAA8E /* CategoryUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoryUtils.m; sourceTree = "<group>"; };
+		5A606B90257D0B8F0020B0B1 /* StoredPlaceItem+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "StoredPlaceItem+CoreDataProperties.h"; path = "/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceItem+CoreDataProperties.h"; sourceTree = "<absolute>"; };
+		5A606B91257D0B8F0020B0B1 /* StoredPlaceItem+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "StoredPlaceItem+CoreDataProperties.m"; path = "/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceItem+CoreDataProperties.m"; sourceTree = "<absolute>"; };
 		5A69921524F7DE51008FB47E /* IndexModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexModel.h; sourceTree = "<group>"; };
 		5A69921624F7DE51008FB47E /* IndexModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexModel.m; sourceTree = "<group>"; };
 		5A69921824F7DF63008FB47E /* PathItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PathItem.h; sourceTree = "<group>"; };
@@ -629,6 +629,8 @@
 		5A5FB19F25057A6300EBAA8E /* managedobjects */ = {
 			isa = PBXGroup;
 			children = (
+				5A606B90257D0B8F0020B0B1 /* StoredPlaceItem+CoreDataProperties.h */,
+				5A606B91257D0B8F0020B0B1 /* StoredPlaceItem+CoreDataProperties.m */,
 				5A0C84B12559C89600165D22 /* StoredRelatedItemUUID+CoreDataProperties.h */,
 				5A0C84AF2559C89600165D22 /* StoredRelatedItemUUID+CoreDataClass.h */,
 				5A0C84B42559C89600165D22 /* StoredRelatedItemUUID+CoreDataClass.m */,
@@ -645,10 +647,8 @@
 				5AF2C68A253C589300B8B3BD /* StoredSearchItem+CoreDataClass.h */,
 				5AF2C68B253C589300B8B3BD /* StoredSearchItem+CoreDataClass.m */,
 				5AF2C68C253C589300B8B3BD /* StoredSearchItem+CoreDataProperties.m */,
-				5A2EBDA22529EE030078AF72 /* StoredPlaceItem+CoreDataProperties.h */,
 				5A2EBDA62529EE040078AF72 /* StoredPlaceItem+CoreDataClass.h */,
 				5A2EBDA12529EE030078AF72 /* StoredPlaceItem+CoreDataClass.m */,
-				5A2EBDA52529EE040078AF72 /* StoredPlaceItem+CoreDataProperties.m */,
 				5A2EBD9F2529EE030078AF72 /* StoredCategory+CoreDataProperties.h */,
 				5A2EBDA42529EE040078AF72 /* StoredCategory+CoreDataClass.h */,
 				5A2EBDA02529EE030078AF72 /* StoredCategory+CoreDataClass.m */,
@@ -1013,6 +1013,7 @@
 				5A0C84B92559C89600165D22 /* StoredRelatedItemUUID+CoreDataClass.m in Sources */,
 				5A69921A24F7DF63008FB47E /* PathItem.m in Sources */,
 				5A1482F224EF005300EBB756 /* BookmarkCell.m in Sources */,
+				5A606B92257D0B900020B0B1 /* StoredPlaceItem+CoreDataProperties.m in Sources */,
 				5A324B8A24FAB9780044A671 /* SearchModel.m in Sources */,
 				5A324B9F24FEF87B0044A671 /* LocationModel.m in Sources */,
 				5A14825E24E7ED9400EBB756 /* main.m in Sources */,
@@ -1048,7 +1049,6 @@
 				5A0C84BD2559C93800165D22 /* StoredPlaceDetails+CoreDataClass.m in Sources */,
 				5A1482E924EC8C2C00EBB756 /* PlacesViewController.m in Sources */,
 				5A1482CE24EB091300EBB756 /* PlaceItem.m in Sources */,
-				5A2EBDAA2529EE040078AF72 /* StoredPlaceItem+CoreDataProperties.m in Sources */,
 				5A5FB1E12517EAB800EBAA8E /* CategoryUtils.m in Sources */,
 				5A2EBDA92529EE040078AF72 /* StoredCategory+CoreDataProperties.m in Sources */,
 				5A69921724F7DE51008FB47E /* IndexModel.m in Sources */,

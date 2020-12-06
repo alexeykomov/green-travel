@@ -22,7 +22,8 @@
 
 @end
 
-NSString * const kSlideCellIdentifier = @"slideCellId";
+static NSString * const kSlideCellIdentifier = @"slideCellId";
+static const NSInteger kMaximalNumberOfDotsForCustomPageControl = 6;
 
 @implementation GalleryView
 
@@ -35,18 +36,19 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
 */
 
 - (instancetype)initWithFrame:(CGRect)frame
+                    imageURLs:(NSArray<NSString *>*)imageURLs
                   aspectRatio:(CGFloat)aspectRatio
             pageControlHeight:(CGFloat)pageControlHeight
 {
 
     self = [super initWithFrame:frame];
     if (self) {
-        [self setUp:aspectRatio pageControlHeight:pageControlHeight];
+        [self setUp:imageURLs aspectRatio:aspectRatio pageControlHeight:pageControlHeight];
     }
     return self;
 }
 
-- (void)setUp:(CGFloat)aspectRatio pageControlHeight:(CGFloat)pageControlHeight {
+- (void)setUp:(NSArray<NSString *>*)imageURLs aspectRatio:(CGFloat)aspectRatio pageControlHeight:(CGFloat)pageControlHeight {
     self.aspectRatio = aspectRatio;
 
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -82,7 +84,16 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
             [self.pageControl.heightAnchor constraintEqualToConstant:50.0],
             [self.pageControl.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:15.0],
         ]];
+    } else if ([imageURLs count] <= kMaximalNumberOfDotsForCustomPageControl) {
+        self.pageControl.currentPageIndicatorTintColor = [Colors get].green;
+        [self addSubview:self.pageControl];
+        [NSLayoutConstraint activateConstraints:@[
+            [self.pageControl.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
+            [self.pageControl.heightAnchor constraintEqualToConstant:50.0],
+            [self.pageControl.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:15.0],
+        ]];
     } else {
+        self.pageControl.currentPageIndicatorTintColor = [Colors get].green;
         self.scrollView = [[UIScrollView alloc] init];
         self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:self.scrollView];
@@ -110,6 +121,7 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
             [self.pageControl.heightAnchor constraintEqualToAnchor:self.contentView.heightAnchor],
         ]];
     }
+    [self setUpWithPictureURLs:imageURLs];
 }
 
 - (void)setUpWithPictureURLs:(NSArray<NSString *>*)pictureURLs {
@@ -121,23 +133,27 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
 }
 
 - (void)updateBeforeSettingCurrentPage {
-    if (__builtin_available(iOS 14.0, *)) {} else {
-        NSInteger dotIndex = 0;
-        for (UIView *dotView in self.pageControl.subviews) {
-            for (CALayer *layer in dotView.layer.sublayers) {
-                if ([layer isKindOfClass:CAGradientLayer.class]) {
-                    [layer removeFromSuperlayer];
-                }
+    if (__builtin_available(iOS 14.0, *)) {
+        return;
+    }
+    NSInteger dotIndex = 0;
+    for (UIView *dotView in self.pageControl.subviews) {
+        for (CALayer *layer in dotView.layer.sublayers) {
+            if ([layer isKindOfClass:CAGradientLayer.class]) {
+                [layer removeFromSuperlayer];
             }
-            dotIndex++;
         }
+        dotIndex++;
     }
 }
 
 - (void)updateAfterSettingCurrentPage:(NSInteger)indexOfScrolledItem
           prevPage:(NSInteger)prevPage
        currentPage:(NSInteger)currentPage {
-    if (__builtin_available(iOS 14.0, *)) {} else {
+    if (__builtin_available(iOS 14.0, *)) {
+        return;
+    }
+    if ([self.imageURLs count] > kMaximalNumberOfDotsForCustomPageControl) {
         NSInteger indexToShow = indexOfScrolledItem;
         if (indexToShow < self.pageControl.numberOfPages - 2 && prevPage < currentPage) {
                 indexToShow+=2;
@@ -146,14 +162,13 @@ NSString * const kSlideCellIdentifier = @"slideCellId";
                 indexToShow-=2;
         }
         [self.scrollView scrollRectToVisible:self.pageControl.subviews[indexToShow].frame animated:YES];
-    
-        int dotIndex = 0;
-        for (UIView *dotView in self.pageControl.subviews) {
-            if (dotIndex == self.pageControl.currentPage) {
-                insertGradientLayer(dotView, dotView.layer.cornerRadius);
-            }
-            dotIndex++;
+    }
+    int dotIndex = 0;
+    for (UIView *dotView in self.pageControl.subviews) {
+        if (dotIndex == self.pageControl.currentPage) {
+            insertGradientLayer(dotView, dotView.layer.cornerRadius);
         }
+        dotIndex++;
     }
 }
 

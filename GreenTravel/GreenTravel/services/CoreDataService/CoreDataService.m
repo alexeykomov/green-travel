@@ -97,6 +97,7 @@ NSPersistentContainer *_persistentContainer;
     item.coords = coords;
     item.cover = storedItem.coverURL;
     item.bookmarked = storedItem.bookmarked;
+    item.details = [self mapStoredDetailsToDetails:storedItem.details];
     return item;
 }
 
@@ -165,6 +166,7 @@ NSPersistentContainer *_persistentContainer;
             storedItem.coverURL = item.cover;
             storedItem.uuid = item.uuid;
             storedItem.bookmarked = item.bookmarked;
+            storedItem.details = [self mapDetailsToStoredDetails:item.details];
             [storedCategory addItemsObject:storedItem];
         }];
         [parentCategory addCategoriesObject:storedCategory];
@@ -173,6 +175,50 @@ NSPersistentContainer *_persistentContainer;
         }
         [weakSelf.ctx save:&error];
     }];
+}
+
+#pragma mark - Mapping
+
+- (StoredPlaceDetails *)mapDetailsToStoredDetails:(PlaceDetails *)details {
+    __weak typeof(self) weakSelf = self;
+    StoredPlaceDetails *storedDetails = [NSEntityDescription insertNewObjectForEntityForName:@"StoredPlaceDetails" inManagedObjectContext:weakSelf.ctx];
+    storedDetails.uuid = details.uuid;
+    storedDetails.address = details.address;
+    storedDetails.descriptionHTML = details.descriptionHTML;
+    storedDetails.imageURLs = [details.images componentsJoinedByString:@","];
+    // Save linked categories.
+    [details.categoryIdToItems enumerateObjectsUsingBlock:^(CategoryUUIDToRelatedItemUUIDs * _Nonnull categoryUUIDToRelatedItemUUIDs, NSUInteger idx, BOOL * _Nonnull stop) {
+        StoredCategoryUUIDToRelatedItemUUIDs *relatedCategoryUUIDs = [NSEntityDescription insertNewObjectForEntityForName:@"StoredCategoryUUIDToRelatedItemUUIDs" inManagedObjectContext:weakSelf.ctx];
+        relatedCategoryUUIDs.uuid = categoryUUIDToRelatedItemUUIDs.categoryUUID;
+        [categoryUUIDToRelatedItemUUIDs.relatedItemUUIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            StoredRelatedItemUUID *relatedItemUUID = [NSEntityDescription insertNewObjectForEntityForName:@"StoredRelatedItemUUID" inManagedObjectContext:weakSelf.ctx];
+            relatedItemUUID.uuid = obj;
+            [relatedCategoryUUIDs addRelatedItemUUIDsObject:relatedItemUUID];
+        }];
+        [storedDetails addLinkedCategoriesObject:relatedCategoryUUIDs];
+    }];
+    return storedDetails;
+}
+
+- (PlaceDetails *)mapStoredDetailsToDetails:(StoredPlaceDetails *)storedDetails {
+    PlaceDetails *details = [[PlaceDetails alloc] init];
+    details.address = storedDetails.address;
+    details.images = [storedDetails.imageURLs componentsSeparatedByString:@","];
+    details.descriptionHTML = storedDetails.descriptionHTML;
+    
+    NSMutableArray<CategoryUUIDToRelatedItemUUIDs *> *categoryIdToItems = [[NSMutableArray alloc] init];
+    [storedDetails.linkedCategories enumerateObjectsUsingBlock:^(StoredCategoryUUIDToRelatedItemUUIDs * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        CategoryUUIDToRelatedItemUUIDs *categoryUUIDToRelatedItemUUIDs = [[CategoryUUIDToRelatedItemUUIDs alloc] init];
+        categoryUUIDToRelatedItemUUIDs.categoryUUID = obj.uuid;
+        NSMutableArray<NSString *> *relatedItemUUIDs = [[NSMutableArray alloc] init];
+        [obj.relatedItemUUIDs enumerateObjectsUsingBlock:^(StoredRelatedItemUUID * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [relatedItemUUIDs addObject:obj.uuid];
+        }];
+        categoryUUIDToRelatedItemUUIDs.relatedItemUUIDs = [[NSOrderedSet alloc] initWithArray:relatedItemUUIDs];
+        [categoryIdToItems addObject:categoryUUIDToRelatedItemUUIDs];
+    }];
+    details.categoryIdToItems = categoryIdToItems;
+    return details;
 }
 
 #pragma mark - Search items

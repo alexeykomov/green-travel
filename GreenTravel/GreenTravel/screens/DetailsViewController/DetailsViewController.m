@@ -22,6 +22,7 @@
 #import "LinkedCategoriesView.h"
 #import "BannerView.h"
 #import "GalleryView.h"
+#import "CategoryUtils.h"
 
 @interface DetailsViewController ()
 
@@ -51,8 +52,6 @@
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) IndexModel *indexModel;
-@property (strong, nonatomic) DetailsModel *detailsModel;
-@property (strong, nonatomic) PlaceDetails *details;
 @property (strong, nonatomic) NSLayoutConstraint *aspectRatioConstraint;
 
 @end
@@ -63,7 +62,6 @@ static const CGFloat kPagerHeight = 20.0;
 @implementation DetailsViewController
 
 - (instancetype)initWithApiService:(ApiService *)apiService
-                      detailsModel:(DetailsModel *)detailsModel
                       indexModel:(IndexModel *)indexModel
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel
@@ -71,7 +69,6 @@ static const CGFloat kPagerHeight = 20.0;
     self = [super init];
     if (self) {
         _apiService = apiService;
-        _detailsModel = detailsModel;
         _mapModel = mapModel;
         _indexModel = indexModel;
         _locationModel = locationModel;
@@ -111,7 +108,10 @@ static const CGFloat kPagerHeight = 20.0;
     ]];
         
     #pragma mark - Preview image
-    self.imageGalleryView = [[GalleryView alloc] initWithFrame:CGRectZero aspectRatio:kPreviewImageAspectRatio pageControlHeight:kPagerHeight];
+    self.imageGalleryView = [[GalleryView alloc] initWithFrame:CGRectZero
+                                                     imageURLs:self.item.details.images
+                                                   aspectRatio:kPreviewImageAspectRatio
+                                             pageControlHeight:kPagerHeight];
     self.imageGalleryView.translatesAutoresizingMaskIntoConstraints = NO;
     self.imageGalleryView.layer.masksToBounds = YES;
     
@@ -264,7 +264,6 @@ static const CGFloat kPagerHeight = 20.0;
     self.linkedCategoriesView =
     [[LinkedCategoriesView alloc] initWithIndexModel:self.indexModel
                                           apiService:self.apiService
-                                        detailsModel:self.detailsModel
                                             mapModel:self.mapModel
                                        locationModel:self.locationModel
                           pushToNavigationController:^(PlacesViewController * _Nonnull placesViewController) {
@@ -343,66 +342,75 @@ static const CGFloat kPagerHeight = 20.0;
     ]];
     
 #pragma mark - Add observers
-    [self.detailsModel addObserver:self];
+    [self.indexModel addObserver:self];
     [self.indexModel addObserverBookmarks:self];
     
 #pragma mark - Load data
-    [self.detailsModel loadDetailsByUUID:self.item.uuid];
+    [self updateMainContent:self.item.details];
     if (!self.ready) {
         [self.activityIndicatorView startAnimating];
         [self.activityIndicatorView setHidden:NO];
     }
 }
 
-#pragma mark - Observers
-
-- (void)onDetailsUpdate:(NSMutableDictionary<NSString *,PlaceDetails *> *)itemUUIDToDetails items:(NSMutableDictionary<NSString *,PlaceItem *> *)itemUUIDToItem {
-    PlaceDetails *details = itemUUIDToDetails[self.item.uuid];
-    PlaceItem *item = itemUUIDToItem[self.item.uuid];
-    __weak typeof(self) weakSelf = self;
-    if (!self.details && details) {
-        loadImage(details.images[0], ^(UIImage *image) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-//                CGFloat aspectRatio = image.size.height / image.size.width;
-//                [NSLayoutConstraint deactivateConstraints:@[weakSelf.aspectRatioConstraint]];
-//                weakSelf.aspectRatioConstraint = [weakSelf.previewImageView.heightAnchor constraintEqualToAnchor:weakSelf.previewImageView.widthAnchor multiplier:aspectRatio];
-//                [NSLayoutConstraint activateConstraints:@[
-//                    weakSelf.aspectRatioConstraint
-//                ]];
-                [weakSelf.imageGalleryView setUpWithPictureURLs:details.images];
-            });
+- (void)updateMainContent:(PlaceDetails *)details {
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+        NSAttributedString *html = getAttributedStringFromHTML(details.descriptionHTML);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!self.ready) {
+                self.ready = YES;
+                [self.activityIndicatorContainerView setHidden:YES];
+                [self.activityIndicatorView stopAnimating];
+            }
+            self.titleLabel.attributedText = getAttributedString(self.item.title, [Colors get].black, 20.0, UIFontWeightSemibold);
+            if (details.address) {
+                self.addressLabel.attributedText = getAttributedString(details.address, [Colors get].black, 14.0, UIFontWeightRegular);
+            }
+            [self.locationButton setAttributedTitle:getAttributedString([NSString stringWithFormat:@"%f° N, %f° E", self.item.coords.latitude, self.item.coords.longitude], [Colors get].royalBlue, 14.0, UIFontWeightRegular) forState:UIControlStateNormal];
+            [self.descriptionTextView setAttributedText:html];
+            if (details.categoryIdToItems) {
+                [self.linkedCategoriesView update:details.categoryIdToItems];
+                if (self.linkedCategoriesViewHeightConstraint) {
+                    [NSLayoutConstraint deactivateConstraints:@[self.linkedCategoriesViewHeightConstraint]];
+                }
+                self.linkedCategoriesViewHeightConstraint = [self.linkedCategoriesView.heightAnchor constraintEqualToConstant:[details.categoryIdToItems count] * 46.0];
+                [NSLayoutConstraint activateConstraints:@[
+                    self.linkedCategoriesViewHeightConstraint
+                ]];
+                [self.linkedCategoriesView layoutIfNeeded];
+            }
         });
-    }
-    NSAttributedString *html = getAttributedStringFromHTML(details.descriptionHTML);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.ready) {
-            self.ready = YES;
-            [self.activityIndicatorContainerView setHidden:YES];
-            [self.activityIndicatorView stopAnimating];
-        }
-        weakSelf.titleLabel.attributedText = getAttributedString(item.title, [Colors get].black, 20.0, UIFontWeightSemibold);
-        weakSelf.addressLabel.attributedText = getAttributedString(details.address, [Colors get].black, 14.0, UIFontWeightRegular);
-        [weakSelf.locationButton setAttributedTitle:getAttributedString([NSString stringWithFormat:@"%f° N, %f° E", item.coords.latitude, item.coords.longitude], [Colors get].royalBlue, 14.0, UIFontWeightRegular) forState:UIControlStateNormal];
-        [weakSelf.descriptionTextView setAttributedText:html];
-        [weakSelf.linkedCategoriesView update:details.categoryIdToItems];
-        
-        if (weakSelf.linkedCategoriesViewHeightConstraint) {
-            [NSLayoutConstraint deactivateConstraints:@[weakSelf.linkedCategoriesViewHeightConstraint]];
-        }
-        weakSelf.linkedCategoriesViewHeightConstraint = [weakSelf.linkedCategoriesView.heightAnchor constraintEqualToConstant:[details.categoryIdToItems count] * 46.0];
-        [NSLayoutConstraint activateConstraints:@[
-            weakSelf.linkedCategoriesViewHeightConstraint
-        ]];
-        [weakSelf.linkedCategoriesView layoutIfNeeded];
-        
     });
 }
+
+- (void)updateDetails {
+    PlaceDetails *details = self.item.details;
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.imageGalleryView setUpWithPictureURLs:details.images];
+    });
+    [self updateMainContent:details];
+}
+
+#pragma mark - Observers
 
 - (void)onBookmarkUpdate:(PlaceItem *)item bookmark:(BOOL)bookmark {
     if ([self.item.uuid isEqualToString:item.uuid]) {
         [self.bookmarkButton setSelected:bookmark];
     }
 }
+
+- (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
+    NSString *itemUUID = self.item.uuid;
+    __weak typeof(self) weakSelf = self;
+    traverseCategories(categories, ^(Category *newCategory, PlaceItem *newItem) {
+        if ([newItem.uuid isEqualToString:itemUUID]) {
+            weakSelf.item = newItem;
+        }
+    });
+    [self updateDetails];
+}
+
 
 - (void)onMapButtonPress:(id)sender {
     MapItem *mapItem = [[MapItem alloc] init];

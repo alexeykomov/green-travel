@@ -98,6 +98,7 @@ static NSInteger kMaximalNumberOfItemsInCell = 10;
     } else {
         self.dataSourceItems = [item.items subarrayWithRange:NSMakeRange(0, MIN([item.items count], kMaximalNumberOfItemsInCell))];
     }
+    [self.allButton setHidden:([self.dataSourceItems count] + [self.dataSourceCategories count] <= 1)];
     self.item = item;
     [self.collectionView reloadData];
 }

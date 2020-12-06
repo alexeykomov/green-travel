@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 @class Category;
 @class PlaceItem;
 @class ApiService;
-@class DetailsModel;
 @class MapModel;
 @class LocationModel;
 @class IndexModel;
@@ -26,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) Category *category;
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel
                         apiService:(ApiService *)apiService
-                      detailsModel:(DetailsModel *)detailsModel
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel
                         bookmarked:(BOOL)bookmarked

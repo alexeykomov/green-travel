@@ -2,7 +2,7 @@
 //  StoredPlaceItem+CoreDataProperties.m
 //  
 //
-//  Created by Alex K on 10/4/20.
+//  Created by Alex K on 12/6/20.
 //
 //
 
@@ -24,5 +24,6 @@
 @dynamic title;
 @dynamic uuid;
 @dynamic parent;
+@dynamic details;
 
 @end

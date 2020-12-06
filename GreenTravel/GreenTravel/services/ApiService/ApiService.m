@@ -16,7 +16,7 @@
 #import "TextUtils.h"
 #import "CategoryUUIDToRelatedItemUUIDs.h"
 
-static NSString * const kGetCategoriesURL = @"http://ecsc00a0916b.epam.com:3001/api/v1/object?mobile=true";
+static NSString * const kGetCategoriesURL = @"http://localhost:3000/categories";
 static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@";
 
 @interface ApiService ()
@@ -70,14 +70,14 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
 - (NSArray<PlaceItem *>*)mapItemsFromJSON:(NSArray *)items
                                  category:(Category *)category{
     NSMutableArray<PlaceItem *> *mappedItems = [[NSMutableArray alloc] init];
+    __weak typeof(self) weakSelf = self;
     [items enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        
         PlaceItem *placeItem = [[PlaceItem alloc] init];
         placeItem.title = obj[@"name"];
         placeItem.cover = obj[@"cover"];
         placeItem.category = category;
-        placeItem.details = [self mapDetailsFromJSON:obj];
-        placeItem.coords = [self mapPointCoordsFromJSON:obj];
+        placeItem.details = [weakSelf mapDetailsFromJSON:obj];
+        placeItem.coords = [weakSelf mapPointCoordsFromJSON:obj];
         placeItem.uuid = obj[@"_id"];
         [mappedItems addObject:placeItem];
     }];
@@ -91,12 +91,24 @@ static NSString * const kGetDetailsBaseURL = @"http://localhost:3000/details/%@"
 - (PlaceDetails *)mapDetailsFromJSON:(NSDictionary *)item {
     PlaceDetails *details = [[PlaceDetails alloc] init];
     NSMutableArray *imageURLs = [[NSMutableArray alloc] init];
-    [item[@"images"] enumerateObjectsUsingBlock:^(id  _Nonnull imageURL, NSUInteger idx, BOOL * _Nonnull stop) {
-        [imageURLs addObject:imageURL];
-    }];
+    if (item[@"images"]) {
+        [item[@"images"] enumerateObjectsUsingBlock:^(id  _Nonnull imageURL, NSUInteger idx, BOOL * _Nonnull stop) {
+            [imageURLs addObject:imageURL];
+        }];
+    }
+    details.uuid = item[@"_id"];
     details.images = [imageURLs copy];
-    details.address = item[@"adress"];
-    details.descriptionHTML = item[@"description"];
+    if (item[@"address"]) {
+        details.address = item[@"address"];
+    } else {
+        details.address = @"";
+    }
+    if (item[@"description"] && ![item[@"description"] isEqual:[NSNull null]]) {
+        details.descriptionHTML = item[@"description"];
+    } else {
+        details.descriptionHTML = @"";
+    }
+    details.categoryIdToItems = @[];
     return details;
 }
 

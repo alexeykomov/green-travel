@@ -7,22 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DetailsObserver.h"
 #import "BookmarksObserver.h"
+#import "CategoriesObserver.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class PlaceItem;
 @class ApiService;
-@class DetailsModel;
 @class MapModel;
 @class LocationModel;
 @class IndexModel;
 
-@interface DetailsViewController : UIViewController <DetailsObserver, BookmarksObserver>
+@interface DetailsViewController : UIViewController <BookmarksObserver, CategoriesObserver>
 
 - (instancetype)initWithApiService:(ApiService *)apiService
-                      detailsModel:(DetailsModel *)detailsModel
                         indexModel:(IndexModel *)indexModel
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel;

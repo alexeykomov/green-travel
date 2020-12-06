@@ -2,12 +2,13 @@
 //  StoredPlaceItem+CoreDataProperties.h
 //  
 //
-//  Created by Alex K on 10/4/20.
+//  Created by Alex K on 12/6/20.
 //
 //
 
 #import "StoredPlaceItem+CoreDataClass.h"
 
+@class StoredPlaceDetails;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSString *title;
 @property (nullable, nonatomic, copy) NSString *uuid;
 @property (nullable, nonatomic, retain) StoredCategory *parent;
+@property (nullable, nonatomic, retain) StoredPlaceDetails *details;
 
 @end
 

@@ -24,7 +24,6 @@
 @property (strong, nonatomic) NSArray<NSArray *> *linkIds;
 @property (strong, nonatomic) IndexModel *indexModel;
 @property (strong, nonatomic) ApiService *apiService;
-@property (strong, nonatomic) DetailsModel *detailsModel;
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) NSMutableArray<Category *> *categories;
@@ -39,7 +38,6 @@ static NSString * const kCategoryLinkCellId = @"categoryLinkCellId";
 
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel
                      apiService:(nonnull ApiService *)apiService
-                   detailsModel:(nonnull DetailsModel *)detailsModel
                        mapModel:(nonnull MapModel *)mapModel
                   locationModel:(nonnull LocationModel *)locationModel
      pushToNavigationController:(nonnull void (^)(PlacesViewController * _Nonnull))pushToNavigationController
@@ -49,7 +47,6 @@ static NSString * const kCategoryLinkCellId = @"categoryLinkCellId";
         self.categories = [[NSMutableArray alloc] init];
         self.apiService = apiService;
         self.indexModel = indexModel;
-        self.detailsModel = detailsModel;
         self.mapModel = mapModel;
         self.locationModel = locationModel;
         self.pushToNavigationController = pushToNavigationController;
@@ -92,7 +89,6 @@ static NSString * const kCategoryLinkCellId = @"categoryLinkCellId";
     PlacesViewController *placesViewController =
     [[PlacesViewController alloc] initWithIndexModel:self.indexModel
                                           apiService:self.apiService
-                                        detailsModel:self.detailsModel
                                             mapModel:self.mapModel
                                        locationModel:self.locationModel
                                           bookmarked:NO

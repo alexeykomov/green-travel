@@ -177,7 +177,7 @@ static const CGFloat kSearchRowHeight = 40.0;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    DetailsViewController *detailsController = [[DetailsViewController alloc] initWithApiService:self.apiService detailsModel:self.detailsModel indexModel:self.indexModel mapModel:self.mapModel locationModel:self.locationModel];
+    DetailsViewController *detailsController = [[DetailsViewController alloc] initWithApiService:self.apiService indexModel:self.indexModel mapModel:self.mapModel locationModel:self.locationModel];
     if ([self isSearching]) {
         SearchItem *searchItem = self.dataSourceFiltered[indexPath.row];
         detailsController.item = searchItem.correspondingPlaceItem;

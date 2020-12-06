@@ -172,7 +172,6 @@ static const CGFloat kSpacing = 12.0;
     PlacesViewController *placesViewController =
     [[PlacesViewController alloc] initWithIndexModel:self.indexModel
                                           apiService:self.apiService
-                                        detailsModel:self.detailsModel
                                             mapModel:self.mapModel
                                        locationModel:self.locationModel
                                           bookmarked:YES allowedItemUUIDs:nil];

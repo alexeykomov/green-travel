@@ -10,7 +10,6 @@
 
 @class Category;
 @class ApiService;
-@class DetailsModel;
 @class MapModel;
 @class LocationModel;
 @class IndexModel;
@@ -23,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel
                      apiService:(nonnull ApiService *)apiService
-                   detailsModel:(nonnull DetailsModel *)detailsModel
                        mapModel:(nonnull MapModel *)mapModel
                   locationModel:(nonnull LocationModel *)locationModel
      pushToNavigationController:(void(^)(PlacesViewController *))pushToNavigationController;
