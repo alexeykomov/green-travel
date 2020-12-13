@@ -11,6 +11,14 @@
 #import "Colors.h"
 #import "StyleUtils.h"
 
+typedef NS_ENUM(NSInteger, PageControlState) {
+    PageControlStateLeftDots5,
+    PageControlStateLeftDots6,
+    PageControlStateDots7,
+    PageControlStateRightDots6,
+    PageControlStateRightDots5
+};
+
 @interface GalleryView ()
 
 @property (strong, nonatomic) UIScrollView *scrollView;
@@ -19,11 +27,16 @@
 @property (strong, nonatomic) NSArray<NSString *> *imageURLs;
 @property (assign, nonatomic) CGFloat aspectRatio;
 @property (assign, nonatomic) CGFloat indexOfScrolledItem;
+@property (strong, nonatomic) NSLayoutConstraint *scrollViewWidthConstraint;
+@property (assign, nonatomic) PageControlState pageControlState;
 
 @end
 
 static NSString * const kSlideCellIdentifier = @"slideCellId";
 static const NSInteger kMaximalNumberOfDotsForCustomPageControl = 6;
+static const CGFloat kPageControlScrollContainerWidthFor5 = 78.0;
+static const CGFloat kPageControlScrollContainerWidthFor6 = 88.0;
+static const CGFloat kPageControlScrollContainerWidthFor7 = 98.0;
 
 @implementation GalleryView
 
@@ -44,6 +57,7 @@ static const NSInteger kMaximalNumberOfDotsForCustomPageControl = 6;
     self = [super initWithFrame:frame];
     if (self) {
         [self setUp:imageURLs aspectRatio:aspectRatio pageControlHeight:pageControlHeight];
+        self.pageControlState = PageControlStateLeftDots5;
     }
     return self;
 }
@@ -96,10 +110,12 @@ static const NSInteger kMaximalNumberOfDotsForCustomPageControl = 6;
         self.pageControl.currentPageIndicatorTintColor = [Colors get].green;
         self.scrollView = [[UIScrollView alloc] init];
         self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+        self.scrollView.backgroundColor = [Colors get].blue;
         [self addSubview:self.scrollView];
+        self.scrollViewWidthConstraint = [self.scrollView.widthAnchor constraintEqualToConstant:kPageControlScrollContainerWidthFor5];
         [NSLayoutConstraint activateConstraints:@[
             [self.scrollView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
-            [self.scrollView.widthAnchor constraintEqualToConstant:88.0],
+            self.scrollViewWidthConstraint,
             [self.scrollView.heightAnchor constraintEqualToConstant:50.0],
             [self.scrollView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:15.0],
         ]];
@@ -132,6 +148,53 @@ static const NSInteger kMaximalNumberOfDotsForCustomPageControl = 6;
     [self updateAfterSettingCurrentPage:0 prevPage:0 currentPage:0];
 }
 
+- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    SlideCollectionViewCell *cell = [self.collectionView
+                                     dequeueReusableCellWithReuseIdentifier:kSlideCellIdentifier
+                                     forIndexPath:indexPath];
+    [cell setUpWithImageURL:self.imageURLs[indexPath.row]];
+    return cell;
+}
+
+#pragma mark - Collection view
+
+- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return [self.imageURLs count];
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    CGFloat width = self.safeAreaLayoutGuide.layoutFrame.size.width;
+    return CGSizeMake(self.safeAreaLayoutGuide.layoutFrame.size.width, self.aspectRatio * width);
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 0.0;
+}
+
+#pragma mark - Scroll view delegate
+
+- (CGFloat)getIndexOfScrolledItem {
+    CGFloat indexOfScrolledItem = self.collectionView.contentOffset.x / self.frame.size.width;
+    return indexOfScrolledItem;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    CGFloat indexOfScrolledItem = [self getIndexOfScrolledItem];
+    self.indexOfScrolledItem = indexOfScrolledItem;
+    NSInteger prevPage = self.pageControl.currentPage;
+		NSInteger currentPage = (NSInteger) indexOfScrolledItem;
+    [self updateBeforeSettingCurrentPage];
+		[self.pageControl setCurrentPage:currentPage];
+    [self updateAfterSettingCurrentPage:indexOfScrolledItem
+                               prevPage:prevPage
+                            currentPage:currentPage];
+}
+
+#pragma mark - Update page control
 - (void)updateBeforeSettingCurrentPage {
     if (__builtin_available(iOS 14.0, *)) {
         return;
@@ -161,6 +224,9 @@ static const NSInteger kMaximalNumberOfDotsForCustomPageControl = 6;
         if (indexToShow > 1 && prevPage > currentPage) {
                 indexToShow-=2;
         }
+        
+        [self updateScrollViewWidth:indexOfScrolledItem];
+        
         [self.scrollView scrollRectToVisible:self.pageControl.subviews[indexToShow].frame animated:YES];
     }
     int dotIndex = 0;
@@ -172,44 +238,109 @@ static const NSInteger kMaximalNumberOfDotsForCustomPageControl = 6;
     }
 }
 
-- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    SlideCollectionViewCell *cell = [self.collectionView
-                                     dequeueReusableCellWithReuseIdentifier:kSlideCellIdentifier
-                                     forIndexPath:indexPath];
-    [cell setUpWithImageURL:self.imageURLs[indexPath.row]];
-    return cell;
+#pragma mark - State transitions
+
+- (PageControlState)getStateFromPreviousAndIndex:(NSInteger)index {
+    switch (self.pageControlState) {
+        case PageControlStateLeftDots5:
+            if (index <= 2) {
+                return PageControlStateLeftDots5;
+            }
+            if (index == 3) {
+                return PageControlStateLeftDots6;
+            }
+            if (index > 3 && index <= 7) {
+                return PageControlStateDots7;
+            }
+            if (index == 8) {
+                return PageControlStateRightDots6;
+            }
+            if (index > 8) {
+                return PageControlStateRightDots5;
+            }
+            return PageControlStateDots7;
+        case PageControlStateLeftDots6:
+            if (index == 2 || index == 3) {
+                return PageControlStateLeftDots6;
+            }
+            if (index == 1) {
+                return PageControlStateLeftDots5;
+            }
+            if (index > 3 && index <= 7) {
+                return PageControlStateDots7;
+            }
+            if (index == 8) {
+                return PageControlStateRightDots6;
+            }
+            if (index > 8) {
+                return PageControlStateRightDots5;
+            }
+        case PageControlStateDots7:
+            if (index >= 2 && index <= 7) {
+                return PageControlStateDots7;
+            }
+            if (index == 1) {
+                return PageControlStateLeftDots6;
+            }
+            if (index < 1) {
+                return PageControlStateLeftDots5;
+            }
+            if (index == 8) {
+                return PageControlStateRightDots6;
+            }
+            if (index > 8) {
+                return PageControlStateRightDots5;
+            }
+        case PageControlStateRightDots6:
+            if (index > 8) {
+                return PageControlStateRightDots5;
+            }
+            if (index >= 6 && index <= 8) {
+                return PageControlStateRightDots6;
+            }
+            if (index < 6 && index >= 2) {
+                return PageControlStateDots7;
+            }
+            if (index == 1) {
+                return PageControlStateLeftDots6;
+            }
+            if (index < 1) {
+                return PageControlStateLeftDots5;
+            }
+        case PageControlStateRightDots5:
+            if (index <= 9 && index >= 7) {
+                return PageControlStateRightDots5;
+            }
+            if (index == 6) {
+                return PageControlStateRightDots6;
+            }
+            if (index < 6 && index >= 2) {
+                return PageControlStateDots7;
+            }
+            if (index == 1) {
+                return PageControlStateLeftDots6;
+            }
+            if (index < 1) {
+                return PageControlStateLeftDots5;
+            }
+    }
+    return self.pageControlState;
 }
 
-- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self.imageURLs count];
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGFloat width = self.safeAreaLayoutGuide.layoutFrame.size.width;
-    return CGSizeMake(self.safeAreaLayoutGuide.layoutFrame.size.width, self.aspectRatio * width);
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 0.0;
-}
-
-#pragma mark - Scroll view delegate
-
-- (CGFloat)getIndexOfScrolledItem {
-    CGFloat indexOfScrolledItem = self.collectionView.contentOffset.x / self.frame.size.width;
-    return indexOfScrolledItem;
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    CGFloat indexOfScrolledItem = [self getIndexOfScrolledItem];
-    self.indexOfScrolledItem = indexOfScrolledItem;
-    NSInteger prevPage = self.pageControl.currentPage;
-		NSInteger currentPage = (NSInteger) indexOfScrolledItem;
-    [self updateBeforeSettingCurrentPage];
-		[self.pageControl setCurrentPage:currentPage];
-    [self updateAfterSettingCurrentPage:indexOfScrolledItem
-                               prevPage:prevPage
-                            currentPage:currentPage];
+- (void)updateScrollViewWidth:(NSInteger)index {
+    PageControlState pageControlState = [self getStateFromPreviousAndIndex:index];
+    CGFloat scrollViewWidth = 0;
+    if (pageControlState == PageControlStateLeftDots5 || pageControlState == PageControlStateRightDots5) {
+        scrollViewWidth = kPageControlScrollContainerWidthFor5;
+    } else if (pageControlState == PageControlStateLeftDots6 || pageControlState == PageControlStateRightDots6) {
+        scrollViewWidth = kPageControlScrollContainerWidthFor6;
+    } else {
+        scrollViewWidth = kPageControlScrollContainerWidthFor7;
+    }
+    
+    self.scrollViewWidthConstraint.constant = scrollViewWidth;
+    [self.scrollView setNeedsLayout];
+    [self.scrollView layoutIfNeeded];
 }
 
 @end

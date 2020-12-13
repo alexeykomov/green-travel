@@ -15,6 +15,7 @@
 		5A0C84BD2559C93800165D22 /* StoredPlaceDetails+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0C84AA2559C89500165D22 /* StoredPlaceDetails+CoreDataClass.m */; };
 		5A0C84C52559C93A00165D22 /* StoredPlaceDetails+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0C84AB2559C89500165D22 /* StoredPlaceDetails+CoreDataProperties.m */; };
 		5A0C84E82561CA9F00165D22 /* BannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0C84E72561CA9F00165D22 /* BannerView.m */; };
+		5A11BF8B2584F0FF00113B31 /* GalleryPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A11BF8A2584F0FF00113B31 /* GalleryPageControl.m */; };
 		5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824924E7ED9100EBB756 /* AppDelegate.m */; };
 		5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824C24E7ED9100EBB756 /* SceneDelegate.m */; };
 		5A14825024E7ED9100EBB756 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824F24E7ED9100EBB756 /* ViewController.m */; };
@@ -136,6 +137,8 @@
 		5A0C84DF25612C7900165D22 /* BookmarksObservable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarksObservable.h; sourceTree = "<group>"; };
 		5A0C84E62561CA9F00165D22 /* BannerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BannerView.h; sourceTree = "<group>"; };
 		5A0C84E72561CA9F00165D22 /* BannerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BannerView.m; sourceTree = "<group>"; };
+		5A11BF892584F0FF00113B31 /* GalleryPageControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GalleryPageControl.h; sourceTree = "<group>"; };
+		5A11BF8A2584F0FF00113B31 /* GalleryPageControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GalleryPageControl.m; sourceTree = "<group>"; };
 		5A14824524E7ED9100EBB756 /* GreenTravel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenTravel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A14824824E7ED9100EBB756 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5A14824924E7ED9100EBB756 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -321,6 +324,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A11BF8F2584F10500113B31 /* GalleryPageControl */ = {
+			isa = PBXGroup;
+			children = (
+				5A11BF892584F0FF00113B31 /* GalleryPageControl.h */,
+				5A11BF8A2584F0FF00113B31 /* GalleryPageControl.m */,
+			);
+			path = GalleryPageControl;
+			sourceTree = "<group>";
+		};
 		5A14823C24E7ED9000EBB756 = {
 			isa = PBXGroup;
 			children = (
@@ -542,6 +554,7 @@
 			children = (
 				5A225EA7256927A200D71977 /* GalleryView.h */,
 				5A225EA8256927A200D71977 /* GalleryView.m */,
+				5A11BF8F2584F10500113B31 /* GalleryPageControl */,
 				5AAB5A1D2569587300D52F53 /* SlideCollectionViewCell */,
 			);
 			path = GalleryView;
@@ -1011,6 +1024,7 @@
 				5A324B9124FB00A60044A671 /* MapModel.m in Sources */,
 				5A14829E24E9501100EBB756 /* PlacesTableViewCell.m in Sources */,
 				5A0C84B92559C89600165D22 /* StoredRelatedItemUUID+CoreDataClass.m in Sources */,
+				5A11BF8B2584F0FF00113B31 /* GalleryPageControl.m in Sources */,
 				5A69921A24F7DF63008FB47E /* PathItem.m in Sources */,
 				5A1482F224EF005300EBB756 /* BookmarkCell.m in Sources */,
 				5A606B92257D0B900020B0B1 /* StoredPlaceItem+CoreDataProperties.m in Sources */,
