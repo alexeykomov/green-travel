@@ -15,6 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger numberOfPages;
 @property (nonatomic, assign) NSInteger currentPage;
 
+- (void)moveToNextPage;
+- (void)moveToPrevPage;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -46,9 +46,11 @@ static const CGFloat kSpacing = 12.0;
 }
 
 - (void)setUp {
+    self.pageControlState = PageControlStateLeftDots5;
     
 #pragma mark - Content view
     self.contentView = [[UIStackView alloc] init];
+    self.contentView.backgroundColor = [Colors get].milkyGrey;
     self.contentView.alignment = UIStackViewAlignmentCenter;
     self.contentView.distribution = UIStackViewDistributionFill;
     self.contentView.spacing = kSpacing;
@@ -56,7 +58,7 @@ static const CGFloat kSpacing = 12.0;
     [self addSubview:self.contentView];
     self.centerOffsetConstraint = [self.contentView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor constant:0.0];
     [NSLayoutConstraint activateConstraints:@[
-        [self.contentView.topAnchor constraintEqualToAnchor:self.scrollView.topAnchor],
+        [self.contentView.topAnchor constraintEqualToAnchor:self.topAnchor],
         self.centerOffsetConstraint,
         [self.contentView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
         [self.contentView.heightAnchor constraintEqualToAnchor:self.heightAnchor]
@@ -74,12 +76,32 @@ static const CGFloat kSpacing = 12.0;
 
 - (void)moveToNextPage {
     PageControlState newState = [self getNextState:self.pageControlState forNextPage:self.currentPage + 1];
+    
+    BOOL shouldAddNewSubview = YES;
+    BOOL shouldDeleteOldSubview = NO;
+    
+    NSInteger prevCount = [self.contentView.arrangedSubviews count];
+    
     [self.contentView addArrangedSubview:[self createDotView:NO]];
-    self.centerOffsetConstraint.constant += 20.0;
+    
+    NSInteger newCount = [self.contentView.arrangedSubviews count];
+    CGFloat centerOffsetCompensation = (newCount * kDotWidth + (newCount - 1) *
+        kSpacing - (prevCount * kDotWidth + (prevCount - 1) * kSpacing)) / 2;
+    
+    self.centerOffsetConstraint.constant += centerOffsetCompensation;
     [self setNeedsLayout];
-    [UIView animateWithDuration:0.0 delay:0.0 options:nil animations:^{
-    } completion:^(BOOL finished) {
+    [self layoutIfNeeded];
+    __weak typeof(self) weakSelf = self;
+    UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:0.4 curve:UIViewAnimationCurveLinear animations:^{
+        weakSelf.centerOffsetConstraint.constant = -centerOffsetCompensation;
+        [weakSelf layoutIfNeeded];
     }];
+    [moveAnimator addCompletion:^(UIViewAnimatingPosition finalPosition) {
+        [weakSelf.contentView.subviews[0] removeFromSuperview];
+        weakSelf.centerOffsetConstraint.constant = 0.0;
+        [weakSelf layoutIfNeeded];
+    }];
+    [moveAnimator startAnimation];
 }
 
 - (void)moveToPrevPage {
@@ -89,15 +111,17 @@ static const CGFloat kSpacing = 12.0;
 - (void)setCurrentPage:(NSInteger)currentPage {
     NSInteger dotIndex = 0;
     for (UIView *dotView in self.contentView.subviews) {
-        for (CALayer *layer in dotView.layer.sublayers) {
-            if ([layer isKindOfClass:CAGradientLayer.class]) {
-                [layer removeFromSuperlayer];
-            }
-        }
+//        for (CALayer *layer in dotView.layer.sublayers) {
+//            if ([layer isKindOfClass:CAGradientLayer.class]) {
+//                [layer removeFromSuperlayer];
+//            }
+//        }
+        dotView.backgroundColor = [Colors get].black;
     }
     for (UIView *dotView in self.contentView.subviews) {
         if (dotIndex == currentPage) {
-            insertGradientLayer(dotView, 8.0);
+            //insertGradientLayer(dotView, 8.0);
+            dotView.backgroundColor = [Colors get].shamrock;
         }
         dotIndex++;
     }
@@ -114,7 +138,9 @@ static const CGFloat kSpacing = 12.0;
     dotView.layer.cornerRadius = 8.0;
     if (isCurrent) {
         insertGradientLayer(dotView, 8.0);
+        return dotView;
     }
+    dotView.backgroundColor = [Colors get].black;
     return dotView;
 }
 

@@ -10,6 +10,7 @@
 #import "SlideCollectionViewCell.h"
 #import "Colors.h"
 #import "StyleUtils.h"
+#import "GalleryPageControl.h"
 
 typedef NS_ENUM(NSInteger, PageControlState) {
     PageControlStateLeftDots5,
@@ -23,12 +24,11 @@ typedef NS_ENUM(NSInteger, PageControlState) {
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *contentView;
-@property (strong, nonatomic) UIPageControl *pageControl;
+@property (strong, nonatomic) GalleryPageControl *pageControl;
 @property (strong, nonatomic) NSArray<NSString *> *imageURLs;
 @property (assign, nonatomic) CGFloat aspectRatio;
 @property (assign, nonatomic) CGFloat indexOfScrolledItem;
 @property (strong, nonatomic) NSLayoutConstraint *scrollViewWidthConstraint;
-@property (assign, nonatomic) PageControlState pageControlState;
 
 @end
 
@@ -57,7 +57,6 @@ static const CGFloat kPageControlScrollContainerWidthFor7 = 98.0;
     self = [super initWithFrame:frame];
     if (self) {
         [self setUp:imageURLs aspectRatio:aspectRatio pageControlHeight:pageControlHeight];
-        self.pageControlState = PageControlStateLeftDots5;
     }
     return self;
 }
@@ -85,58 +84,17 @@ static const CGFloat kPageControlScrollContainerWidthFor7 = 98.0;
     self.collectionView.backgroundColor = [Colors get].white;
 
 #pragma mark - Page control
-    self.pageControl = [[UIPageControl alloc] init];
-    self.pageControl.pageIndicatorTintColor = [Colors get].milkyGrey;
+    self.pageControl = [[GalleryPageControl alloc] init];
+    [self addSubview:self.pageControl];
     self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
     
-    if (@available(iOS 14.0, *)) {
-        self.pageControl.currentPageIndicatorTintColor = [Colors get].green;
-        self.pageControl.allowsContinuousInteraction = YES;
-        [self addSubview:self.pageControl];
-        [NSLayoutConstraint activateConstraints:@[
-            [self.pageControl.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
-            [self.pageControl.heightAnchor constraintEqualToConstant:50.0],
-            [self.pageControl.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:15.0],
-        ]];
-    } else if ([imageURLs count] <= kMaximalNumberOfDotsForCustomPageControl) {
-        self.pageControl.currentPageIndicatorTintColor = [Colors get].green;
-        [self addSubview:self.pageControl];
-        [NSLayoutConstraint activateConstraints:@[
-            [self.pageControl.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
-            [self.pageControl.heightAnchor constraintEqualToConstant:50.0],
-            [self.pageControl.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:15.0],
-        ]];
-    } else {
-        self.pageControl.currentPageIndicatorTintColor = [Colors get].green;
-        self.scrollView = [[UIScrollView alloc] init];
-        self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-        self.scrollView.backgroundColor = [Colors get].blue;
-        [self addSubview:self.scrollView];
-        self.scrollViewWidthConstraint = [self.scrollView.widthAnchor constraintEqualToConstant:kPageControlScrollContainerWidthFor5];
-        [NSLayoutConstraint activateConstraints:@[
-            [self.scrollView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
-            self.scrollViewWidthConstraint,
-            [self.scrollView.heightAnchor constraintEqualToConstant:50.0],
-            [self.scrollView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:15.0],
-        ]];
-        self.contentView = [[UIScrollView alloc] init];
-        self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.scrollView addSubview:self.contentView];
-        [NSLayoutConstraint activateConstraints:@[
-            [self.contentView.topAnchor constraintEqualToAnchor:self.scrollView.topAnchor],
-            [self.contentView.leadingAnchor constraintEqualToAnchor:self.scrollView.leadingAnchor],
-            [self.contentView.trailingAnchor constraintEqualToAnchor:self.scrollView.trailingAnchor],
-            [self.contentView.bottomAnchor constraintEqualToAnchor:self.scrollView.bottomAnchor],
-            [self.contentView.heightAnchor constraintEqualToConstant:50.0]
-        ]];
-        [self.contentView addSubview:self.pageControl];
-        [NSLayoutConstraint activateConstraints:@[
-            [self.pageControl.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
-            [self.pageControl.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:0.0],
-            [self.pageControl.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:0.0],
-            [self.pageControl.heightAnchor constraintEqualToAnchor:self.contentView.heightAnchor],
-        ]];
-    }
+    [NSLayoutConstraint activateConstraints:@[
+        [self.pageControl.topAnchor constraintEqualToAnchor:self.collectionView.bottomAnchor],
+        [self.pageControl.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [self.pageControl.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [self.pageControl.heightAnchor constraintEqualToConstant:20.0],
+    ]];
+    
     [self setUpWithPictureURLs:imageURLs];
 }
 
@@ -179,168 +137,40 @@ static const CGFloat kPageControlScrollContainerWidthFor7 = 98.0;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat indexOfScrolledItem = ABS(round([self getIndexOfScrolledItem]));
+    NSLog(@"Collection view did scroll: %f", indexOfScrolledItem);
+    if (indexOfScrolledItem > self.indexOfScrolledItem) {
+        self.indexOfScrolledItem = indexOfScrolledItem;
+        [self.pageControl moveToNextPage];
+    }
+    if (indexOfScrolledItem < self.indexOfScrolledItem) {
+        self.indexOfScrolledItem = indexOfScrolledItem;
+        [self.pageControl moveToPrevPage];
+    }
     
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     CGFloat indexOfScrolledItem = [self getIndexOfScrolledItem];
-    self.indexOfScrolledItem = indexOfScrolledItem;
-    NSInteger prevPage = self.pageControl.currentPage;
-		NSInteger currentPage = (NSInteger) indexOfScrolledItem;
-    [self updateBeforeSettingCurrentPage];
-		[self.pageControl setCurrentPage:currentPage];
-    [self updateAfterSettingCurrentPage:indexOfScrolledItem
-                               prevPage:prevPage
-                            currentPage:currentPage];
+    NSLog(@"Collection view did end decelerating: %f", indexOfScrolledItem);
+//    self.indexOfScrolledItem = indexOfScrolledItem;
+//    NSInteger prevPage = self.pageControl.currentPage;
+//		NSInteger currentPage = (NSInteger) indexOfScrolledItem;
+//    [self updateBeforeSettingCurrentPage];
+//		[self.pageControl setCurrentPage:currentPage];
+//    [self updateAfterSettingCurrentPage:indexOfScrolledItem
+//                               prevPage:prevPage
+//                            currentPage:currentPage];
 }
 
 #pragma mark - Update page control
 - (void)updateBeforeSettingCurrentPage {
-    if (__builtin_available(iOS 14.0, *)) {
-        return;
-    }
-    NSInteger dotIndex = 0;
-    for (UIView *dotView in self.pageControl.subviews) {
-        for (CALayer *layer in dotView.layer.sublayers) {
-            if ([layer isKindOfClass:CAGradientLayer.class]) {
-                [layer removeFromSuperlayer];
-            }
-        }
-        dotIndex++;
-    }
+   
 }
 
 - (void)updateAfterSettingCurrentPage:(NSInteger)indexOfScrolledItem
           prevPage:(NSInteger)prevPage
        currentPage:(NSInteger)currentPage {
-    if (__builtin_available(iOS 14.0, *)) {
-        return;
-    }
-    if ([self.imageURLs count] > kMaximalNumberOfDotsForCustomPageControl) {
-        NSInteger indexToShow = indexOfScrolledItem;
-        if (indexToShow < self.pageControl.numberOfPages - 2 && prevPage < currentPage) {
-                indexToShow+=2;
-        }
-        if (indexToShow > 1 && prevPage > currentPage) {
-                indexToShow-=2;
-        }
-        
-        [self updateScrollViewWidth:indexOfScrolledItem];
-        
-        [self.scrollView scrollRectToVisible:self.pageControl.subviews[indexToShow].frame animated:YES];
-    }
-    int dotIndex = 0;
-    for (UIView *dotView in self.pageControl.subviews) {
-        if (dotIndex == self.pageControl.currentPage) {
-            insertGradientLayer(dotView, dotView.layer.cornerRadius);
-        }
-        dotIndex++;
-    }
-}
-
-#pragma mark - State transitions
-
-- (PageControlState)getStateFromPreviousAndIndex:(NSInteger)index {
-    switch (self.pageControlState) {
-        case PageControlStateLeftDots5:
-            if (index <= 2) {
-                return PageControlStateLeftDots5;
-            }
-            if (index == 3) {
-                return PageControlStateLeftDots6;
-            }
-            if (index > 3 && index <= 7) {
-                return PageControlStateDots7;
-            }
-            if (index == 8) {
-                return PageControlStateRightDots6;
-            }
-            if (index > 8) {
-                return PageControlStateRightDots5;
-            }
-            return PageControlStateDots7;
-        case PageControlStateLeftDots6:
-            if (index == 2 || index == 3) {
-                return PageControlStateLeftDots6;
-            }
-            if (index == 1) {
-                return PageControlStateLeftDots5;
-            }
-            if (index > 3 && index <= 7) {
-                return PageControlStateDots7;
-            }
-            if (index == 8) {
-                return PageControlStateRightDots6;
-            }
-            if (index > 8) {
-                return PageControlStateRightDots5;
-            }
-        case PageControlStateDots7:
-            if (index >= 2 && index <= 7) {
-                return PageControlStateDots7;
-            }
-            if (index == 1) {
-                return PageControlStateLeftDots6;
-            }
-            if (index < 1) {
-                return PageControlStateLeftDots5;
-            }
-            if (index == 8) {
-                return PageControlStateRightDots6;
-            }
-            if (index > 8) {
-                return PageControlStateRightDots5;
-            }
-        case PageControlStateRightDots6:
-            if (index > 8) {
-                return PageControlStateRightDots5;
-            }
-            if (index >= 6 && index <= 8) {
-                return PageControlStateRightDots6;
-            }
-            if (index < 6 && index >= 2) {
-                return PageControlStateDots7;
-            }
-            if (index == 1) {
-                return PageControlStateLeftDots6;
-            }
-            if (index < 1) {
-                return PageControlStateLeftDots5;
-            }
-        case PageControlStateRightDots5:
-            if (index <= 9 && index >= 7) {
-                return PageControlStateRightDots5;
-            }
-            if (index == 6) {
-                return PageControlStateRightDots6;
-            }
-            if (index < 6 && index >= 2) {
-                return PageControlStateDots7;
-            }
-            if (index == 1) {
-                return PageControlStateLeftDots6;
-            }
-            if (index < 1) {
-                return PageControlStateLeftDots5;
-            }
-    }
-    return self.pageControlState;
-}
-
-- (void)updateScrollViewWidth:(NSInteger)index {
-    PageControlState pageControlState = [self getStateFromPreviousAndIndex:index];
-    CGFloat scrollViewWidth = 0;
-    if (pageControlState == PageControlStateLeftDots5 || pageControlState == PageControlStateRightDots5) {
-        scrollViewWidth = kPageControlScrollContainerWidthFor5;
-    } else if (pageControlState == PageControlStateLeftDots6 || pageControlState == PageControlStateRightDots6) {
-        scrollViewWidth = kPageControlScrollContainerWidthFor6;
-    } else {
-        scrollViewWidth = kPageControlScrollContainerWidthFor7;
-    }
-    
-    self.scrollViewWidthConstraint.constant = scrollViewWidth;
-    [self.scrollView setNeedsLayout];
-    [self.scrollView layoutIfNeeded];
 }
 
 @end
