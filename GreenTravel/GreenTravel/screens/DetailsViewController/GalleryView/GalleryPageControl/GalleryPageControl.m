@@ -18,6 +18,12 @@ typedef NS_ENUM(NSInteger, PageControlState) {
     PageControlStateRightDots5
 };
 
+typedef NS_OPTIONS(NSInteger, DotsGrow) {
+    DotsGrowConstant = 1 << 0,
+    DotsGrowDown = 1 << 1,
+    DotsGrowUp = 1 << 2
+};
+
 @interface GalleryPageControl ()
 
 @property (strong, nonatomic) UIScrollView *scrollView;
@@ -74,38 +80,57 @@ static const CGFloat kSpacing = 12.0;
     }
 }
 
-- (void)moveToNextPage {
+- (void)moveToPage:(BOOL)next {
     PageControlState newState = [self getNextState:self.pageControlState forNextPage:self.currentPage + 1];
     
-    BOOL shouldAddNewSubview = YES;
-    BOOL shouldDeleteOldSubview = NO;
+//    if (newState == self.pageControlState) {
+//        return;
+//    }
+    
+    DotsGrow growBehavior = DotsGrowConstant;
     
     NSInteger prevCount = [self.contentView.arrangedSubviews count];
     
-    [self.contentView addArrangedSubview:[self createDotView:NO]];
+    if (growBehavior & DotsGrowUp || growBehavior & DotsGrowConstant) {
+        //[self.contentView addArrangedSubview:[self createDotView:NO]];
+        [self.contentView insertArrangedSubview:[self createDotView:NO]
+                                        atIndex:next ? prevCount : 0];
+    } else {
+        [self.contentView.subviews[next ? 0 : prevCount - 1] removeFromSuperview];
+    }
     
     NSInteger newCount = [self.contentView.arrangedSubviews count];
     CGFloat centerOffsetCompensation = (newCount * kDotWidth + (newCount - 1) *
         kSpacing - (prevCount * kDotWidth + (prevCount - 1) * kSpacing)) / 2;
     
-    self.centerOffsetConstraint.constant += centerOffsetCompensation;
+    self.centerOffsetConstraint.constant += fabs(centerOffsetCompensation) * (next ? 1 : -1);
     [self setNeedsLayout];
     [self layoutIfNeeded];
     __weak typeof(self) weakSelf = self;
-    UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:0.4 curve:UIViewAnimationCurveLinear animations:^{
-        weakSelf.centerOffsetConstraint.constant = -centerOffsetCompensation;
+    UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:0.2 curve:UIViewAnimationCurveLinear animations:^{
+        if (growBehavior & DotsGrowConstant) {
+            weakSelf.centerOffsetConstraint.constant = -centerOffsetCompensation * (next ? 1 : -1);
+        } else {
+            weakSelf.centerOffsetConstraint.constant = 0;
+        }
         [weakSelf layoutIfNeeded];
     }];
     [moveAnimator addCompletion:^(UIViewAnimatingPosition finalPosition) {
-        [weakSelf.contentView.subviews[0] removeFromSuperview];
-        weakSelf.centerOffsetConstraint.constant = 0.0;
-        [weakSelf layoutIfNeeded];
+        if (growBehavior & DotsGrowConstant) {
+            [weakSelf.contentView.subviews[next ? 0 : newCount - 1] removeFromSuperview];
+            weakSelf.centerOffsetConstraint.constant = 0.0;
+            [weakSelf layoutIfNeeded];
+        }
     }];
     [moveAnimator startAnimation];
 }
 
+- (void)moveToNextPage {
+    [self moveToPage:YES];
+}
+
 - (void)moveToPrevPage {
-    
+    [self moveToPage:NO];
 }
 
 - (void)setCurrentPage:(NSInteger)currentPage {

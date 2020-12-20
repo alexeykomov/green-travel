@@ -138,7 +138,7 @@ static const CGFloat kPageControlScrollContainerWidthFor7 = 98.0;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat indexOfScrolledItem = ABS(round([self getIndexOfScrolledItem]));
-    NSLog(@"Collection view did scroll: %f", indexOfScrolledItem);
+    //NSLog(@"Collection view did scroll: %f", indexOfScrolledItem);
     if (indexOfScrolledItem > self.indexOfScrolledItem) {
         self.indexOfScrolledItem = indexOfScrolledItem;
         [self.pageControl moveToNextPage];
@@ -152,7 +152,7 @@ static const CGFloat kPageControlScrollContainerWidthFor7 = 98.0;
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     CGFloat indexOfScrolledItem = [self getIndexOfScrolledItem];
-    NSLog(@"Collection view did end decelerating: %f", indexOfScrolledItem);
+    //NSLog(@"Collection view did end decelerating: %f", indexOfScrolledItem);
 //    self.indexOfScrolledItem = indexOfScrolledItem;
 //    NSInteger prevPage = self.pageControl.currentPage;
 //		NSInteger currentPage = (NSInteger) indexOfScrolledItem;
