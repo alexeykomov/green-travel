@@ -19,10 +19,29 @@ typedef NS_ENUM(NSInteger, PageControlState) {
 };
 
 typedef NS_OPTIONS(NSInteger, DotsGrow) {
-    DotsGrowConstant = 1 << 0,
-    DotsGrowDown = 1 << 1,
-    DotsGrowUp = 1 << 2
+    DotsGrowOff = 1 << 0,
+    DotsGrowConstant = 1 << 1,
+    DotsGrowDown = 1 << 2,
+    DotsGrowUp = 1 << 3
 };
+
+struct IndexWindow {
+    NSInteger left;
+    NSInteger right;
+};
+
+NSInteger indexWindowLength(struct IndexWindow indexWindow) {
+    return indexWindow.right - indexWindow.left + 1;
+}
+
+BOOL indexWindowEquals(struct IndexWindow indexWindowA, struct IndexWindow indexWindowB) {
+    return indexWindowA.right == indexWindowB.right &&
+            indexWindowA.left == indexWindowB.left;
+}
+
+static const CGFloat kDotWidth = 16.0;
+static const CGFloat kSpacing = 12.0;
+static const NSUInteger kMaxNumberOfDotsOnStart = 5;
 
 @interface GalleryPageControl ()
 
@@ -33,12 +52,11 @@ typedef NS_OPTIONS(NSInteger, DotsGrow) {
 @property (assign, nonatomic) CGFloat aspectRatio;
 @property (assign, nonatomic) CGFloat indexOfScrolledItem;
 @property (strong, nonatomic) NSLayoutConstraint *centerOffsetConstraint;
+
 @property (assign, nonatomic) PageControlState pageControlState;
+@property (assign, nonatomic) struct IndexWindow indexWindow;
 
 @end
-
-static const CGFloat kDotWidth = 16.0;
-static const CGFloat kSpacing = 12.0;
 
 @implementation GalleryPageControl
 
@@ -53,6 +71,9 @@ static const CGFloat kSpacing = 12.0;
 
 - (void)setUp {
     self.pageControlState = PageControlStateLeftDots5;
+    self.indexWindow = (struct IndexWindow){0, 4};
+    self.numberOfPages = 0;
+    self.currentPage = 0;
     
 #pragma mark - Content view
     self.contentView = [[UIStackView alloc] init];
@@ -72,27 +93,41 @@ static const CGFloat kSpacing = 12.0;
 }
 
 - (void)setNumberOfPages:(NSInteger)numberOfPages {
+    _numberOfPages = numberOfPages;
+    
+    NSUInteger maxVisibleDots = fmin(kMaxNumberOfDotsOnStart, _numberOfPages);
     for (UIView *subview in self.contentView.subviews) {
         [subview removeFromSuperview];
     }
-    for (int counter = 0; counter < numberOfPages; counter++) {
+    for (int counter = 0; counter < maxVisibleDots; counter++) {
         [self.contentView addArrangedSubview:[self createDotView:self.currentPage == counter]];
     }
 }
 
+#pragma mark - Move to next page
+
 - (void)moveToPage:(BOOL)next {
-    PageControlState newState = [self getNextState:self.pageControlState forNextPage:self.currentPage + 1];
+    NSUInteger nextPage = self.currentPage + (next ? 1 : -1);
+    PageControlState nextState = [self getNextState:self.pageControlState
+                                        forNextPage:nextPage];
+    struct IndexWindow nextIndexWindow =
+    [self getNextIndexWindowForPrevState:self.pageControlState
+                               nextState:nextState nextPage:nextPage
+                         prevIndexWindow:self.indexWindow];
+    DotsGrow growBehavior =
+    [self getNextDotsGrowStateFromPrevIndexWindow:self.indexWindow
+                                  nextIndexWindow:nextIndexWindow];
+    self.pageControlState = nextState;
+    self.indexWindow = nextIndexWindow;
+    [self setCurrentPage:nextPage];
     
-//    if (newState == self.pageControlState) {
-//        return;
-//    }
-    
-    DotsGrow growBehavior = DotsGrowConstant;
+    if (growBehavior & DotsGrowOff) {
+        return;
+    }
     
     NSInteger prevCount = [self.contentView.arrangedSubviews count];
     
     if (growBehavior & DotsGrowUp || growBehavior & DotsGrowConstant) {
-        //[self.contentView addArrangedSubview:[self createDotView:NO]];
         [self.contentView insertArrangedSubview:[self createDotView:NO]
                                         atIndex:next ? prevCount : 0];
     } else {
@@ -134,6 +169,7 @@ static const CGFloat kSpacing = 12.0;
 }
 
 - (void)setCurrentPage:(NSInteger)currentPage {
+    _currentPage = currentPage;
     NSInteger dotIndex = 0;
     for (UIView *dotView in self.contentView.subviews) {
 //        for (CALayer *layer in dotView.layer.sublayers) {
@@ -144,13 +180,12 @@ static const CGFloat kSpacing = 12.0;
         dotView.backgroundColor = [Colors get].black;
     }
     for (UIView *dotView in self.contentView.subviews) {
-        if (dotIndex == currentPage) {
+        if (dotIndex == currentPage - self.indexWindow.left) {
             //insertGradientLayer(dotView, 8.0);
             dotView.backgroundColor = [Colors get].shamrock;
         }
         dotIndex++;
     }
-    
 }
 
 - (UIView *)createDotView:(BOOL)isCurrent {
@@ -169,26 +204,11 @@ static const CGFloat kSpacing = 12.0;
     return dotView;
 }
 
-- (void)moveScrollViewFor:(NSInteger)nextPage {
-    NSInteger currentPage = self.currentPage;
-    PageControlState pageControlStatePrev = self.pageControlState;
-    PageControlState pageControlStateNew = [self getNextState:pageControlStatePrev forNextPage:nextPage];
-    if (pageControlStatePrev != pageControlStateNew) {
-        return;
-    }
-}
-
-- (CGFloat)calculateWidthFor:(NSInteger)numberOfPages {
-    CGFloat dotsWidth = numberOfPages * kDotWidth;
-    CGFloat spacings = (numberOfPages - 1) * kSpacing;
-    return dotsWidth + spacings;
-}
-
 #pragma mark - State transition
 - (PageControlState)getNextState:(PageControlState)prevState
                        forNextPage:(NSInteger)nextPage {
     NSInteger currentPage = self.currentPage;
-    if (ABS(nextPage) - ABS(currentPage) <= 1) {
+    if (labs(nextPage - currentPage) <= 1) {
         switch (prevState) {
             case PageControlStateLeftDots5:
                 if (nextPage <= 2) {
@@ -196,40 +216,144 @@ static const CGFloat kSpacing = 12.0;
                 }
                 return PageControlStateLeftDots6;
             case PageControlStateLeftDots6:
-                if (nextPage < 3) {
+                if (nextPage < 1) {
                     return PageControlStateLeftDots5;
                 }
-                return PageControlStateDots7;
+                if (nextPage > 3) {
+                    return PageControlStateDots7;
+                }
+                return PageControlStateLeftDots6;
             case PageControlStateDots7:
                 if (nextPage == 1) {
                     return PageControlStateLeftDots6;
                 }
-                if (nextPage == 8) {
+                if (nextPage == self.numberOfPages - 2) {
                     return PageControlStateRightDots6;
                 }
                 return PageControlStateDots7;
             case PageControlStateRightDots6:
-                if (nextPage > 8) {
+                if (nextPage > self.numberOfPages - 2) {
                     return PageControlStateRightDots5;
                 }
-                if (nextPage >= 6) {
-                    return PageControlStateRightDots6;
-                }
-                return PageControlStateDots7;
-            case PageControlStateRightDots5:
-                if (nextPage >= 7) {
-                    return PageControlStateRightDots5;
+                if (nextPage < self.numberOfPages - 4) {
+                    return PageControlStateDots7;
                 }
                 return PageControlStateRightDots6;
+            case PageControlStateRightDots5:
+                if (nextPage < self.numberOfPages - 3) {
+                    return PageControlStateRightDots6;
+                }
+                return PageControlStateRightDots5;
         }
         return self.pageControlState;
     }
     PageControlState newState = prevState;
-    while (ABS(nextPage) - ABS(currentPage) > 1) {
+    while (labs(nextPage - currentPage) > 1) {
         NSInteger decrementedNextPage = nextPage < currentPage ? nextPage + 1 : nextPage - 1;
         newState = [self getNextState:newState forNextPage:decrementedNextPage];
     }
     return newState;
 }
+
+#pragma mark - Grow state
+- (DotsGrow)getNextDotsGrowStateFromPrevIndexWindow:(struct IndexWindow)prevIndexWindow
+             nextIndexWindow:(struct IndexWindow)nextIndexWindow {
+    if (indexWindowEquals(prevIndexWindow, nextIndexWindow)) {
+        return DotsGrowOff;
+    }
+    NSUInteger indexWindowLengthPrev = indexWindowLength(prevIndexWindow);
+    NSUInteger indexWindowLengthNext = indexWindowLength(nextIndexWindow);
+    if (indexWindowLengthPrev < indexWindowLengthNext) {
+        return DotsGrowUp;
+    }
+    if (indexWindowLengthPrev > indexWindowLengthNext) {
+        return DotsGrowDown;
+    }
+    return DotsGrowConstant;
+}
+
+#pragma mark - Index window
+- (struct IndexWindow)getNextIndexWindowForPrevState:(PageControlState)prevState
+                               nextState:(PageControlState)nextState
+                                nextPage:(NSUInteger)nextPage
+             prevIndexWindow:(struct IndexWindow)prevIndexWindow {
+    switch (prevState) {
+        case PageControlStateLeftDots5:
+            if (nextState == PageControlStateLeftDots6) {
+                return (struct IndexWindow){
+                    prevIndexWindow.left,
+                    prevIndexWindow.right + 1
+                };
+            }
+            return prevIndexWindow;
+        case PageControlStateLeftDots6:
+            if (nextState == PageControlStateDots7) {
+                return (struct IndexWindow){
+                    prevIndexWindow.left,
+                    prevIndexWindow.right + 1
+                };
+            }
+            if (nextState == PageControlStateLeftDots5) {
+                return (struct IndexWindow) {
+                    prevIndexWindow.left,
+                    prevIndexWindow.right - 1
+                };
+            }
+            return prevIndexWindow;
+        case PageControlStateDots7:
+            if (nextState == prevState) {
+                if (nextPage > prevIndexWindow.right) {
+                    return (struct IndexWindow){
+                        prevIndexWindow.left + 1,
+                        prevIndexWindow.right + 1
+                    };
+                }
+                if (nextPage < prevIndexWindow.left) {
+                    return (struct IndexWindow){
+                        prevIndexWindow.left - 1,
+                        prevIndexWindow.right - 1
+                    };
+                }
+                return prevIndexWindow;
+            }
+            if (nextState == PageControlStateRightDots6) {
+                return (struct IndexWindow){
+                    prevIndexWindow.left + 1,
+                    prevIndexWindow.right
+                };
+            }
+            if (nextState == PageControlStateLeftDots6) {
+                return (struct IndexWindow){
+                    prevIndexWindow.left,
+                    prevIndexWindow.right - 1
+                };
+            }
+            return prevIndexWindow;
+        case PageControlStateRightDots6:
+            if (nextState == PageControlStateRightDots5) {
+                return (struct IndexWindow){
+                    prevIndexWindow.left + 1,
+                    prevIndexWindow.right
+                };
+            }
+            if (nextState == PageControlStateDots7) {
+                return (struct IndexWindow){
+                    prevIndexWindow.left - 2,
+                    prevIndexWindow.right - 1
+                };
+            }
+            return prevIndexWindow;
+        case PageControlStateRightDots5:
+            if (nextState == PageControlStateRightDots6) {
+                return (struct IndexWindow){
+                    prevIndexWindow.left - 2,
+                    prevIndexWindow.right - 1
+                };
+            }
+            return prevIndexWindow;
+    }
+    return prevIndexWindow;
+}
+
 
 @end
