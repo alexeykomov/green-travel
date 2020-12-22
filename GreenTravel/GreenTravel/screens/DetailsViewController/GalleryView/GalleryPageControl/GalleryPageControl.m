@@ -9,7 +9,7 @@
 #import "GalleryPageControl.h"
 #import "StyleUtils.h"
 #import "Colors.h"
-#import "DotsIndexes.h"
+#import "DotSizes.h"
 
 typedef NS_ENUM(NSInteger, PageControlState) {
     PageControlStateLeftDots5,
@@ -91,7 +91,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     self.indexWindow = (struct IndexWindow){0, kMaxNumberOfDotsOnStart - 1};
     self.numberOfPages = 0;
     self.currentPage = 0;
-    [self drawDotsBeforeAnimation:self.currentPage forIndexWindow:self.indexWindow];
+    [self drawDots:self.currentPage forIndexWindow:self.indexWindow];
     
 #pragma mark - Content view
     self.contentView = [[UIStackView alloc] init];
@@ -138,21 +138,21 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     DotsGrow growBehavior =
     [self getNextDotsGrowStateFromPrevIndexWindow:self.indexWindow
                                   nextIndexWindow:nextIndexWindow];
+    DotSizes *dotSizes = [self prepareDotsBeforeAnimationForPrevState:prevState
+                                                           nextState:nextState
+                                                                next:next];
     self.pageControlState = nextState;
     [self setCurrentPage:nextPage];
     self.indexWindow = nextIndexWindow;
     
     
     if (growBehavior & DotsGrowOff) {
-        [self drawDotsBeforeAnimation:nextPage forIndexWindow:prevIndexWindow];
+        [self drawDots:nextPage forIndexWindow:prevIndexWindow];
         return;
     }
     
     NSInteger prevCount = [self.contentView.arrangedSubviews count];
-    
-    
-    [self drawDotsBeforeAnimation:nextPage forIndexWindow:prevIndexWindow];
-    
+    [self drawDots:nextPage forIndexWindow:prevIndexWindow];
     
     if (growBehavior & DotsGrowUp || growBehavior & DotsGrowConstant) {
         [self.contentView insertArrangedSubview:[self createDotView:NO]
@@ -161,7 +161,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
         [self.contentView.arrangedSubviews[next ? 0 : prevCount - 1] removeFromSuperview];
     }
     
-    [self prepareDotsBeforeAnimationForPrevState:prevState nextState:nextState];
+    [self applyDotSizes:dotSizes.before];
     
     NSInteger newCount = [self.contentView.arrangedSubviews count];
     CGFloat centerOffsetCompensation = (newCount * kDotWidth + (newCount - 1) *
@@ -177,6 +177,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
         } else {
             weakSelf.centerOffsetConstraint.constant = 0;
         }
+        [weakSelf applyDotSizes:dotSizes.after];
         [weakSelf layoutIfNeeded];
     }];
     [moveAnimator addCompletion:^(UIViewAnimatingPosition finalPosition) {
@@ -197,7 +198,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     [self moveToPage:NO];
 }
 
-- (void)drawDotsBeforeAnimation:(NSInteger)currentPage forIndexWindow:(struct IndexWindow)indexWindow {
+- (void)drawDots:(NSInteger)currentPage forIndexWindow:(struct IndexWindow)indexWindow {
     for (UIView *dotView in self.contentView.arrangedSubviews) {
         dotView.backgroundColor = [Colors get].black;
 
@@ -217,116 +218,106 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     }];
 }
 
-- (DotsIndexes *)prepareDotsBeforeAnimationForPrevState:(PageControlState)prevState
-                                     nextState:(PageControlState)nextState {
-    DotsIndexes *dotsIndexes = [[DotsIndexes alloc] init];
+- (DotSizes *)prepareDotsBeforeAnimationForPrevState:(PageControlState)prevState
+                                     nextState:(PageControlState)nextState
+                                                   next:(BOOL)next {
+    DotSizes *dotsIndexes = [[DotSizes alloc] init];
     switch (prevState) {
         case PageControlStateLeftDots5:
             if (nextState == PageControlStateLeftDots6) {
-                [dotsIndexes.smallestDotIndexesInitial addIndex:5];
-                [dotsIndexes.smallDotIndexesInitial addIndex:4]; 
-                [dotsIndexes.mediumDotIndexesInitial addIndex:3];
-                
-                [dotsIndexes.mediumDotIndexesFinal addIndex:0];
-                [dotsIndexes.mediumDotIndexesFinal addIndex:4];
-                [dotsIndexes.smallDotIndexesFinal addIndex:5];
+                dotsIndexes.before = @[@(DotSizeL), @(DotSizeL), @(DotSizeL),
+                                       @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
+                dotsIndexes.after = @[@(DotSizeM), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeL), @(DotSizeM), @(DotSizeS)];
             }
-            return dotsIndexes;
+            
         case PageControlStateLeftDots6:
+            
             if (nextState == PageControlStateDots7) {
-                [dotsIndexes.smallestDotIndexesInitial addIndex:5];
-                [dotsIndexes.smallDotIndexesInitial addIndex:4];
-                [dotsIndexes.mediumDotIndexesInitial addIndex:3];
-                
-                [dotsIndexes.mediumDotIndexesFinal addIndex:0];
-                [dotsIndexes.mediumDotIndexesFinal addIndex:4];
-                [dotsIndexes.smallDotIndexesFinal addIndex:5];
+                dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeL), @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
+                dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL),
+                                      @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];;
             }
             if (nextState == PageControlStateLeftDots5) {
-                return (struct IndexWindow) {
-                    prevIndexWindow.left,
-                    prevIndexWindow.right - 1
-                };
+                dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeL), @(DotSizeM), @(DotSizeS)];
+                dotsIndexes.before = @[@(DotSizeL), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
             }
-            return prevIndexWindow;
         case PageControlStateDots7:
-            if (nextState == prevState) {
-                if (normalizedPage(nextPage, prevIndexWindow) > 4) {
-                    return (struct IndexWindow){
-                        prevIndexWindow.left + 1,
-                        prevIndexWindow.right + 1
-                    };
-                }
-                if (normalizedPage(nextPage, prevIndexWindow) < 2) {
-                    return (struct IndexWindow){
-                        prevIndexWindow.left - 1,
-                        prevIndexWindow.right - 1
-                    };
-                }
-                return prevIndexWindow;
+            if (nextState == prevState && next) {
+                dotsIndexes.before = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeL), @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
+                dotsIndexes.after = @[@(DotSizeXS), @(DotSizeS), @(DotSizeM), @(DotSizeL),
+                                      @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];
+            }
+            if (nextState == prevState && !next) {
+                dotsIndexes.before = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeL), @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
+                dotsIndexes.after = @[@(DotSizeXS), @(DotSizeS), @(DotSizeM), @(DotSizeL),
+                                      @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];
             }
             if (nextState == PageControlStateRightDots6) {
-                return (struct IndexWindow){
-                    prevIndexWindow.left + 1,
-                    prevIndexWindow.right
-                };
+                dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeM), @(DotSizeS)];
+                dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeL), @(DotSizeM)];
             }
             if (nextState == PageControlStateLeftDots6) {
-                return (struct IndexWindow){
-                    prevIndexWindow.left,
-                    prevIndexWindow.right - 1
-                };
+                dotsIndexes.before = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
+                                       @(DotSizeL), @(DotSizeM)];
+                dotsIndexes.after = @[@(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeM), @(DotSizeS)];
             }
-            return prevIndexWindow;
         case PageControlStateRightDots6:
             if (nextState == PageControlStateRightDots5) {
-                return (struct IndexWindow){
-                    prevIndexWindow.left + 1,
-                    prevIndexWindow.right
-                };
+                dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
+                                       @(DotSizeM)];
+                dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeL)];
             }
             if (nextState == PageControlStateDots7) {
-                return (struct IndexWindow){
-                    prevIndexWindow.left - 1,
-                    prevIndexWindow.right
-                };
+                dotsIndexes.before = @[@(DotSizeXS), @(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
+                                       @(DotSizeL), @(DotSizeM)];
+                dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeM), @(DotSizeS)];
             }
-            return prevIndexWindow;
         case PageControlStateRightDots5:
             if (nextState == PageControlStateRightDots6) {
-                return (struct IndexWindow){
-                    prevIndexWindow.left - 1,
-                    prevIndexWindow.right
-                };
+                dotsIndexes.before = @[@(DotSizeXS), @(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
+                                       @(DotSizeL)];
+                dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeM)];
             }
-            return prevIndexWindow;
     }
-    [self.contentView.arrangedSubviews enumerateObjectsWithOptions:0
-                                                        usingBlock:^(__kindof UIView * _Nonnull dotView, NSUInteger dotIndex, BOOL * _Nonnull stop) {
-        if ([smallestDotIndexes containsIndex:dotIndex]) {
-            dotView.transform = CGAffineTransformScale(dotView.transform, 0.2, 0.2);
-            dotView.alpha = 0.2;
-        } else if ([smallDotIndexes containsIndex:dotIndex]) {
-            dotView.transform = CGAffineTransformScale(dotView.transform, 0.5, 0.5);
-            dotView.alpha = 0.5;
-        } else if ([mediumDotIndexes containsIndex:dotIndex]) {
-            dotView.transform = CGAffineTransformScale(dotView.transform, 0.8, 0.8);
-            dotView.alpha = 0.2;
-        } else {
-            dotView.transform = CGAffineTransformIdentity;
-            dotView.alpha = 1.0;
-        }
-    }];
-    
+    return dotsIndexes;
 }
 
-- (void)prepareDotsAfterAnimationForPrevState:(PageControlState)prevState
-                                     nextState:(PageControlState)nextState {
-    [self.contentView.arrangedSubviews enumerateObjectsWithOptions:0
-                                                        usingBlock:^(__kindof UIView * _Nonnull dotView, NSUInteger dotIndex, BOOL * _Nonnull stop) {
-        
+- (void)applyDotSizes:(NSArray<NSNumber *>*)dotSizes {
+    [self.contentView.arrangedSubviews
+     enumerateObjectsWithOptions:0
+     usingBlock:^(__kindof UIView * _Nonnull dotView,
+                  NSUInteger dotIndex, BOOL * _Nonnull stop) {
+        switch ([dotSizes[dotIndex] intValue]) {
+            case DotSizeXS:
+                dotView.transform = CGAffineTransformScale(dotView.transform, 0.2, 0.2);
+                dotView.alpha = 0.2;
+                return;
+            case DotSizeS:
+                dotView.transform = CGAffineTransformScale(dotView.transform, 0.5, 0.5);
+                dotView.alpha = 0.5;
+                return;
+            case DotSizeM:
+                dotView.transform = CGAffineTransformScale(dotView.transform, 0.8, 0.8);
+                dotView.alpha = 0.8;
+                return;
+            case DotSizeL:
+                dotView.transform = CGAffineTransformIdentity;
+                dotView.alpha = 1.0;
+                return;
+        }
     }];
-    
 }
 
 - (UIView *)createDotView:(BOOL)isCurrent {

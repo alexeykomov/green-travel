@@ -95,7 +95,7 @@
 		5AA75C012504258300AE7331 /* DetailsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C002504258300AE7331 /* DetailsModel.m */; };
 		5AA75C082505196D00AE7331 /* CoreDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C072505196D00AE7331 /* CoreDataService.m */; };
 		5AAB5A192569484B00D52F53 /* SlideCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAB5A182569484B00D52F53 /* SlideCollectionViewCell.m */; };
-		5AC77EE92592438E0012A488 /* DotsIndexes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AC77EE82592438E0012A488 /* DotsIndexes.m */; };
+		5AC77EE92592438E0012A488 /* DotSizes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AC77EE82592438E0012A488 /* DotSizes.m */; };
 		5AEA97F92554A1FD0037A51D /* LinkedCategoriesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA97F82554A1FD0037A51D /* LinkedCategoriesView.m */; };
 		5AEA98042556A8AC0037A51D /* ApiServiceDataMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA98032556A8AC0037A51D /* ApiServiceDataMapper.m */; };
 		5AEA980A2556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA98092556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.m */; };
@@ -282,8 +282,8 @@
 		5AA75C072505196D00AE7331 /* CoreDataService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreDataService.m; sourceTree = "<group>"; };
 		5AAB5A172569484B00D52F53 /* SlideCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SlideCollectionViewCell.h; sourceTree = "<group>"; };
 		5AAB5A182569484B00D52F53 /* SlideCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SlideCollectionViewCell.m; sourceTree = "<group>"; };
-		5AC77EE72592438E0012A488 /* DotsIndexes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DotsIndexes.h; sourceTree = "<group>"; };
-		5AC77EE82592438E0012A488 /* DotsIndexes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DotsIndexes.m; sourceTree = "<group>"; };
+		5AC77EE72592438E0012A488 /* DotSizes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DotSizes.h; sourceTree = "<group>"; };
+		5AC77EE82592438E0012A488 /* DotSizes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DotSizes.m; sourceTree = "<group>"; };
 		5AEA97F72554A1FD0037A51D /* LinkedCategoriesView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkedCategoriesView.h; sourceTree = "<group>"; };
 		5AEA97F82554A1FD0037A51D /* LinkedCategoriesView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkedCategoriesView.m; sourceTree = "<group>"; };
 		5AEA98022556A8AC0037A51D /* ApiServiceDataMapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApiServiceDataMapper.h; sourceTree = "<group>"; };
@@ -332,7 +332,7 @@
 			children = (
 				5A11BF892584F0FF00113B31 /* GalleryPageControl.h */,
 				5A11BF8A2584F0FF00113B31 /* GalleryPageControl.m */,
-				5AC77EED25924B490012A488 /* DotIndexes */,
+				5AC77EED25924B490012A488 /* DotSizes */,
 			);
 			path = GalleryPageControl;
 			sourceTree = "<group>";
@@ -765,13 +765,13 @@
 			path = SlideCollectionViewCell;
 			sourceTree = "<group>";
 		};
-		5AC77EED25924B490012A488 /* DotIndexes */ = {
+		5AC77EED25924B490012A488 /* DotSizes */ = {
 			isa = PBXGroup;
 			children = (
-				5AC77EE72592438E0012A488 /* DotsIndexes.h */,
-				5AC77EE82592438E0012A488 /* DotsIndexes.m */,
+				5AC77EE72592438E0012A488 /* DotSizes.h */,
+				5AC77EE82592438E0012A488 /* DotSizes.m */,
 			);
-			path = DotIndexes;
+			path = DotSizes;
 			sourceTree = "<group>";
 		};
 		5AEA97F62554A0650037A51D /* LinkedCategories */ = {
@@ -1091,7 +1091,7 @@
 				5AAB5A192569484B00D52F53 /* SlideCollectionViewCell.m in Sources */,
 				5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */,
 				5A324B9424FB00D70044A671 /* MapItem.m in Sources */,
-				5AC77EE92592438E0012A488 /* DotsIndexes.m in Sources */,
+				5AC77EE92592438E0012A488 /* DotSizes.m in Sources */,
 				5A0C84B82559C89600165D22 /* StoredCategoryUUIDToRelatedItemUUIDs+CoreDataProperties.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
