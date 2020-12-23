@@ -245,8 +245,8 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
             if (nextState == PageControlStateLeftDots5) {
                 dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeM), @(DotSizeS)];
-                dotsIndexes.before = @[@(DotSizeL), @(DotSizeL), @(DotSizeL),
-                                      @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
+                dotsIndexes.after = @[@(DotSizeL), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeM), @(DotSizeS)];
             }
             break;
         case PageControlStateDots7:
@@ -257,10 +257,10 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                                       @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];
             }
             if (nextState == prevState && !next) {
-                dotsIndexes.before = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
+                dotsIndexes.before = @[@(DotSizeXS), @(DotSizeS), @(DotSizeM), @(DotSizeL),
+                                       @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];
+                dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
-                dotsIndexes.after = @[@(DotSizeXS), @(DotSizeS), @(DotSizeM), @(DotSizeL),
-                                      @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];
             }
             if (nextState == PageControlStateRightDots6) {
                 dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
