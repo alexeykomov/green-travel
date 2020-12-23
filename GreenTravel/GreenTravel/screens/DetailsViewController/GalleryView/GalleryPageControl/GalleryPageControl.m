@@ -121,6 +121,9 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     for (int counter = 0; counter < maxVisibleDotsOnStart; counter++) {
         [self.contentView addArrangedSubview:[self createDotView:self.currentPage == counter]];
     }
+    if (_numberOfPages > kMaxNumberOfDotsOnStart) {
+        [self applyDotSizes:@[@(DotSizeL), @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)]];
+    }
 }
 
 #pragma mark - Move to next page
@@ -230,7 +233,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                 dotsIndexes.after = @[@(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeM), @(DotSizeS)];
             }
-            
+            break;
         case PageControlStateLeftDots6:
             
             if (nextState == PageControlStateDots7) {
@@ -245,6 +248,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                 dotsIndexes.before = @[@(DotSizeL), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
             }
+            break;
         case PageControlStateDots7:
             if (nextState == prevState && next) {
                 dotsIndexes.before = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
@@ -270,6 +274,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                 dotsIndexes.after = @[@(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeM), @(DotSizeS)];
             }
+            break;
         case PageControlStateRightDots6:
             if (nextState == PageControlStateRightDots5) {
                 dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
@@ -283,6 +288,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                 dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeM), @(DotSizeS)];
             }
+            break;
         case PageControlStateRightDots5:
             if (nextState == PageControlStateRightDots6) {
                 dotsIndexes.before = @[@(DotSizeXS), @(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
@@ -290,6 +296,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                 dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeM)];
             }
+            break;
     }
     return dotsIndexes;
 }
@@ -301,15 +308,15 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                   NSUInteger dotIndex, BOOL * _Nonnull stop) {
         switch ([dotSizes[dotIndex] intValue]) {
             case DotSizeXS:
-                dotView.transform = CGAffineTransformScale(dotView.transform, 0.2, 0.2);
+                dotView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.2, 0.2);
                 dotView.alpha = 0.2;
                 return;
             case DotSizeS:
-                dotView.transform = CGAffineTransformScale(dotView.transform, 0.5, 0.5);
+                dotView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.5, 0.5);
                 dotView.alpha = 0.5;
                 return;
             case DotSizeM:
-                dotView.transform = CGAffineTransformScale(dotView.transform, 0.8, 0.8);
+                dotView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.8, 0.8);
                 dotView.alpha = 0.8;
                 return;
             case DotSizeL:
