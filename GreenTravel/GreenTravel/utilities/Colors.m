@@ -40,6 +40,7 @@ static Colors *instance;
         self.royalBlue = UIColorFromHEX(0x2F80ED);
         self.logCabin = UIColorFromHEX(0x0A0B0A);
         self.milkyGrey = UIColorFromHEX(0xE0E0E0);
+        self.alto = UIColorFromHEX(0xD9D9D9);
     }
     return self;
 }

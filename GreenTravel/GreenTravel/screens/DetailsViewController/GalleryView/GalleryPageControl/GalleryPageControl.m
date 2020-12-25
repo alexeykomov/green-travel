@@ -56,8 +56,14 @@ NSUInteger normalizedPageRight(NSUInteger page, struct IndexWindow indexWindow) 
     return indexWindow.right - page;
 }
 
-static const CGFloat kDotWidth = 16.0;
-static const CGFloat kSpacing = 12.0;
+static const CGFloat kDotScaleOriginal = 1.0;
+static const CGFloat kDotScaleMedium = 5.0 / 7.0;
+static const CGFloat kDotScaleSmall = 3.0 / 7.0;
+static const CGFloat kDotScaleExtraSmall = 0.2;
+
+static const CGFloat kDotWidth = 7.0;
+static const CGFloat kSpacing = 5.0;
+
 static const NSUInteger kMaxNumberOfDotsOnStart = 5;
 
 @interface GalleryPageControl ()
@@ -86,12 +92,12 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     return self;
 }
 
+#pragma mark - Set up
 - (void)setUp {
     self.pageControlState = PageControlStateLeftDots5;
     self.indexWindow = (struct IndexWindow){0, kMaxNumberOfDotsOnStart - 1};
     self.numberOfPages = 0;
     self.currentPage = 0;
-    [self drawDots:self.currentPage forIndexWindow:self.indexWindow];
     
 #pragma mark - Content view
     self.contentView = [[UIStackView alloc] init];
@@ -119,11 +125,12 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
         [subview removeFromSuperview];
     }
     for (int counter = 0; counter < maxVisibleDotsOnStart; counter++) {
-        [self.contentView addArrangedSubview:[self createDotView:self.currentPage == counter]];
+        [self.contentView addArrangedSubview:[self createDotView]];
     }
     if (_numberOfPages > kMaxNumberOfDotsOnStart) {
         [self applyDotSizes:@[@(DotSizeL), @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)]];
     }
+    [self applyDotColorsWithCurrentPage:0 indexWindow:(struct IndexWindow){0, 4}];
 }
 
 #pragma mark - Move to next page
@@ -148,17 +155,21 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     [self setCurrentPage:nextPage];
     self.indexWindow = nextIndexWindow;
     
-    
+    __weak typeof(self) weakSelf = self;
     if (growBehavior & DotsGrowOff) {
-        [self drawDots:nextPage forIndexWindow:prevIndexWindow];
+        //[self drawDots:nextPage forIndexWindow:prevIndexWindow];
+        UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:0.2 curve:UIViewAnimationCurveLinear animations:^{
+            [weakSelf applyDotColorsWithCurrentPage:nextPage indexWindow:nextIndexWindow];
+        }];
+        [moveAnimator startAnimation];
         return;
     }
     
     NSInteger prevCount = [self.contentView.arrangedSubviews count];
-    [self drawDots:nextPage forIndexWindow:prevIndexWindow];
+    //[self drawDots:nextPage forIndexWindow:prevIndexWindow];
     
     if (growBehavior & DotsGrowUp || growBehavior & DotsGrowConstant) {
-        [self.contentView insertArrangedSubview:[self createDotView:NO]
+        [self.contentView insertArrangedSubview:[self createDotView]
                                         atIndex:next ? prevCount : 0];
     } else {
         [self.contentView.arrangedSubviews[next ? 0 : prevCount - 1] removeFromSuperview];
@@ -173,12 +184,13 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     self.centerOffsetConstraint.constant += fabs(centerOffsetCompensation) * (next ? 1 : -1);
     [self setNeedsLayout];
     [self layoutIfNeeded];
-    __weak typeof(self) weakSelf = self;
     UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:0.2 curve:UIViewAnimationCurveLinear animations:^{
         if (growBehavior & DotsGrowConstant) {
             weakSelf.centerOffsetConstraint.constant = -centerOffsetCompensation * (next ? 1 : -1);
+            [weakSelf applyDotColorsWithCurrentPage:nextPage + (next ? 1 : 0) indexWindow:nextIndexWindow];
         } else {
             weakSelf.centerOffsetConstraint.constant = 0;
+            [weakSelf applyDotColorsWithCurrentPage:nextPage indexWindow:nextIndexWindow];
         }
         [weakSelf applyDotSizes:dotSizes.after];
         [weakSelf layoutIfNeeded];
@@ -201,26 +213,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     [self moveToPage:NO];
 }
 
-- (void)drawDots:(NSInteger)currentPage forIndexWindow:(struct IndexWindow)indexWindow {
-    for (UIView *dotView in self.contentView.arrangedSubviews) {
-        dotView.backgroundColor = [Colors get].black;
-
-    }
-    [self.contentView.arrangedSubviews enumerateObjectsWithOptions:0
-                                                usingBlock:^(__kindof UIView * _Nonnull dotView, NSUInteger dotIndex, BOOL * _Nonnull stop) {
-        if (dotIndex == normalizedPage(currentPage, indexWindow)) {
-            //insertGradientLayer(dotView, 8.0);
-            dotView.backgroundColor = [Colors get].shamrock;
-            *stop = YES;
-        }
-//        if (!next && (viewsCount - dotIndex - 1) == normalizedPageRight(currentPage, indexWindow)) {
-//            //insertGradientLayer(dotView, 8.0);
-//            dotView.backgroundColor = [Colors get].shamrock;
-//            *stop = YES;
-//        }
-    }];
-}
-
+#pragma mark - Prepare dot sizes
 - (DotSizes *)prepareDotsBeforeAnimationForPrevState:(PageControlState)prevState
                                      nextState:(PageControlState)nextState
                                                    next:(BOOL)next {
@@ -301,6 +294,20 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     return dotsIndexes;
 }
 
+#pragma mark - Apply dot attributes
+- (void)applyDotColorsWithCurrentPage:(NSUInteger)currentPage
+           indexWindow:(struct IndexWindow)indexWindow {
+    NSUInteger currentDotIndex = normalizedPage(currentPage, indexWindow);
+    [self.contentView.arrangedSubviews
+    enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull dotView,
+                  NSUInteger dotIndex, BOOL * _Nonnull stop) {
+    if (dotIndex == currentDotIndex) {
+        dotView.backgroundColor = [Colors get].apple;
+    } else {
+        dotView.backgroundColor = [Colors get].alto;
+    }}];
+}
+
 - (void)applyDotSizes:(NSArray<NSNumber *>*)dotSizes {
     [self.contentView.arrangedSubviews
      enumerateObjectsWithOptions:0
@@ -308,38 +315,30 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                   NSUInteger dotIndex, BOOL * _Nonnull stop) {
         switch ([dotSizes[dotIndex] intValue]) {
             case DotSizeXS:
-                dotView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.2, 0.2);
-                dotView.alpha = 0.2;
+                dotView.transform = CGAffineTransformScale(CGAffineTransformIdentity, kDotScaleExtraSmall, kDotScaleExtraSmall);
                 return;
             case DotSizeS:
-                dotView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.5, 0.5);
-                dotView.alpha = 0.5;
+                dotView.transform = CGAffineTransformScale(CGAffineTransformIdentity, kDotScaleSmall, kDotScaleSmall);
                 return;
             case DotSizeM:
-                dotView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.8, 0.8);
-                dotView.alpha = 0.8;
+                dotView.transform = CGAffineTransformScale(CGAffineTransformIdentity, kDotScaleMedium, kDotScaleMedium);
                 return;
             case DotSizeL:
                 dotView.transform = CGAffineTransformIdentity;
-                dotView.alpha = 1.0;
                 return;
         }
     }];
 }
 
-- (UIView *)createDotView:(BOOL)isCurrent {
+- (UIView *)createDotView {
     UIView *dotView = [[UIView alloc] init];
     dotView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [dotView.widthAnchor constraintEqualToConstant:16.0],
-        [dotView.heightAnchor constraintEqualToConstant:16.0],
+        [dotView.widthAnchor constraintEqualToConstant:kDotWidth],
+        [dotView.heightAnchor constraintEqualToConstant:kDotWidth],
     ]];
-    dotView.layer.cornerRadius = 8.0;
-    if (isCurrent) {
-        insertGradientLayer(dotView, 8.0);
-        return dotView;
-    }
-    dotView.backgroundColor = [Colors get].black;
+    dotView.layer.cornerRadius = kDotWidth / 2;
+    dotView.backgroundColor = [Colors get].alto;
     return dotView;
 }
 
@@ -493,10 +492,5 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     }
     return prevIndexWindow;
 }
-
-- (NSUInteger)getPage:(NSUInteger)page inIndexWindow:(struct IndexWindow)indexWindow {
-    return page - indexWindow.left;
-}
-
 
 @end
