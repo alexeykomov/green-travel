@@ -56,7 +56,6 @@ NSUInteger normalizedPageRight(NSUInteger page, struct IndexWindow indexWindow) 
     return indexWindow.right - page;
 }
 
-static const CGFloat kDotScaleOriginal = 1.0;
 static const CGFloat kDotScaleMedium = 5.0 / 7.0;
 static const CGFloat kDotScaleSmall = 3.0 / 7.0;
 static const CGFloat kDotScaleExtraSmall = 0.2;
@@ -65,7 +64,7 @@ static const CGFloat kDotWidth = 7.0;
 static const CGFloat kSpacing = 5.0;
 
 static const NSUInteger kMaxNumberOfDotsOnStart = 5;
-static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
+static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
 
 @interface GalleryPageControl ()
 
@@ -85,11 +84,11 @@ static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
 
 @implementation GalleryPageControl
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
+- (instancetype)initWithNumberOfPages:(NSUInteger)numberOfPages {
+    self = [super initWithFrame:CGRectZero];
     if (self) {
         [self setUp];
+        [self setNumberOfPages:numberOfPages];
     }
     return self;
 }
@@ -97,8 +96,6 @@ static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
 #pragma mark - Set up
 - (void)setUp {
     self.pageControlState = PageControlStateLeftDots5;
-    self.indexWindow = (struct IndexWindow){0, kMaxNumberOfDotsOnStart - 1};
-    self.numberOfPages = 0;
     self.currentPage = 0;
     
 #pragma mark - Content view
@@ -120,7 +117,9 @@ static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
 
 - (void)setNumberOfPages:(NSInteger)numberOfPages {
     _numberOfPages = numberOfPages;
-    self.continuousMode = numberOfPages > kMaxNumberOfPagesWhenSwichToContinuousMode;
+    self.continuousMode = numberOfPages >= kMinNumberOfPagesWhenToSwitchToContinuousMode;
+    NSUInteger indexWindowRight = fmin(kMaxNumberOfDotsOnStart, numberOfPages) - 1;
+    self.indexWindow = (struct IndexWindow){0, indexWindowRight};
     NSUInteger maxVisibleDotsOnStart = fmin(kMaxNumberOfDotsOnStart, _numberOfPages);
     for (UIView *subview in self.contentView.subviews) {
         [self.contentView removeArrangedSubview:subview];
@@ -131,8 +130,18 @@ static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
     }
     if (_numberOfPages > kMaxNumberOfDotsOnStart) {
         [self applyDotSizes:@[@(DotSizeL), @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)]];
+    } else {
+        [self applyDotSizes:[self fillDotSizeStandardForNumberOfPages:_numberOfPages]];
     }
-    [self applyDotColorsWithCurrentPage:0 indexWindow:(struct IndexWindow){0, 4}];
+    [self applyDotColorsWithCurrentPage:0 indexWindow:(struct IndexWindow){0, indexWindowRight}];
+}
+
+- (NSArray<NSNumber *>*)fillDotSizeStandardForNumberOfPages:(NSUInteger)numberOfPages {
+    NSMutableArray<NSNumber *> *dotSizes = [[NSMutableArray alloc] init];
+    for (NSUInteger counter = 0; counter < _numberOfPages; counter++) {
+        [dotSizes addObject:@(DotSizeL)];
+    }
+    return [dotSizes copy];
 }
 
 #pragma mark - Move to next page
@@ -153,14 +162,15 @@ static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
     [self prepareDotsBeforeAnimationForPrevState:prevState
                                        nextState:nextState
                                             next:next
-                                indexWindowMoved:indexWindowEquals(prevIndexWindow, nextIndexWindow)];
+                                indexWindowMoved:indexWindowEquals(prevIndexWindow, nextIndexWindow)
+                                   numberOfPages:self.numberOfPages];
 #pragma mark - Setting new state
     self.pageControlState = nextState;
     [self setCurrentPage:nextPage];
     self.indexWindow = nextIndexWindow;
     
     __weak typeof(self) weakSelf = self;
-    if (growBehavior & DotsGrowOff) {
+    if (growBehavior & DotsGrowOff || !self.continuousMode) {
         [self applyDotSizes:dotSizes.before];
         UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:0.2 curve:UIViewAnimationCurveLinear animations:^{
             [weakSelf applyDotColorsWithCurrentPage:nextPage indexWindow:nextIndexWindow];
@@ -221,8 +231,14 @@ static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
 - (DotSizes *)prepareDotsBeforeAnimationForPrevState:(PageControlState)prevState
                                      nextState:(PageControlState)nextState
                                                 next:(BOOL)next
-                                    indexWindowMoved:(BOOL)indexWindowMoved{
+                                    indexWindowMoved:(BOOL)indexWindowMoved
+                                       numberOfPages:(NSUInteger)numberOfPages {
     DotSizes *dotsIndexes = [[DotSizes alloc] init];
+    if (!self.continuousMode) {
+        dotsIndexes.before = dotsIndexes.after =
+        [self fillDotSizeStandardForNumberOfPages:numberOfPages];
+        return dotsIndexes;
+    }
     switch (prevState) {
         case PageControlStateLeftDots5:
             if (nextState == PageControlStateLeftDots6) {
@@ -370,6 +386,9 @@ static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
 - (PageControlState)getNextState:(PageControlState)prevState
                        forNextPage:(NSInteger)nextPage {
     NSInteger currentPage = self.currentPage;
+    if (!self.continuousMode) {
+        return PageControlStateLeftDots5;
+    }
     if (labs(nextPage - currentPage) <= 1) {
         switch (prevState) {
             case PageControlStateLeftDots5:
@@ -382,7 +401,7 @@ static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
                     return PageControlStateLeftDots5;
                 }
                 if (nextPage > 3 && self.numberOfPages ==
-                    kMaxNumberOfPagesWhenSwichToContinuousMode) {
+                    kMinNumberOfPagesWhenToSwitchToContinuousMode) {
                     return PageControlStateRightDots6;
                 }
                 if (nextPage > 3) {
@@ -401,7 +420,7 @@ static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
                 if (nextPage > self.numberOfPages - 2) {
                     return PageControlStateRightDots5;
                 }
-                if (nextPage < self.numberOfPages - 4 && self.numberOfPages == kMaxNumberOfPagesWhenSwichToContinuousMode) {
+                if (nextPage < self.numberOfPages - 4 && self.numberOfPages == kMinNumberOfPagesWhenToSwitchToContinuousMode) {
                     return PageControlStateLeftDots6;
                 }
                 if (nextPage < self.numberOfPages - 4) {
@@ -446,6 +465,9 @@ static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
                                nextState:(PageControlState)nextState
                                 nextPage:(NSUInteger)nextPage
              prevIndexWindow:(struct IndexWindow)prevIndexWindow {
+    if (!self.continuousMode) {
+        return prevIndexWindow;
+    }
     switch (prevState) {
         case PageControlStateLeftDots5:
             if (nextState == PageControlStateLeftDots6) {

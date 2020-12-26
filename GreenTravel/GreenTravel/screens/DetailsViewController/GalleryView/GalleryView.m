@@ -84,7 +84,7 @@ static const CGFloat kPageControlScrollContainerWidthFor7 = 98.0;
     self.collectionView.backgroundColor = [Colors get].white;
 
 #pragma mark - Page control
-    self.pageControl = [[GalleryPageControl alloc] init];
+    self.pageControl = [[GalleryPageControl alloc] initWithNumberOfPages:[imageURLs count]];
     [self addSubview:self.pageControl];
     self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
     
