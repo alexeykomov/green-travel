@@ -65,6 +65,7 @@ static const CGFloat kDotWidth = 7.0;
 static const CGFloat kSpacing = 5.0;
 
 static const NSUInteger kMaxNumberOfDotsOnStart = 5;
+static const NSUInteger kMaxNumberOfPagesWhenSwichToContinuousMode = 6;
 
 @interface GalleryPageControl ()
 
@@ -75,6 +76,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
 @property (assign, nonatomic) CGFloat aspectRatio;
 @property (assign, nonatomic) CGFloat indexOfScrolledItem;
 @property (strong, nonatomic) NSLayoutConstraint *centerOffsetConstraint;
+@property (assign, nonatomic) BOOL continuousMode;
 
 @property (assign, nonatomic) PageControlState pageControlState;
 @property (assign, nonatomic) struct IndexWindow indexWindow;
@@ -118,7 +120,7 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
 
 - (void)setNumberOfPages:(NSInteger)numberOfPages {
     _numberOfPages = numberOfPages;
-    
+    self.continuousMode = numberOfPages > kMaxNumberOfPagesWhenSwichToContinuousMode;
     NSUInteger maxVisibleDotsOnStart = fmin(kMaxNumberOfDotsOnStart, _numberOfPages);
     for (UIView *subview in self.contentView.subviews) {
         [self.contentView removeArrangedSubview:subview];
@@ -134,7 +136,6 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
 }
 
 #pragma mark - Move to next page
-
 - (void)moveToPage:(BOOL)next {
     NSUInteger nextPage = self.currentPage + (next ? 1 : -1);
     PageControlState prevState = self.pageControlState;
@@ -148,25 +149,28 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
     DotsGrow growBehavior =
     [self getNextDotsGrowStateFromPrevIndexWindow:self.indexWindow
                                   nextIndexWindow:nextIndexWindow];
-    DotSizes *dotSizes = [self prepareDotsBeforeAnimationForPrevState:prevState
-                                                           nextState:nextState
-                                                                next:next];
+    DotSizes *dotSizes =
+    [self prepareDotsBeforeAnimationForPrevState:prevState
+                                       nextState:nextState
+                                            next:next
+                                indexWindowMoved:indexWindowEquals(prevIndexWindow, nextIndexWindow)];
+#pragma mark - Setting new state
     self.pageControlState = nextState;
     [self setCurrentPage:nextPage];
     self.indexWindow = nextIndexWindow;
     
     __weak typeof(self) weakSelf = self;
     if (growBehavior & DotsGrowOff) {
-        //[self drawDots:nextPage forIndexWindow:prevIndexWindow];
+        [self applyDotSizes:dotSizes.before];
         UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:0.2 curve:UIViewAnimationCurveLinear animations:^{
             [weakSelf applyDotColorsWithCurrentPage:nextPage indexWindow:nextIndexWindow];
+            [weakSelf applyDotSizes:dotSizes.after];
         }];
         [moveAnimator startAnimation];
         return;
     }
     
     NSInteger prevCount = [self.contentView.arrangedSubviews count];
-    //[self drawDots:nextPage forIndexWindow:prevIndexWindow];
     
     if (growBehavior & DotsGrowUp || growBehavior & DotsGrowConstant) {
         [self.contentView insertArrangedSubview:[self createDotView]
@@ -216,7 +220,8 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
 #pragma mark - Prepare dot sizes
 - (DotSizes *)prepareDotsBeforeAnimationForPrevState:(PageControlState)prevState
                                      nextState:(PageControlState)nextState
-                                                   next:(BOOL)next {
+                                                next:(BOOL)next
+                                    indexWindowMoved:(BOOL)indexWindowMoved{
     DotSizes *dotsIndexes = [[DotSizes alloc] init];
     switch (prevState) {
         case PageControlStateLeftDots5:
@@ -225,47 +230,56 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                                        @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
                 dotsIndexes.after = @[@(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeM), @(DotSizeS)];
+            } else {
+                dotsIndexes.before = dotsIndexes.after =
+                @[@(DotSizeL), @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];
             }
             break;
         case PageControlStateLeftDots6:
-            
             if (nextState == PageControlStateDots7) {
                 dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
                 dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];;
-            }
-            if (nextState == PageControlStateLeftDots5) {
+            } else if (nextState == PageControlStateLeftDots5) {
                 dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeM), @(DotSizeS)];
                 dotsIndexes.after = @[@(DotSizeL), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeM), @(DotSizeS)];
+            } else if (nextState == PageControlStateRightDots6) {
+                dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeL), @(DotSizeM), @(DotSizeS)];
+                dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL),
+                                      @(DotSizeL), @(DotSizeL), @(DotSizeM)];
+            } else {
+                dotsIndexes.before = dotsIndexes.after =
+                @[@(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];
             }
             break;
         case PageControlStateDots7:
-            if (nextState == prevState && next) {
+            if (nextState == prevState && next && !indexWindowMoved) {
                 dotsIndexes.before = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
                 dotsIndexes.after = @[@(DotSizeXS), @(DotSizeS), @(DotSizeM), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];
-            }
-            if (nextState == prevState && !next) {
+            } else if (nextState == prevState && !next && !indexWindowMoved) {
                 dotsIndexes.before = @[@(DotSizeXS), @(DotSizeS), @(DotSizeM), @(DotSizeL),
                                        @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];
                 dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
-            }
-            if (nextState == PageControlStateRightDots6) {
+            } else if (nextState == PageControlStateRightDots6) {
                 dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeM), @(DotSizeS)];
                 dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeM)];
-            }
-            if (nextState == PageControlStateLeftDots6) {
+            } else if (nextState == PageControlStateLeftDots6) {
                 dotsIndexes.before = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
                                        @(DotSizeL), @(DotSizeM)];
                 dotsIndexes.after = @[@(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeM), @(DotSizeS)];
+            } else {
+                dotsIndexes.before = dotsIndexes.after =
+                @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),@(DotSizeL), @(DotSizeM), @(DotSizeS)];
             }
             break;
         case PageControlStateRightDots6:
@@ -274,12 +288,19 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                                        @(DotSizeM)];
                 dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL)];
-            }
-            if (nextState == PageControlStateDots7) {
+            } else if (nextState == PageControlStateDots7) {
                 dotsIndexes.before = @[@(DotSizeXS), @(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL),
                                        @(DotSizeL), @(DotSizeM)];
                 dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeM), @(DotSizeS)];
+            } else if (nextState == PageControlStateLeftDots6) {
+                dotsIndexes.before = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
+                                       @(DotSizeM)];
+                dotsIndexes.after = @[@(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
+                                      @(DotSizeM), @(DotSizeS)];
+            } else {
+                dotsIndexes.before = dotsIndexes.after =
+                @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL), @(DotSizeM)];
             }
             break;
         case PageControlStateRightDots5:
@@ -288,6 +309,9 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                                        @(DotSizeL)];
                 dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeM)];
+            } else {
+                dotsIndexes.before = dotsIndexes.after =
+                @[@(DotSizeS), @(DotSizeM), @(DotSizeL), @(DotSizeL), @(DotSizeL)];
             }
             break;
     }
@@ -357,6 +381,10 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                 if (nextPage < 1) {
                     return PageControlStateLeftDots5;
                 }
+                if (nextPage > 3 && self.numberOfPages ==
+                    kMaxNumberOfPagesWhenSwichToContinuousMode) {
+                    return PageControlStateRightDots6;
+                }
                 if (nextPage > 3) {
                     return PageControlStateDots7;
                 }
@@ -372,6 +400,9 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
             case PageControlStateRightDots6:
                 if (nextPage > self.numberOfPages - 2) {
                     return PageControlStateRightDots5;
+                }
+                if (nextPage < self.numberOfPages - 4 && self.numberOfPages == kMaxNumberOfPagesWhenSwichToContinuousMode) {
+                    return PageControlStateLeftDots6;
                 }
                 if (nextPage < self.numberOfPages - 4) {
                     return PageControlStateDots7;
@@ -437,6 +468,12 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
                     prevIndexWindow.right - 1
                 };
             }
+            if (nextState == PageControlStateRightDots6) {
+                return (struct IndexWindow) {
+                    prevIndexWindow.left,
+                    prevIndexWindow.right
+                };
+            }
             return prevIndexWindow;
         case PageControlStateDots7:
             if (nextState == prevState) {
@@ -477,6 +514,12 @@ static const NSUInteger kMaxNumberOfDotsOnStart = 5;
             if (nextState == PageControlStateDots7) {
                 return (struct IndexWindow){
                     prevIndexWindow.left - 1,
+                    prevIndexWindow.right
+                };
+            }
+            if (nextState == PageControlStateLeftDots6) {
+                return (struct IndexWindow) {
+                    prevIndexWindow.left,
                     prevIndexWindow.right
                 };
             }
