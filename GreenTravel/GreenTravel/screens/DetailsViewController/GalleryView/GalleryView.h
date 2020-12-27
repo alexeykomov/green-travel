@@ -17,10 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, readonly, nonatomic) CGFloat indexOfScrolledItem;
 
 - (instancetype)initWithFrame:(CGRect)frame
-                    imageURLs:(NSArray<NSString *>*)imageURLs
-                  aspectRatio:(CGFloat)aspectRatio
-            pageControlHeight:(CGFloat)pageControlHeight;
+                    imageURLs:(NSArray<NSString *>*)imageURLs;
 - (void)setUpWithPictureURLs:(NSArray<NSString *>*)pictureURLs;
+- (void)toggleSkipAnimation;
 
 @end
 

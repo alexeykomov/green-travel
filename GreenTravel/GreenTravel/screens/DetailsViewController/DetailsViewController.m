@@ -52,12 +52,10 @@
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) IndexModel *indexModel;
-@property (strong, nonatomic) NSLayoutConstraint *aspectRatioConstraint;
+@property (assign, nonatomic) BOOL resized;
+@property (assign, nonatomic) CGSize screenSize;
 
 @end
-
-static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
-static const CGFloat kPagerHeight = 41.0;
 
 @implementation DetailsViewController
 
@@ -109,23 +107,16 @@ static const CGFloat kPagerHeight = 41.0;
         
     #pragma mark - Preview image
     self.imageGalleryView = [[GalleryView alloc] initWithFrame:CGRectZero
-                                                     imageURLs:self.item.details.images
-                                                   aspectRatio:kPreviewImageAspectRatio
-                                             pageControlHeight:kPagerHeight];
+                                                     imageURLs:self.item.details.images];
     self.imageGalleryView.translatesAutoresizingMaskIntoConstraints = NO;
     self.imageGalleryView.layer.masksToBounds = YES;
     
     [self.contentView addSubview:self.imageGalleryView];
     
-    self.aspectRatioConstraint = [self.imageGalleryView.heightAnchor
-                                  constraintEqualToAnchor:self.imageGalleryView.widthAnchor
-                                  multiplier:kPreviewImageAspectRatio
-                                  constant:kPagerHeight];
     [NSLayoutConstraint activateConstraints:@[
-        [self.imageGalleryView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0.0],
+        [self.imageGalleryView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
         [self.imageGalleryView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:0.0],
-        [self.imageGalleryView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0.0],
-        self.aspectRatioConstraint,
+        [self.imageGalleryView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
     ]];
     
     #pragma mark - Bookmark button
@@ -411,7 +402,6 @@ static const CGFloat kPagerHeight = 41.0;
     [self updateDetails];
 }
 
-
 - (void)onMapButtonPress:(id)sender {
     MapItem *mapItem = [[MapItem alloc] init];
     mapItem.title = self.item.title;
@@ -472,10 +462,30 @@ static const CGFloat kPagerHeight = 41.0;
     [self.indexModel bookmarkItem:self.item bookmark:!self.item.bookmarked];
 }
 
+#pragma mark - Resize
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    [self.imageGalleryView setNeedsLayout];
+    [self.imageGalleryView layoutIfNeeded];
     [self.imageGalleryView.collectionView reloadData];
     CGPoint pointToScrollTo = CGPointMake(self.imageGalleryView.indexOfScrolledItem * size.width, 0);
-    [self.imageGalleryView.collectionView setContentOffset:pointToScrollTo];
+    [self.imageGalleryView.collectionView setContentOffset:pointToScrollTo animated:YES];
+    [self.imageGalleryView toggleSkipAnimation]; 
+//    if (!CGSizeEqualToSize(self.screenSize, size)) {
+//        self.screenSize = size;
+//        self.resized = YES;
+//    }
+    
 }
+
+//- (void)viewDidLayoutSubviews {
+//    [super viewDidLayoutSubviews];
+//    if (self.resized) {
+//        [self.imageGalleryView setNeedsLayout];
+//        [self.imageGalleryView layoutIfNeeded];
+//        CGPoint pointToScrollTo = CGPointMake(self.imageGalleryView.indexOfScrolledItem * self.screenSize.width, 0);
+//        [self.imageGalleryView.collectionView setContentOffset:pointToScrollTo];
+//        self.resized = NO;
+//    }
+//}
 
 @end

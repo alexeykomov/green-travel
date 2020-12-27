@@ -37,7 +37,8 @@ static const NSInteger kMaximalNumberOfDotsForCustomPageControl = 6;
 static const CGFloat kPageControlScrollContainerWidthFor5 = 78.0;
 static const CGFloat kPageControlScrollContainerWidthFor6 = 88.0;
 static const CGFloat kPageControlScrollContainerWidthFor7 = 98.0;
-static const CGFloat kPageControlHeight = 20.0;
+static const CGFloat kPageControlHeight = 41.0;
+static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
 
 @implementation GalleryView
 
@@ -51,19 +52,24 @@ static const CGFloat kPageControlHeight = 20.0;
 
 - (instancetype)initWithFrame:(CGRect)frame
                     imageURLs:(NSArray<NSString *>*)imageURLs
-                  aspectRatio:(CGFloat)aspectRatio
-            pageControlHeight:(CGFloat)pageControlHeight
 {
 
     self = [super initWithFrame:frame];
     if (self) {
-        [self setUp:imageURLs aspectRatio:aspectRatio pageControlHeight:pageControlHeight];
+        [self setUp:imageURLs];
     }
     return self;
 }
 
-- (void)setUp:(NSArray<NSString *>*)imageURLs aspectRatio:(CGFloat)aspectRatio pageControlHeight:(CGFloat)pageControlHeight {
-    self.aspectRatio = aspectRatio;
+- (void)setUp:(NSArray<NSString *>*)imageURLs {
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    NSLayoutConstraint *aspectRatioConstraint = [self.heightAnchor
+                                  constraintEqualToAnchor:self.widthAnchor
+                                  multiplier:kPreviewImageAspectRatio
+                                  constant:kPageControlHeight];
+    [NSLayoutConstraint activateConstraints:@[
+        aspectRatioConstraint,
+    ]];
 
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
@@ -74,7 +80,7 @@ static const CGFloat kPageControlHeight = 20.0;
         [self.collectionView.topAnchor constraintEqualToAnchor:self.topAnchor],
         [self.collectionView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
         [self.collectionView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-        [self.collectionView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-pageControlHeight],
+        [self.collectionView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-kPageControlHeight],
     ]];
 
     [self.collectionView setPagingEnabled:YES];
@@ -119,55 +125,35 @@ static const CGFloat kPageControlHeight = 20.0;
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat width = self.safeAreaLayoutGuide.layoutFrame.size.width;
-    return CGSizeMake(self.safeAreaLayoutGuide.layoutFrame.size.width, self.aspectRatio * width);
+    return CGSizeMake(self.safeAreaLayoutGuide.layoutFrame.size.width, kPreviewImageAspectRatio * width);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     return 0.0;
 }
 
+- (void)toggleSkipAnimation {
+    [self.pageControl toggleSkipAnimation]; 
+}
+
 #pragma mark - Scroll view delegate
 
 - (CGFloat)getIndexOfScrolledItem {
-    CGFloat indexOfScrolledItem = self.collectionView.contentOffset.x / self.frame.size.width;
+    CGFloat indexOfScrolledItem = ABS(round(self.collectionView.contentOffset.x / self.frame.size.width));
     return indexOfScrolledItem;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat indexOfScrolledItem = ABS(round([self getIndexOfScrolledItem]));
-    //NSLog(@"Collection view did scroll: %f", indexOfScrolledItem);
-    if (indexOfScrolledItem > self.indexOfScrolledItem) {
-        self.indexOfScrolledItem = indexOfScrolledItem;
+    CGFloat indexOfScrolledItem = [self getIndexOfScrolledItem];
+    NSLog(@"Collection view did scroll: %f", indexOfScrolledItem);
+    while (indexOfScrolledItem > self.indexOfScrolledItem) {
+        self.indexOfScrolledItem++;
         [self.pageControl moveToNextPage];
     }
-    if (indexOfScrolledItem < self.indexOfScrolledItem) {
-        self.indexOfScrolledItem = indexOfScrolledItem;
+    while (indexOfScrolledItem < self.indexOfScrolledItem) {
+        self.indexOfScrolledItem--;
         [self.pageControl moveToPrevPage];
     }
-    
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    CGFloat indexOfScrolledItem = [self getIndexOfScrolledItem];
-    //NSLog(@"Collection view did end decelerating: %f", indexOfScrolledItem);
-//    self.indexOfScrolledItem = indexOfScrolledItem;
-//    NSInteger prevPage = self.pageControl.currentPage;
-//		NSInteger currentPage = (NSInteger) indexOfScrolledItem;
-//    [self updateBeforeSettingCurrentPage];
-//		[self.pageControl setCurrentPage:currentPage];
-//    [self updateAfterSettingCurrentPage:indexOfScrolledItem
-//                               prevPage:prevPage
-//                            currentPage:currentPage];
-}
-
-#pragma mark - Update page control
-- (void)updateBeforeSettingCurrentPage {
-   
-}
-
-- (void)updateAfterSettingCurrentPage:(NSInteger)indexOfScrolledItem
-          prevPage:(NSInteger)prevPage
-       currentPage:(NSInteger)currentPage {
 }
 
 @end

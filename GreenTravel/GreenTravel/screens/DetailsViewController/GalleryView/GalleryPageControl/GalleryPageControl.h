@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithNumberOfPages:(NSUInteger)numberOfPages;
 - (void)moveToNextPage;
 - (void)moveToPrevPage;
+- (void)toggleSkipAnimation;
 - (void)dispose;
 
 @end

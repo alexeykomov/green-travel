@@ -62,6 +62,7 @@ static const CGFloat kDotWidth = 7.0;
 static const CGFloat kSpacing = 5.0;
 
 static const CGFloat kAnimationDuration = 0.2;
+static const CGFloat kAnimationDurationSkip = 0.01;
 
 static const NSUInteger kMaxNumberOfDotsOnStart = 5;
 static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
@@ -78,6 +79,7 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
 @property (assign, nonatomic) BOOL continuousMode;
 @property (strong, nonatomic) NSMutableArray<void(^)(void)> *queueAnimations;
 @property (assign, nonatomic) BOOL queueIsUnblocked;
+@property (assign, nonatomic) CGFloat animationDuration;
 
 @property (assign, nonatomic) PageControlState pageControlState;
 @property (assign, nonatomic) struct IndexWindow indexWindow;
@@ -101,6 +103,7 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
     self.currentPage = 0;
     self.queueAnimations = [[NSMutableArray alloc] init];
     self.queueIsUnblocked = YES;
+    self.animationDuration = kAnimationDuration;
     
 #pragma mark - Content view
     self.contentView = [[UIStackView alloc] init];
@@ -204,7 +207,7 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
     __weak typeof(self) weakSelf = self;
     if (growBehavior & DotsGrowOff || !self.continuousMode) {
         [self applyDotSizes:dotSizes.before];
-        UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:kAnimationDuration curve:UIViewAnimationCurveLinear animations:^{
+        UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:weakSelf.animationDuration curve:UIViewAnimationCurveLinear animations:^{
             [weakSelf applyDotColorsWithCurrentPage:nextPage indexWindow:nextIndexWindow];
             [weakSelf applyDotSizes:dotSizes.after];
         }];
@@ -234,7 +237,7 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
     self.centerOffsetConstraint.constant += fabs(centerOffsetCompensation) * (next ? 1 : -1);
     [self setNeedsLayout];
     [self layoutIfNeeded];
-    UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:kAnimationDuration curve:UIViewAnimationCurveLinear animations:^{
+    UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:weakSelf.animationDuration curve:UIViewAnimationCurveLinear animations:^{
         if (growBehavior & DotsGrowConstant) {
             weakSelf.centerOffsetConstraint.constant = -centerOffsetCompensation * (next ? 1 : -1);
             [weakSelf applyDotColorsWithCurrentPage:nextPage + (next ? 1 : 0) indexWindow:nextIndexWindow];
@@ -255,6 +258,14 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
         [weakSelf launchWorkIfPossible];
     }];
     [moveAnimator startAnimation];
+}
+
+- (void)toggleSkipAnimation {
+    __weak typeof(self) weakSelf = self;
+    self.animationDuration = kAnimationDurationSkip;
+    [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:NO block:^(NSTimer * _Nonnull timer) {
+        weakSelf.animationDuration = kAnimationDuration;
+    }];
 }
 
 - (void)dispose {
