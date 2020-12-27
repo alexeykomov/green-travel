@@ -57,7 +57,7 @@
 @end
 
 static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
-static const CGFloat kPagerHeight = 20.0;
+static const CGFloat kPagerHeight = 41.0;
 
 @implementation DetailsViewController
 
@@ -164,7 +164,7 @@ static const CGFloat kPagerHeight = 20.0;
     [self.contentView addSubview:self.titleLabel];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.titleLabel.topAnchor constraintEqualToAnchor:self.imageGalleryView.bottomAnchor constant:29.0],
+        [self.titleLabel.topAnchor constraintEqualToAnchor:self.imageGalleryView.bottomAnchor],
         [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
         [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
 

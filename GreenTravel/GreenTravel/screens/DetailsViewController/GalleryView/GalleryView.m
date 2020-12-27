@@ -37,6 +37,7 @@ static const NSInteger kMaximalNumberOfDotsForCustomPageControl = 6;
 static const CGFloat kPageControlScrollContainerWidthFor5 = 78.0;
 static const CGFloat kPageControlScrollContainerWidthFor6 = 88.0;
 static const CGFloat kPageControlScrollContainerWidthFor7 = 98.0;
+static const CGFloat kPageControlHeight = 20.0;
 
 @implementation GalleryView
 
@@ -87,23 +88,19 @@ static const CGFloat kPageControlScrollContainerWidthFor7 = 98.0;
     self.pageControl = [[GalleryPageControl alloc] initWithNumberOfPages:[imageURLs count]];
     [self addSubview:self.pageControl];
     self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
-    
     [NSLayoutConstraint activateConstraints:@[
-        [self.pageControl.topAnchor constraintEqualToAnchor:self.collectionView.bottomAnchor],
+        [self.pageControl.topAnchor constraintEqualToAnchor:self.collectionView.bottomAnchor constant:20.0],
+        //[self.pageControl.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-16.0],
         [self.pageControl.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
         [self.pageControl.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-        [self.pageControl.heightAnchor constraintEqualToConstant:20.0],
+        
     ]];
-    
     [self setUpWithPictureURLs:imageURLs];
 }
 
 - (void)setUpWithPictureURLs:(NSArray<NSString *>*)pictureURLs {
     self.imageURLs = [[NSArray alloc] initWithArray:pictureURLs];
     [self.collectionView reloadData];
-    [self.pageControl setNumberOfPages:[self.imageURLs count]];
-    [self.pageControl setCurrentPage:0];
-    [self updateAfterSettingCurrentPage:0 prevPage:0 currentPage:0];
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
