@@ -10,10 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GalleryPageControl : UIView
-
-@property (nonatomic, assign) NSInteger numberOfPages;
-@property (nonatomic, assign) NSInteger currentPage;
+@interface GalleryPageControl : UIControl
 
 - (instancetype)initWithNumberOfPages:(NSUInteger)numberOfPages;
 - (void)moveToNextPage;

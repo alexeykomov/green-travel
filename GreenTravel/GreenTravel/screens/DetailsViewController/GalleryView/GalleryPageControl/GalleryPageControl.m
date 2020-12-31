@@ -81,6 +81,8 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
 @property (assign, nonatomic) BOOL queueIsUnblocked;
 @property (assign, nonatomic) CGFloat animationDuration;
 
+@property (nonatomic, assign) NSInteger numberOfPages;
+@property (nonatomic, assign) NSInteger currentPage;
 @property (assign, nonatomic) PageControlState pageControlState;
 @property (assign, nonatomic) struct IndexWindow indexWindow;
 
@@ -604,5 +606,19 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
     }
     return prevIndexWindow;
 }
+
+- (UIAccessibilityTraits)accessibilityTraits {
+    return [super accessibilityTraits] | UIAccessibilityTraitAdjustable;
+}
+
+- (void)accessibilityIncrement {
+    [self moveToNextPage];
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
+}
+
+- (void)accessibilityDecrement {
+    [self moveToPrevPage];
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
+} 
 
 @end
