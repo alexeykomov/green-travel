@@ -37,6 +37,25 @@ struct IndexWindow {
     NSInteger right;
 };
 
+struct CenterOffsetCompensation {
+    CGFloat animationStart;
+    CGFloat animationEnd;
+    CGFloat competion;
+};
+
+static const CGFloat kDotScaleMedium = 5.0 / 7.0;
+static const CGFloat kDotScaleSmall = 3.0 / 7.0;
+static const CGFloat kDotScaleExtraSmall = 0.2;
+
+static const CGFloat kDotWidth = 7.0;
+static const CGFloat kSpacing = 5.0;
+
+static const CGFloat kAnimationDuration = 0.2;
+static const CGFloat kAnimationDurationSkip = 0.01;
+
+static const NSUInteger kMaxNumberOfDotsOnStart = 5;
+static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
+
 NSInteger indexWindowLength(struct IndexWindow indexWindow) {
     return indexWindow.right - indexWindow.left + 1;
 }
@@ -54,18 +73,15 @@ NSUInteger normalizedPageRight(NSUInteger page, struct IndexWindow indexWindow) 
     return indexWindow.right - page;
 }
 
-static const CGFloat kDotScaleMedium = 5.0 / 7.0;
-static const CGFloat kDotScaleSmall = 3.0 / 7.0;
-static const CGFloat kDotScaleExtraSmall = 0.2;
+CGFloat dotsWidth(NSInteger dotCount) {
+    return dotCount * kDotWidth + (dotCount - 1) * kSpacing;
+}
 
-static const CGFloat kDotWidth = 7.0;
-static const CGFloat kSpacing = 5.0;
-
-static const CGFloat kAnimationDuration = 0.2;
-static const CGFloat kAnimationDurationSkip = 0.01;
-
-static const NSUInteger kMaxNumberOfDotsOnStart = 5;
-static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
+CGFloat centerCompensation(NSUInteger dotCountLeft, NSUInteger dotCountRight) {
+    CGFloat threeDotsWidth = dotsWidth(3);
+    CGFloat offset = (dotsWidth(3 + dotCountRight - dotCountLeft) - threeDotsWidth) / 2;
+    return offset;
+}
 
 @interface GalleryPageControl ()
 
@@ -115,7 +131,9 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
     self.contentView.spacing = kSpacing;
     self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview:self.contentView];
-    self.centerOffsetConstraint = [self.contentView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor constant:0.0];
+    self.centerOffsetConstraint =
+    [self.contentView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor
+                                                   constant:0];
     [NSLayoutConstraint activateConstraints:@[
         [self.contentView.topAnchor constraintEqualToAnchor:self.topAnchor],
         self.centerOffsetConstraint,
@@ -139,6 +157,7 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
     }
     if (_numberOfPages > kMaxNumberOfDotsOnStart) {
         [self applyDotSizes:@[@(DotSizeL), @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)]];
+        [self updateCenterOffsetCompensation:centerCompensation(0, 2)];
     } else {
         [self applyDotSizes:[self fillDotSizeStandardForNumberOfPages:_numberOfPages]];
     }
@@ -195,12 +214,16 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
     DotsGrow growBehavior =
     [self getNextDotsGrowStateFromPrevIndexWindow:self.indexWindow
                                   nextIndexWindow:nextIndexWindow];
+    BOOL indexWindowMoved = indexWindowEquals(prevIndexWindow, nextIndexWindow);
     DotSizes *dotSizes =
     [self prepareDotsBeforeAnimationForPrevState:prevState
                                        nextState:nextState
                                             next:next
-                                indexWindowMoved:indexWindowEquals(prevIndexWindow, nextIndexWindow)
+                                indexWindowMoved:indexWindowMoved
                                    numberOfPages:self.numberOfPages];
+    struct CenterOffsetCompensation centerCompensation =
+    [self getCenterOffsetCompensation:prevState nextState:nextState next:next
+                     indexWindowMoved:indexWindowMoved];
 #pragma mark - Setting new state
     self.pageControlState = nextState;
     [self setCurrentPage:nextPage];
@@ -209,12 +232,15 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
     __weak typeof(self) weakSelf = self;
     if (growBehavior & DotsGrowOff || !self.continuousMode) {
         [self applyDotSizes:dotSizes.before];
+        [self updateCenterOffsetCompensation:centerCompensation.animationStart];
         UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:weakSelf.animationDuration curve:UIViewAnimationCurveLinear animations:^{
             [weakSelf applyDotColorsWithCurrentPage:nextPage indexWindow:nextIndexWindow];
             [weakSelf applyDotSizes:dotSizes.after];
+            [weakSelf updateCenterOffsetCompensation:centerCompensation.animationEnd];
         }];
         [moveAnimator startAnimation];
         [moveAnimator addCompletion:^(UIViewAnimatingPosition finalPosition) {
+            [weakSelf updateCenterOffsetCompensation:centerCompensation.competion];
             weakSelf.queueIsUnblocked = YES;
             [weakSelf launchWorkIfPossible];
         }];
@@ -222,44 +248,153 @@ static const NSUInteger kMinNumberOfPagesWhenToSwitchToContinuousMode = 6;
     }
     
     NSInteger prevCount = [self.contentView.arrangedSubviews count];
-    
     if (growBehavior & DotsGrowUp || growBehavior & DotsGrowConstant) {
         [self.contentView insertArrangedSubview:[self createDotView]
                                         atIndex:next ? prevCount : 0];
     } else {
         [self.contentView.arrangedSubviews[next ? 0 : prevCount - 1] removeFromSuperview];
     }
-    
     [self applyDotSizes:dotSizes.before];
-    
     NSInteger newCount = [self.contentView.arrangedSubviews count];
-    CGFloat centerOffsetCompensation = (newCount * kDotWidth + (newCount - 1) *
-        kSpacing - (prevCount * kDotWidth + (prevCount - 1) * kSpacing)) / 2;
     
-    self.centerOffsetConstraint.constant += fabs(centerOffsetCompensation) * (next ? 1 : -1);
-    [self setNeedsLayout];
-    [self layoutIfNeeded];
-    UIViewPropertyAnimator *moveAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:weakSelf.animationDuration curve:UIViewAnimationCurveLinear animations:^{
+    [self updateCenterOffsetCompensation:centerCompensation.animationStart];
+    
+    UIViewPropertyAnimator *moveAnimator =
+    [[UIViewPropertyAnimator alloc] initWithDuration:weakSelf.animationDuration
+                                               curve:UIViewAnimationCurveLinear
+                                          animations:^{
         if (growBehavior & DotsGrowConstant) {
-            weakSelf.centerOffsetConstraint.constant = -centerOffsetCompensation * (next ? 1 : -1);
             [weakSelf applyDotColorsWithCurrentPage:nextPage + (next ? 1 : 0) indexWindow:nextIndexWindow];
         } else {
-            weakSelf.centerOffsetConstraint.constant = 0;
             [weakSelf applyDotColorsWithCurrentPage:nextPage indexWindow:nextIndexWindow];
         }
         [weakSelf applyDotSizes:dotSizes.after];
-        [weakSelf layoutIfNeeded];
+        [weakSelf updateCenterOffsetCompensation:centerCompensation.animationEnd];
     }];
     [moveAnimator addCompletion:^(UIViewAnimatingPosition finalPosition) {
         if (growBehavior & DotsGrowConstant) {
             [weakSelf.contentView.arrangedSubviews[next ? 0 : newCount - 1] removeFromSuperview];
-            weakSelf.centerOffsetConstraint.constant = 0.0;
-            [weakSelf layoutIfNeeded];
         }
+        [weakSelf updateCenterOffsetCompensation:centerCompensation.competion];
         weakSelf.queueIsUnblocked = YES;
         [weakSelf launchWorkIfPossible];
     }];
     [moveAnimator startAnimation];
+}
+
+- (void)updateCenterOffsetCompensation:(CGFloat)centerCompensation {
+    self.centerOffsetConstraint.constant = centerCompensation;
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+}
+
+#pragma mark - Center offset compensation
+- (struct CenterOffsetCompensation)getCenterOffsetCompensation:(PageControlState)prevState
+                                                     nextState:(PageControlState)nextState
+                                                          next:(BOOL)next
+                                              indexWindowMoved:(BOOL)indexWindowMoved {
+    if (!self.continuousMode) {
+        return (struct CenterOffsetCompensation){0.0, 0.0, 0.0};
+    }
+    switch (prevState) {
+        case PageControlStateLeftDots5:
+            if (nextState == PageControlStateLeftDots6) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(0, 3), centerCompensation(1, 2),
+                    centerCompensation(1, 2)
+                };
+            }
+            return (struct CenterOffsetCompensation){
+                centerCompensation(0, 2), centerCompensation(0, 2),
+                centerCompensation(0, 2)
+            };
+        case PageControlStateLeftDots6:
+            if (nextState == PageControlStateDots7) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(1, 3), centerCompensation(2, 2),
+                    centerCompensation(2, 2)
+                };
+            }
+            if (nextState == PageControlStateLeftDots5) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(1, 1), centerCompensation(0, 2),
+                    centerCompensation(0, 2)
+                };
+            }
+            if (nextState == PageControlStateRightDots6) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(1, 2), centerCompensation(2, 1),
+                    centerCompensation(2, 1)
+                };
+            }
+            return (struct CenterOffsetCompensation){
+                centerCompensation(1, 2), centerCompensation(1, 2),
+                centerCompensation(1, 2)
+            };
+        case PageControlStateDots7:
+            if (nextState == prevState && next && !indexWindowMoved) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(2, 3), centerCompensation(3, 2),
+                    centerCompensation(2, 2)
+                };
+            }
+            if (nextState == prevState && !next && !indexWindowMoved) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(3, 2), centerCompensation(2, 3),
+                    centerCompensation(2, 2)
+                };
+            }
+            if (nextState == PageControlStateRightDots6) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(1, 2), centerCompensation(2, 1),
+                    centerCompensation(2, 1)
+                };
+            } else if (nextState == PageControlStateLeftDots6) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(2, 1), centerCompensation(1, 2),
+                    centerCompensation(1, 2)
+                };
+            }
+            return (struct CenterOffsetCompensation){
+                centerCompensation(2, 2), centerCompensation(2, 2),
+                centerCompensation(2, 2)
+            };
+        case PageControlStateRightDots6:
+            if (nextState == PageControlStateRightDots5) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(1, 1), centerCompensation(2, 0),
+                    centerCompensation(2, 0)
+                };
+            }
+            if (nextState == PageControlStateDots7) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(3, 1), centerCompensation(2, 2),
+                    centerCompensation(2, 2)
+                };
+            }
+            if (nextState == PageControlStateLeftDots6) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(2, 1), centerCompensation(1, 2),
+                    centerCompensation(1, 2)
+                };
+            }
+            return (struct CenterOffsetCompensation){
+                centerCompensation(2, 1), centerCompensation(2, 1),
+                centerCompensation(2, 1)
+            };
+        case PageControlStateRightDots5:
+            if (nextState == PageControlStateRightDots6) {
+                return (struct CenterOffsetCompensation){
+                    centerCompensation(3, 0), centerCompensation(2, 1),
+                    centerCompensation(2, 1)
+                };
+            }
+            return (struct CenterOffsetCompensation){
+                centerCompensation(2, 0), centerCompensation(2, 0),
+                centerCompensation(2, 0)
+            };
+    }
+    return (struct CenterOffsetCompensation){0.0, 0.0, 0.0};
 }
 
 - (void)toggleSkipAnimation {
