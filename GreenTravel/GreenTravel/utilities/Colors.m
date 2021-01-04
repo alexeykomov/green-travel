@@ -41,6 +41,7 @@ static Colors *instance;
         self.logCabin = UIColorFromHEX(0x0A0B0A);
         self.milkyGrey = UIColorFromHEX(0xE0E0E0);
         self.alto = UIColorFromHEX(0xD9D9D9);
+        self.alabaster = UIColorFromHEX(0xF8F8F8);
     }
     return self;
 }

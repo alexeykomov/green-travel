@@ -33,10 +33,6 @@ typedef NS_ENUM(NSInteger, PageControlState) {
 @end
 
 static NSString * const kSlideCellIdentifier = @"slideCellId";
-static const NSInteger kMaximalNumberOfDotsForCustomPageControl = 6;
-static const CGFloat kPageControlScrollContainerWidthFor5 = 78.0;
-static const CGFloat kPageControlScrollContainerWidthFor6 = 88.0;
-static const CGFloat kPageControlScrollContainerWidthFor7 = 98.0;
 static const CGFloat kPageControlHeight = 41.0;
 static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
 
@@ -89,6 +85,26 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
     self.collectionView.backgroundColor = [Colors get].white;
+    [self.collectionView setHidden:[imageURLs count] == 0];
+#pragma mark - Placeholder
+    UIView *placeHolderView = [[UIView alloc] init];
+    [self addSubview:placeHolderView];
+    placeHolderView.translatesAutoresizingMaskIntoConstraints = NO;
+    placeHolderView.backgroundColor = [Colors get].alabaster;
+    UIImageView *placeHolderViewImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"camera"]];
+    placeHolderViewImage.translatesAutoresizingMaskIntoConstraints = NO;
+    [placeHolderView addSubview:placeHolderViewImage];
+    [NSLayoutConstraint activateConstraints:@[
+        [placeHolderView.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [placeHolderView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [placeHolderView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [placeHolderView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-kPageControlHeight],
+    ]];
+    [NSLayoutConstraint activateConstraints:@[
+        [placeHolderViewImage.centerXAnchor constraintEqualToAnchor:placeHolderView.centerXAnchor],
+        [placeHolderViewImage.centerYAnchor constraintEqualToAnchor:placeHolderView.centerYAnchor],
+    ]];
+    [placeHolderView setHidden:[imageURLs count] > 0];
 
 #pragma mark - Page control
     self.pageControl = [[GalleryPageControl alloc] initWithNumberOfPages:[imageURLs count]];
@@ -144,7 +160,6 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat indexOfScrolledItem = [self getIndexOfScrolledItem];
-    NSLog(@"Collection view did scroll: %f", indexOfScrolledItem);
     while (indexOfScrolledItem > self.indexOfScrolledItem) {
         self.indexOfScrolledItem++;
         [self.pageControl moveToNextPage];

@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) UIColor *logCabin;
 @property (strong, nonatomic) UIColor *milkyGrey;
 @property (strong, nonatomic) UIColor *alto;
+@property (strong, nonatomic) UIColor *alabaster;
 
 + (instancetype)get;
 
