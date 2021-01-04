@@ -96,11 +96,10 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
     self.pageControl.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
         [self.pageControl.topAnchor constraintEqualToAnchor:self.collectionView.bottomAnchor constant:20.0],
-        //[self.pageControl.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-16.0],
         [self.pageControl.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
         [self.pageControl.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-        
     ]];
+    [self.pageControl setHidden:[imageURLs count] <= 1];
     [self setUpWithPictureURLs:imageURLs];
 }
 
