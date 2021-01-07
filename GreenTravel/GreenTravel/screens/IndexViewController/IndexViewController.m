@@ -213,4 +213,15 @@ static CGFloat kTableRowHeight = 210.0;
     }];
 }
 
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+    for (NSUInteger sectionCounter = 0; sectionCounter < self.tableView.numberOfSections; sectionCounter++) {
+        for (NSUInteger rowCounter = 0; rowCounter < [self.tableView numberOfRowsInSection:sectionCounter]; rowCounter++) {
+            PlacesTableViewCell *cell =
+            [self.tableView cellForRowAtIndexPath:
+             [NSIndexPath indexPathForRow:rowCounter inSection:sectionCounter]];
+            [cell.collectionView setContentOffset:CGPointMake(0, 0) animated:YES];
+        }
+    }
+}
+
 @end
