@@ -39,8 +39,6 @@
 }
 
 - (void)setUp {
-    drawShadow(self);
-    
 #pragma mark - Image
     self.placeholder = [[UIImageView alloc] init];
     [self addSubview:self.placeholder];
@@ -84,6 +82,10 @@
         [self.favoritesButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16.0],
         [self.favoritesButton.widthAnchor constraintEqualToConstant:21.0]
     ]];
+#pragma mark - Subscribe to device orientation change
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self selector:@selector(onDeviceOrientationChange:)
+     name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)onFavoritePress:(id)sender {
@@ -106,6 +108,7 @@
             [self.placeholder setImage:image];
         });
     });
+    drawShadow(self);
 }
 
 - (void)updateBookmark:(BOOL)bookmark {
@@ -121,11 +124,17 @@
             [self.placeholder setImage:image];
         });
     });
+    drawShadow(self);
 }
 
 - (void)prepareForReuse {
     [super prepareForReuse];
     [self.loadImageOperation cancel];
+    self.layer.shadowPath = nil;
+}
+
+- (void)onDeviceOrientationChange:(id)sender {
+    drawShadow(self);
 }
 
 @end

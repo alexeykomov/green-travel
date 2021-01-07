@@ -33,6 +33,7 @@
         _itemUUIDs = [[NSMutableSet alloc] init];
         _bookmarksGroupObservers = [[NSMutableArray alloc] init];
         [self.indexModel addObserver:self];
+        [self.indexModel addObserverBookmarks:self];
     }
     return self;
 }
@@ -89,11 +90,6 @@
 
 - (void)removeObserver:(nonnull id<BookmarksGroupObserver>)observer {
     [self.bookmarksGroupObservers removeObject:observer];
-}
-
-- (void)onBookmarksUpdate:(nonnull NSDictionary<NSString *,PlaceItem *> *)bookmarkItems {
-    [self fillBookmarkItemsFromCategories:self.indexModel.categories];
-    [self notifyObservers];
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CategoriesObserver.h"
+#import "BookmarksObserver.h"
 #import "BookmarksGroupObservable.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -17,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class IndexModel;
 @protocol BookmarksGroupObserver;
 
-@interface BookmarksGroupModel : NSObject<CategoriesObserver, BookmarksGroupObservable>
+@interface BookmarksGroupModel : NSObject<CategoriesObserver, BookmarksObserver, BookmarksGroupObservable>
 
 - (instancetype)initWithIndexModel:(IndexModel *)model;
 @property (strong, nonatomic) NSMutableArray<BookmarkItem *> *bookmarkItems;

@@ -35,9 +35,6 @@
     self.backgroundColor = [Colors get].white;
     
     self.layer.cornerRadius = 15.0;
-    
-    drawShadow(self);
-    
 #pragma mark - Header label
     self.headerLabel = [[UILabel alloc] init];
     [self addSubview:self.headerLabel];
@@ -68,7 +65,14 @@
 - (void)update:(BookmarkItem *)item {
     self.headerLabel.attributedText = getAttributedString([item.title uppercaseString], [Colors get].black, 10.0, UIFontWeightRegular);
     self.countLabel.attributedText = getAttributedString([@(item.howMany) stringValue], [Colors get].black, 10.0, UIFontWeightRegular);
-    self.item = item;
+    drawShadow(self);
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    self.headerLabel.attributedText = [[NSAttributedString alloc] init];
+    self.countLabel.attributedText =  [[NSAttributedString alloc] init];
+    self.layer.shadowPath = nil;
 }
 
 - (void)onDeviceOrientationChange:(id)sender {
