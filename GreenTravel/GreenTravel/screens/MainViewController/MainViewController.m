@@ -68,13 +68,8 @@
     UINavigationController *indexViewControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:indexController];
     UIImage *indexImage;
     UIImage *indexImageSelected;
-    if (@available(iOS 13.0, *)) {
-        indexImage = [UIImage systemImageNamed:@"house"];
-        indexImageSelected = [UIImage systemImageNamed:@"house.fill"];
-    } else {
-        indexImage = [UIImage imageNamed:@"noun_Home_1072151"];
-        indexImageSelected = [UIImage imageNamed:@"noun_Home_1072151"];
-    }
+    indexImage = [UIImage imageNamed:@"home"];
+    indexImageSelected = [UIImage imageNamed:@"home-selected"];
     UITabBarItem *indexTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Главная" image:indexImage tag:0];
     indexTabBarItem.selectedImage = indexImageSelected;
     
@@ -91,13 +86,8 @@
     UINavigationController *mapControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:mapController];
     UIImage *mapImage;
     UIImage *mapImageSelected;
-    if (@available(iOS 13.0, *)) {
-        mapImage = [UIImage systemImageNamed:@"map"];
-        mapImageSelected = [UIImage systemImageNamed:@"map.fill"];
-    } else {
-        mapImage = [UIImage imageNamed:@"noun_Star_1730824"];
-        mapImageSelected = [UIImage imageNamed:@"noun_Star_1730824"];
-    }
+    mapImage = [UIImage imageNamed:@"map"];
+    mapImageSelected = [UIImage imageNamed:@"map-selected"];
     UITabBarItem *mapTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Карта" image:mapImage tag:0];
     mapTabBarItem.selectedImage = mapImageSelected;
     
@@ -119,13 +109,8 @@
     UINavigationController *bookmarksControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:bookmarksController];
     UIImage *bookmarksImage;
     UIImage *bookmarksImageSelected;
-    if (@available(iOS 13.0, *)) {
-        bookmarksImage = [UIImage systemImageNamed:@"bookmark"];
-        bookmarksImageSelected = [UIImage systemImageNamed:@"bookmark.fill"];
-    } else {
-        bookmarksImage = [UIImage imageNamed:@"noun_Star_1730824"];
-        bookmarksImageSelected = [UIImage imageNamed:@"noun_Star_1730824"];
-    }
+    bookmarksImage = [UIImage imageNamed:@"bookmark"];
+    bookmarksImageSelected = [UIImage imageNamed:@"bookmark-selected"];
     UITabBarItem *bookmarksTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Закладки" image:bookmarksImage tag:0];
     bookmarksTabBarItem.selectedImage = bookmarksImageSelected;
     
