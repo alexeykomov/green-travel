@@ -235,7 +235,7 @@ static const CGFloat kSpacing = 12.0;
         }];
     }
     
-    if ([self.bookmarkedItems count] == 0) {
+    if (self.viewIfLoaded.window != nil && [self.bookmarkedItems count] == 0) {
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
