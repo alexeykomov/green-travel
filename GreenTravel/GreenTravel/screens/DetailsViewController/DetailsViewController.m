@@ -125,11 +125,15 @@
     self.bookmarkButton.backgroundColor = [Colors get].white;
     self.bookmarkButton.contentMode = UIViewContentModeScaleAspectFill;
     self.bookmarkButton.layer.cornerRadius = 22.0;
+    self.bookmarkButton.layer.borderWidth = 1.0;
+    self.bookmarkButton.layer.borderColor = [[Colors get].heavyMetal35 CGColor];
     self.bookmarkButton.layer.masksToBounds = YES;
-    UIImage *imageNotSelected = [UIImage systemImageNamed:@"bookmark"];
-    UIImage *imageSelected = [UIImage systemImageNamed:@"bookmark.fill"];
+    UIImage *imageNotSelected = [[UIImage imageNamed:@"bookmark-index"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIImage *imageSelected = [[UIImage imageNamed:@"bookmark-index-selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    
     [self.bookmarkButton setImage:imageNotSelected forState:UIControlStateNormal];
     [self.bookmarkButton setImage:imageSelected forState:UIControlStateSelected];
+    
     self.bookmarkButton.tintColor = [Colors get].logCabin;
     [self.bookmarkButton setSelected:self.item.bookmarked];
     

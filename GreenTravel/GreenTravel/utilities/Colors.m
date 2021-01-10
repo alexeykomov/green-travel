@@ -35,6 +35,7 @@ static Colors *instance;
         self.apple = UIColorFromHEX(0x4BA83B);
         self.pineTree = UIColorFromHEX(0x152702);
         self.heavyMetal = UIColorFromHEX(0x151614);
+        self.heavyMetal35 = [self getHeavyMetal35];
         self.yellowHighlighted = UIColorFromHEX(0xFDF4E3);
         self.grey = UIColorFromHEX(0x757a7e);
         self.royalBlue = UIColorFromHEX(0x2F80ED);
@@ -44,6 +45,17 @@ static Colors *instance;
         self.alabaster = UIColorFromHEX(0xF8F8F8);
     }
     return self;
+}
+
+- (UIColor *)getHeavyMetal35 {
+    CGFloat heavyMetalRed = 0.0;
+    CGFloat heavyMetalBlue = 0.0;
+    CGFloat heavyMetalGreen = 0.0;
+    [self.heavyMetal getRed:&heavyMetalRed green:&heavyMetalGreen blue:&heavyMetalBlue alpha:nil];
+    return [UIColor colorWithRed:heavyMetalRed
+                           green:heavyMetalBlue
+                            blue:heavyMetalGreen
+                           alpha:0.35];
 }
 
 + (instancetype)get {

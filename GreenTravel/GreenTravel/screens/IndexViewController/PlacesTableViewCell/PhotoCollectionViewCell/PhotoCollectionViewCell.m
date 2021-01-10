@@ -70,7 +70,13 @@
         [self.headerLabel.heightAnchor constraintEqualToConstant:20.0]
     ]];
     
-    self.favoritesButton = [UIButton systemButtonWithImage:[UIImage systemImageNamed:@"bookmark"] target:self action:@selector(onFavoritePress:)];
+    self.favoritesButton = [[UIButton alloc] init];
+    UIImage *imageNotSelected = [[UIImage imageNamed:@"bookmark-index"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIImage *imageSelected = [[UIImage imageNamed:@"bookmark-index-selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.favoritesButton setImage:imageNotSelected forState:UIControlStateNormal];
+    [self.favoritesButton setImage:imageSelected forState:UIControlStateSelected];
+    [self.favoritesButton addTarget:self action:@selector(onFavoritePress:) forControlEvents:UIControlEventTouchUpInside];
+    
     self.favoritesButton.tintColor = [Colors get].white;
     [self addSubview:self.favoritesButton];
     
@@ -80,7 +86,7 @@
         [self.favoritesButton.topAnchor constraintEqualToAnchor:self.headerLabel.topAnchor],
         [self.favoritesButton.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.headerLabel.trailingAnchor constant:16.0],
         [self.favoritesButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16.0],
-        [self.favoritesButton.widthAnchor constraintEqualToConstant:21.0]
+        //[self.favoritesButton.widthAnchor constraintEqualToConstant:21.0]
     ]];
 #pragma mark - Subscribe to device orientation change
     [[NSNotificationCenter defaultCenter]
