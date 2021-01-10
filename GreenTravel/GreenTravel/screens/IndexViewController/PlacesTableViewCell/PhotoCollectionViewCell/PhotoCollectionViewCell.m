@@ -20,6 +20,7 @@
 @property (strong, nonatomic) PlaceItem *item;
 @property (strong, nonatomic) UILabel *headerLabel;
 @property (strong, nonatomic) UIButton *favoritesButton;
+@property (strong, nonatomic) UIView *overlayView;
 @property (strong, nonatomic) UIImageView *placeholder;
 @property (strong, nonatomic) SDWebImageCombinedOperation *loadImageOperation;
 
@@ -41,13 +42,15 @@
 - (void)setUp {
 #pragma mark - Image
     self.placeholder = [[UIImageView alloc] init];
+    self.overlayView = [[UIView alloc] init];
+    
     [self addSubview:self.placeholder];
     
     self.placeholder.contentMode = UIViewContentModeScaleAspectFill;
     self.placeholder.translatesAutoresizingMaskIntoConstraints = NO;
     self.placeholder.backgroundColor = [Colors get].blue;
     
-    self.placeholder.layer.cornerRadius = 15.0;
+    self.placeholder.layer.cornerRadius = 4.0;
     self.placeholder.layer.masksToBounds = YES;
     
     [NSLayoutConstraint activateConstraints:@[
@@ -55,6 +58,14 @@
         [self.placeholder.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
         [self.placeholder.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
         [self.placeholder.bottomAnchor constraintEqualToAnchor:self.bottomAnchor]
+    ]];
+    [self.placeholder addSubview:self.overlayView];
+    self.overlayView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.overlayView.topAnchor constraintEqualToAnchor:self.placeholder.topAnchor],
+        [self.overlayView.leadingAnchor constraintEqualToAnchor:self.placeholder.leadingAnchor],
+        [self.overlayView.trailingAnchor constraintEqualToAnchor:self.placeholder.trailingAnchor],
+        [self.overlayView.bottomAnchor constraintEqualToAnchor:self.placeholder.bottomAnchor]
     ]];
     
 #pragma mark - Header label
@@ -69,7 +80,7 @@
         [self.headerLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
         [self.headerLabel.heightAnchor constraintEqualToConstant:20.0]
     ]];
-    
+#pragma mark - Favorites button
     self.favoritesButton = [[UIButton alloc] init];
     UIImage *imageNotSelected = [[UIImage imageNamed:@"bookmark-index"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     UIImage *imageSelected = [[UIImage imageNamed:@"bookmark-index-selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -131,6 +142,16 @@
         });
     });
     drawShadow(self);
+}
+
+- (void)layoutSubviews {
+    NSUInteger layerCount = [self.overlayView.layer.sublayers count];
+    for (NSInteger layerCounter = layerCount > 0  ? layerCount - 1 : -1;
+         layerCounter >= 0; layerCounter--) {
+        [self.overlayView.layer.sublayers[layerCounter] removeFromSuperlayer];
+    }
+    CAGradientLayer *overlayLayer = createOverlayLayer(self.overlayView);
+    [self.overlayView.layer insertSublayer:overlayLayer atIndex:0];
 }
 
 - (void)prepareForReuse {

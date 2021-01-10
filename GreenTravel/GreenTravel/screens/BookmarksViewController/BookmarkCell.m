@@ -34,7 +34,7 @@
 - (void)setUp {
     self.backgroundColor = [Colors get].white;
     
-    self.layer.cornerRadius = 15.0;
+    self.layer.cornerRadius = 4.0;
 #pragma mark - Header label
     self.headerLabel = [[UILabel alloc] init];
     [self addSubview:self.headerLabel];

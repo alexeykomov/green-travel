@@ -20,6 +20,15 @@ CAGradientLayer* createGradientLayer(UIView *view) {
     return gradient;
 }
 
+CAGradientLayer* createOverlayLayer(UIView *view) {
+    CAGradientLayer *gradient = [[CAGradientLayer alloc] init];
+    gradient.frame = view.bounds;
+    gradient.colors = @[(__bridge id)[Colors get].heavyMetal.CGColor, (__bridge id)UIColor.clearColor.CGColor];
+    gradient.startPoint = CGPointMake(0, 0);
+    gradient.endPoint = CGPointMake(0, 0.6);
+    return gradient;
+}
+
 void insertGradientLayer(UIView *view, CGFloat cornerRadius) {
     CAGradientLayer *gradient = createGradientLayer(view);
     if (cornerRadius) {

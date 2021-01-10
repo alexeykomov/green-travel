@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 
 void insertGradientLayer(UIView *view, CGFloat cornerRadius);
+CAGradientLayer* createOverlayLayer(UIView *view);
 UIImage* getGradientImageToFillRect(CGRect rect);
 UIImage* getGradientImageToFillRectWithRadius(CGRect rect, CGFloat cornerRadius);
 void configureNavigationBar(UINavigationBar *navigationBar);
