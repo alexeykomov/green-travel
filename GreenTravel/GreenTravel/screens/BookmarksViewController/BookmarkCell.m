@@ -58,14 +58,11 @@
         [self.countLabel.topAnchor constraintEqualToAnchor:self.topAnchor constant:10.0],
         [self.countLabel.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10.0],
     ]];
-#pragma mark - Subscribe to orientation change
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeviceOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)update:(BookmarkItem *)item {
     self.headerLabel.attributedText = getAttributedString([item.title uppercaseString], [Colors get].black, 10.0, UIFontWeightRegular);
     self.countLabel.attributedText = getAttributedString([@(item.howMany) stringValue], [Colors get].black, 10.0, UIFontWeightRegular);
-    drawShadow(self);
 }
 
 - (void)prepareForReuse {
@@ -75,9 +72,10 @@
     self.layer.shadowPath = nil;
 }
 
-- (void)onDeviceOrientationChange:(id)sender {
+- (void)layoutSubviews {
     drawShadow(self);
 }
+
 
 
 @end

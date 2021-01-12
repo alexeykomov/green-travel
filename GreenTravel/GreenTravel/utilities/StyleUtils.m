@@ -21,6 +21,9 @@ CAGradientLayer* createGradientLayer(UIView *view) {
 }
 
 CAGradientLayer* createOverlayLayer(UIView *view) {
+    if (CGRectEqualToRect(view.bounds, CGRectZero)) {
+        return nil;
+    };
     CAGradientLayer *gradient = [[CAGradientLayer alloc] init];
     gradient.frame = view.bounds;
     gradient.colors = @[(__bridge id)[Colors get].heavyMetal.CGColor, (__bridge id)UIColor.clearColor.CGColor];

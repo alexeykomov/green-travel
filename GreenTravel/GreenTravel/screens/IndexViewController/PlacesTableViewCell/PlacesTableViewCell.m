@@ -89,6 +89,15 @@ static NSInteger kMaximalNumberOfItemsInCell = 10;
         [self.allButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16.0],
         [self.allButton.topAnchor constraintEqualToAnchor:self.headerLabel.topAnchor constant:-8.0]
     ]];
+
+
+#pragma mark - Subscribe to orientation change
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeviceOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
+#pragma mark - Orientation change
+- (void)onDeviceOrientationChange:(id)sender {
+    //[self.collectionView reloadData];
 }
 
 - (void)update:(Category *)item {
@@ -104,8 +113,8 @@ static NSInteger kMaximalNumberOfItemsInCell = 10;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    [super traitCollectionDidChange:previousTraitCollection];
-    [self.collectionView.collectionViewLayout invalidateLayout];
+    //[super traitCollectionDidChange:previousTraitCollection];
+    //[self.collectionView.collectionViewLayout invalidateLayout];
 }
 
 #pragma mark - Collection view

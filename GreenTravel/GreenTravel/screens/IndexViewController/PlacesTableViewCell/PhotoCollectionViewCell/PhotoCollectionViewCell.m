@@ -24,8 +24,6 @@
 @property (strong, nonatomic) UIImageView *placeholder;
 @property (strong, nonatomic) SDWebImageCombinedOperation *loadImageOperation;
 
-
-
 @end
 
 @implementation PhotoCollectionViewCell
@@ -99,10 +97,6 @@
         [self.favoritesButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16.0],
         //[self.favoritesButton.widthAnchor constraintEqualToConstant:21.0]
     ]];
-#pragma mark - Subscribe to device orientation change
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self selector:@selector(onDeviceOrientationChange:)
-     name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)onFavoritePress:(id)sender {
@@ -125,7 +119,7 @@
             [self.placeholder setImage:image];
         });
     });
-    drawShadow(self);
+    [self updateOverlayAndShadow];
 }
 
 - (void)updateBookmark:(BOOL)bookmark {
@@ -141,10 +135,10 @@
             [self.placeholder setImage:image];
         });
     });
-    drawShadow(self);
+    [self updateOverlayAndShadow];
 }
 
-- (void)layoutSubviews {
+- (void)updateOverlayAndShadow {
     NSUInteger layerCount = [self.overlayView.layer.sublayers count];
     for (NSInteger layerCounter = layerCount > 0  ? layerCount - 1 : -1;
          layerCounter >= 0; layerCounter--) {
@@ -152,16 +146,17 @@
     }
     CAGradientLayer *overlayLayer = createOverlayLayer(self.overlayView);
     [self.overlayView.layer insertSublayer:overlayLayer atIndex:0];
+    drawShadow(self);
+}
+
+- (void)layoutSubviews {
+    [self updateOverlayAndShadow];
 }
 
 - (void)prepareForReuse {
     [super prepareForReuse];
     [self.loadImageOperation cancel];
     self.layer.shadowPath = nil;
-}
-
-- (void)onDeviceOrientationChange:(id)sender {
-    drawShadow(self);
 }
 
 @end
