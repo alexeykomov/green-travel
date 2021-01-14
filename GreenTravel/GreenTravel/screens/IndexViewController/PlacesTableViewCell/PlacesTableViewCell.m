@@ -81,7 +81,7 @@ static NSInteger kMaximalNumberOfItemsInCell = 10;
     self.allButton = [[UIButton alloc] init];
     [self.contentView addSubview:self.allButton];
     [self.allButton.titleLabel setFont:[UIFont fontWithName:@"Montserrat-Semibold" size:12.0]];
-    [self.allButton setAttributedTitle:getAttributedString(@"Все", [Colors get].green, 12.0, UIFontWeightSemibold) forState:UIControlStateNormal];
+    [self.allButton setAttributedTitle:getAttributedString(@"ВСЕ", [Colors get].green, 12.0, UIFontWeightSemibold) forState:UIControlStateNormal];
     [self.allButton addTarget:self action:@selector(onAllButtonPress:) forControlEvents:UIControlEventTouchUpInside];
     
     self.allButton.translatesAutoresizingMaskIntoConstraints = NO;
@@ -113,8 +113,8 @@ static NSInteger kMaximalNumberOfItemsInCell = 10;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    //[super traitCollectionDidChange:previousTraitCollection];
-    //[self.collectionView.collectionViewLayout invalidateLayout];
+    [super traitCollectionDidChange:previousTraitCollection];
+    [self.collectionView.collectionViewLayout invalidateLayout];
 }
 
 #pragma mark - Collection view

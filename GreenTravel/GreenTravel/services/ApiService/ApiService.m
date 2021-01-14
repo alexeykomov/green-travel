@@ -16,8 +16,8 @@
 #import "TextUtils.h"
 #import "CategoryUUIDToRelatedItemUUIDs.h"
 
-static NSString * const kGetCategoriesURL = @"http://192.168.0.23:3000/categories";
-static NSString * const kGetDetailsBaseURL = @"http://192.168.0.23:3000/details/%@";
+static NSString * const kGetCategoriesURL = @"http://192.168.0.13:3000/categories";
+static NSString * const kGetDetailsBaseURL = @"http://192.168.0.13:3000/details/%@";
 
 @interface ApiService ()
 

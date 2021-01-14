@@ -10,6 +10,7 @@
 #import "Category.h"
 #import "PhotoCollectionViewCell.h"
 #import "StyleUtils.h"
+#import "GradientOverlayView.h"
 #import "Colors.h"
 #import "TextUtils.h"
 #import "ImageUtils.h"
@@ -40,7 +41,7 @@
 - (void)setUp {
 #pragma mark - Image
     self.placeholder = [[UIImageView alloc] init];
-    self.overlayView = [[UIView alloc] init];
+    self.overlayView = [[GradientOverlayView alloc] initWithFrame:CGRectZero];
     
     [self addSubview:self.placeholder];
     
@@ -139,17 +140,18 @@
 }
 
 - (void)updateOverlayAndShadow {
-    NSUInteger layerCount = [self.overlayView.layer.sublayers count];
-    for (NSInteger layerCounter = layerCount > 0  ? layerCount - 1 : -1;
-         layerCounter >= 0; layerCounter--) {
-        [self.overlayView.layer.sublayers[layerCounter] removeFromSuperlayer];
-    }
-    CAGradientLayer *overlayLayer = createOverlayLayer(self.overlayView);
-    [self.overlayView.layer insertSublayer:overlayLayer atIndex:0];
+//    NSUInteger layerCount = [self.overlayView.layer.sublayers count];
+//    for (NSInteger layerCounter = layerCount > 0  ? layerCount - 1 : -1;
+//         layerCounter >= 0; layerCounter--) {
+//        [self.overlayView.layer.sublayers[layerCounter] removeFromSuperlayer];
+//    }
+//    CAGradientLayer *overlayLayer = createOverlayLayer(self.overlayView);
+//    [self.overlayView.layer insertSublayer:overlayLayer atIndex:0];
     drawShadow(self);
 }
 
 - (void)layoutSubviews {
+    [super layoutSubviews];
     [self updateOverlayAndShadow];
 }
 
