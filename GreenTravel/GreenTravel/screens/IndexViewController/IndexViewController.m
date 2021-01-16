@@ -40,7 +40,6 @@
 @end
 
 static NSString * const kCollectionCellId = @"collectionCellId";
-static CGFloat kTableRowHeight = 210.0;
 
 @implementation IndexViewController 
 

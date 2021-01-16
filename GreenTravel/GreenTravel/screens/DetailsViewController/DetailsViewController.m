@@ -105,7 +105,7 @@
         [self.contentView.widthAnchor constraintEqualToAnchor:self.scrollView.widthAnchor]
     ]];
         
-    #pragma mark - Preview image
+    #pragma mark - Gallery
     self.imageGalleryView = [[GalleryView alloc] initWithFrame:CGRectZero
                                                      imageURLs:self.item.details.images];
     self.imageGalleryView.translatesAutoresizingMaskIntoConstraints = NO;

@@ -88,7 +88,7 @@ static const CLLocationDistance kLocationAccuracy = 500.0;
         if (self.locationModel.lastLocation) {
             CLLocation *lastLocation = self.locationModel.lastLocation;
             NSLog(@"Last location: %@", lastLocation);
-            CLLocation *itemLocation = [[CLLocation alloc] initWithCoordinate:mapItem.coords altitude:0 horizontalAccuracy:kLocationAccuracy verticalAccuracy:kLocationAccuracy timestamp:NSDate.now];
+            CLLocation *itemLocation = [[CLLocation alloc] initWithCoordinate:mapItem.coords altitude:0 horizontalAccuracy:kLocationAccuracy verticalAccuracy:kLocationAccuracy timestamp:[[NSDate alloc] init]];
             CLLocationDistance distance = [lastLocation distanceFromLocation:itemLocation] / kMetersInKilometer;
             NSLog(@"Distance: %f", distance);
             if (distance <= kCloseDistance) {

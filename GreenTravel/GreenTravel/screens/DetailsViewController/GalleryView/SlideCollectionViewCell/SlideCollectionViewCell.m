@@ -40,7 +40,7 @@
 
 - (void)setUpWithImageURL:(NSString *)imageURL {
     __weak typeof(self) weakSelf = self;
-    loadImage(imageURL, ^(UIImage *image) {
+    self.loadImageOperation = loadImage(imageURL, ^(UIImage *image) {
         [weakSelf.imageView setImage:image];
     });
 }

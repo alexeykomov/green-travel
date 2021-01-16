@@ -95,7 +95,6 @@ static const CGFloat kSearchRowHeight = 40.0;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.model addObserver:self];
-    [self.locationModel addObserver:self];
     [self.model loadSearchItems];
     
     [self.navigationController.view setNeedsLayout];
@@ -114,7 +113,6 @@ static const CGFloat kSearchRowHeight = 40.0;
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self.searchController setActive:NO];
-    [self.locationModel removeObserver:self];
     [self.model removeObserver:self];
     if (self.itemToSaveToHistory) {
         [self.model addSearchHistoryItem:self.itemToSaveToHistory];

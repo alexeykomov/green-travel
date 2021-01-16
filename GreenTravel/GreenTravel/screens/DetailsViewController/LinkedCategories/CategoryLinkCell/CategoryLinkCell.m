@@ -72,7 +72,7 @@
     ]];
     
 #pragma mark - Chevron
-    self.chevron = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"chevron.right"]];
+    self.chevron = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"chevron-right"]];
     self.chevron.tintColor = [Colors get].black;
     [self addSubview:self.chevron];
     

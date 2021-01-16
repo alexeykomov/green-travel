@@ -36,23 +36,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+
     self.tabBar.tintColor = [Colors get].green;
     self.tabBar.barTintColor = [Colors get].white;
-    if (@available(iOS 13.0, *)) {
-    } else {
-        self.tabBar.tintColor = [Colors get].white;
-    }
 
     self.view.backgroundColor = [Colors get].white;
-    
+
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     self.session = [NSURLSession sessionWithConfiguration:configuration];
     self.apiService = [[ApiService alloc] initWithSession:self.session];
     self.coreDataService = [[CoreDataService alloc] init];
     self.indexModel = [[IndexModel alloc] initWithApiService:self.apiService coreDataService:self.coreDataService];
     DetailsModel *detailsModel = [[DetailsModel alloc] initWithIndexModel:self.indexModel apiService:self.apiService coreDataService:self.coreDataService];
-    
+
     LocationModel *locationModel = [[LocationModel alloc] init];
     SearchModel *searchModel = [[SearchModel alloc]
                                 initWithIndexModel:self.indexModel
@@ -62,7 +58,7 @@
     BookmarksGroupModel *bookmarksGroupsModel = [[BookmarksGroupModel alloc] initWithIndexModel:self.indexModel];
 
 #pragma mark - IndexViewController
-    
+
     IndexViewController *indexController = [[IndexViewController alloc]   initWithApiService:self.apiService model:self.indexModel searchModel:searchModel locationModel:locationModel mapModel:mapModel detailsModel:detailsModel coreDataService:self.coreDataService];
     indexController.title = @"Главная";
     UINavigationController *indexViewControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:indexController];
@@ -72,15 +68,15 @@
     indexImageSelected = [UIImage imageNamed:@"home-selected"];
     UITabBarItem *indexTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Главная" image:indexImage tag:0];
     indexTabBarItem.selectedImage = indexImageSelected;
-    
+
     indexViewControllerWithNavigation.tabBarItem = indexTabBarItem;
-    
+
     indexViewControllerWithNavigation.navigationBar.barTintColor = [Colors get].green;
     indexViewControllerWithNavigation.navigationBar.titleTextAttributes =
     getTextAttributes([Colors get].black, 18.0, UIFontWeightSemibold);
-    
+
 #pragma mark - MapViewController
-    
+
     MapViewController *mapController = [[MapViewController alloc] initWithMapModel:mapModel locationModel:locationModel mapItem:nil];
     mapController.title = @"Карта";
     UINavigationController *mapControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:mapController];
@@ -90,14 +86,14 @@
     mapImageSelected = [UIImage imageNamed:@"map-selected"];
     UITabBarItem *mapTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Карта" image:mapImage tag:0];
     mapTabBarItem.selectedImage = mapImageSelected;
-    
+
     mapControllerWithNavigation.tabBarItem = mapTabBarItem;
     mapControllerWithNavigation.navigationBar.barTintColor = [Colors get].green;
     mapControllerWithNavigation.navigationBar.titleTextAttributes =
     getTextAttributes([Colors get].black, 18.0, UIFontWeightSemibold);
-    
+
 #pragma mark - BookmarksViewController
-    
+
     BookmarksViewController *bookmarksController =
     [[BookmarksViewController alloc] initWithModel:bookmarksGroupsModel
                                         indexModel:self.indexModel
@@ -113,14 +109,14 @@
     bookmarksImageSelected = [UIImage imageNamed:@"bookmark-selected"];
     UITabBarItem *bookmarksTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Закладки" image:bookmarksImage tag:0];
     bookmarksTabBarItem.selectedImage = bookmarksImageSelected;
-    
+
     bookmarksControllerWithNavigation.tabBarItem = bookmarksTabBarItem;
     bookmarksControllerWithNavigation.navigationBar.barTintColor = [Colors get].green;
     bookmarksControllerWithNavigation.navigationBar.titleTextAttributes =
     getTextAttributes([Colors get].black, 18.0, UIFontWeightSemibold);
-    
+
     self.viewControllers = @[indexViewControllerWithNavigation, mapControllerWithNavigation, bookmarksControllerWithNavigation];
-    
+
     self.selectedIndex = 0;
 }
 

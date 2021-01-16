@@ -87,10 +87,11 @@
     self.locationButton.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.7];
     
     self.locationButton.layer.masksToBounds = YES;
-    self.locationButton.layer.cornerRadius = 22.0;
+    self.locationButton.layer.cornerRadius = 8.0;
+    self.locationButton.layer.borderColor = [[Colors get].alto CGColor];
+    self.locationButton.layer.borderWidth = 1.0;
     
-    UIImage *image = [UIImage imageNamed:@"noun_Location_403482_3"];
-    UIImageView *locationImageView = [[UIImageView alloc] initWithImage:[image imageWithTintColor:UIColor.systemBlueColor]];
+    UIImageView *locationImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"location-arrow"]];
     [self.locationButton addSubview:locationImageView];
     
     locationImageView.translatesAutoresizingMaskIntoConstraints = NO;
