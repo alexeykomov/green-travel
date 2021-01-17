@@ -23,6 +23,7 @@
 #import "BannerView.h"
 #import "GalleryView.h"
 #import "CategoryUtils.h"
+#import "Typography.h"
 
 @interface DetailsViewController ()
 
@@ -234,25 +235,6 @@
         [self.descriptionTextView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
         [self.descriptionTextView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
     ]];
-        
-    #pragma mark - "Will be interesting" label
-    self.interestingLabel = [[UILabel alloc] init];
-
-    self.interestingLabel.numberOfLines = 2;
-    [self.interestingLabel setFont:[UIFont fontWithName:@"Montserrat-SemiBold" size:20.0]];
-    self.interestingLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.interestingLabel.attributedText =
-    getAttributedString(@"Будет интересно", [Colors get].black, 20.0,
-                        UIFontWeightSemibold);
-
-    [self.contentView addSubview:self.interestingLabel];
-
-    [NSLayoutConstraint activateConstraints:@[
-        [self.interestingLabel.topAnchor constraintEqualToAnchor:self.descriptionTextView.bottomAnchor constant:32.0],
-        [self.interestingLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
-        [self.interestingLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
-
-    ]];
     
     #pragma mark - Linked items
     __weak typeof(self) weakSelf = self;
@@ -266,16 +248,12 @@
                                                  animated:YES];
     }];
 
-    self.linkedCategoriesView.backgroundColor = [Colors get].apple;
-    
-    self.linkedCategoriesView.scrollEnabled = NO;
-    self.linkedCategoriesView.alwaysBounceVertical = NO;
     self.linkedCategoriesView.translatesAutoresizingMaskIntoConstraints = NO;
 
     [self.contentView addSubview:self.linkedCategoriesView];
     
     [NSLayoutConstraint activateConstraints:@[
-        [self.linkedCategoriesView.topAnchor constraintEqualToAnchor:self.interestingLabel.bottomAnchor constant:18.0],
+        [self.linkedCategoriesView.topAnchor constraintEqualToAnchor:self.descriptionTextView.bottomAnchor constant:32.0],
         [self.linkedCategoriesView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0],
         [self.linkedCategoriesView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0],
     ]];
@@ -294,7 +272,7 @@
     [self.contentView addSubview:self.mapButtonBottom];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.mapButtonBottom.topAnchor constraintEqualToAnchor:self.linkedCategoriesView.bottomAnchor constant:32.0],
+        [self.mapButtonBottom.topAnchor constraintEqualToAnchor:self.linkedCategoriesView.bottomAnchor constant:0.0],
         [self.mapButtonBottom.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
         [self.mapButtonBottom.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
         [self.mapButtonBottom.widthAnchor constraintLessThanOrEqualToConstant:343.0],
@@ -357,22 +335,17 @@
                 [self.activityIndicatorContainerView setHidden:YES];
                 [self.activityIndicatorView stopAnimating];
             }
-            self.titleLabel.attributedText = getAttributedString(self.item.title, [Colors get].black, 20.0, UIFontWeightSemibold);
+            self.titleLabel.attributedText = [[Typography get] makeTitle1Semibold:self.item.title];
             if (details.address) {
-                self.addressLabel.attributedText = getAttributedString(details.address, [Colors get].black, 14.0, UIFontWeightRegular);
+                self.addressLabel.attributedText = [[Typography get] makeSubtitle3Regular:self.item.title];
             }
-            [self.locationButton setAttributedTitle:getAttributedString([NSString stringWithFormat:@"%f° N, %f° E", self.item.coords.latitude, self.item.coords.longitude], [Colors get].royalBlue, 14.0, UIFontWeightRegular) forState:UIControlStateNormal];
+            [self.locationButton setAttributedTitle:
+             
+             [[Typography get] makeSubtitle3Regular:[NSString stringWithFormat:@"%f° N, %f° E", self.item.coords.latitude, self.item.coords.longitude] color:[Colors get].royalBlue]
+             forState:UIControlStateNormal];
             [self.descriptionTextView setAttributedText:html];
             if (details.categoryIdToItems) {
                 [self.linkedCategoriesView update:details.categoryIdToItems];
-                if (self.linkedCategoriesViewHeightConstraint) {
-                    [NSLayoutConstraint deactivateConstraints:@[self.linkedCategoriesViewHeightConstraint]];
-                }
-                self.linkedCategoriesViewHeightConstraint = [self.linkedCategoriesView.heightAnchor constraintEqualToConstant:[details.categoryIdToItems count] * 46.0];
-                [NSLayoutConstraint activateConstraints:@[
-                    self.linkedCategoriesViewHeightConstraint
-                ]];
-                [self.linkedCategoriesView layoutIfNeeded];
             }
         });
     });

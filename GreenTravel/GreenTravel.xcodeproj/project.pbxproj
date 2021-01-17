@@ -97,6 +97,7 @@
 		5AAB5A192569484B00D52F53 /* SlideCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAB5A182569484B00D52F53 /* SlideCollectionViewCell.m */; };
 		5AC77EE92592438E0012A488 /* DotSizes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AC77EE82592438E0012A488 /* DotSizes.m */; };
 		5AE91FBD25B0EBC700A24DF0 /* GradientOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AE91FBC25B0EBC700A24DF0 /* GradientOverlayView.m */; };
+		5AE91FD925B4411D00A24DF0 /* Typography.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AE91FD825B4411D00A24DF0 /* Typography.m */; };
 		5AEA97F92554A1FD0037A51D /* LinkedCategoriesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA97F82554A1FD0037A51D /* LinkedCategoriesView.m */; };
 		5AEA98042556A8AC0037A51D /* ApiServiceDataMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA98032556A8AC0037A51D /* ApiServiceDataMapper.m */; };
 		5AEA980A2556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA98092556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.m */; };
@@ -287,6 +288,8 @@
 		5AC77EE82592438E0012A488 /* DotSizes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DotSizes.m; sourceTree = "<group>"; };
 		5AE91FBB25B0EBC700A24DF0 /* GradientOverlayView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GradientOverlayView.h; sourceTree = "<group>"; };
 		5AE91FBC25B0EBC700A24DF0 /* GradientOverlayView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GradientOverlayView.m; sourceTree = "<group>"; };
+		5AE91FD725B4411D00A24DF0 /* Typography.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Typography.h; sourceTree = "<group>"; };
+		5AE91FD825B4411D00A24DF0 /* Typography.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Typography.m; sourceTree = "<group>"; };
 		5AEA97F72554A1FD0037A51D /* LinkedCategoriesView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinkedCategoriesView.h; sourceTree = "<group>"; };
 		5AEA97F82554A1FD0037A51D /* LinkedCategoriesView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LinkedCategoriesView.m; sourceTree = "<group>"; };
 		5AEA98022556A8AC0037A51D /* ApiServiceDataMapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApiServiceDataMapper.h; sourceTree = "<group>"; };
@@ -417,6 +420,8 @@
 				5A1482EE24EDC8E500EBB756 /* StyleUtils.m */,
 				5A5FB1DF2517EAB800EBAA8E /* CategoryUtils.h */,
 				5A5FB1E02517EAB800EBAA8E /* CategoryUtils.m */,
+				5AE91FD725B4411D00A24DF0 /* Typography.h */,
+				5AE91FD825B4411D00A24DF0 /* Typography.m */,
 			);
 			path = utilities;
 			sourceTree = "<group>";
@@ -463,8 +468,7 @@
 			children = (
 				5A14829F24E9527700EBB756 /* PhotoCollectionViewCell.h */,
 				5A1482A024E9527700EBB756 /* PhotoCollectionViewCell.m */,
-				5AE91FBB25B0EBC700A24DF0 /* GradientOverlayView.h */,
-				5AE91FBC25B0EBC700A24DF0 /* GradientOverlayView.m */,
+				5AE91FDD25B4531C00A24DF0 /* GradientOverlayView */,
 			);
 			path = PhotoCollectionViewCell;
 			sourceTree = "<group>";
@@ -779,6 +783,15 @@
 			path = DotSizes;
 			sourceTree = "<group>";
 		};
+		5AE91FDD25B4531C00A24DF0 /* GradientOverlayView */ = {
+			isa = PBXGroup;
+			children = (
+				5AE91FBB25B0EBC700A24DF0 /* GradientOverlayView.h */,
+				5AE91FBC25B0EBC700A24DF0 /* GradientOverlayView.m */,
+			);
+			path = GradientOverlayView;
+			sourceTree = "<group>";
+		};
 		5AEA97F62554A0650037A51D /* LinkedCategories */ = {
 			isa = PBXGroup;
 			children = (
@@ -1066,6 +1079,7 @@
 				5A0C84C52559C93A00165D22 /* StoredPlaceDetails+CoreDataProperties.m in Sources */,
 				5A324B8124F70B490044A671 /* ApiService.m in Sources */,
 				5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */,
+				5AE91FD925B4411D00A24DF0 /* Typography.m in Sources */,
 				5A69922024F7E134008FB47E /* PathDetails.m in Sources */,
 				5A324B8424F860420044A671 /* ImageUtils.m in Sources */,
 				5A1482A124E9527700EBB756 /* PhotoCollectionViewCell.m in Sources */,

@@ -14,6 +14,7 @@
 #import "Colors.h"
 #import "TextUtils.h"
 #import "ImageUtils.h"
+#import "Typography.h"
 
 @interface PhotoCollectionViewCell ()
 
@@ -72,7 +73,7 @@
     [self addSubview:self.headerLabel];
     
     self.headerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.headerLabel setFont:[UIFont fontWithName:@"OpenSans-Bold" size:16.0]];
+    [self.headerLabel setFont:[UIFont fontWithName:@"Montserrat-Bold" size:15.0]];
     
     [NSLayoutConstraint activateConstraints:@[
         [self.headerLabel.topAnchor constraintEqualToAnchor:self.topAnchor constant:16.0],
@@ -104,7 +105,6 @@
     NSLog(@"Favorites button pressed.");
     NSLog(@"item: %@", self.item);
     self.item.onFavoriteButtonPress();
-    //[self.favoritesButton setSelected:self.item.bookmarked];
 }
 
 - (void)onPlaceButtonPress:(id)sender {
@@ -113,7 +113,7 @@
 
 - (void)updateItem:(PlaceItem *)item {
     self.item = item;
-    self.headerLabel.attributedText = getAttributedString(item.title, [Colors get].white, 16.0, UIFontWeightBold);
+    self.headerLabel.attributedText = [[Typography get] makeCardsTitle2Bold:item.title];
     [self.favoritesButton setSelected:item.bookmarked];
     loadImage(item.cover, ^(UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -129,7 +129,7 @@
 }
 
 - (void)updateCategory:(Category *)category {
-     self.headerLabel.attributedText = getAttributedString(category.title, [Colors get].white, 16.0, UIFontWeightBold);
+     self.headerLabel.attributedText = [[Typography get] makeCardsTitle2Bold:category.title];
     [self.favoritesButton setHidden:YES];
     self.loadImageOperation = loadImage(category.cover, ^(UIImage *image) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -140,13 +140,6 @@
 }
 
 - (void)updateOverlayAndShadow {
-//    NSUInteger layerCount = [self.overlayView.layer.sublayers count];
-//    for (NSInteger layerCounter = layerCount > 0  ? layerCount - 1 : -1;
-//         layerCounter >= 0; layerCounter--) {
-//        [self.overlayView.layer.sublayers[layerCounter] removeFromSuperlayer];
-//    }
-//    CAGradientLayer *overlayLayer = createOverlayLayer(self.overlayView);
-//    [self.overlayView.layer insertSublayer:overlayLayer atIndex:0];
     drawShadow(self);
 }
 

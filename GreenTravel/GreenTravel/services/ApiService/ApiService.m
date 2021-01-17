@@ -108,7 +108,18 @@ static NSString * const kGetDetailsBaseURL = @"http://192.168.0.13:3000/details/
     } else {
         details.descriptionHTML = @"";
     }
-    details.categoryIdToItems = @[];
+    NSMutableArray *categoryIdToItems = [[NSMutableArray alloc] init];
+    
+    NSArray<NSArray*> *linkedCategoriesFromAPI = (NSArray<NSArray*>*) item[@"linkedCategories"];
+    [linkedCategoriesFromAPI enumerateObjectsUsingBlock:^(NSArray * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *categoryId = obj[0];
+        NSArray<NSString *> *linkedItemIds = [obj[1] copy];
+        CategoryUUIDToRelatedItemUUIDs *categoryUUIDToRelatedItemUUIDs = [[CategoryUUIDToRelatedItemUUIDs alloc] init];
+        categoryUUIDToRelatedItemUUIDs.categoryUUID = categoryId;
+        categoryUUIDToRelatedItemUUIDs.relatedItemUUIDs = [[NSOrderedSet alloc] initWithArray:linkedItemIds];
+        [categoryIdToItems addObject:categoryUUIDToRelatedItemUUIDs];
+    }];
+    details.categoryIdToItems = categoryIdToItems;
     return details;
 }
 

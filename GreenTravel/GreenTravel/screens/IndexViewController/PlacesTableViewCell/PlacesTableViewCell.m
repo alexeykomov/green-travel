@@ -13,6 +13,7 @@
 #import "Category.h"
 #import "PlaceItem.h"
 #import "SizeUtils.h"
+#import "Typography.h"
 
 static NSString * const kPhotoCellId = @"photoCellId";
 static NSInteger kMaximalNumberOfItemsInCell = 10;
@@ -51,7 +52,7 @@ static NSInteger kMaximalNumberOfItemsInCell = 10;
 - (void)setUp {
     self.headerLabel = [[UILabel alloc] init];
     [self.contentView addSubview:self.headerLabel];
-    [self.headerLabel setFont:[UIFont fontWithName:@"Montserrat-Bold" size:12.0]];
+    [self.headerLabel setFont:[UIFont fontWithName:@"Montserrat-SemiBold" size:14.0]];
     
     self.headerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
@@ -80,8 +81,8 @@ static NSInteger kMaximalNumberOfItemsInCell = 10;
     
     self.allButton = [[UIButton alloc] init];
     [self.contentView addSubview:self.allButton];
-    [self.allButton.titleLabel setFont:[UIFont fontWithName:@"Montserrat-Semibold" size:12.0]];
-    [self.allButton setAttributedTitle:getAttributedString(@"ВСЕ", [Colors get].green, 12.0, UIFontWeightSemibold) forState:UIControlStateNormal];
+    [self.allButton.titleLabel setFont:[UIFont fontWithName:@"Montserrat-SemiBold" size:14.0]];
+    [self.allButton setAttributedTitle:[[Typography get] makeSubtitle1Semibold:@"ВСЕ" color:[Colors get].green] forState:UIControlStateNormal];
     [self.allButton addTarget:self action:@selector(onAllButtonPress:) forControlEvents:UIControlEventTouchUpInside];
     
     self.allButton.translatesAutoresizingMaskIntoConstraints = NO;
@@ -101,7 +102,7 @@ static NSInteger kMaximalNumberOfItemsInCell = 10;
 }
 
 - (void)update:(Category *)item {
-    self.headerLabel.attributedText = getAttributedString([item.title uppercaseString], [Colors get].black, 12.0, UIFontWeightBold);
+    self.headerLabel.attributedText = [[Typography get] makeSubtitle1Semibold:[item.title uppercaseString]];
     if ([item.categories count] > 0) {
         self.dataSourceCategories = [item.categories subarrayWithRange:NSMakeRange(0, MIN([item.categories count], kMaximalNumberOfItemsInCell))];
     } else {

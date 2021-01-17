@@ -90,6 +90,9 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
         self.allowedItems = [[NSMutableArray alloc] init];
         NSDictionary<NSString*, PlaceItem*> *flatItems = flattenCategoriesTreeIntoItemsMap(self.indexModel.categories);
         [self.allowedItemUUIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull itemUUID, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (!flatItems[itemUUID]) {
+                return;
+            }
             [weakSelf.allowedItems addObject:flatItems[itemUUID]];
         }];
     }
@@ -128,7 +131,7 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
         return [self.bookmarkedItems count];
     }
     if (self.allowedItemUUIDs) {
-        return [self.allowedItemUUIDs count];
+        return [self.allowedItems count];
     }
     return [self.category.items count];
 }

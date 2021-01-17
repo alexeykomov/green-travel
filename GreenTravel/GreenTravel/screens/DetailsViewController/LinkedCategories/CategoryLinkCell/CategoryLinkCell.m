@@ -81,7 +81,7 @@
     [NSLayoutConstraint activateConstraints:@[
         [self.chevron.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
         [self.chevron.leadingAnchor constraintEqualToAnchor:self.title.trailingAnchor constant:10.0],
-        [self.chevron.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-19.0],
+        [self.chevron.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-25.0],
     ]];
 }
 

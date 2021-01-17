@@ -20,6 +20,7 @@
 #import "BookmarksGroupModel.h"
 #import "LocationModel.h"
 #import "CoreDataService.h"
+#import "Typography.h"
 
 @interface MainViewController ()
 
@@ -66,14 +67,13 @@
     UIImage *indexImageSelected;
     indexImage = [UIImage imageNamed:@"home"];
     indexImageSelected = [UIImage imageNamed:@"home-selected"];
-    UITabBarItem *indexTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Главная" image:indexImage tag:0];
-    indexTabBarItem.selectedImage = indexImageSelected;
-
+    UITabBarItem *indexTabBarItem = createTabBarItem(@"Главная", 0, indexImage, indexImageSelected);
+    
     indexViewControllerWithNavigation.tabBarItem = indexTabBarItem;
 
     indexViewControllerWithNavigation.navigationBar.barTintColor = [Colors get].green;
     indexViewControllerWithNavigation.navigationBar.titleTextAttributes =
-    getTextAttributes([Colors get].black, 18.0, UIFontWeightSemibold);
+    [Typography get].navigationSemiboldAttributes;
 
 #pragma mark - MapViewController
 
@@ -84,13 +84,12 @@
     UIImage *mapImageSelected;
     mapImage = [UIImage imageNamed:@"map"];
     mapImageSelected = [UIImage imageNamed:@"map-selected"];
-    UITabBarItem *mapTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Карта" image:mapImage tag:0];
-    mapTabBarItem.selectedImage = mapImageSelected;
+    UITabBarItem *mapTabBarItem = createTabBarItem(@"Карта", 0, mapImage, mapImageSelected);
 
     mapControllerWithNavigation.tabBarItem = mapTabBarItem;
     mapControllerWithNavigation.navigationBar.barTintColor = [Colors get].green;
     mapControllerWithNavigation.navigationBar.titleTextAttributes =
-    getTextAttributes([Colors get].black, 18.0, UIFontWeightSemibold);
+    [Typography get].navigationSemiboldAttributes;;
 
 #pragma mark - BookmarksViewController
 
@@ -107,17 +106,26 @@
     UIImage *bookmarksImageSelected;
     bookmarksImage = [UIImage imageNamed:@"bookmark"];
     bookmarksImageSelected = [UIImage imageNamed:@"bookmark-selected"];
-    UITabBarItem *bookmarksTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Закладки" image:bookmarksImage tag:0];
-    bookmarksTabBarItem.selectedImage = bookmarksImageSelected;
+    UITabBarItem *bookmarksTabBarItem = createTabBarItem(@"Закладки", 0, bookmarksImage, bookmarksImageSelected);
 
     bookmarksControllerWithNavigation.tabBarItem = bookmarksTabBarItem;
     bookmarksControllerWithNavigation.navigationBar.barTintColor = [Colors get].green;
     bookmarksControllerWithNavigation.navigationBar.titleTextAttributes =
-    getTextAttributes([Colors get].black, 18.0, UIFontWeightSemibold);
+    [Typography get].navigationSemiboldAttributes;;
 
     self.viewControllers = @[indexViewControllerWithNavigation, mapControllerWithNavigation, bookmarksControllerWithNavigation];
 
     self.selectedIndex = 0;
+}
+
+UITabBarItem* createTabBarItem(NSString *title, NSUInteger tag, UIImage *image, UIImage *imageSelected) {
+    UITabBarItem *bookmarksTabBarItem = [[UITabBarItem alloc] initWithTitle:title image:image tag:tag];
+    [bookmarksTabBarItem setTitleTextAttributes:[Typography get].tabBarSelectedAttributes
+                                       forState:UIControlStateSelected];
+    [bookmarksTabBarItem setTitleTextAttributes:[Typography get].tabBarAttributes
+                                       forState:UIControlStateNormal];
+    bookmarksTabBarItem.selectedImage = imageSelected;
+    return bookmarksTabBarItem;
 }
 
 /*

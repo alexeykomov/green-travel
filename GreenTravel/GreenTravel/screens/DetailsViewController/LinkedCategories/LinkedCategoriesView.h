@@ -18,7 +18,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LinkedCategoriesView : UITableView<UITableViewDataSource, UITableViewDelegate>
+@interface LinkedCategoriesView : UIView<UITableViewDataSource, UITableViewDelegate>
 
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel
                      apiService:(nonnull ApiService *)apiService
