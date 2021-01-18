@@ -10,6 +10,7 @@
 #import "Colors.h"
 #import "TextUtils.h"
 #import "Category.h"
+#import "Typography.h"
 
 @interface CategoryLinkCell ()
 
@@ -64,7 +65,7 @@
     [self addSubview:self.title];
     
     self.title.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.title setFont:[UIFont fontWithName:@"OpenSans-Regular" size:16.0]];
+    [self.title setFont:[UIFont fontWithName:@"Montserrat-Regular" size:15.0]];
     
     [NSLayoutConstraint activateConstraints:@[
         [self.title.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
@@ -86,7 +87,7 @@
 }
 
 - (void)update:(Category *)category {
-    self.title.attributedText = getAttributedString(category.title, [Colors get].black, 16.0, UIFontWeightRegular);
+    self.title.attributedText = [[Typography get] makeBody:category.title];
     //[self.icon setImage:[UIImage imageNamed:category.icon]];
 }
 

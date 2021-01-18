@@ -12,6 +12,7 @@
 #import "Category.h"
 #import "StyleUtils.h"
 #import "BookmarkItem.h"
+#import "Typography.h"
 
 @interface BookmarkCell ()
 
@@ -39,8 +40,10 @@
     self.headerLabel = [[UILabel alloc] init];
     [self addSubview:self.headerLabel];
     
+    [self.headerLabel setNumberOfLines:2];
     self.headerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.headerLabel setFont:[UIFont fontWithName:@"Montserratt-Regular" size:10.0]];
+    [self.headerLabel setFont:[UIFont fontWithName:@"Montserratt-SemiBold" size:12.0]];
+    [self.headerLabel setTextAlignment:NSTextAlignmentCenter];
     
     [NSLayoutConstraint activateConstraints:@[
         [self.headerLabel.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
@@ -52,7 +55,7 @@
     [self addSubview:self.countLabel];
     
     self.countLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.countLabel setFont:[UIFont fontWithName:@"Montserratt-Regular" size:10.0]];
+    [self.countLabel setFont:[UIFont fontWithName:@"Montserratt-SemiBold" size:12.0]];
     
     [NSLayoutConstraint activateConstraints:@[
         [self.countLabel.topAnchor constraintEqualToAnchor:self.topAnchor constant:10.0],
@@ -61,8 +64,10 @@
 }
 
 - (void)update:(BookmarkItem *)item {
-    self.headerLabel.attributedText = getAttributedString([item.title uppercaseString], [Colors get].black, 10.0, UIFontWeightRegular);
-    self.countLabel.attributedText = getAttributedString([@(item.howMany) stringValue], [Colors get].black, 10.0, UIFontWeightRegular);
+    self.headerLabel.attributedText =
+    [[Typography get] makeBookmarkText:[item.title uppercaseString]];
+    self.countLabel.attributedText =
+    [[Typography get] makeBookmarkText:[@(item.howMany) stringValue]];
 }
 
 - (void)prepareForReuse {

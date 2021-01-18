@@ -739,8 +739,7 @@
 			children = (
 				5A14829124E8103400EBB756 /* BookmarksViewController.h */,
 				5A14829224E8103400EBB756 /* BookmarksViewController.m */,
-				5A1482F024EF005300EBB756 /* BookmarkCell.h */,
-				5A1482F124EF005300EBB756 /* BookmarkCell.m */,
+				5AE91FE125B6112F00A24DF0 /* BookmarkCell */,
 			);
 			path = BookmarksViewController;
 			sourceTree = "<group>";
@@ -790,6 +789,15 @@
 				5AE91FBC25B0EBC700A24DF0 /* GradientOverlayView.m */,
 			);
 			path = GradientOverlayView;
+			sourceTree = "<group>";
+		};
+		5AE91FE125B6112F00A24DF0 /* BookmarkCell */ = {
+			isa = PBXGroup;
+			children = (
+				5A1482F024EF005300EBB756 /* BookmarkCell.h */,
+				5A1482F124EF005300EBB756 /* BookmarkCell.m */,
+			);
+			path = BookmarkCell;
 			sourceTree = "<group>";
 		};
 		5AEA97F62554A0650037A51D /* LinkedCategories */ = {

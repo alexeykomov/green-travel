@@ -90,6 +90,12 @@ static Typography *instance;
                                            attributes:getTextAttributes([Colors get].black, 15.0, UIFontWeightRegular)];
 }
 
+- (NSAttributedString *)makeBookmarkText:(NSString *)input {
+    return [[NSAttributedString alloc] initWithString:input
+                                           attributes:getTextAttributes([Colors get].black, 12.0, UIFontWeightSemibold)];
+}
+
+
 + (instancetype)get {
     if (instance) {
         return instance;
