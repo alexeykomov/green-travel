@@ -51,7 +51,7 @@ static Typography *instance;
 }
 
 - (NSAttributedString *)makeSubtitle1Semibold:(NSString *)input {
-    return [self makeSubtitle1Semibold:input color:[Colors get].black];
+    return [self makeSubtitle1Semibold:input color:[Colors get].logCabin];
 }
 
 - (NSAttributedString *)makeSubtitle1Semibold:(NSString *)input
@@ -92,7 +92,7 @@ static Typography *instance;
 
 - (NSAttributedString *)makeBookmarkText:(NSString *)input {
     return [[NSAttributedString alloc] initWithString:input
-                                           attributes:getTextAttributes([Colors get].black, 12.0, UIFontWeightSemibold)];
+                                           attributes:getTextAttributes([Colors get].logCabin, 12.0, UIFontWeightSemibold)];
 }
 
 
