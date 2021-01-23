@@ -154,17 +154,20 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
 
 #pragma mark <UICollectionViewDelegate>
 
-static const CGFloat kInset = 12.0;
-static const CGFloat kSpacing = 12.0;
+static const CGFloat kInset = 16.0;
+static const CGFloat kInsetVertical = 32.0;
+static const CGFloat kSpacing = 32.0;
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat baseWidth = self.view.bounds.size.width;
-    
     return CGSizeMake((baseWidth - kInset * 2),
                       ((baseWidth - kInset * 2) / kCellAspectRatio));
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView
+didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Did select item at index path: %@", indexPath);
     if ([self.category.categories count] > 0) {
         Category *category = self.category.categories[indexPath.row];
@@ -206,7 +209,7 @@ static const CGFloat kSpacing = 12.0;
     if (section > 0) {
         return UIEdgeInsetsMake(0, kInset, kInset, kInset);
     }
-    return UIEdgeInsetsMake(kInset, kInset, kInset, kInset);
+    return UIEdgeInsetsMake(kInsetVertical, kInset, kInsetVertical, kInset);
 }
 
 - (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {

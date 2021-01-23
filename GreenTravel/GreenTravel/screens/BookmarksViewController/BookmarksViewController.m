@@ -100,8 +100,8 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
 
 #pragma mark <UICollectionViewDelegateFlowLayout>
 
-static const CGFloat kInset = 12.0;
-static const CGFloat kSpacing = 12.0;
+static const CGFloat kInsetHorizontal = 16.0;
+static const CGFloat kInsetVertical = 24.0;
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [self.collectionView.collectionViewLayout invalidateLayout];
@@ -120,8 +120,8 @@ static const CGFloat kSpacing = 12.0;
         return CGSizeZero;
     }
     
-    CGSize cellSize = CGSizeMake((baseWidth - 3 * kInset) / 2,
-                                 ((baseWidth - 3 * kInset) / kCellAspectRatio ) / 2);
+    CGSize cellSize = CGSizeMake((baseWidth - 3 * kInsetHorizontal) / 2,
+                                 ((baseWidth - 3 * kInsetHorizontal) / kCellAspectRatio ) / 2);
     
     return cellSize;
 }
@@ -131,14 +131,14 @@ static const CGFloat kSpacing = 12.0;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return kSpacing;
+    return 0;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     if (section > 0) {
-        return UIEdgeInsetsMake(0, kInset, kInset, kInset);
+        return UIEdgeInsetsMake(0, kInsetHorizontal, kInsetVertical, kInsetHorizontal);
     }
-    return UIEdgeInsetsMake(kInset, kInset, kInset, kInset);
+    return UIEdgeInsetsMake(kInsetVertical, kInsetHorizontal, kInsetVertical, kInsetHorizontal);
 }
 
 #pragma mark <UICollectionViewDelegate>
