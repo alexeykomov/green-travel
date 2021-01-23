@@ -340,12 +340,13 @@
                 self.addressLabel.attributedText = [[Typography get] makeSubtitle3Regular:self.item.title];
             }
             [self.locationButton setAttributedTitle:
-             
              [[Typography get] makeSubtitle3Regular:[NSString stringWithFormat:@"%f° N, %f° E", self.item.coords.latitude, self.item.coords.longitude] color:[Colors get].royalBlue]
              forState:UIControlStateNormal];
             [self.descriptionTextView setAttributedText:html];
             if (details.categoryIdToItems) {
                 [self.linkedCategoriesView update:details.categoryIdToItems];
+            } else {
+                [self.linkedCategoriesView setHidden:YES];
             }
         });
     });

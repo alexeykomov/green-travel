@@ -107,9 +107,7 @@ static NSString * const kCategoryLinkCellId = @"categoryLinkCellId";
     [self.tableView reloadData];
     
     if ([self.categories count] == 0) {
-        [NSLayoutConstraint activateConstraints:@[
-            [self.heightAnchor constraintEqualToConstant:0.0]
-        ]];
+        [self setHidden:YES];
     }
     
     if (self.tableViewHeightConstraint) {
@@ -121,6 +119,15 @@ static NSString * const kCategoryLinkCellId = @"categoryLinkCellId";
     ]];
     [self setNeedsLayout];
     [self layoutIfNeeded];
+}
+
+- (void)setHidden:(BOOL)hidden {
+    [super setHidden:hidden];
+    if (hidden) {
+        [NSLayoutConstraint activateConstraints:@[
+            [self.heightAnchor constraintEqualToConstant:0.0]
+        ]];
+    }
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
