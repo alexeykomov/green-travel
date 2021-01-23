@@ -14,6 +14,7 @@
 #import "PlaceItem.h"
 #import "SizeUtils.h"
 #import "Typography.h"
+#import "IndexViewControllerConstants.h"
 
 static NSString * const kPhotoCellId = @"photoCellId";
 static NSInteger kMaximalNumberOfItemsInCell = 10;
@@ -147,7 +148,7 @@ static NSInteger kMaximalNumberOfItemsInCell = 10;
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGSize adaptedSize = CGSizeMake(self.bounds.size.width - 50, self.bounds.size.height);
-    return getCellSize(adaptedSize);
+    return getCoverSize(adaptedSize);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -174,7 +175,6 @@ static NSInteger kMaximalNumberOfItemsInCell = 10;
 
 #pragma mark - <UICollectionViewDelegate>
 
-static const CGFloat kInset = 16.0;
 static const CGFloat kSpacing = 16.0;
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
@@ -186,7 +186,10 @@ static const CGFloat kSpacing = 16.0;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(kInset, kInset, kInset, kInset);
+    return UIEdgeInsetsMake(IndexViewControllerCoverInset,
+                            IndexViewControllerCoverInset,
+                            IndexViewControllerCoverInset,
+                            IndexViewControllerCoverInset);
 }
 
 @end

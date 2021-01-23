@@ -23,6 +23,7 @@
 #import "ApiService.h"
 #import "LocationModel.h"
 #import "CoreDataService.h"
+#import "IndexViewControllerConstants.h"
 
 @interface IndexViewController ()
 
@@ -40,6 +41,7 @@
 @end
 
 static NSString * const kCollectionCellId = @"collectionCellId";
+static CGFloat kDeltaCoverAndBouds = 50.0;
 
 @implementation IndexViewController 
 
@@ -131,8 +133,9 @@ static NSString * const kCollectionCellId = @"collectionCellId";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CGSize adaptedSize = CGSizeMake(self.view.bounds.size.width - 50, self.view.bounds.size.height);
-    return getCellSize(adaptedSize).height + 2 * 16.0 + 50.0;
+    CGSize adaptedSize = CGSizeMake(self.view.bounds.size.width - kDeltaCoverAndBouds, self.view.bounds.size.height);
+    return getCoverSize(adaptedSize).height + 2 *
+            IndexViewControllerCoverInset + 50.0;
 }
 
 #pragma mark - Categories update

@@ -9,4 +9,4 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-CGSize getCellSize(CGSize inputSize); 
+CGSize getCoverSize(CGSize inputSize); 
