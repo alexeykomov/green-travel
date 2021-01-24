@@ -79,6 +79,10 @@ static Typography *instance;
                                            attributes:getTextAttributes(color, 14.0, UIFontWeightRegular)];
 }
 
+- (NSAttributedString *)makeButtonText:(NSString *)input {
+    return [[NSAttributedString alloc] initWithString:input
+                                           attributes:getTextAttributes([Colors get].white, 14.0, UIFontWeightBold)];
+}
 
 - (NSAttributedString *)makeCardsTitle2Bold:(NSString *)input {
     return [[NSAttributedString alloc] initWithString:input

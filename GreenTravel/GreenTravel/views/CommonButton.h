@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CommonButton : UIButton
 
+- (instancetype)initWithTarget:(id)target action:(SEL)action
+                         label:(NSString *)label;
+
 @end
 
 NS_ASSUME_NONNULL_END

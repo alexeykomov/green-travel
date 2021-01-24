@@ -24,6 +24,7 @@
 #import "GalleryView.h"
 #import "CategoryUtils.h"
 #import "Typography.h"
+#import "CommonButton.h"
 
 @interface DetailsViewController ()
 
@@ -199,25 +200,19 @@
     ]];
     
     #pragma mark - Map button top
-    self.mapButtonTop = [[UIButton alloc] init];
-    self.mapButtonTop.backgroundColor = [Colors get].apple;
-    self.mapButtonTop.layer.cornerRadius = 8.0;
-    self.mapButtonTop.layer.masksToBounds = YES;
-    [self.mapButtonTop.titleLabel setFont:[UIFont fontWithName:@"OpenSans-Bold" size:14.0]];
-    [self.mapButtonTop setAttributedTitle:getAttributedString(@"Как добраться", [Colors get].white, 14.0, UIFontWeightBold) forState:UIControlStateNormal];
-    
-    [self.mapButtonTop addTarget:self action:@selector(onMapButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-
-    self.mapButtonTop.translatesAutoresizingMaskIntoConstraints = NO;
+    self.mapButtonTop = [[CommonButton alloc] initWithTarget:self action:@selector(onMapButtonPress:) label:@"Как добраться"];
     
     [self.contentView addSubview:self.mapButtonTop];
 
+    NSLayoutConstraint *mapButtonTopLeading = [self.mapButtonTop.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0];
+    NSLayoutConstraint *mapButtonTopTrailing = [self.mapButtonTop.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0];
+    mapButtonTopLeading.priority = UILayoutPriorityDefaultHigh - 1;
+    mapButtonTopTrailing.priority = UILayoutPriorityDefaultHigh - 1;
     [NSLayoutConstraint activateConstraints:@[
         [self.mapButtonTop.topAnchor constraintEqualToAnchor:self.locationButton.bottomAnchor constant:20.0],
-        [self.mapButtonTop.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
-        [self.mapButtonTop.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
-        [self.mapButtonTop.widthAnchor constraintLessThanOrEqualToConstant:343.0],
-        [self.mapButtonTop.heightAnchor constraintEqualToConstant:48.0],
+        [self.mapButtonTop.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        mapButtonTopLeading,
+        mapButtonTopTrailing,
     ]];
     
     #pragma mark - Description text
@@ -259,24 +254,20 @@
     ]];
         
     #pragma mark - Map button bottom
-    self.mapButtonBottom = [[UIButton alloc] init];
-    self.mapButtonBottom.translatesAutoresizingMaskIntoConstraints = NO;
-    self.mapButtonBottom.backgroundColor = [Colors get].apple;
-    self.mapButtonBottom.layer.cornerRadius = 8.0;
-    self.mapButtonBottom.layer.masksToBounds = YES;
-    [self.mapButtonBottom.titleLabel setFont:[UIFont fontWithName:@"OpenSans-Bold" size:14.0]];
-    [self.mapButtonBottom setAttributedTitle:getAttributedString(@"Как добраться", [Colors get].white, 14.0, UIFontWeightBold) forState:UIControlStateNormal];
-
-    [self.mapButtonBottom addTarget:self action:@selector(onMapButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-
+    self.mapButtonBottom = [[CommonButton alloc] initWithTarget:self
+                                                         action:@selector(onMapButtonPress:)
+                                                          label:@"Как добраться"];
+    
     [self.contentView addSubview:self.mapButtonBottom];
-
+    NSLayoutConstraint *mapButtonBottomLeading = [self.mapButtonBottom.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0];
+    NSLayoutConstraint *mapButtonBottomTrailing = [self.mapButtonBottom.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0];
+    mapButtonBottomLeading.priority = UILayoutPriorityDefaultHigh - 1;
+    mapButtonBottomTrailing.priority = UILayoutPriorityDefaultHigh - 1;
     [NSLayoutConstraint activateConstraints:@[
         [self.mapButtonBottom.topAnchor constraintEqualToAnchor:self.linkedCategoriesView.bottomAnchor constant:0.0],
-        [self.mapButtonBottom.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
-        [self.mapButtonBottom.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
-        [self.mapButtonBottom.widthAnchor constraintLessThanOrEqualToConstant:343.0],
-        [self.mapButtonBottom.heightAnchor constraintEqualToConstant:48.0],
+        [self.mapButtonBottom.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        mapButtonBottomLeading,
+        mapButtonBottomTrailing,
         [self.mapButtonBottom.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-37.5],
     ]];
     
