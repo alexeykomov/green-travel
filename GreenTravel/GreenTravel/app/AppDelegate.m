@@ -43,6 +43,10 @@
     // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
 }
 
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    [(MainViewController *) self.window.rootViewController loadCategories];
+}
+
 
 #pragma mark - Core Data stack
 

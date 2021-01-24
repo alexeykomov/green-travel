@@ -14,14 +14,18 @@
 #import "ApiService.h"
 #import "CoreDataService.h"
 #import "CategoryUtils.h"
+#import "UserDefaultsService.h"
 
 @interface IndexModel ()
 
 @property (strong, nonatomic) ApiService *apiService;
 @property (strong, nonatomic) CoreDataService *coreDataService;
-@property (assign, nonatomic) BOOL loaded;
-- (NSArray<Category *>*)mergeCategoriesOld:(NSArray<Category *>*)oldCategories
-                                   withNew:(NSArray<Category *>*)newCategories;
+@property (strong, nonatomic) UserDefaultsService *userDefaultsService;
+@property (assign, nonatomic) BOOL loadedFromDB;
+@property (strong, nonatomic) NSArray<Category *> *categoriesRequestedToUpdate;
+- (NSArray<Category *>*)copyBookmarksFromOldCategories:(NSArray<Category *>*)oldCategories
+                                   toNew:(NSArray<Category *>*)newCategories;
+
 
 @end
 
@@ -31,6 +35,7 @@ static IndexModel *instance;
 
 - (instancetype)initWithApiService:(ApiService *)apiService
                    coreDataService:(CoreDataService *)coreDataService
+               userDefaultsService:(UserDefaultsService *)userDefaultsService
 {
     self = [super init];
     if (self) {
@@ -38,32 +43,44 @@ static IndexModel *instance;
         _bookmarksObservers = [[NSMutableArray alloc] init];
         _coreDataService = coreDataService;
         _apiService = apiService;
+        _userDefaultsService = userDefaultsService;
     }
     return self;
 }
 
 - (void)loadCategories {
-    if (self.loaded) {
-        return;
-    }
     NSLog(@"loadCategories");
     __weak typeof(self) weakSelf = self;
+    if (self.loadedFromDB) {
+        [self loadCategoriesRemote];
+        return;
+    }
     [self.coreDataService loadCategoriesWithCompletion:^(NSArray<Category *> * _Nonnull categories) {
         __strong typeof(self) strongSelf = weakSelf;
         [strongSelf updateCategories:categories];
-        [strongSelf.apiService loadCategoriesWithCompletion:^(NSArray<Category *>  * _Nonnull categories) {
-            NSArray<Category*> *newCategories = [strongSelf mergeCategoriesOld:strongSelf.categories withNew:categories];
-            if (!isCategoriesEqual(strongSelf.categories, newCategories)) {
-                [strongSelf updateCategories:newCategories];
-                [strongSelf.coreDataService saveCategories:newCategories];
-            }
-        }];
+        [strongSelf loadCategoriesRemote];
+        strongSelf.loadedFromDB = YES;
     }];
-    self.loaded = YES;
 }
 
-- (NSArray<Category *>*)mergeCategoriesOld:(NSArray<Category *>*)oldCategories
-                                   withNew:(NSArray<Category *>*)newCategories {
+- (void)loadCategoriesRemote {
+    __weak typeof(self) weakSelf = self;
+    [self.apiService loadCategoriesWithCompletion:^(NSArray<Category *>  * _Nonnull categories, NSString *eTag) {
+        __strong typeof(self) strongSelf = weakSelf;
+        NSString *existingETag = [strongSelf.userDefaultsService loadETag];
+        if (![existingETag isEqualToString:eTag]) {
+            NSArray<Category*> *newCategories =
+            [strongSelf copyBookmarksFromOldCategories:strongSelf.categories
+                                                 toNew:categories];
+            [strongSelf.userDefaultsService saveETag:eTag];
+            [strongSelf requestCategoriesUpdate:newCategories];
+            [strongSelf.coreDataService saveCategories:newCategories];
+        }
+    }];
+}
+
+- (NSArray<Category *>*)copyBookmarksFromOldCategories:(NSArray<Category *>*)oldCategories
+                                   toNew:(NSArray<Category *>*)newCategories {
     NSMutableSet *uuids = [[NSMutableSet alloc] init];
     traverseCategories(oldCategories, ^(Category *category, PlaceItem *item) {
         if (item.bookmarked) {
@@ -87,6 +104,16 @@ static IndexModel *instance;
 - (void)updateCategories:(NSArray<Category *> *)categories {
     self.categories = categories;
     [self notifyObservers];
+}
+
+- (void)requestCategoriesUpdate:(NSArray<Category *> *)categories {
+    // TODO: change this to show "new content is available" widget
+    self.categories = categories;
+    [self notifyObservers];
+}
+
+- (BOOL)isEmpty {
+    return [self.categories count] == 0;
 }
 
 - (void)addObserver:(nonnull id<CategoriesObserver>)observer {

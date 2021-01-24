@@ -16,8 +16,8 @@
 #import "TextUtils.h"
 #import "CategoryUUIDToRelatedItemUUIDs.h"
 
-static NSString * const kGetCategoriesURL = @"http://192.168.0.13:3000/categories";
-static NSString * const kGetDetailsBaseURL = @"http://192.168.0.13:3000/details/%@";
+static NSString * const kGetCategoriesURL = @"http://ecsc00a0916b.epam.com:3001/api/v1/object?mobile=true";
+static NSString * const kGetDetailsBaseURL = @"http://ecsc00a0916b.epam.com:3001/api/v1/details/%@";
 
 @interface ApiService ()
 
@@ -35,18 +35,23 @@ static NSString * const kGetDetailsBaseURL = @"http://192.168.0.13:3000/details/
     return self;
 }
 
-- (void)loadCategoriesWithCompletion:(void(^)(NSArray<Category *>*))completion {
+- (void)loadCategoriesWithCompletion:(void(^)(NSArray<Category *>*, NSString *))completion {
     NSURL *url = [NSURL URLWithString:kGetCategoriesURL];
     __weak typeof(self) weakSelf = self;
-    NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url
+                                                  cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                              timeoutInterval:120];
+    NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (!data) {
             return;
         }
+        NSDictionary* headers = [(NSHTTPURLResponse *)response allHeaderFields];
+        NSString *eTag = headers[@"ETag"];
         
         NSArray *categories = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         NSLog(@"Error when loading categories: %@", error);
         NSArray<Category *> *mappedCategories = [[weakSelf mapCategoriesFromJSON:categories] copy];
-        completion(mappedCategories);
+        completion(mappedCategories, eTag);
     }];
     [task resume];
 }

@@ -21,6 +21,7 @@
 #import "LocationModel.h"
 #import "CoreDataService.h"
 #import "Typography.h"
+#import "UserDefaultsService.h"
 
 @interface MainViewController ()
 
@@ -47,7 +48,10 @@
     self.session = [NSURLSession sessionWithConfiguration:configuration];
     self.apiService = [[ApiService alloc] initWithSession:self.session];
     self.coreDataService = [[CoreDataService alloc] init];
-    self.indexModel = [[IndexModel alloc] initWithApiService:self.apiService coreDataService:self.coreDataService];
+    UserDefaultsService *userDefaultsService = [[UserDefaultsService alloc] init];
+    self.indexModel = [[IndexModel alloc] initWithApiService:self.apiService
+                                             coreDataService:self.coreDataService
+                                         userDefaultsService:userDefaultsService];
     DetailsModel *detailsModel = [[DetailsModel alloc] initWithIndexModel:self.indexModel apiService:self.apiService coreDataService:self.coreDataService];
 
     LocationModel *locationModel = [[LocationModel alloc] init];
@@ -126,6 +130,10 @@ UITabBarItem* createTabBarItem(NSString *title, NSUInteger tag, UIImage *image, 
                                        forState:UIControlStateNormal];
     bookmarksTabBarItem.selectedImage = imageSelected;
     return bookmarksTabBarItem;
+}
+
+- (void)loadCategories {
+    [self.indexModel loadCategories];
 }
 
 /*

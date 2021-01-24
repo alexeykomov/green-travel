@@ -102,7 +102,7 @@ static CGFloat kDeltaCoverAndBouds = 50.0;
     [self.navigationItem setBackBarButtonItem:self.originalBackButtonItem];
 }
 
-- (void) onSearchPress:(id)sender {
+- (void)onSearchPress:(id)sender {
     [self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil]];
     [self.navigationController pushViewController:
      [[SearchViewController alloc] initWithModel:self.searchModel
