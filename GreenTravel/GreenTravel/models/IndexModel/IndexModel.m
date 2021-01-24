@@ -22,6 +22,8 @@
 @property (strong, nonatomic) CoreDataService *coreDataService;
 @property (strong, nonatomic) UserDefaultsService *userDefaultsService;
 @property (assign, nonatomic) BOOL loadedFromDB;
+@property (assign, nonatomic) BOOL loading;
+@property (assign, nonatomic) BOOL loadingRemote;
 @property (strong, nonatomic) NSArray<Category *> *categoriesRequestedToUpdate;
 - (NSArray<Category *>*)copyBookmarksFromOldCategories:(NSArray<Category *>*)oldCategories
                                    toNew:(NSArray<Category *>*)newCategories;
@@ -116,6 +118,10 @@ static IndexModel *instance;
     return [self.categories count] == 0;
 }
 
+- (BOOL)loading {
+    return [self.categories count] == 0 && self.loadingRemote;
+}
+
 - (void)addObserver:(nonnull id<CategoriesObserver>)observer {
     if ([self.categoriesObservers containsObject:observer]) {
         return;
@@ -127,6 +133,18 @@ static IndexModel *instance;
     __weak typeof(self) weakSelf = self;
     [self.categoriesObservers enumerateObjectsUsingBlock:^(id<CategoriesObserver>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj onCategoriesUpdate:weakSelf.categories];
+    }];
+}
+
+- (void)notifyObserversNewDataAvailable {
+    [self.categoriesObservers enumerateObjectsUsingBlock:^(id<CategoriesObserver>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj onCategoriesNewDataAvailable];
+    }];
+}
+
+- (void)notifyObserversLoading:(BOOL)loading {
+    [self.categoriesObservers enumerateObjectsUsingBlock:^(id<CategoriesObserver>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj onCategoriesLoading:loading];
     }];
 }
 

@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol CategoriesObserver <NSObject>
 
 - (void)onCategoriesUpdate:(NSArray<Category *>*)categories;
+- (void)onCategoriesNewDataAvailable;
+- (void)onCategoriesLoading:(BOOL)loading;
 
 @end
 
