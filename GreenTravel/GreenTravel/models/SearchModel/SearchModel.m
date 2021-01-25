@@ -46,6 +46,7 @@
     return self;
 }
  
+#pragma mark - Observers
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
     [self.searchItems removeAllObjects];
     [self.uuids removeAllObjects];
@@ -53,22 +54,24 @@
     [self notifyObservers];
 }
 
+- (void)onCategoriesLoading:(BOOL)loading {}
+
+- (void)onCategoriesNewDataAvailable {}
+
 - (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {}
 
 - (void)fillSearchItemsFromCategories:(NSArray<Category *>*)categories {
-    __weak typeof(self) weakSelf = self;
     [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
-        [weakSelf fillSearchItemsFromCategories:category.categories];
         [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (![weakSelf.uuids containsObject:item.uuid]) {
+            if (![self.uuids containsObject:item.uuid]) {
                 SearchItem *searchItem = [[SearchItem alloc] init];
                 searchItem.correspondingPlaceItem = item;
                 searchItem.title = item.title;
                 // TODO: Take into account when Geolocation is enabled.
                 searchItem.distance = -1;
                 
-                [weakSelf.searchItems addObject:searchItem];
-                [weakSelf.uuids addObject:item.uuid];
+                [self.searchItems addObject:searchItem];
+                [self.uuids addObject:item.uuid];
             }
         }];
     }];
@@ -118,7 +121,7 @@
 - (void)fillSearchItemsWithCategories {
     __weak typeof(self) weakSelf = self;
     traverseCategories(self.indexModel.categories, ^(Category *category, PlaceItem *item) {
-        __strong typeof(self) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf.searchHistoryItems enumerateObjectsUsingBlock:^(SearchItem * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([item.uuid isEqualToString:searchItem.correspondingPlaceItem.uuid]) {
                 searchItem.correspondingPlaceItem.category = category;
@@ -130,7 +133,7 @@
 - (void)loadSearchItems {
     __weak typeof(self) weakSelf = self;
     [self.coreDataService loadSearchItemsWithCompletion:^(NSArray<SearchItem *> * _Nonnull searchItems) {
-        __strong typeof(self) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         strongSelf.searchHistoryItems = [[NSMutableArray alloc] initWithArray:searchItems];
         [strongSelf fillSearchItemsWithCategories];
         [strongSelf notifyObserversOfSearchHistoryUpdate];

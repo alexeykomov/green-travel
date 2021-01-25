@@ -80,9 +80,14 @@ static Typography *instance;
 }
 
 - (NSAttributedString *)makeButtonText:(NSString *)input {
-    return [[NSAttributedString alloc] initWithString:input
-                                           attributes:getTextAttributes([Colors get].white, 14.0, UIFontWeightBold)];
+    return [self makeButtonText:input color:[Colors get].white];
 }
+
+- (NSAttributedString *)makeButtonText:(NSString *)input color:(UIColor *)color {
+    return [[NSAttributedString alloc] initWithString:input
+                                           attributes:getTextAttributes(color, 14.0, UIFontWeightBold)];
+}
+
 
 - (NSAttributedString *)makeCardsTitle2Bold:(NSString *)input {
     return [[NSAttributedString alloc] initWithString:input
@@ -97,6 +102,11 @@ static Typography *instance;
 - (NSAttributedString *)makeBookmarkText:(NSString *)input {
     return [[NSAttributedString alloc] initWithString:input
                                            attributes:getTextAttributes([Colors get].logCabin, 12.0, UIFontWeightSemibold)];
+}
+
+- (NSAttributedString *)makeLoadingScreenText:(NSString *)input {
+    return [[NSAttributedString alloc] initWithString:input
+                                           attributes:getTextAttributes([Colors get].boulder, 15.0, UIFontWeightRegular)];
 }
 
 

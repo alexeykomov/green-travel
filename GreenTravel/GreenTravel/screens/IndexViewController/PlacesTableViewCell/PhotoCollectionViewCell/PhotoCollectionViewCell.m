@@ -114,12 +114,19 @@
 - (void)updateItem:(PlaceItem *)item {
     self.item = item;
     self.headerLabel.attributedText = [[Typography get] makeCardsTitle2Bold:item.title];
+    [self.favoritesButton setHidden:NO];
     [self.favoritesButton setSelected:item.bookmarked];
-    loadImage(item.cover, ^(UIImage *image) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.placeholder setImage:image];
+    if (item.cover && [item.cover length] > 0) {
+        __weak typeof (self) weakSelf = self;
+        self.loadImageOperation = loadImage(item.cover, ^(UIImage *image) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.placeholder setImage:image];
+            });
         });
-    });
+    } else {
+        [self.placeholder setImage:nil];
+    }
+    
     [self updateOverlayAndShadow];
 }
 
@@ -131,11 +138,16 @@
 - (void)updateCategory:(Category *)category {
      self.headerLabel.attributedText = [[Typography get] makeCardsTitle2Bold:category.title];
     [self.favoritesButton setHidden:YES];
-    self.loadImageOperation = loadImage(category.cover, ^(UIImage *image) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.placeholder setImage:image];
+    if (category.cover && [category.cover length] > 0) {
+        __weak typeof (self) weakSelf = self;
+        self.loadImageOperation = loadImage(category.cover, ^(UIImage *image) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.placeholder setImage:image];
+            });
         });
-    });
+    } else {
+        [self.placeholder setImage:nil];
+    }
     [self updateOverlayAndShadow];
 }
 
@@ -151,6 +163,7 @@
 - (void)prepareForReuse {
     [super prepareForReuse];
     [self.loadImageOperation cancel];
+    [self.placeholder setImage:nil];
     self.layer.shadowPath = nil;
 }
 

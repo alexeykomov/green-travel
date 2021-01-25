@@ -190,7 +190,11 @@ static const CGFloat kInsetVertical = 24.0;
  */
 
 - (void)onBookmarksUpdate:(nonnull NSArray<BookmarkItem *> *)bookmarkItems {
-    [self.collectionView reloadData];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.collectionView reloadData];
+    });
+    
 }
 
 @end

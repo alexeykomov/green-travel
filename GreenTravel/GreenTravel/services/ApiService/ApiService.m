@@ -43,6 +43,7 @@ static NSString * const kGetDetailsBaseURL = @"http://ecsc00a0916b.epam.com:3001
                                               timeoutInterval:120];
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (!data) {
+            completion(@[], @"");
             return;
         }
         NSDictionary* headers = [(NSHTTPURLResponse *)response allHeaderFields];

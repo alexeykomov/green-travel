@@ -90,6 +90,7 @@
 		5A6646A825BC608F00B4E7A0 /* IndexViewControllerConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A6646A725BC608F00B4E7A0 /* IndexViewControllerConstants.m */; };
 		5A6646AF25BC667800B4E7A0 /* CommonButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A6646AE25BC667800B4E7A0 /* CommonButton.m */; };
 		5A6646EC25BD989800B4E7A0 /* UserDefaultsService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A6646EB25BD989800B4E7A0 /* UserDefaultsService.m */; };
+		5A6646F625C0BCA900B4E7A0 /* RefreshButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A6646F525C0BCA900B4E7A0 /* RefreshButton.m */; };
 		5A69921724F7DE51008FB47E /* IndexModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921624F7DE51008FB47E /* IndexModel.m */; };
 		5A69921A24F7DF63008FB47E /* PathItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921924F7DF63008FB47E /* PathItem.m */; };
 		5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921C24F7E11F008FB47E /* PlaceDetails.m */; };
@@ -273,6 +274,8 @@
 		5A6646AE25BC667800B4E7A0 /* CommonButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommonButton.m; sourceTree = "<group>"; };
 		5A6646EA25BD989800B4E7A0 /* UserDefaultsService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserDefaultsService.h; sourceTree = "<group>"; };
 		5A6646EB25BD989800B4E7A0 /* UserDefaultsService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserDefaultsService.m; sourceTree = "<group>"; };
+		5A6646F425C0BCA900B4E7A0 /* RefreshButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RefreshButton.h; sourceTree = "<group>"; };
+		5A6646F525C0BCA900B4E7A0 /* RefreshButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RefreshButton.m; sourceTree = "<group>"; };
 		5A69921524F7DE51008FB47E /* IndexModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexModel.h; sourceTree = "<group>"; };
 		5A69921624F7DE51008FB47E /* IndexModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexModel.m; sourceTree = "<group>"; };
 		5A69921824F7DF63008FB47E /* PathItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PathItem.h; sourceTree = "<group>"; };
@@ -708,6 +711,7 @@
 			children = (
 				5A14828B24E8101A00EBB756 /* IndexViewController.h */,
 				5A14828C24E8101A00EBB756 /* IndexViewController.m */,
+				5A6646F325C0BC8F00B4E7A0 /* NewDataButton */,
 				5A6646A625BC608F00B4E7A0 /* IndexViewControllerConstants.h */,
 				5A6646A725BC608F00B4E7A0 /* IndexViewControllerConstants.m */,
 				5A1482A224E9578800EBB756 /* PlacesTableViewCell */,
@@ -782,6 +786,15 @@
 				5A6646EB25BD989800B4E7A0 /* UserDefaultsService.m */,
 			);
 			path = UserDefaultsService;
+			sourceTree = "<group>";
+		};
+		5A6646F325C0BC8F00B4E7A0 /* NewDataButton */ = {
+			isa = PBXGroup;
+			children = (
+				5A6646F425C0BCA900B4E7A0 /* RefreshButton.h */,
+				5A6646F525C0BCA900B4E7A0 /* RefreshButton.m */,
+			);
+			path = NewDataButton;
 			sourceTree = "<group>";
 		};
 		5AA75C02250425A400AE7331 /* DetailsModel */ = {
@@ -1150,6 +1163,7 @@
 				5A1482FB24F0717300EBB756 /* SearchCell.m in Sources */,
 				5A14829B24E9440C00EBB756 /* SearchViewController.m in Sources */,
 				5A14825624E7ED9100EBB756 /* GreenTravel.xcdatamodeld in Sources */,
+				5A6646F625C0BCA900B4E7A0 /* RefreshButton.m in Sources */,
 				5AAB5A192569484B00D52F53 /* SlideCollectionViewCell.m in Sources */,
 				5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */,
 				5A324B9424FB00D70044A671 /* MapItem.m in Sources */,

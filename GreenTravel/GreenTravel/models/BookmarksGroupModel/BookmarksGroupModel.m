@@ -38,10 +38,15 @@
     return self;
 }
 
+#pragma mark - Observers
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
     [self fillBookmarkItemsFromCategories:categories];
     [self notifyObservers];
 }
+
+- (void)onCategoriesLoading:(BOOL)loading {}
+
+- (void)onCategoriesNewDataAvailable {}
 
 - (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark { 
     [self fillBookmarkItemsFromCategories:self.indexModel.categories];
@@ -54,7 +59,7 @@
     self.categoryTypeToBookmark = [[NSMutableDictionary alloc] init];
     self.itemUUIDs = [[NSMutableSet alloc] init];
     traverseCategories(categories, ^(Category *category, PlaceItem *item) {
-        __strong typeof(self) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf.categoryTypeToBookmark[category.uuid] && [category.categories count] == 0) {
             strongSelf.categoryTypeToBookmark[category.uuid] = @0;
             BookmarkItem *bookmarkItem = [[BookmarkItem alloc] init];

@@ -44,22 +44,26 @@
         return self;
 }
 
+#pragma mark - Observers
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
     [self fillPlaceItemsFromCategories:categories];
     [self notifyObservers];
 }
 
+- (void)onCategoriesLoading:(BOOL)loading {}
+
+- (void)onCategoriesNewDataAvailable {}
+
 - (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {
 }
 
 - (void)fillPlaceItemsFromCategories:(NSArray<Category *> *)categories {
-    __weak typeof(self) weakSelf = self;
     [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
-        [weakSelf fillPlaceItemsFromCategories:category.categories];
+        [self fillPlaceItemsFromCategories:category.categories];
         [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (![weakSelf.itemUUIDs containsObject:item.uuid]) {
-                [weakSelf.itemUUIDToItem setValue:item forKey:item.uuid];
-                [weakSelf.itemUUIDs addObject:item.uuid];
+            if (![self.itemUUIDs containsObject:item.uuid]) {
+                [self.itemUUIDToItem setValue:item forKey:item.uuid];
+                [self.itemUUIDs addObject:item.uuid];
             }
         }];
     }];

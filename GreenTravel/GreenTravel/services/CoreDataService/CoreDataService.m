@@ -226,7 +226,7 @@ NSPersistentContainer *_persistentContainer;
 - (void)addSearchItem:(SearchItem *)searchItem {
     __weak typeof(self) weakSelf = self;
     [self.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
-        __strong typeof(self) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         NSError *error;
         // Delete dublicate.
         [strongSelf removeSearchItem:searchItem];
@@ -253,7 +253,7 @@ NSPersistentContainer *_persistentContainer;
     __weak typeof(self) weakSelf = self;
     __block StoredSearchItem *foundItem;
     [self.ctx performBlockAndWait:^{
-        __strong typeof(self) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         NSError *error;
         NSFetchRequest *fetchRequestSearchItem = [StoredSearchItem fetchRequest];
         fetchRequestSearchItem.predicate = [NSPredicate predicateWithFormat:@"correspondingPlaceItem.uuid == %@",
@@ -290,7 +290,7 @@ NSPersistentContainer *_persistentContainer;
 - (void)loadSearchItemsWithCompletion:(void (^)(NSArray<SearchItem *> * _Nonnull))completion {
     __weak typeof(self) weakSelf = self;
     [self.ctx performBlockAndWait:^{
-        __strong typeof(self) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         NSError *error;
         NSMutableArray *searchItems = [[NSMutableArray alloc] init];
         NSFetchRequest *fetchRequestSearchItem = [StoredSearchItem fetchRequest];
@@ -312,7 +312,7 @@ NSPersistentContainer *_persistentContainer;
 - (void)loadDetailsByUUID:(NSString *)uuid withCompletion:(void (^)(PlaceDetails *))completion {
     __weak typeof(self) weakSelf = self;
     [self.ctx performBlockAndWait:^{
-        __strong typeof(self) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         NSError *error;
         NSFetchRequest *fetchRequestSearchItem = [StoredPlaceDetails fetchRequest];
         fetchRequestSearchItem.predicate = [NSPredicate predicateWithFormat:@"uuid == %@", uuid];

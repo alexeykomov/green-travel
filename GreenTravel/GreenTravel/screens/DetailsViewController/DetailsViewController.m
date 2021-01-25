@@ -371,6 +371,10 @@
     [self updateDetails];
 }
 
+- (void)onCategoriesLoading:(BOOL)loading {}
+
+- (void)onCategoriesNewDataAvailable {}
+
 - (void)onMapButtonPress:(id)sender {
     MapItem *mapItem = [[MapItem alloc] init];
     mapItem.title = self.item.title;
