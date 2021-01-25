@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) UIColor *milkyGrey;
 @property (strong, nonatomic) UIColor *alto;
 @property (strong, nonatomic) UIColor *alabaster;
+@property (strong, nonatomic) UIColor *boulder;
 
 + (instancetype)get;
 

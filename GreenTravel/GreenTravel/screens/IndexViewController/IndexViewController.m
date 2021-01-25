@@ -24,6 +24,9 @@
 #import "LocationModel.h"
 #import "CoreDataService.h"
 #import "IndexViewControllerConstants.h"
+#import "CommonButton.h"
+#import "Typography.h"
+#import "RefreshButton.h"
 
 @interface IndexViewController ()
 
@@ -34,14 +37,22 @@
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) CoreDataService *coreDataService;
+@property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) UIBarButtonItem *originalBackButtonItem;
+@property (strong, nonatomic) UIImageView *placeholderImageView;
+@property (strong, nonatomic) UILabel *somethingIsWrongLabel;
+@property (strong, nonatomic) CommonButton *retryButton;
+@property (strong, nonatomic) UIActivityIndicatorView *activityIndicatorView;
+@property (strong, nonatomic) UIView *placeholder;
+@property (strong, nonatomic) RefreshButton *refreshButton;
+@property (strong, nonatomic) NSLayoutConstraint *yPosition;
 
 @end
 
 static NSString * const kCollectionCellId = @"collectionCellId";
-static CGFloat kDeltaCoverAndBouds = 50.0;
+static CGFloat kDeltaCoverAndBounds = 50.0;
 
 @implementation IndexViewController 
 
@@ -72,7 +83,6 @@ static CGFloat kDeltaCoverAndBouds = 50.0;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [Colors get].white;
-    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(onSearchPress:)];
     self.navigationItem.rightBarButtonItem.tintColor = [Colors get].white;
     
@@ -80,16 +90,126 @@ static CGFloat kDeltaCoverAndBouds = 50.0;
     configureNavigationBar(navigationBar);
     
     self.originalBackButtonItem = self.navigationItem.backBarButtonItem;
-    
 #pragma mark - Table view
+    self.tableView = [[UITableView alloc] init];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     [self.tableView registerClass:PlacesTableViewCell.class forCellReuseIdentifier:kCollectionCellId];
     self.tableView.allowsSelection = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.alwaysBounceVertical = YES;
+    [self.view addSubview:self.tableView];
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.tableView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+        [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
+    ]];
+#pragma mark - Placeholder
+    self.placeholder = [[UIView alloc] init];
+    [self.tableView addSubview:self.placeholder];
+    self.placeholder.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.placeholder.centerXAnchor constraintEqualToAnchor:self.tableView.centerXAnchor],
+        [self.placeholder.centerYAnchor constraintEqualToAnchor:self.tableView.centerYAnchor],
+        [self.placeholder.widthAnchor constraintEqualToAnchor:self.tableView.widthAnchor],
+    ]];
+    
+    self.placeholderImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"coffee-break"]];
+    [self.placeholder addSubview:self.placeholderImageView];
+    self.placeholderImageView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.placeholderImageView.centerXAnchor constraintEqualToAnchor:self.placeholder.centerXAnchor],
+        [self.placeholderImageView.topAnchor constraintEqualToAnchor:self.placeholder.topAnchor],
+    ]];
+    
+    self.somethingIsWrongLabel = [[UILabel alloc] init];
+    [self.placeholder addSubview:self.somethingIsWrongLabel];
+    [self.somethingIsWrongLabel setAttributedText:[[Typography get] makeLoadingScreenText:@"Что-то пошло не так..."]];
+    self.somethingIsWrongLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.somethingIsWrongLabel.centerXAnchor constraintEqualToAnchor:self.placeholder.centerXAnchor],
+        [self.somethingIsWrongLabel.topAnchor constraintEqualToAnchor:self.placeholderImageView.bottomAnchor constant:32.0],
+    ]];
+    
+    self.retryButton = [[CommonButton alloc] initWithTarget:self
+                                                     action:@selector(onRetry:)
+                                                      label:@"Попробовать еще раз"];
+    [self.placeholder addSubview:self.retryButton];
+    self.retryButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.retryButton.centerXAnchor constraintEqualToAnchor:self.placeholder.centerXAnchor],
+        [self.retryButton.topAnchor constraintEqualToAnchor:self.somethingIsWrongLabel.bottomAnchor constant:27.28],
+        [self.retryButton.bottomAnchor constraintEqualToAnchor:self.placeholder.bottomAnchor],
+    ]];
+#pragma mark - Activity indicator view
+    self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [self.view addSubview:self.activityIndicatorView];
+    self.activityIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.activityIndicatorView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        [self.activityIndicatorView.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor],
+    ]];
+#pragma mark - Refresh button
+    self.refreshButton = [[RefreshButton alloc] initWithTarget:self
+                                                            action:@selector(onNewDataPress:)];
+    [self.view addSubview:self.refreshButton];
+    self.refreshButton.translatesAutoresizingMaskIntoConstraints = NO;
+    self.yPosition = [self.refreshButton.bottomAnchor constraintEqualToAnchor:self.view.topAnchor constant:0.0];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.refreshButton.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        self.yPosition,
+    ]];
+    
+    [self setUpWithActivityIndicator];
 
     [self.model addObserver:self];
     [self.model addObserverBookmarks:self];
     [self.model loadCategories];
+}
+
+- (void)showRefreshButton:(BOOL)show {
+    __weak typeof(self) weakSelf = self;
+    if (show) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [UIView animateWithDuration:0.5 animations:^{
+            strongSelf.yPosition.constant = 50.0;
+            [strongSelf.view setNeedsLayout];
+            [strongSelf.view layoutIfNeeded];
+        } completion:^(BOOL finished) {
+        }];
+        return;
+    }
+    [UIView animateWithDuration:0.5 animations:^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strongSelf.yPosition.constant = 0.0;
+        [strongSelf.view setNeedsLayout];
+        [strongSelf.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+    }];
+}
+
+- (void)setUpWithTable {
+    [self.activityIndicatorView setHidden:YES];
+    [self.activityIndicatorView stopAnimating];
+    [self.placeholder setHidden:YES];
+    [self.tableView setHidden:NO];
+    [self.tableView reloadData];
+}
+
+- (void)setUpWithNoDataPlaceholder {
+    [self.tableView setHidden:NO];
+    [self.activityIndicatorView setHidden:YES];
+    [self.activityIndicatorView stopAnimating];
+    [self.placeholder setHidden:NO];
+}
+
+- (void)setUpWithActivityIndicator {
+    [self.tableView setHidden:YES];
+    [self.placeholder setHidden:YES];
+    [self.activityIndicatorView setHidden:NO];
+    [self.activityIndicatorView startAnimating];
 }
 
 #pragma mark - Lifecycle
@@ -133,23 +253,54 @@ static CGFloat kDeltaCoverAndBouds = 50.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CGSize adaptedSize = CGSizeMake(self.view.bounds.size.width - kDeltaCoverAndBouds, self.view.bounds.size.height);
+    CGSize adaptedSize = CGSizeMake(self.view.bounds.size.width - kDeltaCoverAndBounds, self.view.bounds.size.height);
     return getCoverSize(adaptedSize).height + 2 *
             IndexViewControllerCoverInset + 50.0;
 }
 
 #pragma mark - Categories update
-
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
-    __weak typeof(self) weakSelf = self;
-    
     [self fillNavigationListeners:self.model.categories];
-    
+    if ([categories count]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setUpWithTable];
+        });
+    }
+}
+
+- (void)onCategoriesNewDataAvailable {
+    __weak typeof(self) weakSelf = self;
+    if (![self.model.categories count]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf setUpWithTable];
+        });
+        return;
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.tableView reloadData];
+        [weakSelf showRefreshButton:YES];
     });
 }
 
+- (void)onCategoriesLoading:(BOOL)loading {
+    __weak typeof(self) weakSelf = self;
+    if (!loading) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([weakSelf.model.categories count] > 0) {
+                [weakSelf setUpWithTable];
+                return;
+            }
+            [weakSelf setUpWithNoDataPlaceholder];
+        });
+        return;
+    }
+    if (loading) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf setUpWithActivityIndicator];
+        });
+    }
+}
+
+#pragma mark - Bookmarks update
 - (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {
     NSIndexSet *indexes = [self.model.categories indexesOfObjectsPassingTest:^BOOL(Category * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         return [obj.uuid isEqualToString:item.category.uuid];
@@ -168,6 +319,15 @@ static CGFloat kDeltaCoverAndBouds = 50.0;
     }];
 }
 
+#pragma mark - Listeners
+- (void)onRetry:(id)sender {
+    [self.model retryCategories];
+}
+
+- (void)onNewDataPress:(id)sender {
+    [self.model refreshCategories];
+    [self showRefreshButton:NO];
+}
 
 - (void)fillNavigationListeners:(NSArray<Category *> *)categories {
     __weak typeof(self) weakSelf = self;

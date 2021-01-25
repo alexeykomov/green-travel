@@ -33,9 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSAttributedString *)makeSubtitle3Regular:(NSString *)input
                                        color:(UIColor *)color;
 - (NSAttributedString *)makeButtonText:(NSString *)input;
+- (NSAttributedString *)makeButtonText:(NSString *)input color:(UIColor *)color;
 - (NSAttributedString *)makeCardsTitle2Bold:(NSString *)input;
 - (NSAttributedString *)makeBody:(NSString *)input;
 - (NSAttributedString *)makeBookmarkText:(NSString *)input;
+- (NSAttributedString *)makeLoadingScreenText:(NSString *)input;
 
 @end
 

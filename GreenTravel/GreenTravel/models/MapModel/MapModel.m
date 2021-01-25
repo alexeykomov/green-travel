@@ -45,11 +45,16 @@ static const CLLocationDistance kLocationAccuracy = 500.0;
         return self;
 }
 
+#pragma mark - Observers
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
     [self fillMapItemsFromCategories:categories];
     [self updateCloseItems];
     [self notifyObservers];
 }
+
+- (void)onCategoriesLoading:(BOOL)loading {}
+
+- (void)onCategoriesNewDataAvailable {}
 
 - (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {
 }

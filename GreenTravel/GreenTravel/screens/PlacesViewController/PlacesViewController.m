@@ -72,7 +72,6 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
     if (!self.bookmarked) {
         [self.collectionView reloadData];
     }
-    [self.indexModel addObserver:self];
     [self.indexModel addObserverBookmarks:self];
 }
 
@@ -244,10 +243,6 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (self.viewIfLoaded.window != nil && [self.bookmarkedItems count] == 0) {
         [self.navigationController popViewControllerAnimated:YES];
     }
-}
-
-- (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
-    
 }
 
 @end

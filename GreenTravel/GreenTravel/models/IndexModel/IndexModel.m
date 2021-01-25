@@ -24,7 +24,7 @@
 @property (assign, nonatomic) BOOL loadedFromDB;
 @property (assign, nonatomic) BOOL loading;
 @property (assign, nonatomic) BOOL loadingRemote;
-@property (strong, nonatomic) NSArray<Category *> *categoriesRequestedToUpdate;
+@property (strong, nonatomic) NSArray<Category *> *categoriesScheduledForUpdate;
 - (NSArray<Category *>*)copyBookmarksFromOldCategories:(NSArray<Category *>*)oldCategories
                                    toNew:(NSArray<Category *>*)newCategories;
 
@@ -46,6 +46,7 @@ static IndexModel *instance;
         _coreDataService = coreDataService;
         _apiService = apiService;
         _userDefaultsService = userDefaultsService;
+        _loading = YES;
     }
     return self;
 }
@@ -53,24 +54,30 @@ static IndexModel *instance;
 - (void)loadCategories {
     NSLog(@"loadCategories");
     __weak typeof(self) weakSelf = self;
-    if (self.loadedFromDB) {
-        [self loadCategoriesRemote];
-        return;
-    }
     [self.coreDataService loadCategoriesWithCompletion:^(NSArray<Category *> * _Nonnull categories) {
-        __strong typeof(self) strongSelf = weakSelf;
-        [strongSelf updateCategories:categories];
-        [strongSelf loadCategoriesRemote];
-        strongSelf.loadedFromDB = YES;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf.loadedFromDB) {
+            [strongSelf updateCategories:categories];
+            strongSelf.loadedFromDB = YES;
+        }
+        [strongSelf loadCategoriesRemote:[categories count] == 0];
     }];
 }
 
-- (void)loadCategoriesRemote {
+- (void)loadCategoriesRemote:(BOOL)visible {
+    self.loading = YES;
+    if (visible) { [self notifyObserversLoading:YES]; }
     __weak typeof(self) weakSelf = self;
     [self.apiService loadCategoriesWithCompletion:^(NSArray<Category *>  * _Nonnull categories, NSString *eTag) {
-        __strong typeof(self) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        strongSelf.loading = NO;
+        if ([strongSelf.categories count] == 0 && [categories count] > 0) {
+            [strongSelf.userDefaultsService saveETag:eTag];
+            [strongSelf updateCategories:categories];
+            [strongSelf.coreDataService saveCategories:categories];
+        }
         NSString *existingETag = [strongSelf.userDefaultsService loadETag];
-        if (![existingETag isEqualToString:eTag]) {
+        if (![existingETag isEqualToString:eTag] && [categories count] > 0) {
             NSArray<Category*> *newCategories =
             [strongSelf copyBookmarksFromOldCategories:strongSelf.categories
                                                  toNew:categories];
@@ -78,7 +85,28 @@ static IndexModel *instance;
             [strongSelf requestCategoriesUpdate:newCategories];
             [strongSelf.coreDataService saveCategories:newCategories];
         }
+        if (visible) { [strongSelf notifyObserversLoading:NO]; }
     }];
+}
+
+- (void)refreshCategories {
+    [self notifyObserversLoading:YES];
+    __weak typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        NSArray<Category*> *newCategories = [weakSelf.categoriesScheduledForUpdate copy];
+        [weakSelf notifyObserversLoading:NO];
+        [strongSelf updateCategories:newCategories];
+    });
+}
+
+- (void)retryCategories {
+    [self notifyObserversLoading:YES];
+    __weak typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        [strongSelf loadCategoriesRemote:YES];
+    });
 }
 
 - (NSArray<Category *>*)copyBookmarksFromOldCategories:(NSArray<Category *>*)oldCategories
@@ -108,18 +136,14 @@ static IndexModel *instance;
     [self notifyObservers];
 }
 
-- (void)requestCategoriesUpdate:(NSArray<Category *> *)categories {
+- (void)requestCategoriesUpdate:(NSArray<Category *> *)categoriesScheduledForUpdate {
     // TODO: change this to show "new content is available" widget
-    self.categories = categories;
-    [self notifyObservers];
+    self.categoriesScheduledForUpdate = categoriesScheduledForUpdate;
+    [self notifyObserversNewDataAvailable];
 }
 
 - (BOOL)isEmpty {
     return [self.categories count] == 0;
-}
-
-- (BOOL)loading {
-    return [self.categories count] == 0 && self.loadingRemote;
 }
 
 - (void)addObserver:(nonnull id<CategoriesObserver>)observer {

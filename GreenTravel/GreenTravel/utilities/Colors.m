@@ -43,6 +43,7 @@ static Colors *instance;
         self.milkyGrey = UIColorFromHEX(0xE0E0E0);
         self.alto = UIColorFromHEX(0xD9D9D9);
         self.alabaster = UIColorFromHEX(0xF8F8F8);
+        self.boulder = UIColorFromHEX(0x777777);
     }
     return self;
 }

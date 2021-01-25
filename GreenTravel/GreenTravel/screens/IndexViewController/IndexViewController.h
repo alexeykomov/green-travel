@@ -20,7 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class DetailsModel;
 @class CoreDataService;
 
-@interface IndexViewController : UITableViewController<CategoriesObserver, BookmarksObserver>
+@interface IndexViewController : UIViewController<CategoriesObserver,
+BookmarksObserver, UITableViewDelegate, UITableViewDataSource>
 
 - (instancetype) initWithApiService:(ApiService *)apiService
                               model:(IndexModel *)model

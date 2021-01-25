@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class IndexModel;
 
 
-@interface PlacesViewController : UICollectionViewController<CategoriesObserver, BookmarksObserver>
+@interface PlacesViewController : UICollectionViewController<BookmarksObserver>
 
 @property (strong, nonatomic) Category *category;
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel
