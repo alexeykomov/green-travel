@@ -60,17 +60,17 @@
     self.itemUUIDs = [[NSMutableSet alloc] init];
     traverseCategories(categories, ^(Category *category, PlaceItem *item) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf.categoryTypeToBookmark[category.uuid] && [category.categories count] == 0) {
-            strongSelf.categoryTypeToBookmark[category.uuid] = @0;
-            BookmarkItem *bookmarkItem = [[BookmarkItem alloc] init];
-            bookmarkItem.correspondingCategory = category;
-            bookmarkItem.howMany = 0;
-            bookmarkItem.title = category.title;
-            bookmarkItem.uuid = category.uuid;
-            [strongSelf.bookmarkItems addObject:bookmarkItem];
-        }
         if (item && item.bookmarked && ![strongSelf.itemUUIDs containsObject:item.uuid]) {
             [strongSelf.itemUUIDs addObject:item.uuid];
+            if (!strongSelf.categoryTypeToBookmark[category.uuid] && [category.categories count] == 0) {
+                strongSelf.categoryTypeToBookmark[category.uuid] = @0;
+                BookmarkItem *bookmarkItem = [[BookmarkItem alloc] init];
+                bookmarkItem.correspondingCategory = category;
+                bookmarkItem.howMany = 0;
+                bookmarkItem.title = category.title;
+                bookmarkItem.uuid = category.uuid;
+                [strongSelf.bookmarkItems addObject:bookmarkItem];
+            }
             strongSelf.categoryTypeToBookmark[category.uuid] = @([strongSelf.categoryTypeToBookmark[category.uuid] intValue] + 1);
         }
     });

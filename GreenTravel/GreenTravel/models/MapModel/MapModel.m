@@ -70,18 +70,16 @@ static const CLLocationDistance kLocationAccuracy = 500.0;
 }
 
 - (void)fillMapItemsFromCategories:(NSArray<Category *> *)categories {
-    __weak typeof(self) weakSelf = self;
     [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
-        [weakSelf fillMapItemsFromCategories:category.categories];
+        [self fillMapItemsFromCategories:category.categories];
         [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (![weakSelf.uuids containsObject:item.uuid]) {
+            if (![self.uuids containsObject:item.uuid]) {
                 MapItem *mapItem = [[MapItem alloc] init];
                 mapItem.coords = item.coords;
                 mapItem.title = item.title;
                 mapItem.correspondingPlaceItem = item;
-                [weakSelf.mapItems addObject:mapItem];
-                
-                [weakSelf.uuids addObject:item.uuid];
+                [self.mapItems addObject:mapItem];
+                [self.uuids addObject:item.uuid];
             }
         }];
     }];

@@ -15,6 +15,7 @@
 #import "BookmarksGroupModel.h"
 #import "BookmarkItem.h"
 #import "IndexModel.h"
+#import "Typography.h"
 
 @interface BookmarksViewController ()
 
@@ -24,6 +25,9 @@
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) IndexModel *indexModel;
+@property (strong, nonatomic) UIImageView *placeholderImageView;
+@property (strong, nonatomic) UILabel *somethingIsWrongLabel;
+@property (strong, nonatomic) UIView *placeholder;
 
 @end
 
@@ -70,6 +74,37 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
     [self.collectionView registerClass:BookmarkCell.class forCellWithReuseIdentifier:kBookmarkCellId];
     self.collectionView.backgroundColor = [Colors get].white;
     self.collectionView.alwaysBounceVertical = YES;
+    
+#pragma mark - No data view
+    self.placeholder = [[UIView alloc] init];
+    [self.collectionView addSubview:self.placeholder];
+    self.placeholder.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.placeholder.centerXAnchor constraintEqualToAnchor:self.collectionView.centerXAnchor],
+        [self.placeholder.centerYAnchor constraintEqualToAnchor:self.collectionView.centerYAnchor],
+        [self.placeholder.widthAnchor constraintEqualToAnchor:self.collectionView.widthAnchor],
+    ]];
+    
+    UIImage *placeholderImage = [UIImage imageNamed:arc4random_uniform(2) > 0 ?
+                                 @"fox-in-the-jungle" : @"trekking"];
+    self.placeholderImageView = [[UIImageView alloc] initWithImage:placeholderImage];
+    [self.placeholder addSubview:self.placeholderImageView];
+    self.placeholderImageView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.placeholderImageView.centerXAnchor constraintEqualToAnchor:self.placeholder.centerXAnchor],
+        [self.placeholderImageView.topAnchor constraintEqualToAnchor:self.placeholder.topAnchor],
+    ]];
+    
+    self.somethingIsWrongLabel = [[UILabel alloc] init];
+    [self.placeholder addSubview:self.somethingIsWrongLabel];
+    [self.somethingIsWrongLabel setAttributedText:
+     [[Typography get] makeLoadingScreenText:@"Вы пока ничего  сюда не добавили"]];
+    self.somethingIsWrongLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.somethingIsWrongLabel.centerXAnchor constraintEqualToAnchor:self.placeholder.centerXAnchor],
+        [self.somethingIsWrongLabel.topAnchor constraintEqualToAnchor:self.placeholderImageView.bottomAnchor constant:32.0],
+        [self.somethingIsWrongLabel.bottomAnchor constraintEqualToAnchor:self.placeholder.bottomAnchor],
+    ]];
     
     [self.model addObserver:self];
 }
@@ -193,6 +228,7 @@ static const CGFloat kInsetVertical = 24.0;
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.collectionView reloadData];
+        [weakSelf.placeholder setHidden:[weakSelf.model.bookmarkItems count] > 0];
     });
     
 }
