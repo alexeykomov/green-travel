@@ -18,7 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 @class IndexModel;
 @class LocationModel;
 
-@interface BookmarksViewController : UICollectionViewController<UICollectionViewDelegateFlowLayout, BookmarksGroupObserver>
+@interface BookmarksViewController : UIViewController<
+UICollectionViewDelegateFlowLayout, BookmarksGroupObserver,
+UICollectionViewDataSource>
 
 - (instancetype)initWithModel:(BookmarksGroupModel *)model
                    indexModel:(IndexModel *)indexModel

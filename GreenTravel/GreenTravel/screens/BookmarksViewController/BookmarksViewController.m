@@ -25,6 +25,9 @@
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) IndexModel *indexModel;
+@property (strong, nonatomic) UICollectionView *collectionView;
+@property (strong, nonatomic) UIScrollView *scrollView;
+@property (strong, nonatomic) UIView *contentView;
 @property (strong, nonatomic) UIImageView *placeholderImageView;
 @property (strong, nonatomic) UILabel *somethingIsWrongLabel;
 @property (strong, nonatomic) UIView *placeholder;
@@ -33,6 +36,7 @@
 
 static NSString * const kBookmarkCellId = @"bookmarkCellId";
 static const CGFloat kCellAspectRatio = 166.0 / 104.0;
+static const CGFloat kMinHeightOfPlaceholderView = 400.0;
 
 @implementation BookmarksViewController
 
@@ -47,7 +51,7 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
     if (self) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
-        self = [self initWithCollectionViewLayout:layout];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _model = model;
         _indexModel = indexModel;
         _apiService = apiService;
@@ -65,24 +69,52 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.collectionView.backgroundColor = [Colors get].green;
     
     UINavigationBar *navigationBar = self.navigationController.navigationBar;
     configureNavigationBar(navigationBar);
-    
-    
+#pragma mark - Collection view
     [self.collectionView registerClass:BookmarkCell.class forCellWithReuseIdentifier:kBookmarkCellId];
     self.collectionView.backgroundColor = [Colors get].white;
     self.collectionView.alwaysBounceVertical = YES;
-    
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+    [self.view addSubview:self.collectionView];
+    self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.collectionView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+        [self.collectionView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [self.collectionView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [self.collectionView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
+    ]];
 #pragma mark - No data view
+    self.scrollView = [[UIScrollView alloc] init];
+    [self.view addSubview:self.scrollView];
+    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.scrollView.alwaysBounceVertical = YES;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.scrollView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+        [self.scrollView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+        [self.scrollView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+        [self.scrollView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
+    ]];
+    self.contentView = [[UIView alloc] init];
+    [self.scrollView addSubview:self.contentView];
+    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.scrollView addSubview:self.contentView];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.contentView.topAnchor constraintEqualToAnchor:self.scrollView.topAnchor],
+        [self.contentView.bottomAnchor constraintEqualToAnchor:self.scrollView.bottomAnchor],
+        [self.contentView.widthAnchor constraintEqualToAnchor:self.scrollView.widthAnchor],
+        [self.contentView.heightAnchor constraintGreaterThanOrEqualToAnchor:self.scrollView.heightAnchor],
+        [self.contentView.heightAnchor constraintGreaterThanOrEqualToConstant:kMinHeightOfPlaceholderView],
+    ]];
     self.placeholder = [[UIView alloc] init];
-    [self.collectionView addSubview:self.placeholder];
+    [self.contentView addSubview:self.placeholder];
     self.placeholder.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [self.placeholder.centerXAnchor constraintEqualToAnchor:self.collectionView.centerXAnchor],
-        [self.placeholder.centerYAnchor constraintEqualToAnchor:self.collectionView.centerYAnchor],
-        [self.placeholder.widthAnchor constraintEqualToAnchor:self.collectionView.widthAnchor],
+        [self.placeholder.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
+        [self.placeholder.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
+        [self.placeholder.widthAnchor constraintEqualToAnchor:self.contentView.widthAnchor],
     ]];
     
     UIImage *placeholderImage = [UIImage imageNamed:arc4random_uniform(2) > 0 ?
@@ -94,7 +126,6 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
         [self.placeholderImageView.centerXAnchor constraintEqualToAnchor:self.placeholder.centerXAnchor],
         [self.placeholderImageView.topAnchor constraintEqualToAnchor:self.placeholder.topAnchor],
     ]];
-    
     self.somethingIsWrongLabel = [[UILabel alloc] init];
     [self.placeholder addSubview:self.somethingIsWrongLabel];
     [self.somethingIsWrongLabel setAttributedText:
@@ -107,6 +138,21 @@ static const CGFloat kCellAspectRatio = 166.0 / 104.0;
     ]];
     
     [self.model addObserver:self];
+    [self updateMainView];
+}
+
+- (void)updateMainView {
+    [self.collectionView reloadData];
+    [self.collectionView setHidden:[self.model.bookmarkItems count] == 0];
+    [self.scrollView setHidden:[self.model.bookmarkItems count] > 0];
+}
+
+- (void)setUpWithCollectionView {
+    
+}
+
+- (void)setUpWithNoDataPlaceholder {
+    
 }
 
 #pragma mark <UICollectionViewDataSource>
@@ -227,8 +273,7 @@ static const CGFloat kInsetVertical = 24.0;
 - (void)onBookmarksUpdate:(nonnull NSArray<BookmarkItem *> *)bookmarkItems {
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.collectionView reloadData];
-        [weakSelf.placeholder setHidden:[weakSelf.model.bookmarkItems count] > 0];
+        [weakSelf updateMainView];
     });
     
 }

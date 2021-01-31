@@ -53,6 +53,7 @@
 
 static NSString * const kCollectionCellId = @"collectionCellId";
 static CGFloat kDeltaCoverAndBounds = 50.0;
+static CGFloat kMinHeightOfPlaceholderView = 500.0;
 
 @implementation IndexViewController 
 
@@ -106,14 +107,35 @@ static CGFloat kDeltaCoverAndBounds = 50.0;
         [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
         [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
     ]];
-#pragma mark - Placeholder
+#pragma mark - No data view
+    self.scrollView = [[UIScrollView alloc] init];
+    [self.view addSubview:self.scrollView];
+    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.scrollView.alwaysBounceVertical = YES;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.scrollView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+        [self.scrollView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+        [self.scrollView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+        [self.scrollView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
+    ]];
+    self.contentView = [[UIView alloc] init];
+    [self.scrollView addSubview:self.contentView];
+    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.scrollView addSubview:self.contentView];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.contentView.topAnchor constraintEqualToAnchor:self.scrollView.topAnchor],
+        [self.contentView.bottomAnchor constraintEqualToAnchor:self.scrollView.bottomAnchor],
+        [self.contentView.widthAnchor constraintEqualToAnchor:self.scrollView.widthAnchor],
+        [self.contentView.heightAnchor constraintGreaterThanOrEqualToAnchor:self.scrollView.heightAnchor],
+        [self.contentView.heightAnchor constraintGreaterThanOrEqualToConstant:kMinHeightOfPlaceholderView],
+    ]];
     self.placeholder = [[UIView alloc] init];
-    [self.tableView addSubview:self.placeholder];
+    [self.contentView addSubview:self.placeholder];
     self.placeholder.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [self.placeholder.centerXAnchor constraintEqualToAnchor:self.tableView.centerXAnchor],
-        [self.placeholder.centerYAnchor constraintEqualToAnchor:self.tableView.centerYAnchor],
-        [self.placeholder.widthAnchor constraintEqualToAnchor:self.tableView.widthAnchor],
+        [self.placeholder.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
+        [self.placeholder.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
+        [self.placeholder.widthAnchor constraintEqualToAnchor:self.contentView.widthAnchor],
     ]];
     
     self.placeholderImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"coffee-break"]];
@@ -193,7 +215,7 @@ static CGFloat kDeltaCoverAndBounds = 50.0;
 - (void)setUpWithTable {
     [self.activityIndicatorView setHidden:YES];
     [self.activityIndicatorView stopAnimating];
-    [self.placeholder setHidden:YES];
+    [self.scrollView setHidden:YES];
     [self.tableView setHidden:NO];
     [self.tableView reloadData];
 }
@@ -202,12 +224,12 @@ static CGFloat kDeltaCoverAndBounds = 50.0;
     [self.tableView setHidden:NO];
     [self.activityIndicatorView setHidden:YES];
     [self.activityIndicatorView stopAnimating];
-    [self.placeholder setHidden:NO];
+    [self.scrollView setHidden:NO];
 }
 
 - (void)setUpWithActivityIndicator {
     [self.tableView setHidden:YES];
-    [self.placeholder setHidden:YES];
+    [self.scrollView setHidden:YES];
     [self.activityIndicatorView setHidden:NO];
     [self.activityIndicatorView startAnimating];
 }
