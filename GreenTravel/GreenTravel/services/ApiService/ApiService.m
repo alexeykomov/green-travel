@@ -116,10 +116,10 @@ static NSString * const kGetDetailsBaseURL = @"http://ecsc00a0916b.epam.com:3001
     }
     NSMutableArray *categoryIdToItems = [[NSMutableArray alloc] init];
     
-    NSArray<NSArray*> *linkedCategoriesFromAPI = (NSArray<NSArray*>*) item[@"linkedCategories"];
-    [linkedCategoriesFromAPI enumerateObjectsUsingBlock:^(NSArray * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *categoryId = obj[0];
-        NSArray<NSString *> *linkedItemIds = [obj[1] copy];
+    NSArray<NSDictionary*> *linkedCategoriesFromAPI = (NSArray<NSDictionary*>*) item[@"include"];
+    [linkedCategoriesFromAPI enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *categoryId = (NSString *) obj[@"_id"];
+        NSArray<NSString *> *linkedItemIds = [obj[@"objects"] copy];
         CategoryUUIDToRelatedItemUUIDs *categoryUUIDToRelatedItemUUIDs = [[CategoryUUIDToRelatedItemUUIDs alloc] init];
         categoryUUIDToRelatedItemUUIDs.categoryUUID = categoryId;
         categoryUUIDToRelatedItemUUIDs.relatedItemUUIDs = [[NSOrderedSet alloc] initWithArray:linkedItemIds];
