@@ -53,15 +53,20 @@ static IndexModel *instance;
 
 - (void)loadCategories {
     NSLog(@"loadCategories");
-    __weak typeof(self) weakSelf = self;
-    [self.coreDataService loadCategoriesWithCompletion:^(NSArray<Category *> * _Nonnull categories) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf.loadedFromDB) {
+    if (!self.loadedFromDB) {
+        self.loadedFromDB = YES;
+        __weak typeof(self) weakSelf = self;
+        self.loading = YES;
+        [self.coreDataService loadCategoriesWithCompletion:^(NSArray<Category *> * _Nonnull categories) {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
             [strongSelf updateCategories:categories];
-            strongSelf.loadedFromDB = YES;
-        }
-        [strongSelf loadCategoriesRemote:[categories count] == 0];
-    }];
+            [strongSelf loadCategoriesRemote:[categories count] == 0];
+        }];
+        return;
+    }
+    if (!self.loading) {
+        [self loadCategoriesRemote:[self.categories count] == 0];
+    }
 }
 
 - (void)loadCategoriesRemote:(BOOL)visible {
@@ -70,7 +75,6 @@ static IndexModel *instance;
     __weak typeof(self) weakSelf = self;
     [self.apiService loadCategoriesWithCompletion:^(NSArray<Category *>  * _Nonnull categories, NSString *eTag) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
-        strongSelf.loading = NO;
         if ([strongSelf.categories count] == 0 && [categories count] > 0) {
             [strongSelf.userDefaultsService saveETag:eTag];
             [strongSelf updateCategories:categories];
@@ -85,6 +89,7 @@ static IndexModel *instance;
             [strongSelf requestCategoriesUpdate:newCategories];
             [strongSelf.coreDataService saveCategories:newCategories];
         }
+        strongSelf.loading = NO;
         if (visible) { [strongSelf notifyObserversLoading:NO]; }
     }];
 }
