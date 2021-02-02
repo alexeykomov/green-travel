@@ -266,8 +266,8 @@
 		5A324BA5250025B90044A671 /* LocationObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationObserver.h; sourceTree = "<group>"; };
 		5A5FB1DF2517EAB800EBAA8E /* CategoryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoryUtils.h; sourceTree = "<group>"; };
 		5A5FB1E02517EAB800EBAA8E /* CategoryUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoryUtils.m; sourceTree = "<group>"; };
-		5A606B90257D0B8F0020B0B1 /* StoredPlaceItem+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "StoredPlaceItem+CoreDataProperties.h"; path = "/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceItem+CoreDataProperties.h"; sourceTree = "<absolute>"; };
-		5A606B91257D0B8F0020B0B1 /* StoredPlaceItem+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "StoredPlaceItem+CoreDataProperties.m"; path = "/Users/alexk/Work/green-travel/GreenTravel/GreenTravel/managedobjects/StoredPlaceItem+CoreDataProperties.m"; sourceTree = "<absolute>"; };
+		5A606B90257D0B8F0020B0B1 /* StoredPlaceItem+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StoredPlaceItem+CoreDataProperties.h"; sourceTree = "<group>"; };
+		5A606B91257D0B8F0020B0B1 /* StoredPlaceItem+CoreDataProperties.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "StoredPlaceItem+CoreDataProperties.m"; sourceTree = "<group>"; };
 		5A6646A625BC608F00B4E7A0 /* IndexViewControllerConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexViewControllerConstants.h; sourceTree = "<group>"; };
 		5A6646A725BC608F00B4E7A0 /* IndexViewControllerConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexViewControllerConstants.m; sourceTree = "<group>"; };
 		5A6646AD25BC667800B4E7A0 /* CommonButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonButton.h; sourceTree = "<group>"; };
