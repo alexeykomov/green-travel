@@ -72,6 +72,7 @@
 		5A14830124F129E900EBB756 /* SearchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830024F129E900EBB756 /* SearchItem.m */; };
 		5A14830424F136B800EBB756 /* WeRecommendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830324F136B800EBB756 /* WeRecommendCell.m */; };
 		5A14830924F3083E00EBB756 /* PlacesTableViewCellConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14830824F3083D00EBB756 /* PlacesTableViewCellConstants.m */; };
+		5A18E9C225C9E15A00F26C3E /* IconNameToImageNameMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A18E9C125C9E15A00F26C3E /* IconNameToImageNameMap.m */; };
 		5A225EA9256927A300D71977 /* GalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A225EA8256927A200D71977 /* GalleryView.m */; };
 		5A2EBDA72529EE040078AF72 /* StoredCategory+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A2EBDA02529EE030078AF72 /* StoredCategory+CoreDataClass.m */; };
 		5A2EBDA82529EE040078AF72 /* StoredPlaceItem+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A2EBDA12529EE030078AF72 /* StoredPlaceItem+CoreDataClass.m */; };
@@ -230,6 +231,8 @@
 		5A14830324F136B800EBB756 /* WeRecommendCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeRecommendCell.m; sourceTree = "<group>"; };
 		5A14830724F3083D00EBB756 /* PlacesTableViewCellConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlacesTableViewCellConstants.h; sourceTree = "<group>"; };
 		5A14830824F3083D00EBB756 /* PlacesTableViewCellConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlacesTableViewCellConstants.m; sourceTree = "<group>"; };
+		5A18E9C025C9E15A00F26C3E /* IconNameToImageNameMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IconNameToImageNameMap.h; sourceTree = "<group>"; };
+		5A18E9C125C9E15A00F26C3E /* IconNameToImageNameMap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IconNameToImageNameMap.m; sourceTree = "<group>"; };
 		5A225EA7256927A200D71977 /* GalleryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GalleryView.h; sourceTree = "<group>"; };
 		5A225EA8256927A200D71977 /* GalleryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GalleryView.m; sourceTree = "<group>"; };
 		5A2EBD9F2529EE030078AF72 /* StoredCategory+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StoredCategory+CoreDataProperties.h"; sourceTree = SOURCE_ROOT; };
@@ -542,6 +545,8 @@
 				5A324B9824FBADDF0044A671 /* BookmarkItem.m */,
 				5AEA98082556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.h */,
 				5AEA98092556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.m */,
+				5A18E9C025C9E15A00F26C3E /* IconNameToImageNameMap.h */,
+				5A18E9C125C9E15A00F26C3E /* IconNameToImageNameMap.m */,
 			);
 			path = valueobjects;
 			sourceTree = "<group>";
@@ -1122,6 +1127,7 @@
 				5A6646A825BC608F00B4E7A0 /* IndexViewControllerConstants.m in Sources */,
 				5A14828324E7F92300EBB756 /* Colors.m in Sources */,
 				5A14828D24E8101A00EBB756 /* IndexViewController.m in Sources */,
+				5A18E9C225C9E15A00F26C3E /* IconNameToImageNameMap.m in Sources */,
 				5A2EBDA72529EE040078AF72 /* StoredCategory+CoreDataClass.m in Sources */,
 				5AEA980A2556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.m in Sources */,
 				5A324B7B24F6E3CB0044A671 /* Category.m in Sources */,
@@ -1330,18 +1336,18 @@
 			baseConfigurationReference = 72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 53APD5F9YQ;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NWSTPFC433;
 				INFOPLIST_FILE = GreenTravel/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.greentravel.radzima-light";
+				PRODUCT_BUNDLE_IDENTIFIER = "by.gov.nasb.greentravel.radzima-light";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = EPM_SLR_Light_InHouse;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1351,18 +1357,18 @@
 			baseConfigurationReference = 9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 53APD5F9YQ;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NWSTPFC433;
 				INFOPLIST_FILE = GreenTravel/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.greentravel.radzima-light";
+				PRODUCT_BUNDLE_IDENTIFIER = "by.gov.nasb.greentravel.radzima-light";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = EPM_SLR_Light_InHouse;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
