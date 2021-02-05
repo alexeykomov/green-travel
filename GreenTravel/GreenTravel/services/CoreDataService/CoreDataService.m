@@ -154,7 +154,7 @@ NSPersistentContainer *_persistentContainer;
         StoredCategory *storedCategory = [NSEntityDescription insertNewObjectForEntityForName:@"StoredCategory" inManagedObjectContext:weakSelf.ctx];
         storedCategory.title = category.title;
         storedCategory.uuid = category.uuid;
-        storedCategory.coverURL = category.cover;
+        storedCategory.coverURL = category.cover != nil && category.cover != [NSNull null] ? category.cover : @"";
         storedCategory.parent = parentCategory;
         [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
             StoredPlaceItem *storedItem = [NSEntityDescription insertNewObjectForEntityForName:@"StoredPlaceItem" inManagedObjectContext:weakSelf.ctx];
@@ -163,7 +163,7 @@ NSPersistentContainer *_persistentContainer;
             NSData *coordsAsData = [NSData dataWithBytes:&coords
                                                   length:sizeof(item.coords)];
             storedItem.coords = coordsAsData;
-            storedItem.coverURL = item.cover;
+            storedItem.coverURL = item.cover != nil && item.cover != [NSNull null] ? item.cover : @"";
             storedItem.uuid = item.uuid;
             storedItem.bookmarked = item.bookmarked;
             storedItem.details = [self mapDetailsToStoredDetails:item.details];

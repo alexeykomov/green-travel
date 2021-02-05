@@ -116,7 +116,8 @@
     self.headerLabel.attributedText = [[Typography get] makeCardsTitle2Bold:item.title];
     [self.favoritesButton setHidden:NO];
     [self.favoritesButton setSelected:item.bookmarked];
-    if (item.cover && [item.cover length] > 0) {
+    if (item.cover != nil && item.cover != [NSNull null] &&
+        [item.cover length] > 0) {
         __weak typeof (self) weakSelf = self;
         self.loadImageOperation = loadImage(item.cover, ^(UIImage *image) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -138,7 +139,8 @@
 - (void)updateCategory:(Category *)category {
      self.headerLabel.attributedText = [[Typography get] makeCardsTitle2Bold:category.title];
     [self.favoritesButton setHidden:YES];
-    if (category.cover && [category.cover length] > 0) {
+    if (category.cover != nil && category.cover != [NSNull null] &&
+        [category.cover length] > 0) {
         __weak typeof (self) weakSelf = self;
         self.loadImageOperation = loadImage(category.cover, ^(UIImage *image) {
             dispatch_async(dispatch_get_main_queue(), ^{
