@@ -2,7 +2,7 @@
 //  StoredCategory+CoreDataClass.h
 //  
 //
-//  Created by Alex K on 10/4/20.
+//  Created by Alex K on 2/6/21.
 //
 //
 

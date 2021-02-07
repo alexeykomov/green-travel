@@ -10,15 +10,18 @@
 #import <UIKit/UIKit.h>
 @import SDWebImage;
 
-SDWebImageCombinedOperation* loadImage(NSString *url, void (^onImageReady)(UIImage *)) {
+SDWebImageCombinedOperation* loadImage(NSString *url, void (^onImageReady)(UIImage *, NSError *)) {
     NSURL *urlForImage = [NSURL URLWithString:url];
     
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     return [manager loadImageWithURL:urlForImage options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
         
     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+        if (error) {
+            onImageReady(image, nil);
+        }
         if (image) {
-            onImageReady(image);
+            onImageReady(nil, error);
         }
     }];
 }

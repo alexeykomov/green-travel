@@ -119,7 +119,7 @@
     if (item.cover != nil && item.cover != [NSNull null] &&
         [item.cover length] > 0) {
         __weak typeof (self) weakSelf = self;
-        self.loadImageOperation = loadImage(item.cover, ^(UIImage *image) {
+        self.loadImageOperation = loadImage(item.cover, ^(UIImage *image, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.placeholder setImage:image];
             });
@@ -142,7 +142,7 @@
     if (category.cover != nil && category.cover != [NSNull null] &&
         [category.cover length] > 0) {
         __weak typeof (self) weakSelf = self;
-        self.loadImageOperation = loadImage(category.cover, ^(UIImage *image) {
+        self.loadImageOperation = loadImage(category.cover, ^(UIImage *image, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.placeholder setImage:image];
             });

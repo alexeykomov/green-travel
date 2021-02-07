@@ -9,11 +9,14 @@
 #import "SlideCollectionViewCell.h"
 #import "ImageUtils.h"
 #import "Colors.h"
+#import "GalleryImagePlaceholder.h"
 
 @interface SlideCollectionViewCell ()
 
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) SDWebImageCombinedOperation *loadImageOperation;
+@property (strong, nonatomic) GalleryImagePlaceholder *placeHolderView;
+@property (strong, nonatomic) UIActivityIndicatorView *activityIndicatorView;
 
 @end
 
@@ -40,14 +43,55 @@
 
 - (void)setUpWithImageURL:(NSString *)imageURL {
     __weak typeof(self) weakSelf = self;
-    self.loadImageOperation = loadImage(imageURL, ^(UIImage *image) {
+    [self addActivityIndicatorSubview];
+    self.loadImageOperation = loadImage(imageURL, ^(UIImage *image, NSError *error) {
+        if (error || image == nil) {
+            [weakSelf.activityIndicatorView removeFromSuperview];
+            [weakSelf addPlaceholderSubview];
+            return;
+        }
         [weakSelf.imageView setImage:image];
+        [weakSelf.activityIndicatorView removeFromSuperview];
     });
 }
 
 - (void)prepareForReuse {
     [super prepareForReuse];
     [self.loadImageOperation cancel];
+    [self.imageView setImage:nil];
+    [self addActivityIndicatorSubview];
+    [self.placeHolderView removeFromSuperview];
+}
+
+- (void)addPlaceholderSubview {
+    if (!self.placeHolderView) {
+        self.placeHolderView = [[GalleryImagePlaceholder alloc] init];
+    }
+    if (![self.subviews containsObject:self.placeHolderView] ) {
+        [self addSubview:self.placeHolderView];
+        self.placeHolderView.translatesAutoresizingMaskIntoConstraints = NO;
+        [NSLayoutConstraint activateConstraints:@[
+            [self.placeHolderView.topAnchor constraintEqualToAnchor:self.topAnchor],
+            [self.placeHolderView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+            [self.placeHolderView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+            [self.placeHolderView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
+        ]];
+    }
+}
+
+- (void)addActivityIndicatorSubview {
+    if (!self.activityIndicatorView) {
+        self.activityIndicatorView = [[UIActivityIndicatorView alloc] init];
+    }
+    if (![self.subviews containsObject:self.activityIndicatorView] ) {
+        [self addSubview:self.activityIndicatorView];
+        self.activityIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
+        [NSLayoutConstraint activateConstraints:@[
+            [self.activityIndicatorView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
+            [self.activityIndicatorView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+        ]];
+    }
+    [self.activityIndicatorView startAnimating];
 }
 
 @end

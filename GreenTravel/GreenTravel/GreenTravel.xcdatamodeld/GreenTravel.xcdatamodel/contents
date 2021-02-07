@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="19H114" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="StoredCategory" representedClassName="StoredCategory" syncable="YES">
         <attribute name="coverURL" optional="YES" attributeType="String"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
         <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="StoredCategory" inverseName="parent" inverseEntity="StoredCategory"/>
@@ -41,7 +42,7 @@
         <relationship name="correspondingPlaceItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StoredPlaceItem"/>
     </entity>
     <elements>
-        <element name="StoredCategory" positionX="-63" positionY="54" width="128" height="133"/>
+        <element name="StoredCategory" positionX="-63" positionY="54" width="128" height="148"/>
         <element name="StoredCategoryUUIDToRelatedItemUUIDs" positionX="-45" positionY="81" width="128" height="73"/>
         <element name="StoredPlaceDetails" positionX="-54" positionY="72" width="128" height="118"/>
         <element name="StoredPlaceItem" positionX="-63" positionY="-18" width="128" height="208"/>

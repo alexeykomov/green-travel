@@ -11,6 +11,7 @@
 #import "Colors.h"
 #import "StyleUtils.h"
 #import "GalleryPageControl.h"
+#import "GalleryImagePlaceholder.h"
 
 typedef NS_ENUM(NSInteger, PageControlState) {
     PageControlStateLeftDots5,
@@ -87,22 +88,14 @@ static const CGFloat kPreviewImageAspectRatio = 310.0 / 375.0;
     self.collectionView.backgroundColor = [Colors get].white;
     [self.collectionView setHidden:[imageURLs count] == 0];
 #pragma mark - Placeholder
-    UIView *placeHolderView = [[UIView alloc] init];
+    GalleryImagePlaceholder *placeHolderView = [[GalleryImagePlaceholder alloc] init];
     [self addSubview:placeHolderView];
     placeHolderView.translatesAutoresizingMaskIntoConstraints = NO;
-    placeHolderView.backgroundColor = [Colors get].alabaster;
-    UIImageView *placeHolderViewImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"camera"]];
-    placeHolderViewImage.translatesAutoresizingMaskIntoConstraints = NO;
-    [placeHolderView addSubview:placeHolderViewImage];
     [NSLayoutConstraint activateConstraints:@[
         [placeHolderView.topAnchor constraintEqualToAnchor:self.topAnchor],
         [placeHolderView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
         [placeHolderView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
         [placeHolderView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-kPageControlHeight],
-    ]];
-    [NSLayoutConstraint activateConstraints:@[
-        [placeHolderViewImage.centerXAnchor constraintEqualToAnchor:placeHolderView.centerXAnchor],
-        [placeHolderViewImage.centerYAnchor constraintEqualToAnchor:placeHolderView.centerYAnchor],
     ]];
     [placeHolderView setHidden:[imageURLs count] > 0];
 

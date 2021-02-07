@@ -67,6 +67,7 @@ static NSString * const kGetDetailsBaseURL = @"http://ecsc00a0916b.epam.com:3001
             category.title = obj[@"name"];
             category.cover = obj[@"cover"];
             category.uuid = obj[@"_id"];
+            category.icon = obj[@"icon"];
             [mappedCategories addObject:category];
         }
     }];

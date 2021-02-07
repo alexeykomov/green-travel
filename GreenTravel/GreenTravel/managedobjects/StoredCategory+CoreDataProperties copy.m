@@ -2,7 +2,7 @@
 //  StoredCategory+CoreDataProperties.m
 //  
 //
-//  Created by Alex K on 10/4/20.
+//  Created by Alex K on 2/6/21.
 //
 //
 
@@ -17,6 +17,7 @@
 @dynamic coverURL;
 @dynamic title;
 @dynamic uuid;
+@dynamic icon;
 @dynamic categories;
 @dynamic items;
 @dynamic parent;

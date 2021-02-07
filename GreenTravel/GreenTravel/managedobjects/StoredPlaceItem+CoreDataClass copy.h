@@ -2,14 +2,14 @@
 //  StoredPlaceItem+CoreDataClass.h
 //  
 //
-//  Created by Alex K on 10/4/20.
+//  Created by Alex K on 2/6/21.
 //
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class StoredCategory;
+@class StoredCategory, StoredPlaceDetails;
 
 NS_ASSUME_NONNULL_BEGIN
 

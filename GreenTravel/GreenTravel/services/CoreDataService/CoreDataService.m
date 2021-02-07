@@ -106,6 +106,7 @@ NSPersistentContainer *_persistentContainer;
     category.title = storedCategory.title;
     category.uuid = storedCategory.uuid;
     category.cover = storedCategory.coverURL;
+    category.icon = storedCategory.icon;
     NSMutableArray *items = [[NSMutableArray alloc] init];
     [storedCategory.items enumerateObjectsUsingBlock:^(StoredPlaceItem * _Nonnull storedItem, NSUInteger idx, BOOL * _Nonnull stop) {
         [items addObject:[self mapStoredPlaceItemToPlaceItem:storedItem withCategory:category]];
@@ -154,6 +155,7 @@ NSPersistentContainer *_persistentContainer;
         StoredCategory *storedCategory = [NSEntityDescription insertNewObjectForEntityForName:@"StoredCategory" inManagedObjectContext:weakSelf.ctx];
         storedCategory.title = category.title;
         storedCategory.uuid = category.uuid;
+        storedCategory.icon = category.icon;
         storedCategory.coverURL = category.cover != nil && category.cover != [NSNull null] ? category.cover : @"";
         storedCategory.parent = parentCategory;
         [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {

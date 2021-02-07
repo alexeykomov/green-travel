@@ -10,7 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class UIImage;
+
 @interface IconNameToImageNameMap : NSObject
+
++ (instancetype)get;
+- (UIImage *)iconForName:(NSString *)name;
 
 @end
 

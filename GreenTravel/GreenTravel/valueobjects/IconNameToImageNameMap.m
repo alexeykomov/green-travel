@@ -23,16 +23,21 @@ static IconNameToImageNameMap *instance;
 {
     self = [super init];
     if (self) {
-        self.map = [[NSDictionary alloc] init];
-        [self.map setValue:@"hiking" forKey:@"walking-routes"];
-        [self.map setValue:@"historical-place" forKey:@"walking-routes"];
-        [self.map setValue:@"bicycle-route" forKey:@"walking-routes"];
-        [self.map setValue:@"exсursion" forKey:@"excursion-pin"];
+        _map = @{
+            @"object": @"conserv.area",
+            @"hiking": @"walking-routes",
+            @"historical-place": @"historical-place",
+            @"bicycle-route": @"bicycle-route",
+            @"excursion-pin": @"excursion",
+        };
     }
     return self;
 }
 
 - (UIImage *)iconForName:(NSString *)name {
+    if (!self.map[name]) {
+        return nil;
+    }
     NSString *fileName = self.map[name];
     return [UIImage imageNamed:fileName];
 }

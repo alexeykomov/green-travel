@@ -10,4 +10,4 @@
 #import <UIKit/UIKit.h>
 @import SDWebImage;
 
-SDWebImageCombinedOperation* loadImage(NSString *url, void (^onImageReady)(UIImage *));
+SDWebImageCombinedOperation* loadImage(NSString *url, void (^onImageReady)(UIImage *, NSError *));

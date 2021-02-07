@@ -25,6 +25,7 @@
 #import "CategoryUtils.h"
 #import "Typography.h"
 #import "CommonButton.h"
+#import "DescriptionView.h"
 
 @interface DetailsViewController ()
 
@@ -39,7 +40,8 @@
 @property (strong, nonatomic) GalleryView *imageGalleryView;
 @property (strong, nonatomic) UIButton *mapButtonTop;
 @property (strong, nonatomic) UIButton *mapButtonBottom;
-@property (strong, nonatomic) UITextView *descriptionTextView;
+@property (strong, nonatomic) DescriptionView *descriptionTextView;
+@property (strong, nonatomic) UIStackView *descriptionPlaceholderView;
 @property (strong, nonatomic) UILabel *interestingLabel;
 @property (strong, nonatomic) LinkedCategoriesView *linkedCategoriesView;
 @property (strong, nonatomic) NSLayoutConstraint *linkedCategoriesViewHeightConstraint;
@@ -200,7 +202,7 @@
     ]];
     
     #pragma mark - Map button top
-    self.mapButtonTop = [[CommonButton alloc] initWithTarget:self action:@selector(onMapButtonPress:) label:@"Как добраться"];
+    self.mapButtonTop = [[CommonButton alloc] initWithTarget:self action:@selector(onMapButtonPress:) label:@"Посмотреть на карте"];
     
     [self.contentView addSubview:self.mapButtonTop];
 
@@ -216,13 +218,9 @@
     ]];
     
     #pragma mark - Description text
-    self.descriptionTextView = [[UITextView alloc] init];
-
-    //self.descriptionTextView.backgroundColor = [Colors get].apple;
+    self.descriptionTextView = [[DescriptionView alloc] init];
 
     self.descriptionTextView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.descriptionTextView.editable = NO;
-    self.descriptionTextView.scrollEnabled = NO;
     [self.contentView addSubview:self.descriptionTextView];
 
     [NSLayoutConstraint activateConstraints:@[
@@ -251,24 +249,7 @@
         [self.linkedCategoriesView.topAnchor constraintEqualToAnchor:self.descriptionTextView.bottomAnchor constant:32.0],
         [self.linkedCategoriesView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0],
         [self.linkedCategoriesView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0],
-    ]];
-        
-    #pragma mark - Map button bottom
-    self.mapButtonBottom = [[CommonButton alloc] initWithTarget:self
-                                                         action:@selector(onMapButtonPress:)
-                                                          label:@"Как добраться"];
-    
-    [self.contentView addSubview:self.mapButtonBottom];
-    NSLayoutConstraint *mapButtonBottomLeading = [self.mapButtonBottom.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0];
-    NSLayoutConstraint *mapButtonBottomTrailing = [self.mapButtonBottom.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0];
-    mapButtonBottomLeading.priority = UILayoutPriorityDefaultHigh - 1;
-    mapButtonBottomTrailing.priority = UILayoutPriorityDefaultHigh - 1;
-    [NSLayoutConstraint activateConstraints:@[
-        [self.mapButtonBottom.topAnchor constraintEqualToAnchor:self.linkedCategoriesView.bottomAnchor constant:0.0],
-        [self.mapButtonBottom.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
-        mapButtonBottomLeading,
-        mapButtonBottomTrailing,
-        [self.mapButtonBottom.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-37.5],
+        [self.linkedCategoriesView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-10.5],
     ]];
     
 #pragma mark - Activity indicator
@@ -333,7 +314,7 @@
             [self.locationButton setAttributedTitle:
              [[Typography get] makeSubtitle3Regular:[NSString stringWithFormat:@"%f° N, %f° E", self.item.coords.latitude, self.item.coords.longitude] color:[Colors get].royalBlue]
              forState:UIControlStateNormal];
-            [self.descriptionTextView setAttributedText:html];
+            [self.descriptionTextView update:html showPlaceholder:[details.descriptionHTML length] == 0];
             if (details.categoryIdToItems) {
                 [self.linkedCategoriesView update:details.categoryIdToItems];
             } else {

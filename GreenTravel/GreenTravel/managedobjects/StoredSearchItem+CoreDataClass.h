@@ -1,5 +1,5 @@
 //
-//  StoredPlaceItem+CoreDataClass.h
+//  StoredSearchItem+CoreDataClass.h
 //  
 //
 //  Created by Alex K on 2/6/21.
@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class StoredCategory, StoredPlaceDetails;
+@class StoredPlaceItem;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface StoredPlaceItem : NSManagedObject
+@interface StoredSearchItem : NSManagedObject
 
 @end
 
 NS_ASSUME_NONNULL_END
 
-#import "StoredPlaceItem+CoreDataProperties.h"
+#import "StoredSearchItem+CoreDataProperties.h"
