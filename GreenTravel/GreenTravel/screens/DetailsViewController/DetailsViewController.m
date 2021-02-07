@@ -225,8 +225,8 @@
 
     [NSLayoutConstraint activateConstraints:@[
         [self.descriptionTextView.topAnchor constraintEqualToAnchor:self.mapButtonTop.bottomAnchor constant:26.0],
-        [self.descriptionTextView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
-        [self.descriptionTextView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
+        [self.descriptionTextView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [self.descriptionTextView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
     ]];
     
     #pragma mark - Linked items

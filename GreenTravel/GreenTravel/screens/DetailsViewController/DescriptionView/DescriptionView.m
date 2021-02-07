@@ -61,7 +61,7 @@
         [self.descriptionPlaceholderView addArrangedSubview:placeholderLabel];
         [self.descriptionPlaceholderView addArrangedSubview:[[UIImageView alloc] initWithImage:placeholderImage]];
         [NSLayoutConstraint activateConstraints:@[
-            [self.descriptionPlaceholderView.topAnchor constraintEqualToAnchor:self.topAnchor],
+            [self.descriptionPlaceholderView.topAnchor constraintEqualToAnchor:self.topAnchor constant:20.0],
             [self.descriptionPlaceholderView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
             [self.descriptionPlaceholderView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
             [self.descriptionPlaceholderView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
