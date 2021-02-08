@@ -18,10 +18,10 @@ SDWebImageCombinedOperation* loadImage(NSString *url, void (^onImageReady)(UIIma
         
     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
         if (error) {
-            onImageReady(image, nil);
+            onImageReady(nil, error);
         }
         if (image) {
-            onImageReady(nil, error);
+            onImageReady(image, nil);
         }
     }];
 }
