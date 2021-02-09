@@ -89,10 +89,11 @@ static NSInteger kMaximalNumberOfItemsInCell = 10;
     self.allButton.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
         [self.allButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16.0],
-        [self.allButton.topAnchor constraintEqualToAnchor:self.headerLabel.topAnchor constant:-8.0]
+        [self.allButton.centerYAnchor constraintEqualToAnchor:self.headerLabel.centerYAnchor],
+        [self.allButton.widthAnchor constraintEqualToConstant:44.0],
+        [self.allButton.heightAnchor constraintEqualToConstant:44.0],
     ]];
-
-
+    
 #pragma mark - Subscribe to orientation change
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeviceOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }

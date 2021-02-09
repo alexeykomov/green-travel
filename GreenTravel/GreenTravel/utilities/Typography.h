@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
                                        color:(UIColor *)color;
 - (NSAttributedString *)makeButtonText:(NSString *)input;
 - (NSAttributedString *)makeButtonText:(NSString *)input color:(UIColor *)color;
-- (NSAttributedString *)makeCardsTitle2Bold:(NSString *)input;
+- (NSAttributedString *)makeTitle2:(NSString *)input color:(UIColor *)color;
 - (NSAttributedString *)makeBody:(NSString *)input;
 - (NSAttributedString *)makeBookmarkText:(NSString *)input;
 - (NSAttributedString *)makeLoadingScreenText:(NSString *)input;

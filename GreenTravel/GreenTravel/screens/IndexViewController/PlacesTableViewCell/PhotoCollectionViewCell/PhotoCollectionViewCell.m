@@ -48,7 +48,7 @@
     
     self.placeholder.contentMode = UIViewContentModeScaleAspectFill;
     self.placeholder.translatesAutoresizingMaskIntoConstraints = NO;
-    self.placeholder.backgroundColor = [Colors get].blue;
+    self.placeholder.backgroundColor = [Colors get].alabaster;
     
     self.placeholder.layer.cornerRadius = 4.0;
     self.placeholder.layer.masksToBounds = YES;
@@ -82,23 +82,34 @@
     ]];
 #pragma mark - Favorites button
     self.favoritesButton = [[UIButton alloc] init];
+    self.favoritesButton.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+    self.favoritesButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     UIImage *imageNotSelected = [[UIImage imageNamed:@"bookmark-index"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     UIImage *imageSelected = [[UIImage imageNamed:@"bookmark-index-selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self.favoritesButton setImage:imageNotSelected forState:UIControlStateNormal];
     [self.favoritesButton setImage:imageSelected forState:UIControlStateSelected];
     [self.favoritesButton addTarget:self action:@selector(onFavoritePress:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.favoritesButton.tintColor = [Colors get].white;
+    self.favoritesButton.tintColor = [Colors get].black;
     [self addSubview:self.favoritesButton];
     
     self.favoritesButton.translatesAutoresizingMaskIntoConstraints = NO;
     
     [NSLayoutConstraint activateConstraints:@[
-        [self.favoritesButton.topAnchor constraintEqualToAnchor:self.headerLabel.topAnchor],
+        [self.favoritesButton.topAnchor constraintEqualToAnchor:self.topAnchor],
         [self.favoritesButton.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.headerLabel.trailingAnchor constant:16.0],
-        [self.favoritesButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16.0],
-        //[self.favoritesButton.widthAnchor constraintEqualToConstant:21.0]
+        [self.favoritesButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [self.favoritesButton.widthAnchor constraintEqualToConstant:44.0],
+        [self.favoritesButton.heightAnchor constraintEqualToConstant:44.0],
     ]];
+    
+    UIImageView *favoritesButtonImageView = self.favoritesButton.imageView;
+    favoritesButtonImageView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [favoritesButtonImageView.topAnchor constraintEqualToAnchor:self.headerLabel.topAnchor],
+    ]];
+    
+    [self.overlayView setHidden:YES];
 }
 
 - (void)onFavoritePress:(id)sender {
@@ -113,7 +124,7 @@
 
 - (void)updateItem:(PlaceItem *)item {
     self.item = item;
-    self.headerLabel.attributedText = [[Typography get] makeCardsTitle2Bold:item.title];
+    self.headerLabel.attributedText = [[Typography get] makeTitle2:item.title color:[Colors get].black];
     [self.favoritesButton setHidden:NO];
     [self.favoritesButton setSelected:item.bookmarked];
     if (item.cover != nil && item.cover != [NSNull null] &&
@@ -121,7 +132,7 @@
         __weak typeof (self) weakSelf = self;
         self.loadImageOperation = loadImage(item.cover, ^(UIImage *image, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.placeholder setImage:image];
+                [weakSelf updateSubviews:item.title image:image];
             });
         });
     } else {
@@ -131,20 +142,31 @@
     [self updateOverlayAndShadow];
 }
 
+- (void)updateSubviews:(NSString *)title image:(UIImage *)image {
+    if (image == nil) {
+        return;
+    }
+    self.headerLabel.attributedText = [[Typography get] makeTitle2:title
+                                                                 color:[Colors get].white];
+    self.favoritesButton.tintColor = [Colors get].white;
+    [self.placeholder setImage:image];
+    [self.overlayView setHidden:NO];
+}
+
 - (void)updateBookmark:(BOOL)bookmark {
     NSLog(@"updateBookmark");
     [self.favoritesButton setSelected:bookmark];
 }
 
 - (void)updateCategory:(Category *)category {
-     self.headerLabel.attributedText = [[Typography get] makeCardsTitle2Bold:category.title];
+     self.headerLabel.attributedText = [[Typography get] makeTitle2:category.title color:[Colors get].black];
     [self.favoritesButton setHidden:YES];
     if (category.cover != nil && category.cover != [NSNull null] &&
         [category.cover length] > 0) {
         __weak typeof (self) weakSelf = self;
         self.loadImageOperation = loadImage(category.cover, ^(UIImage *image, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.placeholder setImage:image];
+                [weakSelf updateSubviews:category.title image:image];
             });
         });
     } else {
@@ -165,7 +187,10 @@
 - (void)prepareForReuse {
     [super prepareForReuse];
     [self.loadImageOperation cancel];
+    [self.favoritesButton setTintColor:[Colors get].black];
     [self.placeholder setImage:nil];
+    [self.overlayView setHidden:YES];
+    self.headerLabel.text = @"";
     self.layer.shadowPath = nil;
 }
 
