@@ -10,10 +10,14 @@
 #import "Colors.h"
 #import "TextUtils.h"
 #import "SearchItem.h"
+#import "Typography.h"
 
 @interface SearchCell ()
 
-@property (strong, nonatomic) UILabel *header;
+@property (strong, nonatomic) UIStackView *titleStack;
+@property (strong, nonatomic) UILabel *title;
+@property (strong, nonatomic) UILabel *titleCategory;
+@property (strong, nonatomic) UIImageView *iconView;
 
 @end
 
@@ -38,23 +42,41 @@
     return self;
 }
 
-- (void)setUp {    
-    self.header = [[UILabel alloc] init];
-    [self addSubview:self.header];
-    
-    self.header.translatesAutoresizingMaskIntoConstraints = NO;
-    
+- (void)setUp {
+    self.titleStack = [[UIStackView alloc] init];
+    [self addSubview:self.titleStack];
+    self.title.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [self.header.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
-        [self.header.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
-        [self.header.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [self.title.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+        [self.title.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
+        [self.title.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
     ]];
+    [self.title setFont:[UIFont fontWithName:@"Montserrat-Bold" size:15.0]];
+#pragma mark - Title
+    self.title = [[UILabel alloc] init];
+    [self addSubview:self.title];
+    self.title.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.title.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+        [self.title.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
+        [self.title.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+    ]];
+    [self.title setFont:[UIFont fontWithName:@"Montserrat-Bold" size:15.0]];
     
-    [self.header setFont:[UIFont fontWithName:@"OpenSans-Regular" size:16.0]];
+    self.titleCategory = [[UILabel alloc] init];
+    [self addSubview:self.titleCategory];
+    self.titleCategory.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.titleCategory.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+        [self.titleCategory.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
+        [self.titleCategory.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+    ]];
+    [self.titleCategory setFont:[UIFont fontWithName:@"Montserrat-Bold" size:15.0]];
 }
 
 - (void)update:(SearchItem *)item {
-    self.header.attributedText = getAttributedString([item searchableText], [Colors get].black, 16.0, UIFontWeightRegular);
+    self.title.attributedText =
+    [[Typography get] makeTitle2:[item searchableText] color:[Colors get].black];
 }
 
 @end
