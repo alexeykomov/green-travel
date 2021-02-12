@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
+@import Firebase;
 
 @interface AppDelegate ()
 
@@ -17,6 +18,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [FIRApp configure];
     UIWindow *window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.window = window;
     MainViewController *mainViewController = [[MainViewController alloc] init];

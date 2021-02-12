@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		24E780EAC2C979C4EF44C2DD /* Pods_GreenTravel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */; };
 		5A0C84E82561CA9F00165D22 /* BannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0C84E72561CA9F00165D22 /* BannerView.m */; };
 		5A11BF8B2584F0FF00113B31 /* GalleryPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A11BF8A2584F0FF00113B31 /* GalleryPageControl.m */; };
 		5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824924E7ED9100EBB756 /* AppDelegate.m */; };
@@ -106,6 +105,7 @@
 		5AA75C082505196D00AE7331 /* CoreDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C072505196D00AE7331 /* CoreDataService.m */; };
 		5AAB5A192569484B00D52F53 /* SlideCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAB5A182569484B00D52F53 /* SlideCollectionViewCell.m */; };
 		5AC77EE92592438E0012A488 /* DotSizes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AC77EE82592438E0012A488 /* DotSizes.m */; };
+		5AD1000225D6940900D463A9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AD1000125D6940800D463A9 /* GoogleService-Info.plist */; };
 		5AE91FBD25B0EBC700A24DF0 /* GradientOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AE91FBC25B0EBC700A24DF0 /* GradientOverlayView.m */; };
 		5AE91FD925B4411D00A24DF0 /* Typography.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AE91FD825B4411D00A24DF0 /* Typography.m */; };
 		5AEA97F92554A1FD0037A51D /* LinkedCategoriesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA97F82554A1FD0037A51D /* LinkedCategoriesView.m */; };
@@ -314,6 +314,7 @@
 		5AAB5A182569484B00D52F53 /* SlideCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SlideCollectionViewCell.m; sourceTree = "<group>"; };
 		5AC77EE72592438E0012A488 /* DotSizes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DotSizes.h; sourceTree = "<group>"; };
 		5AC77EE82592438E0012A488 /* DotSizes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DotSizes.m; sourceTree = "<group>"; };
+		5AD1000125D6940800D463A9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5AE91FBB25B0EBC700A24DF0 /* GradientOverlayView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GradientOverlayView.h; sourceTree = "<group>"; };
 		5AE91FBC25B0EBC700A24DF0 /* GradientOverlayView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GradientOverlayView.m; sourceTree = "<group>"; };
 		5AE91FD725B4411D00A24DF0 /* Typography.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Typography.h; sourceTree = "<group>"; };
@@ -326,9 +327,6 @@
 		5AEA98092556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoryUUIDToRelatedItemUUIDs.m; sourceTree = "<group>"; };
 		5AEA98112556CD3F0037A51D /* CategoryLinkCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoryLinkCell.h; sourceTree = "<group>"; };
 		5AEA98122556CD3F0037A51D /* CategoryLinkCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoryLinkCell.m; sourceTree = "<group>"; };
-		72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.debug.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.debug.xcconfig"; sourceTree = "<group>"; };
-		91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GreenTravel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GreenTravel.release.xcconfig"; path = "Target Support Files/Pods-GreenTravel/Pods-GreenTravel.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -336,7 +334,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24E780EAC2C979C4EF44C2DD /* Pods_GreenTravel.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,7 +372,6 @@
 				5A14827124E7ED9400EBB756 /* GreenTravelUITests */,
 				5A14824624E7ED9100EBB756 /* Products */,
 				72F07A37AC1DE1BCFA8BD0F1 /* Pods */,
-				8B80FB97708A092B6E0D7523 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -406,6 +402,7 @@
 				5A14825724E7ED9400EBB756 /* Assets.xcassets */,
 				5A14825924E7ED9400EBB756 /* LaunchScreen.storyboard */,
 				5A14825C24E7ED9400EBB756 /* Info.plist */,
+				5AD1000125D6940800D463A9 /* GoogleService-Info.plist */,
 				5A14825D24E7ED9400EBB756 /* main.m */,
 				5A14825424E7ED9100EBB756 /* GreenTravel.xcdatamodeld */,
 			);
@@ -930,18 +927,8 @@
 		72F07A37AC1DE1BCFA8BD0F1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */,
-				9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		8B80FB97708A092B6E0D7523 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				91293A664C685F8723F00C87 /* Pods_GreenTravel.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -951,11 +938,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5A14827724E7ED9400EBB756 /* Build configuration list for PBXNativeTarget "GreenTravel" */;
 			buildPhases = (
-				81A3BA4C70CAF422138D64F4 /* [CP] Check Pods Manifest.lock */,
 				5A14824124E7ED9000EBB756 /* Sources */,
 				5A14824224E7ED9000EBB756 /* Frameworks */,
 				5A14824324E7ED9000EBB756 /* Resources */,
-				FBE9B7EF3C7B8A19EF9D6659 /* [CP] Embed Pods Frameworks */,
+				5AD1003B25D6958400D463A9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1064,6 +1050,7 @@
 				5A1482BB24E9DD9000EBB756 /* Montserrat-BlackItalic.ttf in Resources */,
 				5A1482C224E9DD9000EBB756 /* Montserrat-ExtraLight.ttf in Resources */,
 				5A14825824E7ED9400EBB756 /* Assets.xcassets in Resources */,
+				5AD1000225D6940900D463A9 /* GoogleService-Info.plist in Resources */,
 				5A1482C424E9DD9000EBB756 /* Montserrat-ExtraBold.ttf in Resources */,
 				5A1482C724E9DD9000EBB756 /* Montserrat-MediumItalic.ttf in Resources */,
 				5A1482C324E9DD9000EBB756 /* Montserrat-LightItalic.ttf in Resources */,
@@ -1099,7 +1086,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		81A3BA4C70CAF422138D64F4 /* [CP] Check Pods Manifest.lock */ = {
+		5AD1003B25D6958400D463A9 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1107,36 +1094,16 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
 			);
-			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-GreenTravel-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FBE9B7EF3C7B8A19EF9D6659 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GreenTravel/Pods-GreenTravel-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GreenTravel/Pods-GreenTravel-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GreenTravel/Pods-GreenTravel-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellPath = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1375,7 +1342,6 @@
 		};
 		5A14827824E7ED9400EBB756 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 72EA408C6B7F3196733739F5 /* Pods-GreenTravel.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -1396,7 +1362,6 @@
 		};
 		5A14827924E7ED9400EBB756 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9FA60514F55171E41A0702C0 /* Pods-GreenTravel.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
