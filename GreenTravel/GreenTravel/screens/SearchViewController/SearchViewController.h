@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class CoreDataService;
 @class IndexModel;
 
-@interface SearchViewController : UITableViewController<UISearchResultsUpdating, SearchItemsObserver, CLLocationManagerDelegate>
+@interface SearchViewController : UIViewController<UISearchResultsUpdating, SearchItemsObserver, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
 - (instancetype)initWithModel:(SearchModel *)model
                    indexModel:(IndexModel *)indexModel

@@ -35,7 +35,11 @@
 @property (strong, nonatomic) DetailsModel *detailsModel;
 @property (strong, nonatomic) ApiService *apiService;
 @property (strong, nonatomic) CoreDataService *coreDataService;
-@property (assign, nonatomic) SearchItem *itemToSaveToHistory;
+@property (strong, nonatomic) SearchItem *itemToSaveToHistory;
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UIScrollView *scrollView;
+@property (strong, nonatomic) NSLayoutConstraint *bottomConstraint;
+@property (assign, nonatomic) BOOL searchActive;
 
 @end
 
@@ -76,22 +80,36 @@ static const CGFloat kSearchRowHeight = 58.0;
     self.dataSourceHistory = [[NSMutableArray alloc] init];
     self.dataSourceFiltered = [[NSMutableArray alloc] init];
     
+    self.tableView = [[UITableView alloc] init];
+    [self.view addSubview:self.tableView];
     self.tableView.backgroundColor = [Colors get].white;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.alwaysBounceVertical = YES;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     [self.tableView registerClass:[WeRecommendCell class] forCellReuseIdentifier:kWeRecommendCellId];
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:kSearchCellId];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.bottomConstraint = [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.tableView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+        [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+        [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+        self.bottomConstraint,
+    ]];
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
     self.searchController.obscuresBackgroundDuringPresentation = NO;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.searchBar.placeholder = kPlaceholderSearch;
+    self.searchController.searchBar.delegate = self;
     self.navigationItem.titleView = self.searchController.searchBar;
     self.definesPresentationContext = YES;
     
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onKeyboadAppear:) name:UIKeyboardDidShowNotification object:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onKeyboadAppear:) name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onKeyboadDisappear:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 #pragma mark - Lifecycle
@@ -122,10 +140,21 @@ static const CGFloat kSearchRowHeight = 58.0;
         self.itemToSaveToHistory = nil;
     }
     [NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardDidShowNotification object:self];
+    [NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillHideNotification object:self];
 }
 
-- (void)onKeyboadAppear:(id)sender {
-    
+- (void)onKeyboadAppear:(NSNotification *)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    CGSize size = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    UIEdgeInsets insets = UIEdgeInsetsMake(0, 0, size.height - self.tabBarController.tabBar.frame.size.height, 0);
+    self.tableView.contentInset = insets;
+    self.tableView.scrollIndicatorInsets = insets;
+}
+
+- (void)onKeyboadDisappear:(NSNotification *)notification {
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+    self.tableView.contentInset = insets;
+    self.tableView.scrollIndicatorInsets = insets;
 }
 
 #pragma mark - SearchModel
@@ -149,7 +178,11 @@ static const CGFloat kSearchRowHeight = 58.0;
     if ([self isSearching]) {
         return [self.dataSourceFiltered count];
     }
-    return [self.model.searchHistoryItems count] + kDataSourceOrigOffset;
+    NSUInteger searchHistoryItemsCount = [self.model.searchHistoryItems count];
+    if (searchHistoryItemsCount > 0) {
+        return searchHistoryItemsCount + kDataSourceOrigOffset;
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -221,6 +254,11 @@ estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     NSString *search = searchController.searchBar.text;
     [self.dataSourceFiltered removeAllObjects];
+    self.searchActive = searchController.isActive;
+    if (!searchController.isActive) {
+        [self.tableView reloadData];
+        return;
+    }
     for (SearchItem *item in self.model.searchItems) {
         if ([[item searchableText] localizedCaseInsensitiveContainsString:search]) {
             [self.dataSourceFiltered addObject:item];
@@ -230,13 +268,19 @@ estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView reloadData];
 }
 
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    self.searchActive = NO;
+    [self.tableView reloadData];
+}
+
 - (BOOL)isSearchBarEmpty {
     NSString *search = self.searchController.searchBar.text;
     return [search length] == 0;
 }
 
 - (BOOL)isSearching {
-    return self.searchController.isActive && ![self isSearchBarEmpty];
+    return self.searchActive && self.searchController.isActive &&
+    ![self isSearchBarEmpty];
 }
 
 @end
