@@ -20,6 +20,7 @@
 #import "ApiService.h"
 #import "CoreDataService.h"
 #import <CoreLocation/CoreLocation.h>
+#import "Typography.h"
 
 @interface SearchViewController ()
 
@@ -40,6 +41,8 @@
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) NSLayoutConstraint *bottomConstraint;
 @property (assign, nonatomic) BOOL searchActive;
+@property (assign, nonatomic) UIEdgeInsets scrollInsets;
+@property (strong, nonatomic) NSLayoutConstraint *scrollViewHeightConstraint;
 
 @end
 
@@ -80,6 +83,43 @@ static const CGFloat kSearchRowHeight = 58.0;
     self.dataSourceHistory = [[NSMutableArray alloc] init];
     self.dataSourceFiltered = [[NSMutableArray alloc] init];
     
+    self.scrollInsets = UIEdgeInsetsZero;
+    [self setUpWithTable];
+    
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.obscuresBackgroundDuringPresentation = NO;
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
+    self.searchController.searchBar.placeholder = kPlaceholderSearch;
+    self.searchController.searchBar.delegate = self;
+    self.navigationItem.titleView = self.searchController.searchBar;
+    self.definesPresentationContext = YES;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onKeyboadAppear:) name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onKeyboadDisappear:) name:UIKeyboardDidHideNotification object:nil];
+}
+
+- (void)updateViews {
+    if ([self isSearching]) {
+        if ([self.dataSourceFiltered count] > 0) {
+            [self setUpWithTable];
+            return;
+        }
+        [self setUpWithNoDataPlaceholder];
+        return;
+    }
+    [self setUpWithTable];
+}
+
+
+- (void)setUpWithTable {
+    [self.scrollView removeFromSuperview];
+    self.scrollView = nil;
+    if (self.tableView != nil) {
+        [self.tableView reloadData];
+        return;
+    }
+    
     self.tableView = [[UITableView alloc] init];
     [self.view addSubview:self.tableView];
     self.tableView.backgroundColor = [Colors get].white;
@@ -98,18 +138,80 @@ static const CGFloat kSearchRowHeight = 58.0;
         [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
         self.bottomConstraint,
     ]];
+    [self.tableView reloadData];
+    [self updateInsets:self.scrollInsets];
+}
+
+- (void)setUpWithNoDataPlaceholder {
+    [self.tableView removeFromSuperview];
+    self.tableView = nil;
+    if (self.scrollView != nil) {
+        return;
+    }
     
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    self.searchController.searchResultsUpdater = self;
-    self.searchController.obscuresBackgroundDuringPresentation = NO;
-    self.searchController.hidesNavigationBarDuringPresentation = NO;
-    self.searchController.searchBar.placeholder = kPlaceholderSearch;
-    self.searchController.searchBar.delegate = self;
-    self.navigationItem.titleView = self.searchController.searchBar;
-    self.definesPresentationContext = YES;
+    self.scrollView = [[UIScrollView alloc] init];
+    [self.view addSubview:self.scrollView];
+    self.scrollView.alwaysBounceVertical = YES;
+    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.scrollView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+        [self.scrollView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+        [self.scrollView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+        [self.scrollView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]
+    ]];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onKeyboadAppear:) name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onKeyboadDisappear:) name:UIKeyboardWillHideNotification object:nil];
+    UIView *contentView = [[UIView alloc] init];
+    [self.scrollView addSubview:contentView];
+    contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.scrollViewHeightConstraint = [contentView.heightAnchor constraintEqualToAnchor:self.scrollView.heightAnchor];
+    [NSLayoutConstraint activateConstraints:@[
+        [contentView.topAnchor constraintEqualToAnchor:self.scrollView.topAnchor],
+        [contentView.bottomAnchor constraintEqualToAnchor:self.scrollView.bottomAnchor],
+        [contentView.widthAnchor constraintEqualToAnchor:self.scrollView.widthAnchor],
+        self.scrollViewHeightConstraint,
+    ]];
+    
+    UIStackView *stackView = [[UIStackView alloc] init];
+    [contentView addSubview:stackView];
+    stackView.translatesAutoresizingMaskIntoConstraints = NO;
+    stackView.distribution = UIStackViewDistributionFill;
+    stackView.alignment = UIStackViewAlignmentCenter;
+    stackView.axis = UILayoutConstraintAxisVertical;
+    stackView.spacing = 14.0;
+    stackView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search"]];
+    imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [imageView.widthAnchor constraintEqualToConstant:48.0],
+        [imageView.heightAnchor constraintEqualToConstant:48.0],
+    ]];
+    UILabel *label = [[UILabel alloc] init];
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    [label setAttributedText:[[Typography get] makeBody:@"К сожалению, по вашему запросу ничего не найдено"]];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    label.numberOfLines = 2;
+    
+    [stackView addArrangedSubview:imageView];
+    [stackView addArrangedSubview:label];
+    [NSLayoutConstraint activateConstraints:@[
+        [stackView.centerYAnchor constraintEqualToAnchor:contentView.centerYAnchor],
+        [stackView.heightAnchor constraintLessThanOrEqualToConstant:100.0],
+        [stackView.widthAnchor constraintLessThanOrEqualToConstant:262.0],
+        [stackView.leadingAnchor constraintEqualToAnchor:contentView.leadingAnchor],
+        [stackView.trailingAnchor constraintEqualToAnchor:contentView.trailingAnchor],
+    ]];
+    [self updateInsets:self.scrollInsets];
+}
+
+- (void)updateInsets:(UIEdgeInsets)insets {
+    self.tableView.contentInset = insets;
+    self.tableView.scrollIndicatorInsets = insets;
+    self.scrollView.contentInset = insets;
+    self.scrollView.scrollIndicatorInsets = insets;
+    self.scrollInsets = insets;
+    self.scrollViewHeightConstraint.constant = -insets.bottom;
+    [self.view layoutIfNeeded];
 }
 
 #pragma mark - Lifecycle
@@ -147,25 +249,23 @@ static const CGFloat kSearchRowHeight = 58.0;
     NSDictionary *userInfo = [notification userInfo];
     CGSize size = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     UIEdgeInsets insets = UIEdgeInsetsMake(0, 0, size.height - self.tabBarController.tabBar.frame.size.height, 0);
-    self.tableView.contentInset = insets;
-    self.tableView.scrollIndicatorInsets = insets;
+    [self updateInsets:insets];
 }
 
 - (void)onKeyboadDisappear:(NSNotification *)notification {
     UIEdgeInsets insets = UIEdgeInsetsZero;
-    self.tableView.contentInset = insets;
-    self.tableView.scrollIndicatorInsets = insets;
+    [self updateInsets:insets];
 }
 
 #pragma mark - SearchModel
 - (void)onSearchHistoryItemsUpdate:(NSArray<SearchItem *> *)searchHistoryItems {
     if (![self isSearching]) {
-        [self.tableView reloadData];
+        [self updateViews];
     }
 }
 
 - (void)onSearchItemsUpdate:(nonnull NSArray<SearchItem *> *)searchItems {
-    [self.tableView reloadData];
+    [self updateViews];
 }
 
 #pragma mark - Table view data source
@@ -250,13 +350,12 @@ estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 #pragma mark - Search
-
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     NSString *search = searchController.searchBar.text;
     [self.dataSourceFiltered removeAllObjects];
     self.searchActive = searchController.isActive;
     if (!searchController.isActive) {
-        [self.tableView reloadData];
+        [self updateViews];
         return;
     }
     for (SearchItem *item in self.model.searchItems) {
@@ -265,12 +364,12 @@ estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
             continue;
         }
     }
-    [self.tableView reloadData];
+    [self updateViews];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     self.searchActive = NO;
-    [self.tableView reloadData];
+    [self updateViews];
 }
 
 - (BOOL)isSearchBarEmpty {

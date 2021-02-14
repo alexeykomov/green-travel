@@ -121,7 +121,6 @@ static CGFloat kMinHeightOfPlaceholderView = 500.0;
     self.contentView = [[UIView alloc] init];
     [self.scrollView addSubview:self.contentView];
     self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.scrollView addSubview:self.contentView];
     [NSLayoutConstraint activateConstraints:@[
         [self.contentView.topAnchor constraintEqualToAnchor:self.scrollView.topAnchor],
         [self.contentView.bottomAnchor constraintEqualToAnchor:self.scrollView.bottomAnchor],

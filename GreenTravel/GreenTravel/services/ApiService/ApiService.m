@@ -16,7 +16,7 @@
 #import "TextUtils.h"
 #import "CategoryUUIDToRelatedItemUUIDs.h"
 
-static NSString * const kGetCategoriesURL = @"http://localhost:3000/categories";
+static NSString * const kGetCategoriesURL = @"http://ecsc00a0916b.epam.com:3001/api/v1/object?mobile=true";
 static NSString * const kGetDetailsBaseURL = @"http://ecsc00a0916b.epam.com:3001/api/v1/details/%@";
 
 @interface ApiService ()
