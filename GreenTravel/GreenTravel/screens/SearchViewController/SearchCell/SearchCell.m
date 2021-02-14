@@ -11,6 +11,9 @@
 #import "TextUtils.h"
 #import "SearchItem.h"
 #import "Typography.h"
+#import "IconNameToImageNameMap.h"
+#import "Category.h"
+#import "PlaceItem.h"
 
 @interface SearchCell ()
 
@@ -20,6 +23,8 @@
 @property (strong, nonatomic) UIImageView *iconView;
 
 @end
+
+static const NSUInteger kMaxNumberOfLinesForTitle = 5;
 
 @implementation SearchCell
 
@@ -43,40 +48,63 @@
 }
 
 - (void)setUp {
-    self.titleStack = [[UIStackView alloc] init];
-    [self addSubview:self.titleStack];
-    self.title.translatesAutoresizingMaskIntoConstraints = NO;
+#pragma mark - Icon
+    self.iconView = [[UIImageView alloc] init];
+    self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.contentView addSubview:self.iconView];
     [NSLayoutConstraint activateConstraints:@[
-        [self.title.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
-        [self.title.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
-        [self.title.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [self.iconView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:16.0],
+        [self.iconView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
+        [self.iconView.widthAnchor constraintEqualToConstant:36.0],
+        [self.iconView.heightAnchor constraintEqualToConstant:36.0],
     ]];
-    [self.title setFont:[UIFont fontWithName:@"Montserrat-Bold" size:15.0]];
 #pragma mark - Title
     self.title = [[UILabel alloc] init];
-    [self addSubview:self.title];
+    [self.contentView addSubview:self.title];
+    self.title.numberOfLines = kMaxNumberOfLinesForTitle;
+    self.title.lineBreakMode = NSLineBreakByWordWrapping;
     self.title.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [self.title.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
-        [self.title.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
-        [self.title.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [self.title.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:8.0],
+        
+        [self.title.leadingAnchor constraintEqualToAnchor:self.iconView.trailingAnchor constant:8.0],
+        [self.title.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-16.0],
     ]];
     [self.title setFont:[UIFont fontWithName:@"Montserrat-Bold" size:15.0]];
-    
+#pragma mark - Title category
     self.titleCategory = [[UILabel alloc] init];
-    [self addSubview:self.titleCategory];
+    [self.contentView addSubview:self.titleCategory];
+    self.titleCategory.numberOfLines = kMaxNumberOfLinesForTitle;
+    self.title.lineBreakMode = NSLineBreakByWordWrapping;
     self.titleCategory.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [self.titleCategory.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
-        [self.titleCategory.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
-        [self.titleCategory.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [self.title.bottomAnchor constraintEqualToAnchor:self.titleCategory.topAnchor],
+        [self.titleCategory.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-8.0],
+        [self.titleCategory.leadingAnchor constraintEqualToAnchor:self.iconView.trailingAnchor constant:8.0],
+        [self.titleCategory.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-16.0],
     ]];
-    [self.titleCategory setFont:[UIFont fontWithName:@"Montserrat-Bold" size:15.0]];
+    [self.titleCategory setFont:[UIFont fontWithName:@"Montserrat-Bold" size:14.0]];
+    
+    UIView *separatorView = [[UIView alloc] init];
+    [self.contentView addSubview:separatorView];
+    separatorView.translatesAutoresizingMaskIntoConstraints = NO;
+    separatorView.backgroundColor = [Colors get].alto;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [separatorView.heightAnchor constraintEqualToConstant:1.0],
+        [separatorView.leadingAnchor constraintEqualToAnchor:self.iconView.trailingAnchor],
+        [separatorView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor],
+        [separatorView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor],
+    ]];
 }
 
 - (void)update:(SearchItem *)item {
     self.title.attributedText =
     [[Typography get] makeTitle2:[item searchableText] color:[Colors get].black];
+    self.titleCategory.attributedText =
+    [[Typography get] makeSubtitle2Regular:item.correspondingPlaceItem.category.title
+                           color:[Colors get].boulder];
+    [self.iconView setImage:[[IconNameToImageNameMap get] iconForName:item.correspondingPlaceItem.category.icon]];
 }
 
 @end

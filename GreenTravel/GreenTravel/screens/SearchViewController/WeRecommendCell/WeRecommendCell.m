@@ -9,6 +9,7 @@
 #import "WeRecommendCell.h"
 #import "Colors.h"
 #import "TextUtils.h"
+#import "Typography.h"
 
 @implementation WeRecommendCell
 
@@ -33,18 +34,17 @@
 
 - (void)setUp {
     UILabel *header = [[UILabel alloc] init];
-    [self addSubview:header];
-    //self.backgroundColor = [Colors get].blue;
+    [self.contentView addSubview:header];
     header.translatesAutoresizingMaskIntoConstraints = NO;
-    
     [NSLayoutConstraint activateConstraints:@[
-        [header.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
-        [header.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16.0],
-        [header.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [header.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:32.0],
+        [header.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-16.0],
+        [header.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:16.0],
+        [header.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor],
     ]];
     
     [header setFont:[UIFont fontWithName:@"Montserrat-Bold" size:16.0]];
-    header.attributedText = getAttributedString(@"История поиска", [Colors get].black, 16.0, UIFontWeightBold);
+    header.attributedText = [[Typography get] makeBody:@"История поиска"];
 }
 
 @end

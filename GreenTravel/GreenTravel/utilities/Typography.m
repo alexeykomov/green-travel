@@ -66,9 +66,15 @@ static Typography *instance;
 }
 
 - (NSAttributedString *)makeSubtitle2Regular:(NSString *)input {
-    return [[NSAttributedString alloc] initWithString:input
-                                           attributes:getTextAttributes([Colors get].white, 13.0, UIFontWeightRegular)];
+    return [self makeSubtitle3Regular:(NSString *)input color:[Colors get].white];
 }
+
+- (NSAttributedString *)makeSubtitle2Regular:(NSString *)input
+                                       color:(nonnull UIColor *)color {
+    return [[NSAttributedString alloc] initWithString:input
+                                           attributes:getTextAttributes(color, 13.0, UIFontWeightRegular)];
+}
+
 
 - (NSAttributedString *)makeSubtitle3Regular:(NSString *)input {
     return [self makeSubtitle3Regular:(NSString *)input color:[Colors get].black];

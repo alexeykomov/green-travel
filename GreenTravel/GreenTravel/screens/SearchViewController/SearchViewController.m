@@ -44,8 +44,8 @@ static NSString * const kPlaceholderSearch = @"";
 static NSString * const kWeRecommendCellId = @"weRecommendCellId";
 static NSString * const kSearchCellId = @"searchCellId";
 static const int kDataSourceOrigOffset = 1;
-static const CGFloat kWeRecommendRowHeight = 40.0;
-static const CGFloat kSearchRowHeight = 40.0;
+static const CGFloat kWeRecommendRowHeight = 72.0;
+static const CGFloat kSearchRowHeight = 58.0;
 
 @implementation SearchViewController
 
@@ -79,6 +79,7 @@ static const CGFloat kSearchRowHeight = 40.0;
     self.tableView.backgroundColor = [Colors get].white;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.alwaysBounceVertical = YES;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     [self.tableView registerClass:[WeRecommendCell class] forCellReuseIdentifier:kWeRecommendCellId];
     [self.tableView registerClass:[SearchCell class] forCellReuseIdentifier:kSearchCellId];
     
@@ -89,6 +90,8 @@ static const CGFloat kSearchRowHeight = 40.0;
     self.searchController.searchBar.placeholder = kPlaceholderSearch;
     self.navigationItem.titleView = self.searchController.searchBar;
     self.definesPresentationContext = YES;
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onKeyboadAppear:) name:UIKeyboardDidShowNotification object:self];
 }
 
 #pragma mark - Lifecycle
@@ -118,6 +121,11 @@ static const CGFloat kSearchRowHeight = 40.0;
         [self.model addSearchHistoryItem:self.itemToSaveToHistory];
         self.itemToSaveToHistory = nil;
     }
+    [NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardDidShowNotification object:self];
+}
+
+- (void)onKeyboadAppear:(id)sender {
+    
 }
 
 #pragma mark - SearchModel
@@ -166,7 +174,8 @@ static const CGFloat kSearchRowHeight = 40.0;
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView
+estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0 && ![self isSearching]) {
         return kWeRecommendRowHeight;
     }

@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
                                         color:(UIColor *)color;
 - (NSAttributedString *)makeSubtitle2Semibold:(NSString *)input;
 - (NSAttributedString *)makeSubtitle2Regular:(NSString *)input;
+- (NSAttributedString *)makeSubtitle2Regular:(NSString *)input
+                                       color:(nonnull UIColor *)color;
 - (NSAttributedString *)makeSubtitle3Regular:(NSString *)input;
 - (NSAttributedString *)makeSubtitle3Regular:(NSString *)input
                                        color:(UIColor *)color;
