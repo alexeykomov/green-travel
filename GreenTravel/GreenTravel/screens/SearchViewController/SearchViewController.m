@@ -326,6 +326,7 @@ estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     } else {
         SearchItem *searchItem = self.model.searchHistoryItems[indexPath.row -
                                                                kDataSourceOrigOffset];
+        self.itemToSaveToHistory = searchItem;
         detailsController.item = searchItem.correspondingPlaceItem;
     }
     [self.navigationController pushViewController:detailsController animated:YES];
