@@ -1,5 +1,5 @@
 # green-travel
-This is the Green travel app for iOS.
+This is the Radzima (Green travel) app for iOS.
 The app shows touristic places and routes to visit in Belarus.
 
 ## How to start
