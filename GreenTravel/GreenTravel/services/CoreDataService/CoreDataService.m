@@ -300,6 +300,9 @@ NSPersistentContainer *_persistentContainer;
         fetchRequestSearchItem.sortDescriptors = @[sortByOrder];
         NSArray<StoredSearchItem *> *fetchResultSearchItem = [strongSelf.ctx executeFetchRequest:fetchRequestSearchItem error:&error];
         [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (obj.correspondingPlaceItem == nil) {
+                return;
+            }
             PlaceItem *placeItem = [self mapStoredPlaceItemToPlaceItem:obj.correspondingPlaceItem
                                                           withCategory:nil];
             SearchItem *searchItem = [[SearchItem alloc] init];
