@@ -25,6 +25,7 @@
 @property (assign, nonatomic) BOOL loading;
 @property (assign, nonatomic) BOOL loadingRemote;
 @property (strong, nonatomic) NSArray<Category *> *categoriesScheduledForUpdate;
+@property (strong, nonatomic) NSString *eTagScheduledForUpdate;
 - (NSArray<Category *>*)copyBookmarksFromOldCategories:(NSArray<Category *>*)oldCategories
                                    toNew:(NSArray<Category *>*)newCategories;
 
@@ -85,9 +86,7 @@ static IndexModel *instance;
             NSArray<Category*> *newCategories =
             [strongSelf copyBookmarksFromOldCategories:strongSelf.categories
                                                  toNew:categories];
-            [strongSelf.userDefaultsService saveETag:eTag];
-            [strongSelf requestCategoriesUpdate:newCategories];
-            [strongSelf.coreDataService saveCategories:newCategories];
+            [strongSelf requestCategoriesUpdate:newCategories eTag:eTag];
         }
         strongSelf.loading = NO;
         if (visible) { [strongSelf notifyObserversLoading:NO]; }
@@ -100,7 +99,9 @@ static IndexModel *instance;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
         NSArray<Category*> *newCategories = [weakSelf.categoriesScheduledForUpdate copy];
-        [weakSelf notifyObserversLoading:NO];
+        [strongSelf.userDefaultsService saveETag:strongSelf.eTagScheduledForUpdate];
+        [strongSelf.coreDataService saveCategories:newCategories];
+        [strongSelf notifyObserversLoading:NO];
         [strongSelf updateCategories:newCategories];
     });
 }
@@ -141,9 +142,11 @@ static IndexModel *instance;
     [self notifyObservers];
 }
 
-- (void)requestCategoriesUpdate:(NSArray<Category *> *)categoriesScheduledForUpdate {
+- (void)requestCategoriesUpdate:(NSArray<Category *> *)categoriesScheduledForUpdate
+                           eTag:(NSString *)eTag {
     // TODO: change this to show "new content is available" widget
     self.categoriesScheduledForUpdate = categoriesScheduledForUpdate;
+    self.eTagScheduledForUpdate = eTag;
     [self notifyObserversNewDataAvailable];
 }
 

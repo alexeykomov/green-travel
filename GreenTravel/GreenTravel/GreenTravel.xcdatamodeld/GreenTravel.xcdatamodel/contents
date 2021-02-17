@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="19H114" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="19H114" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="StoredCategory" representedClassName="StoredCategory" syncable="YES">
         <attribute name="coverURL" optional="YES" attributeType="String"/>
         <attribute name="icon" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
-        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="StoredCategory" inverseName="parent" inverseEntity="StoredCategory"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="StoredPlaceItem" inverseName="parent" inverseEntity="StoredPlaceItem"/>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StoredCategory" inverseName="parent" inverseEntity="StoredCategory"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StoredPlaceItem" inverseName="parent" inverseEntity="StoredPlaceItem"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StoredCategory" inverseName="categories" inverseEntity="StoredCategory"/>
     </entity>
     <entity name="StoredCategoryUUIDToRelatedItemUUIDs" representedClassName="StoredCategoryUUIDToRelatedItemUUIDs" syncable="YES">
@@ -18,7 +18,7 @@
         <attribute name="descriptionHTML" optional="YES" attributeType="String"/>
         <attribute name="imageURLs" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
-        <relationship name="linkedCategories" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="StoredCategoryUUIDToRelatedItemUUIDs"/>
+        <relationship name="linkedCategories" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StoredCategoryUUIDToRelatedItemUUIDs"/>
     </entity>
     <entity name="StoredPlaceItem" representedClassName="StoredPlaceItem" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String"/>
@@ -30,7 +30,7 @@
         <attribute name="sections" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
-        <relationship name="details" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StoredPlaceDetails"/>
+        <relationship name="details" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StoredPlaceDetails"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StoredCategory" inverseName="items" inverseEntity="StoredCategory"/>
     </entity>
     <entity name="StoredRelatedItemUUID" representedClassName="StoredRelatedItemUUID" syncable="YES">
