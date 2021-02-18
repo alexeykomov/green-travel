@@ -49,6 +49,7 @@
 #pragma mark - Observers
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
     [self.searchItems removeAllObjects];
+    [self.searchHistoryItems removeAllObjects];
     [self.uuids removeAllObjects];
     [self fillSearchItemsFromCategories:categories];
     [self notifyObservers];

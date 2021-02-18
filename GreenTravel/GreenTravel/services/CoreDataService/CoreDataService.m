@@ -300,14 +300,16 @@ NSPersistentContainer *_persistentContainer;
         fetchRequestSearchItem.sortDescriptors = @[sortByOrder];
         NSArray<StoredSearchItem *> *fetchResultSearchItem = [strongSelf.ctx executeFetchRequest:fetchRequestSearchItem error:&error];
         [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (obj.correspondingPlaceItem == nil) {
-                return;
-            }
             PlaceItem *placeItem = [self mapStoredPlaceItemToPlaceItem:obj.correspondingPlaceItem
                                                           withCategory:nil];
             SearchItem *searchItem = [[SearchItem alloc] init];
             searchItem.title = obj.correspondingPlaceItem.title;
             searchItem.correspondingPlaceItem = placeItem;
+            // TODO: make search item the child of place item, so that deletion
+            // of the latter causes deletion of the former
+            if (searchItem.correspondingPlaceItem.uuid == nil) {
+                return;
+            }
             [searchItems addObject:searchItem];
         }];
         completion(searchItems);
