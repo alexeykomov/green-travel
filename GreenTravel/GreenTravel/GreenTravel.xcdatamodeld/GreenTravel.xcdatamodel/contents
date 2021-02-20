@@ -11,7 +11,7 @@
     </entity>
     <entity name="StoredCategoryUUIDToRelatedItemUUIDs" representedClassName="StoredCategoryUUIDToRelatedItemUUIDs" syncable="YES">
         <attribute name="uuid" optional="YES" attributeType="String"/>
-        <relationship name="relatedItemUUIDs" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="StoredRelatedItemUUID"/>
+        <relationship name="relatedItemUUIDs" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="StoredRelatedItemUUID"/>
     </entity>
     <entity name="StoredPlaceDetails" representedClassName="StoredPlaceDetails" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String"/>

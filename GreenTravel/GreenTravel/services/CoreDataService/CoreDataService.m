@@ -134,17 +134,52 @@ NSPersistentContainer *_persistentContainer;
         
         NSFetchRequest *fetchRequest = [StoredCategory fetchRequest];
         NSArray<StoredCategory *> *fetchResult = [weakSelf.ctx executeFetchRequest:fetchRequest error:&error];
-        
         [fetchResult enumerateObjectsUsingBlock:^(StoredCategory * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [weakSelf.ctx deleteObject:obj];
         }];
         [weakSelf.ctx save:&error];
-        fetchResult = [weakSelf.ctx executeFetchRequest:fetchRequest error:&error];
+        
+        [weakSelf updateSearchItemsWhenSavingCategories:categories];
         
         if ([categories count]) {
             [weakSelf saveCategoriesWithinBlock:categories parentCategory:nil];
         }
     }];
+}
+
+- (void)updateSearchItemsWhenSavingCategories:(NSArray<Category *> *)categories {
+    NSError *error;
+    NSFetchRequest *fetchRequest = [StoredSearchItem fetchRequest];
+    NSArray<StoredSearchItem *> *fetchResultSearchItem = [self.ctx executeFetchRequest:fetchRequest error:&error];
+    NSMutableArray<NSString *> *searchItemUUIDs = [[NSMutableArray alloc] init];
+    [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (searchItem.correspondingPlaceItem.uuid == nil) {
+            return;
+        }
+        [searchItemUUIDs addObject:searchItem.correspondingPlaceItem.uuid];
+    }];
+
+    NSMutableSet *incomingItemUUIDs = [[NSMutableSet alloc] init];
+    traverseCategories(categories, ^(Category *category, PlaceItem *placeItem) {
+        if (placeItem == nil) {
+            return;
+        }
+        [incomingItemUUIDs addObject:placeItem.uuid];
+    });
+    
+    NSMutableArray<NSString *> *searchItemToDeleteUUIDs = [[NSMutableArray alloc] init];
+    [searchItemUUIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![incomingItemUUIDs containsObject:searchItem]) {
+            [searchItemToDeleteUUIDs addObject:searchItem];
+        }
+    }];
+    
+    fetchRequest = [StoredSearchItem fetchRequest];
+    fetchRequest.predicate =
+    [NSPredicate predicateWithFormat:@"correspondingPlaceItem.uuid IN %@",
+                              searchItemToDeleteUUIDs];
+    NSBatchDeleteRequest *deleteRequest = [[NSBatchDeleteRequest alloc] initWithFetchRequest:fetchRequest];
+    [self.ctx executeRequest:deleteRequest error:&error];
 }
 
 - (void)saveCategoriesWithinBlock:(NSArray<Category *> *)categories
