@@ -33,13 +33,13 @@ NSPersistentContainer *_persistentContainer;
 
 @end
 
-@implementation CoreDataService 
+@implementation CoreDataService
 
 - (NSPersistentContainer *)persistentContainer {
     @synchronized (self) {
         if (_persistentContainer == nil) {
             _persistentContainer = [NSPersistentContainer  persistentContainerWithName:@"GreenTravel"];
-            
+
             [_persistentContainer loadPersistentStoresWithCompletionHandler:
              ^(NSPersistentStoreDescription *storeDescription, NSError *error) {
               if (error != nil) {
@@ -47,7 +47,7 @@ NSPersistentContainer *_persistentContainer;
                 abort();
               }
             }];
-            
+
             _ctx = _persistentContainer.newBackgroundContext;
         }
     }
@@ -115,7 +115,7 @@ NSPersistentContainer *_persistentContainer;
     category.categories = [self mapStoredCategoriesToCategories:storedCategory.categories.array];
     return category;
 }
-    
+
 
 - (NSMutableArray<Category *>*)mapStoredCategoriesToCategories:(NSArray<StoredCategory *>*)storedCategories {
     NSMutableArray<Category *> *categories = [[NSMutableArray alloc] init];
@@ -131,16 +131,14 @@ NSPersistentContainer *_persistentContainer;
     __weak typeof(self) weakSelf = self;
     [self.ctx performBlockAndWait:^{
         NSError *error;
-        
-        NSFetchRequest *fetchRequest = [StoredCategory fetchRequest];
-        NSArray<StoredCategory *> *fetchResult = [weakSelf.ctx executeFetchRequest:fetchRequest error:&error];
-        [fetchResult enumerateObjectsUsingBlock:^(StoredCategory * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [weakSelf.ctx deleteObject:obj];
-        }];
-        [weakSelf.ctx save:&error];
-        
+
         [weakSelf updateSearchItemsWhenSavingCategories:categories];
-        
+        [weakSelf reorderSearchItems];
+
+        NSFetchRequest *fetchRequest = [StoredCategory fetchRequest];
+        NSBatchDeleteRequest *deleteRequest = [[NSBatchDeleteRequest alloc] initWithFetchRequest:fetchRequest];
+        [weakSelf.ctx executeRequest:deleteRequest error:&error];
+
         if ([categories count]) {
             [weakSelf saveCategoriesWithinBlock:categories parentCategory:nil];
         }
@@ -148,38 +146,32 @@ NSPersistentContainer *_persistentContainer;
 }
 
 - (void)updateSearchItemsWhenSavingCategories:(NSArray<Category *> *)categories {
-    NSError *error;
-    NSFetchRequest *fetchRequest = [StoredSearchItem fetchRequest];
-    NSArray<StoredSearchItem *> *fetchResultSearchItem = [self.ctx executeFetchRequest:fetchRequest error:&error];
-    NSMutableArray<NSString *> *searchItemUUIDs = [[NSMutableArray alloc] init];
-    [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (searchItem.correspondingPlaceItem.uuid == nil) {
-            return;
-        }
-        [searchItemUUIDs addObject:searchItem.correspondingPlaceItem.uuid];
-    }];
-
-    NSMutableSet *incomingItemUUIDs = [[NSMutableSet alloc] init];
+    NSMutableDictionary *incomingItemUUIDToItems = [[NSMutableDictionary alloc] init];
     traverseCategories(categories, ^(Category *category, PlaceItem *placeItem) {
         if (placeItem == nil) {
             return;
         }
-        [incomingItemUUIDs addObject:placeItem.uuid];
+        incomingItemUUIDToItems[placeItem.uuid] = placeItem;
     });
-    
-    NSMutableArray<NSString *> *searchItemToDeleteUUIDs = [[NSMutableArray alloc] init];
-    [searchItemUUIDs enumerateObjectsUsingBlock:^(NSString * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (![incomingItemUUIDs containsObject:searchItem]) {
-            [searchItemToDeleteUUIDs addObject:searchItem];
-        }
-    }];
-    
-    fetchRequest = [StoredSearchItem fetchRequest];
-    fetchRequest.predicate =
-    [NSPredicate predicateWithFormat:@"correspondingPlaceItem.uuid IN %@",
-                              searchItemToDeleteUUIDs];
+    NSError *error;
+    NSFetchRequest *fetchRequest = [StoredSearchItem fetchRequest];
+    NSArray<StoredSearchItem *> *fetchResultSearchItem = [self.ctx executeFetchRequest:fetchRequest error:&error];
     NSBatchDeleteRequest *deleteRequest = [[NSBatchDeleteRequest alloc] initWithFetchRequest:fetchRequest];
     [self.ctx executeRequest:deleteRequest error:&error];
+
+    [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSError *error;
+        PlaceItem *item = incomingItemUUIDToItems[searchItem.correspondingPlaceItem.uuid];
+        if (item == nil) {
+            return;
+        }
+        StoredSearchItem *updatedStoredSearchItem = (StoredSearchItem *)[NSEntityDescription insertNewObjectForEntityForName:@"StoredSearchItem" inManagedObjectContext:self.ctx];
+        updatedStoredSearchItem.order = searchItem.order;
+        updatedStoredSearchItem.uuid = searchItem.uuid;
+        updatedStoredSearchItem.correspondingPlaceItem =
+            [self mapPlaceItemToStoredPlaceItem:item];
+        [self.ctx save:&error];
+    }];
 }
 
 - (void)saveCategoriesWithinBlock:(NSArray<Category *> *)categories
@@ -194,16 +186,7 @@ NSPersistentContainer *_persistentContainer;
         storedCategory.coverURL = category.cover != nil && category.cover != [NSNull null] ? category.cover : @"";
         storedCategory.parent = parentCategory;
         [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-            StoredPlaceItem *storedItem = [NSEntityDescription insertNewObjectForEntityForName:@"StoredPlaceItem" inManagedObjectContext:weakSelf.ctx];
-            storedItem.title = item.title;
-            CLLocationCoordinate2D coords = item.coords;
-            NSData *coordsAsData = [NSData dataWithBytes:&coords
-                                                  length:sizeof(item.coords)];
-            storedItem.coords = coordsAsData;
-            storedItem.coverURL = item.cover != nil && item.cover != [NSNull null] ? item.cover : @"";
-            storedItem.uuid = item.uuid;
-            storedItem.bookmarked = item.bookmarked;
-            storedItem.details = [self mapDetailsToStoredDetails:item.details];
+            StoredPlaceItem *storedItem = [weakSelf mapPlaceItemToStoredPlaceItem:item];
             [storedCategory addItemsObject:storedItem];
         }];
         [parentCategory addCategoriesObject:storedCategory];
@@ -215,6 +198,20 @@ NSPersistentContainer *_persistentContainer;
 }
 
 #pragma mark - Mapping
+
+- (StoredPlaceItem *)mapPlaceItemToStoredPlaceItem:(PlaceItem *)item {
+    StoredPlaceItem *storedItem = (StoredPlaceItem*)[NSEntityDescription insertNewObjectForEntityForName:@"StoredPlaceItem" inManagedObjectContext:self.ctx];
+    storedItem.title = item.title;
+    CLLocationCoordinate2D coords = item.coords;
+    NSData *coordsAsData = [NSData dataWithBytes:&coords
+                                          length:sizeof(item.coords)];
+    storedItem.coords = coordsAsData;
+    storedItem.coverURL = item.cover != nil && item.cover != [NSNull null] ? item.cover : @"";
+    storedItem.uuid = item.uuid;
+    storedItem.bookmarked = item.bookmarked;
+    storedItem.details = [self mapDetailsToStoredDetails:item.details];
+    return storedItem;
+}
 
 - (StoredPlaceDetails *)mapDetailsToStoredDetails:(PlaceDetails *)details {
     __weak typeof(self) weakSelf = self;
@@ -242,7 +239,7 @@ NSPersistentContainer *_persistentContainer;
     details.address = storedDetails.address;
     details.images = [storedDetails.imageURLs componentsSeparatedByString:@","];
     details.descriptionHTML = storedDetails.descriptionHTML;
-    
+
     NSMutableArray<CategoryUUIDToRelatedItemUUIDs *> *categoryIdToItems = [[NSMutableArray alloc] init];
     [storedDetails.linkedCategories enumerateObjectsUsingBlock:^(StoredCategoryUUIDToRelatedItemUUIDs * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         CategoryUUIDToRelatedItemUUIDs *categoryUUIDToRelatedItemUUIDs = [[CategoryUUIDToRelatedItemUUIDs alloc] init];
@@ -259,7 +256,7 @@ NSPersistentContainer *_persistentContainer;
 }
 
 #pragma mark - Search items
- 
+
 - (void)addSearchItem:(SearchItem *)searchItem {
     __weak typeof(self) weakSelf = self;
     [self.persistentContainer performBackgroundTask:^(NSManagedObjectContext *ctx) {
@@ -305,11 +302,11 @@ NSPersistentContainer *_persistentContainer;
         }
     }];
     if (foundItem) {
-        [weakSelf reorder];
+        [weakSelf reorderSearchItems];
     }
 }
 
-- (void)reorder {
+- (void)reorderSearchItems {
     __weak typeof(self) weakSelf = self;
     [self.ctx performBlockAndWait:^{
         NSError *error;
@@ -340,11 +337,6 @@ NSPersistentContainer *_persistentContainer;
             SearchItem *searchItem = [[SearchItem alloc] init];
             searchItem.title = obj.correspondingPlaceItem.title;
             searchItem.correspondingPlaceItem = placeItem;
-            // TODO: make search item the child of place item, so that deletion
-            // of the latter causes deletion of the former
-            if (searchItem.correspondingPlaceItem.uuid == nil) {
-                return;
-            }
             [searchItems addObject:searchItem];
         }];
         completion(searchItems);
@@ -365,7 +357,7 @@ NSPersistentContainer *_persistentContainer;
             details.address = storedDetails.address;
             details.images = [storedDetails.imageURLs componentsSeparatedByString:@","];
             details.descriptionHTML = storedDetails.descriptionHTML;
-            
+
             NSMutableArray<CategoryUUIDToRelatedItemUUIDs *> *categoryIdToItems = [[NSMutableArray alloc] init];
             [storedDetails.linkedCategories enumerateObjectsUsingBlock:^(StoredCategoryUUIDToRelatedItemUUIDs * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 CategoryUUIDToRelatedItemUUIDs *categoryUUIDToRelatedItemUUIDs = [[CategoryUUIDToRelatedItemUUIDs alloc] init];
@@ -413,7 +405,7 @@ NSPersistentContainer *_persistentContainer;
                 relatedItemUUID.uuid = obj;
                 [relatedCategoryUUIDs addRelatedItemUUIDsObject:relatedItemUUID];
             }];
-            
+
             [storedDetails addLinkedCategoriesObject:relatedCategoryUUIDs];
         }];
         [strongSelf.ctx save:&error];
