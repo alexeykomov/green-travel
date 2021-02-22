@@ -564,8 +564,8 @@
 			isa = PBXGroup;
 			children = (
 				5A1482F924F0717300EBB756 /* SearchCell.h */,
-				5A46B5B725E3F62100F7FF09 /* SearchCellConfiguration */,
 				5A1482FA24F0717300EBB756 /* SearchCell.m */,
+				5A46B5B725E3F62100F7FF09 /* SearchCellConfiguration */,
 			);
 			path = SearchCell;
 			sourceTree = "<group>";

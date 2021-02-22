@@ -52,6 +52,7 @@
     [self.searchHistoryItems removeAllObjects];
     [self.uuids removeAllObjects];
     [self fillSearchItemsFromCategories:categories];
+    [self loadSearchHistoryItems];
     [self notifyObservers];
 }
 
@@ -62,20 +63,18 @@
 - (void)onBookmarkUpdate:(nonnull PlaceItem *)item bookmark:(BOOL)bookmark {}
 
 - (void)fillSearchItemsFromCategories:(NSArray<Category *>*)categories {
-    [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
-        [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (![self.uuids containsObject:item.uuid]) {
-                SearchItem *searchItem = [[SearchItem alloc] init];
-                searchItem.correspondingPlaceItem = item;
-                searchItem.title = item.title;
-                // TODO: Take into account when Geolocation is enabled.
-                searchItem.distance = -1;
-                
-                [self.searchItems addObject:searchItem];
-                [self.uuids addObject:item.uuid];
-            }
-        }];
-    }];
+    traverseCategories(categories, ^(Category *category, PlaceItem *item) {
+        if (![self.uuids containsObject:item.uuid]) {
+            SearchItem *searchItem = [[SearchItem alloc] init];
+            searchItem.correspondingPlaceItemUUID = item.uuid;
+            searchItem.title = item.title;
+            // TODO: Take into account when Geolocation is enabled.
+            searchItem.distance = -1;
+            
+            [self.searchItems addObject:searchItem];
+            [self.uuids addObject:item.uuid];
+        }
+    });
 }
 
 - (void)addObserver:(nonnull id<SearchItemsObserver>)observer {
@@ -105,7 +104,8 @@
     NSLog(@"Last location: %@", lastLocation);
     [self.searchItems enumerateObjectsUsingBlock:^(SearchItem * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
         CLLocation *itemLocation =
-        [[CLLocation alloc] initWithCoordinate:searchItem.correspondingPlaceItem.coords
+        [[CLLocation alloc] initWithCoordinate:
+         self.indexModel.flatItems[searchItem.correspondingPlaceItemUUID].coords
                                               altitude:0
                                     horizontalAccuracy:500.0
                                       verticalAccuracy:500.0
@@ -116,27 +116,13 @@
 }
 
 - (void)onAuthorizationStatusChange:(CLAuthorizationStatus)status {
-    
 }
 
-- (void)fillSearchItemsWithCategories {
-    __weak typeof(self) weakSelf = self;
-    traverseCategories(self.indexModel.categories, ^(Category *category, PlaceItem *item) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf.searchHistoryItems enumerateObjectsUsingBlock:^(SearchItem * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([item.uuid isEqualToString:searchItem.correspondingPlaceItem.uuid]) {
-                searchItem.correspondingPlaceItem.category = category;
-            }
-        }];
-    });
-}
-
-- (void)loadSearchItems {
+- (void)loadSearchHistoryItems {
     __weak typeof(self) weakSelf = self;
     [self.coreDataService loadSearchItemsWithCompletion:^(NSArray<SearchItem *> * _Nonnull searchItems) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         strongSelf.searchHistoryItems = [[NSMutableArray alloc] initWithArray:searchItems];
-        [strongSelf fillSearchItemsWithCategories];
         [strongSelf notifyObserversOfSearchHistoryUpdate];
     }];
 }
@@ -161,7 +147,8 @@
 
 - (NSUInteger)findIndexOfSearchHistoryItem:(SearchItem *)searchItem {
     NSUInteger foundIndex = [self.searchHistoryItems indexOfObjectPassingTest:^BOOL(SearchItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        return [obj.correspondingPlaceItem.uuid isEqualToString:searchItem.correspondingPlaceItem.uuid];
+        return [obj.correspondingPlaceItemUUID
+                isEqualToString:searchItem.correspondingPlaceItemUUID];
     }];
     return foundIndex;
 }

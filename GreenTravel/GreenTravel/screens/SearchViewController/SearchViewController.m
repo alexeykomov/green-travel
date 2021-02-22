@@ -221,7 +221,7 @@ static const CGFloat kSearchRowHeight = 58.0;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.model addObserver:self];
-    [self.model loadSearchItems];
+    [self.model loadSearchHistoryItems];
     
     [self.navigationController.view setNeedsLayout];
     [self.navigationController.view layoutIfNeeded];
@@ -296,16 +296,17 @@ static const CGFloat kSearchRowHeight = 58.0;
         return cell;
     }
     SearchCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kSearchCellId];
+    SearchItem *item;
     SearchCellConfiguration *cellConfiguration;
     if ([self isSearching]) {
         item = self.dataSourceFiltered[indexPath.row];
-        cellConfiguration = [self mapSearchCellConfigurationFromSearchItem:self.item];
+        cellConfiguration = [self mapSearchCellConfigurationFromSearchItem:item];
         [cell update:cellConfiguration];
         return cell;
     }
     if ([self.model.searchHistoryItems count]) {
         item = self.model.searchHistoryItems[indexPath.row - kDataSourceOrigOffset];
-        cellConfiguration = [self  mapSearchCellConfigurationFromSearchItem:item];
+        cellConfiguration = [self mapSearchCellConfigurationFromSearchItem:item];
         [cell update:cellConfiguration];
         return cell;
     }
@@ -318,6 +319,7 @@ static const CGFloat kSearchRowHeight = 58.0;
     cellConfiguration.title = correspondingItem.title;
     cellConfiguration.categoryTitle = correspondingItem.category.title;
     cellConfiguration.iconName = correspondingItem.category.icon;
+    return cellConfiguration;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView
@@ -333,14 +335,14 @@ estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     DetailsViewController *detailsController = [[DetailsViewController alloc] initWithApiService:self.apiService indexModel:self.indexModel mapModel:self.mapModel locationModel:self.locationModel];
     if ([self isSearching]) {
         SearchItem *searchItem = self.dataSourceFiltered[indexPath.row];
-        detailsController.item = self.indexModel.flatItems[ searchItem.correspondingPlaceItemUUID];
+        detailsController.item = self.indexModel.flatItems[searchItem.correspondingPlaceItemUUID];
         self.itemToSaveToHistory = searchItem;
         self.searchController.searchBar.text = @"";
     } else {
         SearchItem *searchItem =
         self.model.searchHistoryItems[indexPath.row - kDataSourceOrigOffset];
         self.itemToSaveToHistory = searchItem;
-        detailsController.item = self.indexModel.flatItems[ searchItem.correspondingPlaceItemUUID];
+        detailsController.item = self.indexModel.flatItems[searchItem.correspondingPlaceItemUUID];
     }
     [self.navigationController pushViewController:detailsController animated:YES];
 }

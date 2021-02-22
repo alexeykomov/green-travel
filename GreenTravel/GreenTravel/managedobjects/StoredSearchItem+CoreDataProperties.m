@@ -2,7 +2,7 @@
 //  StoredSearchItem+CoreDataProperties.m
 //  
 //
-//  Created by Alex K on 2/22/21.
+//  Created by Alex K on 2/23/21.
 //
 //
 
@@ -14,8 +14,7 @@
 	return [NSFetchRequest fetchRequestWithEntityName:@"StoredSearchItem"];
 }
 
-@dynamic order;
-@dynamic uuid;
 @dynamic correspondingPlaceItemUUID;
+@dynamic order;
 
 @end

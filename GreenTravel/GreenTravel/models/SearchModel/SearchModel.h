@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSMutableArray<SearchItem *> *searchItems;
 @property (strong, nonatomic) NSMutableArray<SearchItem *> *searchHistoryItems;
 @property (strong, nonatomic) NSMutableArray<id<SearchItemsObserver>> *searchItemsObservers;
-- (void)loadSearchItems;
+- (void)loadSearchHistoryItems;
 - (void)addSearchHistoryItem:(SearchItem *)searchItem;
 - (void)removeSearchHistoryItem:(SearchItem *)searchItem;
 

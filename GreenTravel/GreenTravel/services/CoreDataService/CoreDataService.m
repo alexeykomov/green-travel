@@ -146,30 +146,23 @@ NSPersistentContainer *_persistentContainer;
 }
 
 - (void)updateSearchItemsWhenSavingCategories:(NSArray<Category *> *)categories {
-    NSMutableDictionary *incomingItemUUIDToItems = [[NSMutableDictionary alloc] init];
+    NSMutableSet<NSString *> *incomingItemUUIDs = [[NSMutableSet alloc] init];
     traverseCategories(categories, ^(Category *category, PlaceItem *placeItem) {
         if (placeItem == nil) {
             return;
         }
-        incomingItemUUIDToItems[placeItem.uuid] = placeItem;
+        [incomingItemUUIDs addObject:placeItem.uuid];
     });
     NSError *error;
     NSFetchRequest *fetchRequest = [StoredSearchItem fetchRequest];
     NSArray<StoredSearchItem *> *fetchResultSearchItem = [self.ctx executeFetchRequest:fetchRequest error:&error];
-    NSBatchDeleteRequest *deleteRequest = [[NSBatchDeleteRequest alloc] initWithFetchRequest:fetchRequest];
-    [self.ctx executeRequest:deleteRequest error:&error];
-
+    
     [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull searchItem, NSUInteger idx, BOOL * _Nonnull stop) {
         NSError *error;
-        PlaceItem *item = incomingItemUUIDToItems[searchItem.correspondingPlaceItem.uuid];
-        if (item == nil) {
+        if ([incomingItemUUIDs containsObject:searchItem.correspondingPlaceItemUUID]) {
             return;
         }
-        StoredSearchItem *updatedStoredSearchItem = (StoredSearchItem *)[NSEntityDescription insertNewObjectForEntityForName:@"StoredSearchItem" inManagedObjectContext:self.ctx];
-        updatedStoredSearchItem.order = searchItem.order;
-        updatedStoredSearchItem.uuid = searchItem.uuid;
-        updatedStoredSearchItem.correspondingPlaceItem =
-            [self mapPlaceItemToStoredPlaceItem:item];
+        [self.ctx deleteObject:searchItem];
         [self.ctx save:&error];
     }];
 }
@@ -264,21 +257,17 @@ NSPersistentContainer *_persistentContainer;
         NSError *error;
         // Delete dublicate.
         [strongSelf removeSearchItem:searchItem];
-        // Request place item.
-        NSFetchRequest *fetchRequestItem = [StoredPlaceItem fetchRequest];
-        fetchRequestItem.predicate = [NSPredicate predicateWithFormat:@"uuid == %@",
-                                  searchItem.correspondingPlaceItem.uuid];
-        NSArray<StoredPlaceItem *> *fetchResultItem = [ctx executeFetchRequest:fetchRequestItem error:&error];
-        StoredPlaceItem *item = [fetchResultItem firstObject];
         // Request order.
         NSFetchRequest *fetchRequestSearchItem = [StoredSearchItem fetchRequest];
         NSUInteger count = [strongSelf.ctx
                             countForFetchRequest:fetchRequestSearchItem
                             error:&error];
         // Create new search item.
-        StoredSearchItem *storedSearchItem = [NSEntityDescription insertNewObjectForEntityForName:@"StoredSearchItem" inManagedObjectContext:ctx];
+        StoredSearchItem *storedSearchItem =
+        [NSEntityDescription insertNewObjectForEntityForName:@"StoredSearchItem" inManagedObjectContext:ctx];
         storedSearchItem.order = count;
-        storedSearchItem.correspondingPlaceItem = item;
+        storedSearchItem.correspondingPlaceItemUUID =
+        searchItem.correspondingPlaceItemUUID;
         [ctx save:&error];
     }];
 }
@@ -290,8 +279,8 @@ NSPersistentContainer *_persistentContainer;
         __strong typeof(weakSelf) strongSelf = weakSelf;
         NSError *error;
         NSFetchRequest *fetchRequestSearchItem = [StoredSearchItem fetchRequest];
-        fetchRequestSearchItem.predicate = [NSPredicate predicateWithFormat:@"correspondingPlaceItem.uuid == %@",
-                                  searchItem.correspondingPlaceItem.uuid];
+        fetchRequestSearchItem.predicate = [NSPredicate predicateWithFormat:@"correspondingPlaceItemUUID == %@",
+                                  searchItem.correspondingPlaceItemUUID];
         NSArray<StoredSearchItem *> *fetchResultSearchItem = [strongSelf.ctx
                                                               executeFetchRequest:fetchRequestSearchItem
                                                               error:&error];
@@ -331,12 +320,9 @@ NSPersistentContainer *_persistentContainer;
         NSSortDescriptor *sortByOrder = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:NO];
         fetchRequestSearchItem.sortDescriptors = @[sortByOrder];
         NSArray<StoredSearchItem *> *fetchResultSearchItem = [strongSelf.ctx executeFetchRequest:fetchRequestSearchItem error:&error];
-        [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            PlaceItem *placeItem = [self mapStoredPlaceItemToPlaceItem:obj.correspondingPlaceItem
-                                                          withCategory:nil];
+        [fetchResultSearchItem enumerateObjectsUsingBlock:^(StoredSearchItem * _Nonnull storedSearchItem, NSUInteger idx, BOOL * _Nonnull stop) {
             SearchItem *searchItem = [[SearchItem alloc] init];
-            searchItem.title = obj.correspondingPlaceItem.title;
-            searchItem.correspondingPlaceItem = placeItem;
+            searchItem.correspondingPlaceItemUUID = storedSearchItem.correspondingPlaceItemUUID;
             [searchItems addObject:searchItem];
         }];
         completion(searchItems);
