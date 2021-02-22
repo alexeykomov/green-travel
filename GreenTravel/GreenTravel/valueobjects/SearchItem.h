@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SearchItem : NSObject
 
-@property (strong, nonatomic) PlaceItem *correspondingPlaceItem;
+@property (strong, nonatomic) NSString *correspondingPlaceItemUUID;
 @property (strong, nonatomic) NSString *title;
 @property (assign, nonatomic) CGFloat distance;
 - (NSString *)searchableText;

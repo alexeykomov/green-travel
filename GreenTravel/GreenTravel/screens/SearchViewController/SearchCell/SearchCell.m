@@ -9,7 +9,7 @@
 #import "SearchCell.h"
 #import "Colors.h"
 #import "TextUtils.h"
-#import "SearchItem.h"
+#import "SearchCellConfiguration.h"
 #import "Typography.h"
 #import "IconNameToImageNameMap.h"
 #import "Category.h"
@@ -98,11 +98,11 @@ static const NSUInteger kMaxNumberOfLinesForTitle = 5;
     ]];
 }
 
-- (void)update:(SearchItem *)item {
+- (void)update:(SearchCellConfiguration *)item {
     self.title.attributedText =
-    [[Typography get] makeTitle2:[item searchableText] color:[Colors get].black];
+    [[Typography get] makeTitle2:item.title color:[Colors get].black];
     self.titleCategory.attributedText =
-    [[Typography get] makeSubtitle2Regular:item.correspondingPlaceItem.category.title
+    [[Typography get] makeSubtitle2Regular:item.categoryTitle
                            color:[Colors get].boulder];
     [self.iconView setImage:[[IconNameToImageNameMap get] iconForName:item.correspondingPlaceItem.category.icon]];
 }
