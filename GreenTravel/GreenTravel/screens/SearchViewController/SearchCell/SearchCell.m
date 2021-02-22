@@ -98,13 +98,14 @@ static const NSUInteger kMaxNumberOfLinesForTitle = 5;
     ]];
 }
 
-- (void)update:(SearchCellConfiguration *)item {
+- (void)update:(SearchCellConfiguration *)configuration {
     self.title.attributedText =
-    [[Typography get] makeTitle2:item.title color:[Colors get].black];
+    [[Typography get] makeTitle2:configuration.title color:[Colors get].black];
     self.titleCategory.attributedText =
-    [[Typography get] makeSubtitle2Regular:item.categoryTitle
+    [[Typography get] makeSubtitle2Regular:configuration.categoryTitle
                            color:[Colors get].boulder];
-    [self.iconView setImage:[[IconNameToImageNameMap get] iconForName:item.correspondingPlaceItem.category.icon]];
+    [self.iconView setImage:[[IconNameToImageNameMap get]
+                             iconForName:configuration.iconName]];
 }
 
 @end

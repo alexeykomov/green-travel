@@ -2,7 +2,7 @@
 //  StoredSearchItem+CoreDataProperties.h
 //  
 //
-//  Created by Alex K on 2/22/21.
+//  Created by Alex K on 2/23/21.
 //
 //
 
@@ -15,9 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSFetchRequest<StoredSearchItem *> *)fetchRequest;
 
-@property (nonatomic) int16_t order;
-@property (nullable, nonatomic, copy) NSString *uuid;
 @property (nullable, nonatomic, copy) NSString *correspondingPlaceItemUUID;
+@property (nonatomic) int16_t order;
 
 @end
 

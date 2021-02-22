@@ -10,11 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class SearchItem;
+@class SearchCellConfiguration;
 
 @interface SearchCell : UITableViewCell
 
-- (void)update:(SearchItem *)item;
+- (void)update:(SearchCellConfiguration *)item;
 
 @end
 
