@@ -30,9 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSMutableArray<id<CategoriesObserver>> *categoriesObservers;
 @property (strong, nonatomic) NSMutableArray<id<BookmarksObserver>> *bookmarksObservers;
 @property (strong, nonatomic) NSArray<Category *> *categories;
-@property (strong, nonatomic) NSArray<PlaceItem *> *searchItems;
-@property (strong, nonatomic) NSDictionary<NSString *, Category *> *categoryByUUID;
-@property (strong, nonatomic) NSDictionary<NSString *, PlaceDetails *> *placesByUUID;
+@property (copy, nonatomic) NSDictionary<NSString *, Category *> *flatCategories;
+@property (copy, nonatomic) NSDictionary<NSString *, PlaceItem *> *flatItems;
 @property (strong, nonatomic) NSDictionary<NSString *, PathDetails *> *pathsByUUID;
 - (instancetype)initWithApiService:(ApiService *)apiService
                    coreDataService:(CoreDataService *)coreDataService

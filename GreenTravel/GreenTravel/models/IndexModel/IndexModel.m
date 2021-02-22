@@ -138,7 +138,19 @@ static IndexModel *instance;
 }
 
 - (void)updateCategories:(NSArray<Category *> *)categories {
+    NSMutableDictionary<NSString *, Category *> *flatCategories = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary<NSString *, PlaceItem *> *flatItems = [[NSMutableDictionary alloc] init];
+    traverseCategories(categories, ^(Category *category, PlaceItem *placeItem) {
+        if (category != nil) {
+            flatCategories[category.uuid] = category;
+        }
+        if (placeItem != nil) {
+            flatItems[placeItem.uuid] = placeItem;
+        }
+    });
     self.categories = categories;
+    self.flatItems = flatItems;
+    self.flatCategories = flatCategories;
     [self notifyObservers];
 }
 

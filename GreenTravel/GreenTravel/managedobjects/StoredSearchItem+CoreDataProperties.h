@@ -2,7 +2,7 @@
 //  StoredSearchItem+CoreDataProperties.h
 //  
 //
-//  Created by Alex K on 2/6/21.
+//  Created by Alex K on 2/22/21.
 //
 //
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) int16_t order;
 @property (nullable, nonatomic, copy) NSString *uuid;
-@property (nullable, nonatomic, retain) StoredPlaceItem *correspondingPlaceItem;
+@property (nullable, nonatomic, copy) NSString *correspondingPlaceItemUUID;
 
 @end
 
