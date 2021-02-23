@@ -359,8 +359,13 @@ estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
         if (![self isSearching] && indexPath.row >= kDataSourceOrigOffset) {
             SearchItem *searchItem = self.model.searchHistoryItems[indexPath.row -kDataSourceOrigOffset];
             [self.model removeSearchHistoryItem:searchItem];
-            [self.tableView deleteRowsAtIndexPaths:@[indexPath]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+            if ([self.model.searchHistoryItems count] > 0) {
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+                return;
+            }
+            [self.tableView deleteRowsAtIndexPaths:@[
+                [NSIndexPath indexPathForRow:0 inSection:0], indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }
 }
