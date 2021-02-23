@@ -64,6 +64,9 @@
 
 - (void)fillSearchItemsFromCategories:(NSArray<Category *>*)categories {
     traverseCategories(categories, ^(Category *category, PlaceItem *item) {
+        if (item == nil) {
+            return;
+        }
         if (![self.uuids containsObject:item.uuid]) {
             SearchItem *searchItem = [[SearchItem alloc] init];
             searchItem.correspondingPlaceItemUUID = item.uuid;
@@ -146,8 +149,8 @@
 }
 
 - (NSUInteger)findIndexOfSearchHistoryItem:(SearchItem *)searchItem {
-    NSUInteger foundIndex = [self.searchHistoryItems indexOfObjectPassingTest:^BOOL(SearchItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        return [obj.correspondingPlaceItemUUID
+    NSUInteger foundIndex = [self.searchHistoryItems indexOfObjectPassingTest:^BOOL(SearchItem * _Nonnull searchHistoryItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [searchHistoryItem.correspondingPlaceItemUUID
                 isEqualToString:searchItem.correspondingPlaceItemUUID];
     }];
     return foundIndex;
