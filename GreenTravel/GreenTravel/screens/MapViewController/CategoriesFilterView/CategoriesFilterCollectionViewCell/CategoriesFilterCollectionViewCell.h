@@ -1,5 +1,5 @@
 //
-//  CategoriesFilterView.h
+//  CategoriesFilterCollectionViewCell.h
 //  GreenTravel
 //
 //  Created by Alex K on 2/25/21.
@@ -10,7 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CategoriesFilterView : UICollectionView<UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
+@class FilterOption;
+
+@interface CategoriesFilterCollectionViewCell : UICollectionViewCell
+
+- (void)update:(FilterOption *)option;
 
 @end
 
