@@ -10,10 +10,13 @@
 #import "FilterOption.h"
 #import "Category.h"
 #import "IndexModel.h"
+#import "CategoriesFilterObserver.h"
+#import "CategoryUtils.h"
 
 @interface CategoriesFilterModel()
 
 @property (strong, nonatomic) IndexModel *indexModel;
+@property (strong, nonatomic) NSMutableSet<NSString *> *categoryUUIDs;
 
 @end
 
@@ -25,6 +28,11 @@
     if (self) {
         _indexModel = indexModel;
         [_indexModel addObserver:self];
+        self.selectedCategoryUUIDs = [[NSMutableSet alloc] init];
+        self.categoryUUIDs = [[NSMutableSet alloc] init];
+        self.filterOptions = [[NSMutableArray alloc] init];
+        self.categoriesFilterObservers = [[NSMutableArray alloc] init];
+        [self fillFilterOptionsFromCategories];
     }
     return self;
 }
@@ -36,59 +44,103 @@
 }
 
 - (void)onCategoriesUpdate:(nonnull NSArray<Category *> *)categories {
-    NSMutableArray<FilterOption *> *filterOptions = [[NSMutableArray alloc] init];
-    [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
-        FilterOption *filterOption = [[FilterOption alloc] init];
-        filterOption.categoryId = category.uuid;
-        filterOption.on = NO;
-        filterOption.all = NO;
-        [filterOptions addObject:filterOption];
-    }];
+    [self fillFilterOptionsFromCategories];
+    [self notifyObservers];
+}
+
+- (void)fillFilterOptionsFromCategories {
+    [self.filterOptions removeAllObjects];
+    [self.categoryUUIDs removeAllObjects];
     
     FilterOption *filterOptionAll = [[FilterOption alloc] init];
     filterOptionAll.categoryId = nil;
     filterOptionAll.on = YES;
     filterOptionAll.all = YES;
+    filterOptionAll.title = @"Все";
     
-    [filterOptions addObject:filterOptionAll];
-    self.filterOptions = filterOptions;
-    
-    [self notifyObservers:self.filterOptions];
+    [self.filterOptions addObject:filterOptionAll];
+    traverseCategories(self.indexModel.categories, ^(Category *category, PlaceItem *item) {
+        if (category == nil || [self.categoryUUIDs containsObject:category.uuid]) {
+            return;
+        }
+        [self.categoryUUIDs addObject:category.uuid];
+        FilterOption *filterOption = [[FilterOption alloc] init];
+        filterOption.categoryId = category.uuid;
+        filterOption.title = category.title;
+        filterOption.on = NO;
+        filterOption.all = NO;
+        filterOption.iconName = category.icon;
+        [self.filterOptions addObject:filterOption];
+    });
 }
 
 - (void)addObserver:(nonnull id<CategoriesFilterObserver>)observer {
-    if ([self.observers containsObject:observer]) {
+    if ([self.categoriesFilterObservers containsObject:observer]) {
         return;
     }
-    [self.observers addObject:observer];
+    [self.categoriesFilterObservers addObject:observer];
 }
 
 - (void)notifyObservers {
-    [self.observers enumerateObjectsUsingBlock:^(CategoriesFilterObserver * _Nonnull obsever, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.categoriesFilterObservers enumerateObjectsUsingBlock:^(id<CategoriesFilterObserver> _Nonnull observer, NSUInteger idx, BOOL * _Nonnull stop) {
         [observer onFilterOptionsUpdate:self.filterOptions];
     }];
 }
 
 - (void)removeObserver:(nonnull id<CategoriesFilterObserver>)observer {
-    [self.observers removeObject:observer];
+    [self.categoriesFilterObservers removeObject:observer];
+}
+
+- (void)selectOptionAll:(BOOL)on {
+    [self.filterOptions enumerateObjectsUsingBlock:^(FilterOption * _Nonnull option, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx == 0) {
+            option.on = on;
+            return;
+        }
+        option.on = NO;
+        if (on) {
+            [self.selectedCategoryUUIDs addObject:option.categoryId];
+            return;
+        }
+        [self.selectedCategoryUUIDs removeObject:option.categoryId];
+        
+    }];
+    [self notifyObservers];
 }
 
 - (void)selectOption:(FilterOption *)selectedOption {
+    if (selectedOption.all) {
+        [self selectOptionAll:selectedOption.on];
+        return;
+    }
     [self.filterOptions enumerateObjectsUsingBlock:^(FilterOption * _Nonnull option, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([option.categoryId isEqualToString:selectedOption.categoryId]) {
             option.on = !option.on;
-            if (selectedOption.on) {
+            if (option.on) {
                 [self.selectedCategoryUUIDs addObject:selectedOption.categoryId];
                 return;
             }
             [self.selectedCategoryUUIDs removeObject:selectedOption.categoryId];
         }
     }];
+    NSPredicate *ordinaryOptionsPredicate =
+    [NSPredicate predicateWithFormat:@"on == %i AND all == %i", YES, NO];
+    NSUInteger selectedCount = [[self.filterOptions filteredArrayUsingPredicate:ordinaryOptionsPredicate] count];
+    // If all options are selected.
+    if (selectedCount == [self.filterOptions count] - 1) {
+        [self selectOptionAll:YES];
+        // TODO: scroll to "all" option
+        return;
+    }
+    if (selectedCount != [self.filterOptions count] - 1) {
+        [self.filterOptions firstObject].on = NO;
+    }
     [self notifyObserversFilterSelect:selectedOption];
 }
-
-- (void)notifyObserversFilterSelect:(FilterOptions *)selectedOption {
-    [self.categoriesFilterSelectObservers enumerateObjectsUsingBlock:^(CategoriesFilterObserver * _Nonnull obsever, NSUInteger idx, BOOL * _Nonnull stop) {
+    
+    
+- (void)notifyObserversFilterSelect:(nonnull FilterOption *)selectedOption {
+    [self.categoriesFilterObservers enumerateObjectsUsingBlock:^(id<CategoriesFilterObserver> _Nonnull observer, NSUInteger idx, BOOL * _Nonnull stop) {
         [observer onFilterOptionsSelect:selectedOption];
     }];
 }

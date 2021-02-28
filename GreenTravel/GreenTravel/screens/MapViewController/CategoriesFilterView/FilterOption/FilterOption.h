@@ -11,11 +11,9 @@
 @interface FilterOption : NSObject
 
 @property (strong, nonatomic, nullable) NSString *categoryId;
-@property (strong, nonatomic, nonnull) NSString *categoryTitle;
+@property (strong, nonatomic, nonnull) NSString *title;
 @property (strong, nonatomic, nullable) NSString *iconName;
 @property (assign, nonatomic) BOOL on;
 @property (assign, nonatomic) BOOL all;
 
-@end 
-
-NS_ASSUME_NONNULL_END
+@end

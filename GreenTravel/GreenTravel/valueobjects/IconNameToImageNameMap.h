@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)get;
 - (UIImage *)iconForName:(NSString *)name;
+- (UIImage *)filterIconForName:(NSString *)name
+                 selectedState:(BOOL)selectedState;
+- (BOOL)hasFilterIconForName:(NSString *)name;
 
 @end
 

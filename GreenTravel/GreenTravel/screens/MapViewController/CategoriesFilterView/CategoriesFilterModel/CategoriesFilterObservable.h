@@ -11,15 +11,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol CategoriesFilterObserver;
+@class FilterOption;
 
 @protocol CategoriesFilterObservable <NSObject>
 
 @property (strong, nonatomic) NSMutableArray<id<CategoriesFilterObserver>> *categoriesFilterObservers;
-@property (strong, nonatomic) NSMutableArray<id<CategoriesFilterObserver>> *categoriesFilterSelectObservers;
 - (void)addObserver:(id<CategoriesFilterObserver>)observer;
 - (void)removeObserver:(id<CategoriesFilterObserver>)observer;
 - (void)notifyObservers;
-- (void)notifyObserversFiterSelect;
+- (void)notifyObserversFiterSelect:(FilterOption *)selectedOption;
 
 @end
 

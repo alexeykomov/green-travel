@@ -362,7 +362,7 @@
     mapItem.uuid = self.item.uuid;
     mapItem.correspondingPlaceItem = self.item;
     mapItem.coords = self.item.coords;
-    MapViewController *mapViewController = [[MapViewController alloc] initWithMapModel:self.mapModel locationModel:self.locationModel mapItem:mapItem];
+    MapViewController *mapViewController = [[MapViewController alloc] initWithMapModel:self.mapModel locationModel:self.locationModel indexModel:self.indexModel mapItem:mapItem];
     [self.navigationController pushViewController:mapViewController animated:YES]; 
 }
 

@@ -12,6 +12,8 @@
 @interface IconNameToImageNameMap()
 
 @property (strong, nonatomic) NSDictionary<NSString *, NSString *> *map;
+@property (strong, nonatomic) NSDictionary<NSString *, NSString *> *filterMap;
+@property (strong, nonatomic) NSDictionary<NSString *, NSString *> *filterMapSelected;
 
 @end
 
@@ -30,6 +32,20 @@ static IconNameToImageNameMap *instance;
             @"bicycle-route": @"bicycle-route",
             @"excursion-pin": @"excursion",
         };
+        _filterMap = @{
+            @"object": @"forest",
+            @"hiking": @"footprints",
+            @"historical-place": @"church",
+            @"bicycle-route": @"bike",
+            @"excursion-pin": @"flag",
+        };
+        _filterMapSelected = @{
+            @"object": @"forest-white",
+            @"hiking": @"footprints-white",
+            @"historical-place": @"church-white",
+            @"bicycle-route": @"bike-white",
+            @"excursion-pin": @"flag-white",
+        };
     }
     return self;
 }
@@ -40,6 +56,24 @@ static IconNameToImageNameMap *instance;
     }
     NSString *fileName = self.map[name];
     return [UIImage imageNamed:fileName];
+}
+
+- (UIImage *)filterIconForName:(NSString *)name
+                 selectedState:(BOOL)selectedState {
+    if (!self.map[name]) {
+        return nil;
+    }
+    NSString *fileName;
+    if (selectedState) {
+        fileName = self.filterMapSelected[name];
+    } else {
+        fileName = self.filterMap[name];
+    }
+    return [UIImage imageNamed:fileName];
+}
+
+- (BOOL)hasFilterIconForName:(NSString *)name {
+    return self.filterMap[name] != nil && self.filterMapSelected[name] != nil;
 }
 
 + (instancetype)get {

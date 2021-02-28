@@ -16,15 +16,19 @@
 #import "MapItem.h"
 #import "MapPinView.h"
 #import "LocationModel.h"
+#import "CategoriesFilterView.h"
+#import "IndexModel.h"
 
 @interface MapViewController ()
 
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) LocationModel *locationModel;
+@property (strong, nonatomic) IndexModel *indexModel;
 @property (strong, nonatomic) UIButton *locationButton;
 @property (strong, nonatomic) MGLMapView *mapView;
 @property (assign, nonatomic) BOOL intentionToFocusOnUserLocation;
 @property (strong, nonatomic) MapItem *mapItem;
+@property (strong, nonatomic) CategoriesFilterView *filterView;
 
 @end
 
@@ -32,12 +36,14 @@
 
 - (instancetype)initWithMapModel:(MapModel *)mapModel
                    locationModel:(LocationModel *)locationModel
+                   indexModel:(IndexModel *)indexModel
                         mapItem:(nullable MapItem *)mapItem {
     self = [super init];
     if (self) {
         _mapModel = mapModel;
         _locationModel = locationModel;
         _mapItem = mapItem;
+        _indexModel = indexModel;
     }
     return self;
 }
@@ -71,19 +77,35 @@
     [self.mapModel addObserver:self];
     [self.locationModel addObserver:self];
     
+#pragma mark - Categories filter view
+    __weak typeof(self) weakSelf = self;
+    self.filterView =
+    [[CategoriesFilterView alloc] initWithIndexModel:self.indexModel
+                                      onFilterUpdate:^(NSSet<NSString *>  * _Nonnull categoryUUIDs) {
+        [weakSelf onFilterUpdate:categoryUUIDs];
+    }];
+    [self.view addSubview:self.filterView];
+    self.filterView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.filterView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
+        [self.filterView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+        [self.filterView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+        [self.filterView.heightAnchor constraintEqualToConstant:73.5],
+    ]];
+#pragma mark - Location button
     self.locationButton = [[UIButton alloc] init];
     [self.view addSubview:self.locationButton];
     
     self.locationButton.translatesAutoresizingMaskIntoConstraints = NO;
     
     [NSLayoutConstraint activateConstraints:@[
-        [self.locationButton.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:-100.0],
-        [self.locationButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-8.0],
+        [self.locationButton.bottomAnchor constraintEqualToAnchor:self.filterView.topAnchor],
+        [self.locationButton.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-8.0],
         [self.locationButton.widthAnchor constraintEqualToConstant:44.0],
         [self.locationButton.heightAnchor constraintEqualToConstant:44.0],
     ]];
 
-    
     self.locationButton.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.7];
     
     self.locationButton.layer.masksToBounds = YES;
@@ -174,6 +196,10 @@
     if (self.locationModel.locationEnabled && self.locationModel.lastLocation) {
         [self.mapView setCenterCoordinate:self.mapModel.lastLocation.coordinate animated:YES];
     }
+}
+
+- (void)onFilterUpdate:(NSSet<NSString *>*)categoryUUIDs {
+    
 }
 
 @end

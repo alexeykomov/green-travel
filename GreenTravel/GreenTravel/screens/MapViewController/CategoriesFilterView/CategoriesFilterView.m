@@ -12,6 +12,7 @@
 #import "CategoriesFilterModel.h"
 #import "TextUtils.h"
 #import "Colors.h"
+#import "IconNameToImageNameMap.h"
 
 static NSString* const kCategoriesFilterCellId = @"categoriesFilterCellId";
 
@@ -21,6 +22,8 @@ static NSString* const kCategoriesFilterCellId = @"categoriesFilterCellId";
 @property (nonatomic, copy) void(^onFilterUpdate)(NSSet<NSString *>*);
 
 @end
+
+static const CGFloat kInset = 16.0;
 
 @implementation CategoriesFilterView
 
@@ -35,16 +38,20 @@ static NSString* const kCategoriesFilterCellId = @"categoriesFilterCellId";
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel
                onFilterUpdate:(void(^)(NSSet<NSString *>*))onFilterUpdate
 {
-    self = [super init];
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self = [super initWithFrame:CGRectZero collectionViewLayout:flowLayout];
     if (self) {
-        UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-        [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-        [self setCollectionViewLayout:flowLayout];
         [self registerClass:CategoriesFilterCollectionViewCell.class forCellWithReuseIdentifier:kCategoriesFilterCellId];
         self.dataSource = self;
+        self.delegate = self;
         self.model = [[CategoriesFilterModel alloc] initWithIndexModel:indexModel];
         self.onFilterUpdate = onFilterUpdate;
         [self.model addObserver:self];
+        [self setBackgroundColor:UIColor.clearColor];
+        [self setBackgroundColor:[Colors get].blue];
+        self.showsHorizontalScrollIndicator = NO;
+        self.alwaysBounceHorizontal = YES;
     }
     return self;
 }
@@ -68,17 +75,18 @@ static NSString* const kCategoriesFilterCellId = @"categoriesFilterCellId";
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    FilterOption *option = self.model.filterOptions[indexPath.row];
+    FilterOption *option = self.model.filterOptions[indexPath.item];
     CGFloat width = 0;
     CGFloat height = 44.0;
     
     width += 14.0 * 2;
-    CGSize textSize = [option.categoryTitle sizeWithAttributes:
+    CGSize textSize = [option.title sizeWithAttributes:
      getTextAttributes(option.on ? [Colors get].white :
                        [Colors get].logCabin, 13.0, UIFontWeightRegular)];
     width += textSize.width;
     
-    if (!option.all) {
+    if (!option.all && [[IconNameToImageNameMap get]
+                        hasFilterIconForName:option.iconName]) {
         width += 40.0 + 8.0;
     }
     CGSize size = CGSizeMake(width, height);
@@ -95,6 +103,7 @@ static NSString* const kCategoriesFilterCellId = @"categoriesFilterCellId";
         return [filterOption.categoryId isEqualToString:selectedFilterOption.categoryId];
     }];
     CategoriesFilterCollectionViewCell *cell = (CategoriesFilterCollectionViewCell *)[self cellForItemAtIndexPath:[NSIndexPath indexPathForItem:indexOfSelectedOption inSection:0]];
+    [self scrollRectToVisible:cell.frame animated:YES];
     [cell update:selectedFilterOption];
     self.onFilterUpdate(self.model.selectedCategoryUUIDs);
 }
@@ -102,6 +111,22 @@ static NSString* const kCategoriesFilterCellId = @"categoriesFilterCellId";
 - (void)onFilterOptionsUpdate:(nonnull NSArray<FilterOption *> *)filterOptions {
     [self reloadData];
     self.onFilterUpdate(self.model.selectedCategoryUUIDs);
+}
+
+#pragma mark - UICollectionViewDelegateFlowLayout
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 16.0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 0.0;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(16.0,
+                            0.0,
+                            13.5,
+                            kInset);
 }
 
 @end
