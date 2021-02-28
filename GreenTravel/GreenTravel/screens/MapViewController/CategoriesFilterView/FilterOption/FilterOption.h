@@ -14,6 +14,6 @@
 @property (strong, nonatomic, nonnull) NSString *title;
 @property (strong, nonatomic, nullable) NSString *iconName;
 @property (assign, nonatomic) BOOL on;
-@property (assign, nonatomic) BOOL all;
+@property (assign, nonatomic) BOOL selectAll;
 
 @end

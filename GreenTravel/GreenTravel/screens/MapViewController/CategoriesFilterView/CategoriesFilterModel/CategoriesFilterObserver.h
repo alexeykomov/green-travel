@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol CategoriesFilterObserver <NSObject>
 
 - (void)onFilterOptionsUpdate:(NSArray<FilterOption *>*)filterOptions;
-- (void)onFilterOptionsSelect:(FilterOption *)filterOption;
+- (void)onFilterOptionsSelect:(NSUInteger)selectedIndex;
 
 @end
 

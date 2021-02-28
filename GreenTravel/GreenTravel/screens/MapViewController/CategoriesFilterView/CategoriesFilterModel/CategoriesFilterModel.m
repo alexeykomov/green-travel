@@ -55,7 +55,7 @@
     FilterOption *filterOptionAll = [[FilterOption alloc] init];
     filterOptionAll.categoryId = nil;
     filterOptionAll.on = YES;
-    filterOptionAll.all = YES;
+    filterOptionAll.selectAll = YES;
     filterOptionAll.title = @"Все";
     
     [self.filterOptions addObject:filterOptionAll];
@@ -68,7 +68,7 @@
         filterOption.categoryId = category.uuid;
         filterOption.title = category.title;
         filterOption.on = NO;
-        filterOption.all = NO;
+        filterOption.selectAll = NO;
         filterOption.iconName = category.icon;
         [self.filterOptions addObject:filterOption];
     });
@@ -103,14 +103,14 @@
             return;
         }
         [self.selectedCategoryUUIDs removeObject:option.categoryId];
-        
     }];
     [self notifyObservers];
 }
 
 - (void)selectOption:(FilterOption *)selectedOption {
-    if (selectedOption.all) {
-        [self selectOptionAll:selectedOption.on];
+    if (selectedOption.selectAll) {
+        [self notifyObserversFilterSelect:0];
+        [self selectOptionAll:!selectedOption.on];
         return;
     }
     [self.filterOptions enumerateObjectsUsingBlock:^(FilterOption * _Nonnull option, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -124,24 +124,28 @@
         }
     }];
     NSPredicate *ordinaryOptionsPredicate =
-    [NSPredicate predicateWithFormat:@"on == %i AND all == %i", YES, NO];
+    [NSPredicate predicateWithFormat:@"on = YES AND selectAll == NO"];
     NSUInteger selectedCount = [[self.filterOptions filteredArrayUsingPredicate:ordinaryOptionsPredicate] count];
     // If all options are selected.
     if (selectedCount == [self.filterOptions count] - 1) {
+        [self notifyObserversFilterSelect:0];
         [self selectOptionAll:YES];
-        // TODO: scroll to "all" option
         return;
     }
     if (selectedCount != [self.filterOptions count] - 1) {
         [self.filterOptions firstObject].on = NO;
     }
-    [self notifyObserversFilterSelect:selectedOption];
+    NSUInteger selectedIndex = [self.filterOptions indexOfObjectPassingTest:^BOOL(FilterOption * _Nonnull option, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [selectedOption.categoryId isEqualToString:option.categoryId];
+    }];
+    [self notifyObserversFilterSelect:selectedIndex];
+    [self notifyObservers];
 }
     
     
-- (void)notifyObserversFilterSelect:(nonnull FilterOption *)selectedOption {
+- (void)notifyObserversFilterSelect:(NSUInteger)selectedIndex {
     [self.categoriesFilterObservers enumerateObjectsUsingBlock:^(id<CategoriesFilterObserver> _Nonnull observer, NSUInteger idx, BOOL * _Nonnull stop) {
-        [observer onFilterOptionsSelect:selectedOption];
+        [observer onFilterOptionsSelect:selectedIndex];
     }];
 }
 

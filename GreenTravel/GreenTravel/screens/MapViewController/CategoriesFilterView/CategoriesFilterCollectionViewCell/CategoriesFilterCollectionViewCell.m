@@ -69,7 +69,12 @@
 }
 
 - (void)updateSubiews:(FilterOption *)option {
-    if (!option.all && [[IconNameToImageNameMap get]
+    [self.iconView removeFromSuperview];
+    self.iconView = nil;
+    [self.label removeFromSuperview];
+    self.label = nil;
+    
+    if (!option.selectAll && [[IconNameToImageNameMap get]
                         hasFilterIconForName:option.iconName]) {
         [self addIconView];
     } else {

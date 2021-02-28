@@ -85,7 +85,7 @@ static const CGFloat kInset = 16.0;
                        [Colors get].logCabin, 13.0, UIFontWeightRegular)];
     width += textSize.width;
     
-    if (!option.all && [[IconNameToImageNameMap get]
+    if (!option.selectAll && [[IconNameToImageNameMap get]
                         hasFilterIconForName:option.iconName]) {
         width += 40.0 + 8.0;
     }
@@ -98,14 +98,13 @@ static const CGFloat kInset = 16.0;
     [self.model selectOption:option];
 }
 
-- (void)onFilterOptionsSelect:(nonnull FilterOption *)selectedFilterOption {
-    NSUInteger indexOfSelectedOption = [self.model.filterOptions indexOfObjectPassingTest:^BOOL(FilterOption * _Nonnull filterOption, NSUInteger idx, BOOL * _Nonnull stop) {
-        return [filterOption.categoryId isEqualToString:selectedFilterOption.categoryId];
-    }];
-    CategoriesFilterCollectionViewCell *cell = (CategoriesFilterCollectionViewCell *)[self cellForItemAtIndexPath:[NSIndexPath indexPathForItem:indexOfSelectedOption inSection:0]];
+- (void)onFilterOptionsSelect:(NSUInteger)selectedIndex {
+    if (selectedIndex == 0) {
+        [self setContentOffset:CGPointMake(0, 0) animated:YES];
+        return;
+    }
+    CategoriesFilterCollectionViewCell *cell = (CategoriesFilterCollectionViewCell *)[self cellForItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0]];
     [self scrollRectToVisible:cell.frame animated:YES];
-    [cell update:selectedFilterOption];
-    self.onFilterUpdate(self.model.selectedCategoryUUIDs);
 }
 
 - (void)onFilterOptionsUpdate:(nonnull NSArray<FilterOption *> *)filterOptions {

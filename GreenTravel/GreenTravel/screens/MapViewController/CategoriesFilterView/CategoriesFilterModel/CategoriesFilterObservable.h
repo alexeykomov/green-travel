@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addObserver:(id<CategoriesFilterObserver>)observer;
 - (void)removeObserver:(id<CategoriesFilterObserver>)observer;
 - (void)notifyObservers;
-- (void)notifyObserversFiterSelect:(FilterOption *)selectedOption;
+- (void)notifyObserversFilterSelect:(NSUInteger)selectedIndex;
 
 @end
 
