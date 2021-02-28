@@ -49,7 +49,6 @@ static const CGFloat kInset = 16.0;
         self.onFilterUpdate = onFilterUpdate;
         [self.model addObserver:self];
         [self setBackgroundColor:UIColor.clearColor];
-        [self setBackgroundColor:[Colors get].blue];
         self.showsHorizontalScrollIndicator = NO;
         self.alwaysBounceHorizontal = YES;
     }

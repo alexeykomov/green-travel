@@ -117,10 +117,10 @@
         if ([option.categoryId isEqualToString:selectedOption.categoryId]) {
             option.on = !option.on;
             if (option.on) {
-                [self.selectedCategoryUUIDs addObject:selectedOption.categoryId];
+                [self.selectedCategoryUUIDs addObject:option.categoryId];
                 return;
             }
-            [self.selectedCategoryUUIDs removeObject:selectedOption.categoryId];
+            [self.selectedCategoryUUIDs removeObject:option.categoryId];
         }
     }];
     NSPredicate *ordinaryOptionsPredicate =
@@ -132,8 +132,10 @@
         [self selectOptionAll:YES];
         return;
     }
-    if (selectedCount != [self.filterOptions count] - 1) {
+    if (selectedCount != [self.filterOptions count] - 1 && [self.filterOptions firstObject].on) {
         [self.filterOptions firstObject].on = NO;
+        [self.selectedCategoryUUIDs removeAllObjects];
+        [self.selectedCategoryUUIDs addObject:selectedOption.categoryId];
     }
     NSUInteger selectedIndex = [self.filterOptions indexOfObjectPassingTest:^BOOL(FilterOption * _Nonnull option, NSUInteger idx, BOOL * _Nonnull stop) {
         return [selectedOption.categoryId isEqualToString:option.categoryId];
