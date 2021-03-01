@@ -23,10 +23,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithIndexModel:(IndexModel *)model
                      locationModel:(LocationModel *)locationModel;
-@property (strong, nonatomic) NSMutableArray<MapItem *> *mapItems;
+@property (strong, nonatomic) NSMutableArray<MapItem *> *mapItemsOriginal;
+@property (strong, nonatomic) NSMutableArray<MapItem *> *mapItemsFiltered;
 @property (strong, nonatomic) NSMutableArray<MapItem *> *closeMapItems;
 @property (strong, nonatomic) CLLocation *lastLocation; 
 @property (strong, nonatomic) NSMutableArray<id<MapItemsObserver>> *mapItemsObservers;
+- (void)applyCategoryFilters:(NSSet<NSString *> *)categoryUUIDs;
 
 @end
 

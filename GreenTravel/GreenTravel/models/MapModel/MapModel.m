@@ -14,16 +14,18 @@
 #import "PlaceItem.h"
 #import "MapItem.h"
 #import <CoreLocation/CoreLocation.h>
+#import "CategoryUtils.h"
 
 @interface MapModel ()
 
 @property (strong, nonatomic) IndexModel *indexModel;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) NSMutableSet *uuids;
+@property (strong, nonatomic) NSMutableSet<NSString *> *categoryFilter;
 
 @end
 
-static const CLLocationDistance kCloseDistance = 200.0;
+static const CLLocationDistance kCloseDistanceKm = 200.0;
 static const CLLocationDistance kMetersInKilometer = 1000.0;
 static const CLLocationDistance kLocationAccuracy = 500.0;
 
@@ -35,10 +37,12 @@ static const CLLocationDistance kLocationAccuracy = 500.0;
         if (self) {
             self.indexModel = model;
             _locationModel = locationModel;
-            self.mapItems = [[NSMutableArray alloc] init];
+            self.mapItemsOriginal = [[NSMutableArray alloc] init];
+            self.mapItemsFiltered = [[NSMutableArray alloc] init];
             self.closeMapItems = [[NSMutableArray alloc] init];
             self.uuids = [[NSMutableSet alloc] init];
             self.mapItemsObservers = [[NSMutableArray alloc] init];
+            self.categoryFilter = [[NSMutableSet alloc] init];
             [self.indexModel addObserver:self];
             [self.locationModel addObserver:self];
         }
@@ -70,31 +74,31 @@ static const CLLocationDistance kLocationAccuracy = 500.0;
 }
 
 - (void)fillMapItemsFromCategories:(NSArray<Category *> *)categories {
-    [categories enumerateObjectsUsingBlock:^(Category * _Nonnull category, NSUInteger idx, BOOL * _Nonnull stop) {
-        [self fillMapItemsFromCategories:category.categories];
-        [category.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (![self.uuids containsObject:item.uuid]) {
-                MapItem *mapItem = [[MapItem alloc] init];
-                mapItem.coords = item.coords;
-                mapItem.title = item.title;
-                mapItem.correspondingPlaceItem = item;
-                [self.mapItems addObject:mapItem];
-                [self.uuids addObject:item.uuid];
-            }
-        }];
-    }];
+    traverseCategories(categories, ^(Category *category, PlaceItem *item) {
+        if (category != nil) {
+            [self.categoryFilter addObject:category.uuid];
+        }
+        if (item != nil && ![self.uuids containsObject:item.uuid]) {
+            MapItem *mapItem = [[MapItem alloc] init];
+            mapItem.coords = item.coords;
+            mapItem.title = item.title;
+            mapItem.correspondingPlaceItem = item;
+            [self.mapItemsOriginal addObject:mapItem];
+            [self.uuids addObject:item.uuid];
+        }
+    });
 }
 
 - (void)updateCloseItems {
     NSMutableArray<MapItem *> *closeItems = [[NSMutableArray alloc] init];
-    [self.mapItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.mapItemsOriginal enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
         if (self.locationModel.lastLocation) {
             CLLocation *lastLocation = self.locationModel.lastLocation;
             NSLog(@"Last location: %@", lastLocation);
             CLLocation *itemLocation = [[CLLocation alloc] initWithCoordinate:mapItem.coords altitude:0 horizontalAccuracy:kLocationAccuracy verticalAccuracy:kLocationAccuracy timestamp:[[NSDate alloc] init]];
             CLLocationDistance distance = [lastLocation distanceFromLocation:itemLocation] / kMetersInKilometer;
             NSLog(@"Distance: %f", distance);
-            if (distance <= kCloseDistance) {
+            if (distance <= kCloseDistanceKm) {
                 [closeItems addObject:mapItem];
             }
         }
@@ -112,12 +116,22 @@ static const CLLocationDistance kLocationAccuracy = 500.0;
 
 - (void)notifyObservers {
     [self.mapItemsObservers enumerateObjectsUsingBlock:^(id<MapItemsObserver>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [obj onMapItemsUpdate:self.mapItems];
+        [obj onMapItemsUpdate:self.mapItemsFiltered];
     }];
 }
 
 - (void)removeObserver:(nonnull id<MapItemsObserver>)observer {
     [self.mapItemsObservers removeObject:observer];
+}
+
+- (void)applyCategoryFilters:(NSSet<NSString *> *)categoryUUIDs {
+    [self.mapItemsFiltered removeAllObjects];
+    [self.mapItemsOriginal enumerateObjectsUsingBlock:^(MapItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([categoryUUIDs containsObject:obj.correspondingPlaceItem.category.uuid]) {
+            [self.mapItemsFiltered addObject:obj];
+        }
+    }];
+    [self notifyObservers];
 }
 
 @end

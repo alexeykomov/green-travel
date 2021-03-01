@@ -132,7 +132,7 @@
     
     NSMutableArray *mapAnnotations = [[NSMutableArray alloc] init];
     NSArray<MapItem *> *mapItems = self.mapItem ? @[self.mapItem] :
-        self.mapModel.mapItems;
+        self.mapModel.mapItemsOriginal;
     [mapItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
         MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
         point.coordinate = mapItem.coords;
@@ -146,6 +146,21 @@
 
 - (void)onMapItemsUpdate:(NSArray<MapItem *> *)mapItems {
     NSLog(@"Map items: %@", mapItems);
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        NSMutableArray *mapAnnotations = [[NSMutableArray alloc] init];
+        [strongSelf.mapView removeAnnotations:strongSelf.mapView.annotations];
+        [mapItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
+            MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
+            point.coordinate = mapItem.coords;
+            point.title = mapItem.title;
+            [mapAnnotations addObject:point];
+        }];
+        [strongSelf.mapView addAnnotations:mapAnnotations];
+        [strongSelf.mapView showAnnotations:mapAnnotations animated:YES];
+    });
+    
 }
 
 - (MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id<MGLAnnotation>)annotation {
@@ -158,9 +173,7 @@
     
     if (!mappin) {
         mappin = [[MapPinView alloc] initWithReuseIdentifier:reuseIdentifier];
-        mappin.bounds = CGRectMake(0, 0, 28, 35);
-        //mappin.backgroundColor = [Colors get].black;
-        
+        mappin.bounds = CGRectMake(0, 0, 28, 35);        
     }
     return mappin;
 }
@@ -199,7 +212,7 @@
 }
 
 - (void)onFilterUpdate:(NSSet<NSString *>*)categoryUUIDs {
-    
+    [self.mapModel applyCategoryFilters:categoryUUIDs];
 }
 
 @end
