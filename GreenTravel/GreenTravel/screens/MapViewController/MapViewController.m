@@ -129,38 +129,30 @@
 }
 
 - (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView {
-    
-    NSMutableArray *mapAnnotations = [[NSMutableArray alloc] init];
     NSArray<MapItem *> *mapItems = self.mapItem ? @[self.mapItem] :
         self.mapModel.mapItemsOriginal;
-    [mapItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
-        MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
-        point.coordinate = mapItem.coords;
-        point.title = mapItem.title;
-        [mapAnnotations addObject:point];
-    }];
-    
-    [mapView addAnnotations:mapAnnotations];
-    [mapView showAnnotations:mapAnnotations animated:YES];
+    [self renderAnnotations:mapItems];
 }
 
 - (void)onMapItemsUpdate:(NSArray<MapItem *> *)mapItems {
     NSLog(@"Map items: %@", mapItems);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        NSMutableArray *mapAnnotations = [[NSMutableArray alloc] init];
-        [strongSelf.mapView removeAnnotations:strongSelf.mapView.annotations];
-        [mapItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
-            MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
-            point.coordinate = mapItem.coords;
-            point.title = mapItem.title;
-            [mapAnnotations addObject:point];
-        }];
-        [strongSelf.mapView addAnnotations:mapAnnotations];
-        [strongSelf.mapView showAnnotations:mapAnnotations animated:YES];
+        [weakSelf renderAnnotations:mapItems];
     });
-    
+}
+
+- (void)renderAnnotations:(NSArray<MapItem *> *)mapItems {
+    NSMutableArray *mapAnnotations = [[NSMutableArray alloc] init];
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    [mapItems enumerateObjectsUsingBlock:^(MapItem * _Nonnull mapItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
+        point.coordinate = mapItem.coords;
+        point.title = mapItem.title;
+        [mapAnnotations addObject:point];
+    }];
+    [self.mapView addAnnotations:mapAnnotations];
+    [self.mapView showAnnotations:mapAnnotations animated:YES];
 }
 
 - (MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id<MGLAnnotation>)annotation {
