@@ -125,7 +125,6 @@ CGFloat centerCompensation(NSUInteger dotCountLeft, NSUInteger dotCountRight) {
     
 #pragma mark - Content view
     self.contentView = [[UIStackView alloc] init];
-    self.contentView.backgroundColor = [Colors get].milkyGrey;
     self.contentView.alignment = UIStackViewAlignmentCenter;
     self.contentView.distribution = UIStackViewDistributionFill;
     self.contentView.spacing = kSpacing;
