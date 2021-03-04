@@ -7,6 +7,7 @@
 //
 
 #import "SearchViewController.h"
+#import "UISearchControllerNoCancel.h"
 #import "Colors.h"
 #import "PlaceItem.h"
 #import "Category.h"
@@ -86,12 +87,19 @@ static const CGFloat kSearchRowHeight = 58.0;
     self.scrollInsets = UIEdgeInsetsZero;
     [self setUpWithTable];
     
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    if (@available(iOS 13.0, *)) {
+        self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    } else {
+        self.searchController = [[UISearchControllerNoCancel alloc] initWithSearchResultsController:nil];
+    }
     self.searchController.searchResultsUpdater = self;
     self.searchController.obscuresBackgroundDuringPresentation = NO;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.searchBar.placeholder = kPlaceholderSearch;
     self.searchController.searchBar.delegate = self;
+    if (@available(iOS 13.0, *)) {
+        self.searchController.automaticallyShowsCancelButton = NO;
+    }
     self.navigationItem.titleView = self.searchController.searchBar;
     self.definesPresentationContext = YES;
     
@@ -150,6 +158,7 @@ static const CGFloat kSearchRowHeight = 58.0;
     }
     
     self.scrollView = [[UIScrollView alloc] init];
+    self.scrollView.backgroundColor = [Colors get].white;
     [self.view addSubview:self.scrollView];
     self.scrollView.alwaysBounceVertical = YES;
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -216,12 +225,19 @@ static const CGFloat kSearchRowHeight = 58.0;
 
 #pragma mark - Lifecycle
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     [self.model addObserver:self];
     [self.model loadSearchHistoryItems];
     
     [self.navigationController.view setNeedsLayout];
     [self.navigationController.view layoutIfNeeded];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    BOOL searchBarIsFirstResponder = [self.searchController.searchBar becomeFirstResponder];
+    
 }
 
 // This fixes situation when next view in the navigation stack doesn't adapt to
@@ -231,6 +247,7 @@ static const CGFloat kSearchRowHeight = 58.0;
     
     [self.navigationController.view setNeedsLayout];
     [self.navigationController.view layoutIfNeeded];
+    [self.searchController.searchBar resignFirstResponder];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

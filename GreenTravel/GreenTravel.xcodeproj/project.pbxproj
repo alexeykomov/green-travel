@@ -103,6 +103,8 @@
 		5A69921A24F7DF63008FB47E /* PathItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921924F7DF63008FB47E /* PathItem.m */; };
 		5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921C24F7E11F008FB47E /* PlaceDetails.m */; };
 		5A69922024F7E134008FB47E /* PathDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921F24F7E134008FB47E /* PathDetails.m */; };
+		5A7759E625FCFE3300CEFC78 /* UISearchBarNoCancel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7759E525FCFE3300CEFC78 /* UISearchBarNoCancel.m */; };
+		5A7759EC25FD073200CEFC78 /* UISearchControllerNoCancel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A7759EB25FD073200CEFC78 /* UISearchControllerNoCancel.m */; };
 		5A8B17EF25E7014E002A187E /* CategoriesFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B17EE25E7014E002A187E /* CategoriesFilterView.m */; };
 		5A8B17FB25E8536B002A187E /* CategoriesFilterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B17FA25E8536B002A187E /* CategoriesFilterModel.m */; };
 		5A8B180225E8593F002A187E /* FilterOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B180125E8593F002A187E /* FilterOption.m */; };
@@ -316,6 +318,10 @@
 		5A69921F24F7E134008FB47E /* PathDetails.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PathDetails.m; sourceTree = "<group>"; };
 		5A69922124F910F2008FB47E /* CategoriesObservable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesObservable.h; sourceTree = "<group>"; };
 		5A69922424F91175008FB47E /* CategoriesObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesObserver.h; sourceTree = "<group>"; };
+		5A7759E425FCFE3300CEFC78 /* UISearchBarNoCancel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UISearchBarNoCancel.h; sourceTree = "<group>"; };
+		5A7759E525FCFE3300CEFC78 /* UISearchBarNoCancel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UISearchBarNoCancel.m; sourceTree = "<group>"; };
+		5A7759EA25FD073200CEFC78 /* UISearchControllerNoCancel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UISearchControllerNoCancel.h; sourceTree = "<group>"; };
+		5A7759EB25FD073200CEFC78 /* UISearchControllerNoCancel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UISearchControllerNoCancel.m; sourceTree = "<group>"; };
 		5A8774FE25EA6A4F00C7B351 /* CategoriesFilterObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesFilterObserver.h; sourceTree = "<group>"; };
 		5A8B17ED25E7014E002A187E /* CategoriesFilterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesFilterView.h; sourceTree = "<group>"; };
 		5A8B17EE25E7014E002A187E /* CategoriesFilterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoriesFilterView.m; sourceTree = "<group>"; };
@@ -610,6 +616,10 @@
 			children = (
 				5A14829924E9440C00EBB756 /* SearchViewController.h */,
 				5A14829A24E9440C00EBB756 /* SearchViewController.m */,
+				5A7759E425FCFE3300CEFC78 /* UISearchBarNoCancel.h */,
+				5A7759E525FCFE3300CEFC78 /* UISearchBarNoCancel.m */,
+				5A7759EA25FD073200CEFC78 /* UISearchControllerNoCancel.h */,
+				5A7759EB25FD073200CEFC78 /* UISearchControllerNoCancel.m */,
 				5A14830524F136BB00EBB756 /* WeRecommendCell */,
 				5A1482FE24F124C300EBB756 /* SearchCell */,
 			);
@@ -1274,6 +1284,7 @@
 				5A55D48525CECA2000D795E1 /* StoredCategoryUUIDToRelatedItemUUIDs+CoreDataClass.m in Sources */,
 				5A18E9C225C9E15A00F26C3E /* IconNameToImageNameMap.m in Sources */,
 				5AEA980A2556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.m in Sources */,
+				5A7759EC25FD073200CEFC78 /* UISearchControllerNoCancel.m in Sources */,
 				5A46B5B325E3F5D600F7FF09 /* SearchCellConfiguration.m in Sources */,
 				5A324B7B24F6E3CB0044A671 /* Category.m in Sources */,
 				5A66EB6225F117A7006367C6 /* CategoriesFilterViewConstants.m in Sources */,
@@ -1292,6 +1303,7 @@
 				5A8B180225E8593F002A187E /* FilterOption.m in Sources */,
 				5A55D48625CECA2000D795E1 /* StoredRelatedItemUUID+CoreDataClass.m in Sources */,
 				5A324B8424F860420044A671 /* ImageUtils.m in Sources */,
+				5A7759E625FCFE3300CEFC78 /* UISearchBarNoCancel.m in Sources */,
 				5A1482A124E9527700EBB756 /* PhotoCollectionViewCell.m in Sources */,
 				5A14828A24E80E3900EBB756 /* MainViewController.m in Sources */,
 				5AEA98042556A8AC0037A51D /* ApiServiceDataMapper.m in Sources */,

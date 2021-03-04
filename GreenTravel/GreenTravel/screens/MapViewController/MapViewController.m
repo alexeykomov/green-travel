@@ -238,10 +238,16 @@
                                        mapModel:self.mapModel
                                      apiService:self.apiService
                                 coreDataService:self.coreDataService];
-    
-    [self presentViewController:searchViewController animated:YES completion:^{
+    searchViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDonePress:)];
+    UINavigationController *searchViewControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:searchViewController];
+    [self presentViewController:searchViewControllerWithNavigation animated:YES completion:^{
             
     }];
+}
+
+-(void)onDonePress:(id)sender {
+    [self.navigationController dismissViewControllerAnimated:YES
+                                                  completion:^{}];
 }
 
 - (void)onFilterUpdate:(NSSet<NSString *>*)categoryUUIDs {
