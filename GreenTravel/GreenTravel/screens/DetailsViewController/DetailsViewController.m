@@ -48,6 +48,7 @@
 @property (strong, nonatomic) UIView *activityIndicatorContainerView;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicatorView;
 @property (strong, nonatomic) ApiService *apiService;
+@property (strong, nonatomic) CoreDataService *coreDataService;
 @property (strong, nonatomic) NSTimer *bannerHideTimer;
 @property (strong, nonatomic) UIViewPropertyAnimator *bannerShowAnimator;
 @property (strong, nonatomic) UIViewPropertyAnimator *bannerHideAnimator;
@@ -56,6 +57,7 @@
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) IndexModel *indexModel;
+@property (strong, nonatomic) SearchModel *searchModel;
 @property (assign, nonatomic) BOOL resized;
 @property (assign, nonatomic) CGSize screenSize;
 
@@ -64,16 +66,20 @@
 @implementation DetailsViewController
 
 - (instancetype)initWithApiService:(ApiService *)apiService
+                   coreDataService:(nonnull CoreDataService *)coreDataService
                       indexModel:(IndexModel *)indexModel
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel
+                     searchModel:(SearchModel *)searchModel
 {
     self = [super init];
     if (self) {
         _apiService = apiService;
+        _coreDataService = coreDataService;
         _mapModel = mapModel;
         _indexModel = indexModel;
         _locationModel = locationModel;
+        _searchModel = searchModel;
     }
     return self;
 }
@@ -362,7 +368,7 @@
     mapItem.uuid = self.item.uuid;
     mapItem.correspondingPlaceItem = self.item;
     mapItem.coords = self.item.coords;
-    MapViewController *mapViewController = [[MapViewController alloc] initWithMapModel:self.mapModel locationModel:self.locationModel indexModel:self.indexModel mapItem:mapItem];
+    MapViewController *mapViewController = [[MapViewController alloc] initWithMapModel:self.mapModel locationModel:self.locationModel indexModel:self.indexModel searchModel:self.searchModel apiService:self.apiService coreDataService:self.coreDataService mapItem:mapItem];
     [self.navigationController pushViewController:mapViewController animated:YES]; 
 }
 

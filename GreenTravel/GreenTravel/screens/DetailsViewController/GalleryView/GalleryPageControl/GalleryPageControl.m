@@ -437,7 +437,7 @@ CGFloat centerCompensation(NSUInteger dotCountLeft, NSUInteger dotCountRight) {
                 dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeM), @(DotSizeS), @(DotSizeXS)];
                 dotsIndexes.after = @[@(DotSizeS), @(DotSizeM), @(DotSizeL),
-                                      @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];;
+                                      @(DotSizeL), @(DotSizeL), @(DotSizeM), @(DotSizeS)];
             } else if (nextState == PageControlStateLeftDots5) {
                 dotsIndexes.before = @[@(DotSizeM), @(DotSizeL), @(DotSizeL),
                                       @(DotSizeL), @(DotSizeM), @(DotSizeS)];

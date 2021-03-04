@@ -16,14 +16,21 @@ NS_ASSUME_NONNULL_BEGIN
 @class MapModel;
 @class MapItem;
 @class LocationModel;
+@class SearchModel;
 @class IndexModel;
+@class ApiService;
+@class CoreDataService;
+@class DetailsModel;
 
 @interface MapViewController : UIViewController<MapItemsObserver, MGLMapViewDelegate, LocationObserver>
 
 - (instancetype)initWithMapModel:(MapModel *)mapModel
                    locationModel:(LocationModel *)locationModel
                       indexModel:(IndexModel *)indexModel
-                        mapItem:(nullable MapItem *)mapItem;
+                     searchModel:(SearchModel *)searchModel
+                      apiService:(ApiService *)apiService
+                 coreDataService:(CoreDataService *)coreDataService
+                         mapItem:(nullable MapItem *)mapItem;
 
 @end
 

@@ -27,8 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
                 locationModel:(LocationModel *)locationModel
                      mapModel:(MapModel *)mapModel
                    apiService:(ApiService *)apiService
-              coreDataService:(CoreDataService *)coreDataService
-detailsModel:(DetailsModel *)detailsModel;
+              coreDataService:(CoreDataService *)coreDataService;
 
 @end
 

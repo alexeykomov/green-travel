@@ -251,8 +251,7 @@ static CGFloat kMinHeightOfPlaceholderView = 500.0;
                                    locationModel:self.locationModel
                                         mapModel:self.mapModel
                                       apiService:self.apiService
-                                 coreDataService:self.coreDataService
-                                    detailsModel:self.detailsModel] animated:NO];
+                                 coreDataService:self.coreDataService] animated:NO];
 }
 
 #pragma mark - Table data source

@@ -81,7 +81,13 @@
 
 #pragma mark - MapViewController
 
-    MapViewController *mapController = [[MapViewController alloc] initWithMapModel:mapModel locationModel:locationModel indexModel:self.indexModel mapItem:nil];
+    MapViewController *mapController = [[MapViewController alloc] initWithMapModel:mapModel
+                                                                     locationModel:locationModel
+                                                                        indexModel:self.indexModel
+                                                                       searchModel:searchModel
+                                                                        apiService:self.apiService
+                                                                   coreDataService:self.coreDataService
+                                                                           mapItem:nil];
     mapController.title = @"Карта";
     UINavigationController *mapControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:mapController];
     UIImage *mapImage;
@@ -93,7 +99,7 @@
     mapControllerWithNavigation.tabBarItem = mapTabBarItem;
     mapControllerWithNavigation.navigationBar.barTintColor = [Colors get].green;
     mapControllerWithNavigation.navigationBar.titleTextAttributes =
-    [Typography get].navigationSemiboldAttributes;;
+    [Typography get].navigationSemiboldAttributes;
 
 #pragma mark - BookmarksViewController
 
@@ -115,7 +121,7 @@
     bookmarksControllerWithNavigation.tabBarItem = bookmarksTabBarItem;
     bookmarksControllerWithNavigation.navigationBar.barTintColor = [Colors get].green;
     bookmarksControllerWithNavigation.navigationBar.titleTextAttributes =
-    [Typography get].navigationSemiboldAttributes;;
+    [Typography get].navigationSemiboldAttributes;
 
     self.viewControllers = @[indexViewControllerWithNavigation, mapControllerWithNavigation, bookmarksControllerWithNavigation];
 

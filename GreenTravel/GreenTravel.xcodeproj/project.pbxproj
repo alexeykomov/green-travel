@@ -106,6 +106,7 @@
 		5A8B17EF25E7014E002A187E /* CategoriesFilterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B17EE25E7014E002A187E /* CategoriesFilterView.m */; };
 		5A8B17FB25E8536B002A187E /* CategoriesFilterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B17FA25E8536B002A187E /* CategoriesFilterModel.m */; };
 		5A8B180225E8593F002A187E /* FilterOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B180125E8593F002A187E /* FilterOption.m */; };
+		5A8E932525F176D90014FEBE /* MapButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8E932425F176D90014FEBE /* MapButton.m */; };
 		5AA75BFE2502D70900AE7331 /* MapPinView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75BFD2502D70900AE7331 /* MapPinView.m */; };
 		5AA75C012504258300AE7331 /* DetailsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C002504258300AE7331 /* DetailsModel.m */; };
 		5AA75C082505196D00AE7331 /* CoreDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75C072505196D00AE7331 /* CoreDataService.m */; };
@@ -323,6 +324,8 @@
 		5A8B17FF25E855D3002A187E /* CategoriesFilterObservable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesFilterObservable.h; sourceTree = "<group>"; };
 		5A8B180025E8593F002A187E /* FilterOption.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterOption.h; sourceTree = "<group>"; };
 		5A8B180125E8593F002A187E /* FilterOption.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterOption.m; sourceTree = "<group>"; };
+		5A8E932325F176D90014FEBE /* MapButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapButton.h; sourceTree = "<group>"; };
+		5A8E932425F176D90014FEBE /* MapButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapButton.m; sourceTree = "<group>"; };
 		5AA75BFC2502D70900AE7331 /* MapPinView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapPinView.h; sourceTree = "<group>"; };
 		5AA75BFD2502D70900AE7331 /* MapPinView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapPinView.m; sourceTree = "<group>"; };
 		5AA75C002504258300AE7331 /* DetailsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsModel.m; sourceTree = "<group>"; };
@@ -789,6 +792,8 @@
 			children = (
 				5A1482F324F04B0B00EBB756 /* MapViewController.h */,
 				5A1482F424F04B0B00EBB756 /* MapViewController.m */,
+				5A8E932325F176D90014FEBE /* MapButton.h */,
+				5A8E932425F176D90014FEBE /* MapButton.m */,
 				5A8B180925EA4922002A187E /* CategoriesFilterView */,
 				5AA75BFC2502D70900AE7331 /* MapPinView.h */,
 				5AA75BFD2502D70900AE7331 /* MapPinView.m */,
@@ -1318,6 +1323,7 @@
 				5A6646F625C0BCA900B4E7A0 /* RefreshButton.m in Sources */,
 				5AAB5A192569484B00D52F53 /* SlideCollectionViewCell.m in Sources */,
 				5A55D48A25CECA2000D795E1 /* StoredPlaceItem+CoreDataProperties.m in Sources */,
+				5A8E932525F176D90014FEBE /* MapButton.m in Sources */,
 				5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */,
 				5A324B9424FB00D70044A671 /* MapItem.m in Sources */,
 				5AC77EE92592438E0012A488 /* DotSizes.m in Sources */,
@@ -1482,18 +1488,18 @@
 			baseConfigurationReference = 9CA4D1431EA6DC3435CF5306 /* Pods-GreenTravel.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 53APD5F9YQ;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NWSTPFC433;
 				INFOPLIST_FILE = GreenTravel/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.greentravel.radzima-light";
+				PRODUCT_BUNDLE_IDENTIFIER = "by.gov.nasb.greentravel.radzima-light";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = EPM_SLR_Light_InHouse;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1503,18 +1509,18 @@
 			baseConfigurationReference = C002332CEB809283A96A693E /* Pods-GreenTravel.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 53APD5F9YQ;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NWSTPFC433;
 				INFOPLIST_FILE = GreenTravel/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.greentravel.radzima-light";
+				PRODUCT_BUNDLE_IDENTIFIER = "by.gov.nasb.greentravel.radzima-light";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = EPM_SLR_Light_InHouse;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

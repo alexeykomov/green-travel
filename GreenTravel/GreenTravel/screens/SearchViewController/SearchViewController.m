@@ -36,7 +36,6 @@
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) CLLocation *lastLocation;
 @property (assign, nonatomic) BOOL locationIsEnabled;
-@property (strong, nonatomic) DetailsModel *detailsModel;
 @property (strong, nonatomic) ApiService *apiService;
 @property (strong, nonatomic) CoreDataService *coreDataService;
 @property (strong, nonatomic) SearchItem *itemToSaveToHistory;
@@ -65,7 +64,6 @@ static const CGFloat kSearchRowHeight = 58.0;
                      mapModel:(MapModel *)mapModel
                    apiService:(ApiService *)apiService
               coreDataService:(CoreDataService *)coreDataService
-                 detailsModel:(DetailsModel *)detailsModel
 {
     self = [super init];
     if (self) {
@@ -73,7 +71,6 @@ static const CGFloat kSearchRowHeight = 58.0;
         _indexModel = indexModel;
         _locationModel = locationModel;
         _mapModel = mapModel;
-        _detailsModel = detailsModel;
         _apiService = apiService;
     }
     return self;

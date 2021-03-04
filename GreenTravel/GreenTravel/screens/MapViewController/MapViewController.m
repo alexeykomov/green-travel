@@ -18,13 +18,22 @@
 #import "LocationModel.h"
 #import "CategoriesFilterView.h"
 #import "IndexModel.h"
+#import "MapButton.h"
+#import "SearchViewController.h"
+#import "SearchModel.h"
+#import "ApiService.h"
+#import "CoreDataService.h"
 
 @interface MapViewController ()
 
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) LocationModel *locationModel;
 @property (strong, nonatomic) IndexModel *indexModel;
+@property (strong, nonatomic) SearchModel *searchModel;
+@property (strong, nonatomic) ApiService *apiService;
+@property (strong, nonatomic) CoreDataService *coreDataService;
 @property (strong, nonatomic) UIButton *locationButton;
+@property (strong, nonatomic) UIButton *searchButton;
 @property (strong, nonatomic) MGLMapView *mapView;
 @property (assign, nonatomic) BOOL intentionToFocusOnUserLocation;
 @property (strong, nonatomic) MapItem *mapItem;
@@ -36,14 +45,20 @@
 
 - (instancetype)initWithMapModel:(MapModel *)mapModel
                    locationModel:(LocationModel *)locationModel
-                   indexModel:(IndexModel *)indexModel
-                        mapItem:(nullable MapItem *)mapItem {
+                      indexModel:(IndexModel *)indexModel
+                     searchModel:(SearchModel *)searchModel
+                      apiService:(ApiService *)apiService
+                 coreDataService:(CoreDataService *)coreDataService
+                         mapItem:(nullable MapItem *)mapItem {
     self = [super init];
     if (self) {
         _mapModel = mapModel;
         _locationModel = locationModel;
         _mapItem = mapItem;
         _indexModel = indexModel;
+        _searchModel = searchModel;
+        _apiService = apiService;
+        _coreDataService = coreDataService;
     }
     return self;
 }
@@ -101,7 +116,7 @@
     
     [NSLayoutConstraint activateConstraints:@[
         [self.locationButton.bottomAnchor constraintEqualToAnchor:self.filterView.topAnchor],
-        [self.locationButton.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-8.0],
+        [self.locationButton.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-16.0],
         [self.locationButton.widthAnchor constraintEqualToConstant:44.0],
         [self.locationButton.heightAnchor constraintEqualToConstant:44.0],
     ]];
@@ -126,6 +141,19 @@
     ]];
     
     [self.locationButton addTarget:self action:@selector(onLocateMePress:) forControlEvents:UIControlEventTouchUpInside];
+    
+#pragma mark - Search button
+    self.searchButton = [[MapButton alloc] initWithImageName:@"search-outline"
+                                                      target:self
+                                                    selector:@selector(onSearchPress:)];
+    [self.view addSubview:self.searchButton];
+    
+    self.searchButton.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.searchButton.bottomAnchor constraintEqualToAnchor:self.locationButton.topAnchor constant:-8.0],
+        [self.searchButton.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-16.0],
+    ]];
 }
 
 - (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView {
@@ -201,6 +229,19 @@
     if (self.locationModel.locationEnabled && self.locationModel.lastLocation) {
         [self.mapView setCenterCoordinate:self.mapModel.lastLocation.coordinate animated:YES];
     }
+}
+
+- (void)onSearchPress:(id)sender {
+    SearchViewController *searchViewController = [[SearchViewController alloc] initWithModel:self.searchModel
+                                     indexModel:self.indexModel
+                                  locationModel:self.locationModel
+                                       mapModel:self.mapModel
+                                     apiService:self.apiService
+                                coreDataService:self.coreDataService];
+    
+    [self presentViewController:searchViewController animated:YES completion:^{
+            
+    }];
 }
 
 - (void)onFilterUpdate:(NSSet<NSString *>*)categoryUUIDs {
