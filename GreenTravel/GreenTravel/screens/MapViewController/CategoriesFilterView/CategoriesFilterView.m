@@ -13,8 +13,10 @@
 #import "TextUtils.h"
 #import "Colors.h"
 #import "IconNameToImageNameMap.h"
+#import "CategoriesFilterSpacerCollectionViewCell.h"
 
 static NSString* const kCategoriesFilterCellId = @"categoriesFilterCellId";
+static NSString* const kCategoriesFilterSpacerCellId = @"categoriesFilterSpacerCellId";
 
 @interface CategoriesFilterView()
 
@@ -43,6 +45,8 @@ static const CGFloat kInset = 16.0;
     self = [super initWithFrame:CGRectZero collectionViewLayout:flowLayout];
     if (self) {
         [self registerClass:CategoriesFilterCollectionViewCell.class forCellWithReuseIdentifier:kCategoriesFilterCellId];
+        [self registerClass:CategoriesFilterSpacerCollectionViewCell.class forCellWithReuseIdentifier:kCategoriesFilterSpacerCellId];
+        
         self.dataSource = self;
         self.delegate = self;
         self.model = [[CategoriesFilterModel alloc] initWithIndexModel:indexModel];
@@ -61,22 +65,29 @@ static const CGFloat kInset = 16.0;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self.model.filterOptions count];
+    return 2 * [self.model.filterOptions count] + 1;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"cellForItemAtIndexPath method, index path: %@", indexPath);
-    
-    FilterOption *option = self.model.filterOptions[indexPath.row];
+    if (indexPath.item % 2 == 0) {
+        CategoriesFilterSpacerCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCategoriesFilterSpacerCellId forIndexPath:indexPath];
+        return cell;
+    }
+    FilterOption *option = self.model.filterOptions[indexPathToDataCellIndex(indexPath)];
     CategoriesFilterCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCategoriesFilterCellId forIndexPath:indexPath];
     [cell update:option];
     return cell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    FilterOption *option = self.model.filterOptions[indexPath.item];
-    CGFloat width = 0;
     CGFloat height = 44.0;
+    if (indexPath.item % 2 == 0) {
+        return CGSizeMake(kInset, height);
+    }
+    FilterOption *option = self.model.filterOptions[indexPathToDataCellIndex(indexPath)];
+    CGFloat width = 0;
+    
     
     width += 14.0 * 2;
     CGSize textSize = [option.title sizeWithAttributes:
@@ -93,7 +104,10 @@ static const CGFloat kInset = 16.0;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    FilterOption *option = self.model.filterOptions[indexPath.row];
+    if (indexPath.item % 2 == 0) {
+        return;
+    }
+    FilterOption *option = self.model.filterOptions[indexPathToDataCellIndex(indexPath)];
     [self.model selectOption:option];
 }
 
@@ -102,7 +116,8 @@ static const CGFloat kInset = 16.0;
         [self setContentOffset:CGPointMake(0, 0) animated:YES];
         return;
     }
-    CategoriesFilterCollectionViewCell *cell = (CategoriesFilterCollectionViewCell *)[self cellForItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0]];
+    NSUInteger dataCellIndex = filterOptionIndexToDataCellIndex(selectedIndex);
+    CategoriesFilterCollectionViewCell *cell = (CategoriesFilterCollectionViewCell *)[self cellForItemAtIndexPath:[NSIndexPath indexPathForItem:dataCellIndex inSection:0]];
     [self scrollRectToVisible:cell.frame animated:YES];
 }
 
@@ -113,18 +128,26 @@ static const CGFloat kInset = 16.0;
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return 16.0;
+    return 0.0;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 0.0;
+    return 0;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     return UIEdgeInsetsMake(16.0,
-                            0.0,
+                            0,
                             13.5,
-                            kInset);
+                            0);
+}
+
+NSUInteger indexPathToDataCellIndex(NSIndexPath *indexPath) {
+    return (NSUInteger) floor(indexPath.item / 2);
+}
+
+NSUInteger filterOptionIndexToDataCellIndex(NSUInteger filterOptionIndex) {
+    return filterOptionIndex * 2 + 1;
 }
 
 @end

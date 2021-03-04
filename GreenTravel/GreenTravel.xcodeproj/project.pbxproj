@@ -97,6 +97,7 @@
 		5A6646AF25BC667800B4E7A0 /* CommonButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A6646AE25BC667800B4E7A0 /* CommonButton.m */; };
 		5A6646EC25BD989800B4E7A0 /* UserDefaultsService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A6646EB25BD989800B4E7A0 /* UserDefaultsService.m */; };
 		5A6646F625C0BCA900B4E7A0 /* RefreshButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A6646F525C0BCA900B4E7A0 /* RefreshButton.m */; };
+		5A66EB5825F0CFEE006367C6 /* CategoriesFilterSpacerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A66EB5725F0CFEE006367C6 /* CategoriesFilterSpacerCollectionViewCell.m */; };
 		5A69921724F7DE51008FB47E /* IndexModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921624F7DE51008FB47E /* IndexModel.m */; };
 		5A69921A24F7DF63008FB47E /* PathItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921924F7DF63008FB47E /* PathItem.m */; };
 		5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A69921C24F7E11F008FB47E /* PlaceDetails.m */; };
@@ -299,6 +300,8 @@
 		5A6646EB25BD989800B4E7A0 /* UserDefaultsService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserDefaultsService.m; sourceTree = "<group>"; };
 		5A6646F425C0BCA900B4E7A0 /* RefreshButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RefreshButton.h; sourceTree = "<group>"; };
 		5A6646F525C0BCA900B4E7A0 /* RefreshButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RefreshButton.m; sourceTree = "<group>"; };
+		5A66EB5625F0CFEE006367C6 /* CategoriesFilterSpacerCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoriesFilterSpacerCollectionViewCell.h; sourceTree = "<group>"; };
+		5A66EB5725F0CFEE006367C6 /* CategoriesFilterSpacerCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoriesFilterSpacerCollectionViewCell.m; sourceTree = "<group>"; };
 		5A69921524F7DE51008FB47E /* IndexModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexModel.h; sourceTree = "<group>"; };
 		5A69921624F7DE51008FB47E /* IndexModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexModel.m; sourceTree = "<group>"; };
 		5A69921824F7DF63008FB47E /* PathItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PathItem.h; sourceTree = "<group>"; };
@@ -859,6 +862,15 @@
 			path = NewDataButton;
 			sourceTree = "<group>";
 		};
+		5A66EB5C25F1157F006367C6 /* CategoriesFilterSpacerCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				5A66EB5625F0CFEE006367C6 /* CategoriesFilterSpacerCollectionViewCell.h */,
+				5A66EB5725F0CFEE006367C6 /* CategoriesFilterSpacerCollectionViewCell.m */,
+			);
+			path = CategoriesFilterSpacerCollectionViewCell;
+			sourceTree = "<group>";
+		};
 		5A8774FA25EA5F0700C7B351 /* CategoriesFilterModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -877,6 +889,7 @@
 				5A8B17EE25E7014E002A187E /* CategoriesFilterView.m */,
 				5A8774FA25EA5F0700C7B351 /* CategoriesFilterModel */,
 				5A8B180A25EA493A002A187E /* FilterOption */,
+				5A66EB5C25F1157F006367C6 /* CategoriesFilterSpacerCollectionViewCell */,
 				5A8B180B25EA4946002A187E /* CategoriesFilterCollectionViewCell */,
 			);
 			path = CategoriesFilterView;
@@ -1275,6 +1288,7 @@
 				5A14830424F136B800EBB756 /* WeRecommendCell.m in Sources */,
 				5AA75C082505196D00AE7331 /* CoreDataService.m in Sources */,
 				5A55D4AA25D0443700D795E1 /* DescriptionView.m in Sources */,
+				5A66EB5825F0CFEE006367C6 /* CategoriesFilterSpacerCollectionViewCell.m in Sources */,
 				5A324B9C24FBAEEB0044A671 /* BookmarksGroupModel.m in Sources */,
 				5A55D48425CECA2000D795E1 /* StoredRelatedItemUUID+CoreDataProperties.m in Sources */,
 				5A56CD2E25E80AC100FDE9D8 /* CategoriesFilterCollectionViewCell.m in Sources */,
