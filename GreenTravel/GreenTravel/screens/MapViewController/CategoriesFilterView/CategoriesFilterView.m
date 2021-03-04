@@ -14,6 +14,7 @@
 #import "Colors.h"
 #import "IconNameToImageNameMap.h"
 #import "CategoriesFilterSpacerCollectionViewCell.h"
+#import "CategoriesFilterViewConstants.h"
 
 static NSString* const kCategoriesFilterCellId = @"categoriesFilterCellId";
 static NSString* const kCategoriesFilterSpacerCellId = @"categoriesFilterSpacerCellId";
@@ -25,7 +26,7 @@ static NSString* const kCategoriesFilterSpacerCellId = @"categoriesFilterSpacerC
 
 @end
 
-static const CGFloat kInset = 16.0;
+static const CGFloat kSpacingWidth = 16.0;
 
 @implementation CategoriesFilterView
 
@@ -83,13 +84,12 @@ static const CGFloat kInset = 16.0;
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat height = 44.0;
     if (indexPath.item % 2 == 0) {
-        return CGSizeMake(kInset, height);
+        return CGSizeMake(kSpacingWidth, height);
     }
-    FilterOption *option = self.model.filterOptions[indexPathToDataCellIndex(indexPath)];
     CGFloat width = 0;
+    FilterOption *option = self.model.filterOptions[indexPathToDataCellIndex(indexPath)];
     
-    
-    width += 14.0 * 2;
+    width += CategoriesFilterViewLabelToCellSpacing * 2;
     CGSize textSize = [option.title sizeWithAttributes:
      getTextAttributes(option.on ? [Colors get].white :
                        [Colors get].logCabin, 13.0, UIFontWeightRegular)];
@@ -97,7 +97,7 @@ static const CGFloat kInset = 16.0;
     
     if (!option.selectAll && [[IconNameToImageNameMap get]
                         hasFilterIconForName:option.iconName]) {
-        width += 40.0 + 8.0;
+        width += CategoriesFilterViewIconWidth + CategoriesFilterViewIconToLabelSpacing;
     }
     CGSize size = CGSizeMake(width, height);
     return size;
@@ -136,10 +136,7 @@ static const CGFloat kInset = 16.0;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(16.0,
-                            0,
-                            13.5,
-                            0);
+    return UIEdgeInsetsMake(16.0, 0, 13.5, 0);
 }
 
 NSUInteger indexPathToDataCellIndex(NSIndexPath *indexPath) {

@@ -11,6 +11,7 @@
 #import "FilterOption.h"
 #import "Typography.h"
 #import "Colors.h"
+#import "CategoriesFilterViewConstants.h"
 
 @interface CategoriesFilterCollectionViewCell ()
 
@@ -44,9 +45,9 @@
     self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
         [self.iconView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
-        [self.iconView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:14.0],
-        [self.iconView.widthAnchor constraintEqualToConstant:40.0],
-        [self.iconView.heightAnchor constraintEqualToConstant:40.0],
+        [self.iconView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:CategoriesFilterViewLabelToCellSpacing], 
+        [self.iconView.widthAnchor constraintEqualToConstant:CategoriesFilterViewIconWidth],
+        [self.iconView.heightAnchor constraintEqualToConstant:CategoriesFilterViewIconWidth],
     ]];
 }
 
@@ -58,8 +59,8 @@
     [self.contentView addSubview:self.label];
     self.label.translatesAutoresizingMaskIntoConstraints = NO;
     NSLayoutConstraint *leadingConstraint = self.iconView != nil ?
-    [self.label.leadingAnchor constraintEqualToAnchor:self.iconView.trailingAnchor constant:8.0] :
-    [self.label.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:14.0];
+    [self.label.leadingAnchor constraintEqualToAnchor:self.iconView.trailingAnchor constant:CategoriesFilterViewIconToLabelSpacing] :
+    [self.label.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:CategoriesFilterViewLabelToCellSpacing];
     [NSLayoutConstraint activateConstraints:@[
         [self.label.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
         leadingConstraint,
@@ -97,7 +98,7 @@
         [self.contentView setBackgroundColor:[Colors get].apple];
         return;
     }
-    [self.label setAttributedText:[[Typography get] makeSubtitle2Regular:option.title color:[Colors get].logCabin]];;
+    [self.label setAttributedText:[[Typography get] makeSubtitle2Regular:option.title color:[Colors get].logCabin]];
     [self.contentView setBackgroundColor:[Colors get].white];
 }
 
