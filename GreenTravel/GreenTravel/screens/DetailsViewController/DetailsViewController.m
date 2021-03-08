@@ -26,6 +26,8 @@
 #import "Typography.h"
 #import "CommonButton.h"
 #import "DescriptionView.h"
+#import "DetailsView.h"
+#import "PlacesViewController.h"
 
 @interface DetailsViewController ()
 
@@ -33,6 +35,7 @@
 @property (strong, nonatomic) BannerView *copiedBannerView;
 @property (strong, nonatomic) NSLayoutConstraint *copiedBannerViewTopConstraint;
 @property (strong, nonatomic) UIView *contentView;
+@property (strong, nonatomic) DetailsView *detailsView;
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UILabel *addressLabel;
 @property (strong, nonatomic) UIButton *bookmarkButton;
@@ -109,168 +112,29 @@
         [self.contentView.widthAnchor constraintEqualToAnchor:self.scrollView.widthAnchor]
     ]];
         
-    #pragma mark - Gallery
-    self.imageGalleryView = [[GalleryView alloc] initWithFrame:CGRectZero
-                                                     imageURLs:self.item.details.images];
-    self.imageGalleryView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.imageGalleryView.layer.masksToBounds = YES;
-    
-    [self.contentView addSubview:self.imageGalleryView];
-    
-    [NSLayoutConstraint activateConstraints:@[
-        [self.imageGalleryView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-        [self.imageGalleryView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:0.0],
-        [self.imageGalleryView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-    ]];
-    
-    #pragma mark - Bookmark button
-    self.bookmarkButton = [[UIButton alloc] init];
-    
-    self.bookmarkButton.backgroundColor = [Colors get].white;
-    self.bookmarkButton.contentMode = UIViewContentModeScaleAspectFill;
-    self.bookmarkButton.layer.cornerRadius = 22.0;
-    self.bookmarkButton.layer.borderWidth = 1.0;
-    self.bookmarkButton.layer.borderColor = [[Colors get].heavyMetal35 CGColor];
-    self.bookmarkButton.layer.masksToBounds = YES;
-    UIImage *imageNotSelected = [[UIImage imageNamed:@"bookmark-index"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIImage *imageSelected = [[UIImage imageNamed:@"bookmark-index-selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    
-    [self.bookmarkButton setImage:imageNotSelected forState:UIControlStateNormal];
-    [self.bookmarkButton setImage:imageSelected forState:UIControlStateSelected];
-    
-    self.bookmarkButton.tintColor = [Colors get].logCabin;
-    [self.bookmarkButton setSelected:self.item.bookmarked];
-    
-    [self.bookmarkButton addTarget:self action:@selector(onBookmarkButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-
-    self.bookmarkButton.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [self.contentView addSubview:self.bookmarkButton];
-    
-    [NSLayoutConstraint activateConstraints:@[
-        [self.bookmarkButton.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:32.0],
-        [self.bookmarkButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
-        [self.bookmarkButton.widthAnchor constraintEqualToConstant:44.0],
-        [self.bookmarkButton.heightAnchor constraintEqualToConstant:44.0],
-    ]];
-        
-    #pragma mark - Title label
-    self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.numberOfLines = 4;
-    [self.titleLabel setFont:[UIFont fontWithName:@"Montserrat-Semibold" size:20.0]];
-    self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-
-    [self.contentView addSubview:self.titleLabel];
-
-    [NSLayoutConstraint activateConstraints:@[
-        [self.titleLabel.topAnchor constraintEqualToAnchor:self.imageGalleryView.bottomAnchor],
-        [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
-        [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
-
-    ]];
-    
-    #pragma mark - Address label
-    self.addressLabel = [[UILabel alloc] init];
-    self.addressLabel.numberOfLines = 4;
-    [self.addressLabel setFont:[UIFont fontWithName:@"OpenSans-Regular" size:14.0]];
-    self.addressLabel.translatesAutoresizingMaskIntoConstraints = NO;
-
-    [self.contentView addSubview:self.addressLabel];
-
-    [NSLayoutConstraint activateConstraints:@[
-        [self.addressLabel.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor constant:8.0],
-        [self.addressLabel.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
-        [self.addressLabel.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
-
-    ]];
-    
-    #pragma mark - Location button
-    self.locationButton = [[UIButton alloc] init];
-    [self.locationButton.titleLabel setFont:[UIFont fontWithName:@"OpenSans-Regular" size:14.0]];
-    
-    [self.locationButton addTarget:self action:@selector(onLocationButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.locationButton.translatesAutoresizingMaskIntoConstraints = NO;
-
-    [self.contentView addSubview:self.locationButton];
-
-    [NSLayoutConstraint activateConstraints:@[
-        [self.locationButton.topAnchor constraintEqualToAnchor:self.addressLabel.bottomAnchor constant:3.0],
-        [self.locationButton.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0],
-        //[self.locationButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0],
-
-    ]];
-    
-    #pragma mark - Map button top
-    self.mapButtonTop = [[CommonButton alloc] initWithTarget:self action:@selector(onMapButtonPress:) label:@"Посмотреть на карте"];
-    
-    [self.contentView addSubview:self.mapButtonTop];
-
-    NSLayoutConstraint *mapButtonTopLeading = [self.mapButtonTop.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16.0];
-    NSLayoutConstraint *mapButtonTopTrailing = [self.mapButtonTop.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16.0];
-    mapButtonTopLeading.priority = UILayoutPriorityDefaultHigh - 1;
-    mapButtonTopTrailing.priority = UILayoutPriorityDefaultHigh - 1;
-    [NSLayoutConstraint activateConstraints:@[
-        [self.mapButtonTop.topAnchor constraintEqualToAnchor:self.locationButton.bottomAnchor constant:20.0],
-        [self.mapButtonTop.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
-        mapButtonTopLeading,
-        mapButtonTopTrailing,
-    ]];
-    
-    #pragma mark - Description text
-    self.descriptionTextView = [[DescriptionView alloc] init];
-
-    self.descriptionTextView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.contentView addSubview:self.descriptionTextView];
-
-    [NSLayoutConstraint activateConstraints:@[
-        [self.descriptionTextView.topAnchor constraintEqualToAnchor:self.mapButtonTop.bottomAnchor constant:26.0],
-        [self.descriptionTextView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-        [self.descriptionTextView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-    ]];
-    
-    #pragma mark - Linked items
     __weak typeof(self) weakSelf = self;
-    self.linkedCategoriesView =
-    [[LinkedCategoriesView alloc] initWithIndexModel:self.indexModel
-                                          apiService:self.apiService
-                                            mapModel:self.mapModel
-                                       locationModel:self.locationModel
-                          pushToNavigationController:^(PlacesViewController * _Nonnull placesViewController) {
-        [weakSelf.navigationController pushViewController:(UIViewController *)placesViewController
-                                                 animated:YES];
+    self.detailsView = [[DetailsView alloc] initWithItem:self.item onBookmarkButtonPress:^{
+        [weakSelf onBookmarkButtonPress:nil];
+    } onLocationButtonPress:^{} onMapButtonPress:^{
+        [weakSelf onMapButtonPress:nil];
+    } onCategoriesLinkPress:^(NSOrderedSet<NSString *>* _Nonnull linkedItems){
+        PlacesViewController *placesViewController =
+        [[PlacesViewController alloc] initWithIndexModel:weakSelf.indexModel
+                                              apiService:weakSelf.apiService
+                                                mapModel:weakSelf.mapModel
+                                           locationModel:weakSelf.locationModel
+                                              bookmarked:NO
+                                        allowedItemUUIDs:linkedItems];
+        placesViewController.category = category;
+        [weakSelf.navigationController pushViewController:placesViewController animated:YES];
     }];
-
-    self.linkedCategoriesView.translatesAutoresizingMaskIntoConstraints = NO;
-
-    [self.contentView addSubview:self.linkedCategoriesView];
-    
+    [self.contentView addSubview:self.detailsView];
+    self.detailsView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [self.linkedCategoriesView.topAnchor constraintEqualToAnchor:self.descriptionTextView.bottomAnchor constant:32.0],
-        [self.linkedCategoriesView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0],
-        [self.linkedCategoriesView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0],
-        [self.linkedCategoriesView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-10.5],
-    ]];
-    
-#pragma mark - Activity indicator
-    self.activityIndicatorContainerView = [[UIView alloc] init];
-    self.activityIndicatorContainerView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.activityIndicatorContainerView.backgroundColor = [Colors get].white;
-    [self.view addSubview:self.activityIndicatorContainerView];
-    [NSLayoutConstraint activateConstraints:@[
-        [self.activityIndicatorContainerView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
-        [self.activityIndicatorContainerView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-        [self.activityIndicatorContainerView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-        [self.activityIndicatorContainerView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
-    ]];
-    
-    self.activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.activityIndicatorView.hidesWhenStopped = YES;
-    self.activityIndicatorView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.activityIndicatorContainerView addSubview:self.activityIndicatorView];
-    [NSLayoutConstraint activateConstraints:@[
-        [self.activityIndicatorView.centerXAnchor constraintEqualToAnchor:self.activityIndicatorContainerView.centerXAnchor],
-        [self.activityIndicatorView.centerYAnchor constraintEqualToAnchor:self.activityIndicatorContainerView.centerYAnchor]
+        [self.detailsView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor],
+        [self.detailsView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor],
+        [self.detailsView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor],
+        [self.detailsView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor],
     ]];
     
 #pragma mark - "Copied" banner

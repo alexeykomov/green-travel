@@ -21,10 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LinkedCategoriesView : UIView<UITableViewDataSource, UITableViewDelegate>
 
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel
-                     apiService:(nonnull ApiService *)apiService
-                       mapModel:(nonnull MapModel *)mapModel
-                  locationModel:(nonnull LocationModel *)locationModel
-     pushToNavigationController:(void(^)(PlacesViewController *))pushToNavigationController;
+                        apiService:(nonnull ApiService *)apiService
+                          mapModel:(nonnull MapModel *)mapModel
+                     locationModel:(nonnull LocationModel *)locationModel
+        pushToNavigationController:(void(^)(PlacesViewController *))pushToNavigationController
+             onCategoriesLinkPress:(void(^)(NSOrderedSet<NSString *> *))onCategoriesLinkPress;
 
 - (void)update:(NSArray<CategoryUUIDToRelatedItemUUIDs *>*)categoryIdToItems;
 

@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		5A0C84E82561CA9F00165D22 /* BannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0C84E72561CA9F00165D22 /* BannerView.m */; };
+		5A0F980225F4F23600395457 /* FeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F980125F4F23600395457 /* FeedViewController.m */; };
+		5A0F981625F4F46C00395457 /* FeedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F981525F4F46C00395457 /* FeedModel.m */; };
+		5A0F981C25F4F4A300395457 /* FeedItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F981B25F4F4A300395457 /* FeedItemCell.m */; };
+		5A0F982325F63CDA00395457 /* DetailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F982225F63CDA00395457 /* DetailsView.m */; };
 		5A11BF8B2584F0FF00113B31 /* GalleryPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A11BF8A2584F0FF00113B31 /* GalleryPageControl.m */; };
 		5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824924E7ED9100EBB756 /* AppDelegate.m */; };
 		5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824C24E7ED9100EBB756 /* SceneDelegate.m */; };
@@ -143,6 +147,14 @@
 		5A0C84DF25612C7900165D22 /* BookmarksObservable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarksObservable.h; sourceTree = "<group>"; };
 		5A0C84E62561CA9F00165D22 /* BannerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BannerView.h; sourceTree = "<group>"; };
 		5A0C84E72561CA9F00165D22 /* BannerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BannerView.m; sourceTree = "<group>"; };
+		5A0F980025F4F23600395457 /* FeedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedViewController.h; sourceTree = "<group>"; };
+		5A0F980125F4F23600395457 /* FeedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedViewController.m; sourceTree = "<group>"; };
+		5A0F981425F4F46C00395457 /* FeedModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedModel.h; sourceTree = "<group>"; };
+		5A0F981525F4F46C00395457 /* FeedModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedModel.m; sourceTree = "<group>"; };
+		5A0F981A25F4F4A300395457 /* FeedItemCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedItemCell.h; sourceTree = "<group>"; };
+		5A0F981B25F4F4A300395457 /* FeedItemCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedItemCell.m; sourceTree = "<group>"; };
+		5A0F982125F63CDA00395457 /* DetailsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsView.h; sourceTree = "<group>"; };
+		5A0F982225F63CDA00395457 /* DetailsView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsView.m; sourceTree = "<group>"; };
 		5A11BF892584F0FF00113B31 /* GalleryPageControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GalleryPageControl.h; sourceTree = "<group>"; };
 		5A11BF8A2584F0FF00113B31 /* GalleryPageControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GalleryPageControl.m; sourceTree = "<group>"; };
 		5A14824524E7ED9100EBB756 /* GreenTravel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenTravel.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -379,6 +391,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A0F980625F4F24100395457 /* FeedViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5A0F980025F4F23600395457 /* FeedViewController.h */,
+				5A0F980125F4F23600395457 /* FeedViewController.m */,
+				5A0F981A25F4F4A300395457 /* FeedItemCell.h */,
+				5A0F981B25F4F4A300395457 /* FeedItemCell.m */,
+			);
+			path = FeedViewController;
+			sourceTree = "<group>";
+		};
+		5A0F981325F4F43F00395457 /* FeedModel */ = {
+			isa = PBXGroup;
+			children = (
+				5A0F981425F4F46C00395457 /* FeedModel.h */,
+				5A0F981525F4F46C00395457 /* FeedModel.m */,
+			);
+			path = FeedModel;
+			sourceTree = "<group>";
+		};
+		5A0F982025F63CBA00395457 /* GalleryImagePlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				5A55D49225CFF5D600D795E1 /* GalleryImagePlaceholder.h */,
+				5A55D49325CFF5D600D795E1 /* GalleryImagePlaceholder.m */,
+			);
+			path = GalleryImagePlaceholder;
+			sourceTree = "<group>";
+		};
+		5A0F982A25F63CDD00395457 /* DetailsView */ = {
+			isa = PBXGroup;
+			children = (
+				5A0F982125F63CDA00395457 /* DetailsView.h */,
+				5A0F982225F63CDA00395457 /* DetailsView.m */,
+			);
+			path = DetailsView;
+			sourceTree = "<group>";
+		};
 		5A11BF8F2584F10500113B31 /* GalleryPageControl */ = {
 			isa = PBXGroup;
 			children = (
@@ -478,6 +528,7 @@
 			isa = PBXGroup;
 			children = (
 				5A5FB1A025057BF200EBAA8E /* MainViewController */,
+				5A0F980625F4F24100395457 /* FeedViewController */,
 				5A5FB1A125057C0200EBAA8E /* IndexViewController */,
 				5A14830624F1496600EBB756 /* SearchViewController */,
 				5A5FB1A225057C4400EBAA8E /* MapViewController */,
@@ -710,6 +761,7 @@
 		5A5FB19D250579E900EBAA8E /* models */ = {
 			isa = PBXGroup;
 			children = (
+				5A0F981325F4F43F00395457 /* FeedModel */,
 				5A5FB19E250579F800EBAA8E /* LocationModel */,
 				5A324BA3250025390044A671 /* SearchModel */,
 				5A324BA22500252D0044A671 /* IndexModel */,
@@ -841,8 +893,8 @@
 			isa = PBXGroup;
 			children = (
 				5A55D48E25CFF59D00D795E1 /* CommonButton */,
-				5A55D49225CFF5D600D795E1 /* GalleryImagePlaceholder.h */,
-				5A55D49325CFF5D600D795E1 /* GalleryImagePlaceholder.m */,
+				5A0F982025F63CBA00395457 /* GalleryImagePlaceholder */,
+				5A0F982A25F63CDD00395457 /* DetailsView */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -1256,6 +1308,7 @@
 				5A1482F224EF005300EBB756 /* BookmarkCell.m in Sources */,
 				5A324B8A24FAB9780044A671 /* SearchModel.m in Sources */,
 				5A55D48925CECA2000D795E1 /* StoredCategory+CoreDataProperties.m in Sources */,
+				5A0F982325F63CDA00395457 /* DetailsView.m in Sources */,
 				5A324B9F24FEF87B0044A671 /* LocationModel.m in Sources */,
 				5A55D48125CECA2000D795E1 /* StoredCategory+CoreDataClass.m in Sources */,
 				5A14825E24E7ED9400EBB756 /* main.m in Sources */,
@@ -1295,6 +1348,7 @@
 				5AA75C082505196D00AE7331 /* CoreDataService.m in Sources */,
 				5A55D4AA25D0443700D795E1 /* DescriptionView.m in Sources */,
 				5A66EB5825F0CFEE006367C6 /* CategoriesFilterSpacerCollectionViewCell.m in Sources */,
+				5A0F981625F4F46C00395457 /* FeedModel.m in Sources */,
 				5A324B9C24FBAEEB0044A671 /* BookmarksGroupModel.m in Sources */,
 				5A55D48425CECA2000D795E1 /* StoredRelatedItemUUID+CoreDataProperties.m in Sources */,
 				5A56CD2E25E80AC100FDE9D8 /* CategoriesFilterCollectionViewCell.m in Sources */,
@@ -1302,6 +1356,7 @@
 				5A8B17EF25E7014E002A187E /* CategoriesFilterView.m in Sources */,
 				5A1482F524F04B0B00EBB756 /* MapViewController.m in Sources */,
 				5A1482E924EC8C2C00EBB756 /* PlacesViewController.m in Sources */,
+				5A0F980225F4F23600395457 /* FeedViewController.m in Sources */,
 				5A1482CE24EB091300EBB756 /* PlaceItem.m in Sources */,
 				5A5FB1E12517EAB800EBAA8E /* CategoryUtils.m in Sources */,
 				5A69921724F7DE51008FB47E /* IndexModel.m in Sources */,
@@ -1319,6 +1374,7 @@
 				5AAB5A192569484B00D52F53 /* SlideCollectionViewCell.m in Sources */,
 				5A55D48A25CECA2000D795E1 /* StoredPlaceItem+CoreDataProperties.m in Sources */,
 				5A69921D24F7E11F008FB47E /* PlaceDetails.m in Sources */,
+				5A0F981C25F4F4A300395457 /* FeedItemCell.m in Sources */,
 				5A324B9424FB00D70044A671 /* MapItem.m in Sources */,
 				5AC77EE92592438E0012A488 /* DotSizes.m in Sources */,
 			);

@@ -34,6 +34,7 @@
 @property (strong, nonatomic) NSArray<CategoryUUIDToRelatedItemUUIDs *> *categoryIdToItems;
 @property (copy, nonatomic) void(^pushToNavigationController)(PlacesViewController *);
 @property (strong, nonatomic) NSLayoutConstraint *tableViewHeightConstraint;
+@property (copy, nonatomic) void(^onCategoriesLinkPress)(NSOrderedSet<NSString *> *, Category *);
 
 @end
 
@@ -42,10 +43,11 @@ static NSString * const kCategoryLinkCellId = @"categoryLinkCellId";
 @implementation LinkedCategoriesView
 
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel
-                     apiService:(nonnull ApiService *)apiService
-                       mapModel:(nonnull MapModel *)mapModel
-                  locationModel:(nonnull LocationModel *)locationModel
-     pushToNavigationController:(nonnull void (^)(PlacesViewController * _Nonnull))pushToNavigationController
+                        apiService:(nonnull ApiService *)apiService
+                          mapModel:(nonnull MapModel *)mapModel
+                     locationModel:(nonnull LocationModel *)locationModel
+        pushToNavigationController:(nonnull void (^)(PlacesViewController * _Nonnull))pushToNavigationController
+             onCategoriesLinkPress:(void(^)(NSOrderedSet<NSString *> *, Category *))onCategoriesLinkPress 
 {
     self = [super init];
     if (self) {
@@ -154,6 +156,9 @@ static NSString * const kCategoryLinkCellId = @"categoryLinkCellId";
                                     allowedItemUUIDs:linkedItems];
     placesViewController.category = category;
     self.pushToNavigationController(placesViewController);
+    
+    self.onCategoriesLinkPress(linkedItems, category);
+    
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
