@@ -8,14 +8,19 @@
 
 #import <Foundation/Foundation.h>
 #import "FeedObservable.h"
+#import "FeedObserver.h"
+#import "CategoriesObserver.h"
 
 @class FeedItem;
+@class IndexModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FeedModel : NSObject<FeedObservable>
+@interface FeedModel : NSObject<FeedObservable, CategoriesObserver>
 
 @property (strong, nonatomic) NSArray<FeedItem *> *feedItems;
+@property (strong, nonatomic) NSMutableArray<id<FeedObserver>> *feedObservers;
+- (instancetype)initWithIndexModel:(IndexModel *)indexModel; 
 
 @end
 

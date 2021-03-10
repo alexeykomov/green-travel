@@ -194,14 +194,7 @@ static const CGFloat kSearchRowHeight = 58.0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([self isSearching]) {
-        return [self.dataSourceFiltered count];
-    }
-    NSUInteger searchHistoryItemsCount = [self.model.searchHistoryItems count];
-    if (searchHistoryItemsCount > 0) {
-        return searchHistoryItemsCount + kDataSourceOrigOffset;
-    }
-    return 0;
+    return [self.model.feedItems count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -227,15 +220,6 @@ static const CGFloat kSearchRowHeight = 58.0;
     return cell;
 }
 
-- (SearchCellConfiguration *)mapSearchCellConfigurationFromSearchItem:(SearchItem *)item {
-    SearchCellConfiguration *cellConfiguration = [[SearchCellConfiguration alloc] init];
-    PlaceItem *correspondingItem = self.indexModel.flatItems[item.correspondingPlaceItemUUID];
-    cellConfiguration.title = correspondingItem.title;
-    cellConfiguration.categoryTitle = correspondingItem.category.title;
-    cellConfiguration.iconName = correspondingItem.category.icon;
-    return cellConfiguration;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView
 estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0 && ![self isSearching]) {
@@ -245,76 +229,6 @@ estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    DetailsViewController *detailsController = [[DetailsViewController alloc] initWithApiService:self.apiService indexModel:self.indexModel mapModel:self.mapModel locationModel:self.locationModel];
-    if ([self isSearching]) {
-        SearchItem *searchItem = self.dataSourceFiltered[indexPath.row];
-        detailsController.item = self.indexModel.flatItems[searchItem.correspondingPlaceItemUUID];
-        self.itemToSaveToHistory = searchItem;
-        self.searchController.searchBar.text = @"";
-    } else {
-        SearchItem *searchItem =
-        self.model.searchHistoryItems[indexPath.row - kDataSourceOrigOffset];
-        self.itemToSaveToHistory = searchItem;
-        detailsController.item = self.indexModel.flatItems[searchItem.correspondingPlaceItemUUID];
-    }
-    [self.navigationController pushViewController:detailsController animated:YES];
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (![self isSearching] && indexPath.row >= kDataSourceOrigOffset) {
-        return YES;
-    }
-    return NO;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        if (![self isSearching] && indexPath.row >= kDataSourceOrigOffset) {
-            SearchItem *searchItem = self.model.searchHistoryItems[indexPath.row -kDataSourceOrigOffset];
-            [self.model removeSearchHistoryItem:searchItem];
-            if ([self.model.searchHistoryItems count] > 0) {
-                [self.tableView deleteRowsAtIndexPaths:@[indexPath]
-                                      withRowAnimation:UITableViewRowAnimationAutomatic];
-                return;
-            }
-            [self.tableView deleteRowsAtIndexPaths:@[
-                [NSIndexPath indexPathForRow:0 inSection:0], indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
-    }
-}
-
-#pragma mark - Search
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-    NSString *search = searchController.searchBar.text;
-    [self.dataSourceFiltered removeAllObjects];
-    self.searchActive = searchController.isActive;
-    if (!searchController.isActive) {
-        [self updateViews];
-        return;
-    }
-    for (SearchItem *item in self.model.searchItems) {
-        if ([[item searchableText] localizedCaseInsensitiveContainsString:search]) {
-            [self.dataSourceFiltered addObject:item];
-            continue;
-        }
-    }
-    [self updateViews];
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    self.searchActive = NO;
-    [self updateViews];
-}
-
-- (BOOL)isSearchBarEmpty {
-    NSString *search = self.searchController.searchBar.text;
-    return [search length] == 0;
-}
-
-- (BOOL)isSearching {
-    return self.searchActive && self.searchController.isActive &&
-    ![self isSearchBarEmpty];
 }
 
 @end
