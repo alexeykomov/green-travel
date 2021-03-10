@@ -31,7 +31,7 @@
     
 }
  
-- (void)update:(FeedItem *)item
+- (void)update:(PlaceItem *)item
 onBookmarkButtonPress:(void(^)(void))onBookmarkButtonPress
 onLocationButtonPress:(void(^)(void))onLocationButtonPress
 onMapButtonPress:(void(^)(void))onMapButtonPress

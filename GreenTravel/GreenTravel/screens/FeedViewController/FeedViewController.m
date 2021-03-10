@@ -9,6 +9,9 @@
 #import "FeedViewController.h"
 #import "FeedItemCell.h"
 #import "FeedModel.h"
+#import "IndexModel.h"
+#import "FeedItem.h"
+#import "PlaceItem.h"
 
 @interface FeedViewController ()
 
@@ -209,7 +212,8 @@ static const CGFloat kSearchRowHeight = 58.0;
         return cell;
     }
     FeedItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kSearchCellId];
-    FeedItem *item = self.model.feedItems[indexPath.row];
+    FeedItem *feedItem = self.model.feedItems[indexPath.row];
+    PlaceItem *placeItem = self.indexModel.flatItems[feedItem.correspondingPlaceItemUUID];
     [cell update:item onBookmarkButtonPress:^{
         
     } onLocationButtonPress:^{
