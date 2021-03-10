@@ -7,13 +7,15 @@
 //
 
 #import "FeedViewController.h"
-#import "DetailsView.h"
+#import "FeedItemCell.h"
+#import "FeedModel.h"
 
 @interface FeedViewController ()
 
 @property (strong, nonatomic) NSMutableArray<NSString *> *dataSourceHistory;
 @property (strong, nonatomic) NSMutableArray<SearchItem *> *dataSourceFiltered;
 @property (strong, nonatomic) UISearchController *searchController;
+@property (strong, nonatomic) FeedModel *model;
 @property (strong, nonatomic) SearchModel *model;
 @property (strong, nonatomic) IndexModel *indexModel;
 @property (strong, nonatomic) LocationModel *locationModel;
@@ -37,9 +39,9 @@ static const int kDataSourceOrigOffset = 1;
 static const CGFloat kWeRecommendRowHeight = 72.0;
 static const CGFloat kSearchRowHeight = 58.0;
 
-@implementation DiscoveryViewController
+@implementation FeedViewController
 
-- (instancetype)initWithModel:(SearchModel *)model
+- (instancetype)initWithModel:(FeedModel *)model
                 indexModel:(IndexModel *)indexModel
                 locationModel:(LocationModel *)locationModel
                      mapModel:(MapModel *)mapModel
@@ -171,59 +173,6 @@ static const CGFloat kSearchRowHeight = 58.0;
     [self updateInsets:self.scrollInsets];
 }
 
-- (void)updateInsets:(UIEdgeInsets)insets {
-    self.tableView.contentInset = insets;
-    self.tableView.scrollIndicatorInsets = insets;
-    self.scrollView.contentInset = insets;
-    self.scrollView.scrollIndicatorInsets = insets;
-    self.scrollInsets = insets;
-    self.scrollViewHeightConstraint.constant = -insets.bottom;
-    [self.view layoutIfNeeded];
-}
-
-#pragma mark - Lifecycle
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self.model addObserver:self];
-    [self.model loadSearchHistoryItems];
-    
-    [self.navigationController.view setNeedsLayout];
-    [self.navigationController.view layoutIfNeeded];
-}
-
-// This fixes situation when next view in the navigation stack doesn't adapt to
-// navigation bar of variable height. https://stackoverflow.com/a/47976999
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self.navigationController.view setNeedsLayout];
-    [self.navigationController.view layoutIfNeeded];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [self.searchController setActive:NO];
-    [self.model removeObserver:self];
-    if (self.itemToSaveToHistory) {
-        [self.model addSearchHistoryItem:self.itemToSaveToHistory];
-        self.itemToSaveToHistory = nil;
-    }
-    [NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardDidShowNotification object:self];
-    [NSNotificationCenter.defaultCenter removeObserver:self name:UIKeyboardWillHideNotification object:self];
-}
-
-- (void)onKeyboadAppear:(NSNotification *)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    CGSize size = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    UIEdgeInsets insets = UIEdgeInsetsMake(0, 0, size.height - self.tabBarController.tabBar.frame.size.height, 0);
-    [self updateInsets:insets];
-}
-
-- (void)onKeyboadDisappear:(NSNotification *)notification {
-    UIEdgeInsets insets = UIEdgeInsetsZero;
-    [self updateInsets:insets];
-}
-
 #pragma mark - SearchModel
 - (void)onSearchHistoryItemsUpdate:(NSArray<SearchItem *> *)searchHistoryItems {
     if (![self isSearching]) {
@@ -259,21 +208,18 @@ static const CGFloat kSearchRowHeight = 58.0;
         cell.userInteractionEnabled = NO;
         return cell;
     }
-    SearchCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kSearchCellId];
-    SearchItem *item;
-    SearchCellConfiguration *cellConfiguration;
-    if ([self isSearching]) {
-        item = self.dataSourceFiltered[indexPath.row];
-        cellConfiguration = [self mapSearchCellConfigurationFromSearchItem:item];
-        [cell update:cellConfiguration];
-        return cell;
-    }
-    if ([self.model.searchHistoryItems count]) {
-        item = self.model.searchHistoryItems[indexPath.row - kDataSourceOrigOffset];
-        cellConfiguration = [self mapSearchCellConfigurationFromSearchItem:item];
-        [cell update:cellConfiguration];
-        return cell;
-    }
+    FeedItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kSearchCellId];
+    FeedItem *item = self.model.feedItems[indexPath.row];
+    [cell update:item onBookmarkButtonPress:^{
+        
+    } onLocationButtonPress:^{
+        
+    } onMapButtonPress:^{
+        
+    } onCategoriesLinkPress:^(NSOrderedSet<NSString *> * _Nonnull, Category * _Nonnull) {
+        
+    }];
+    
     return cell;
 }
 

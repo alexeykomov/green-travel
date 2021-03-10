@@ -115,18 +115,21 @@
     __weak typeof(self) weakSelf = self;
     self.detailsView = [[DetailsView alloc] initWithItem:self.item onBookmarkButtonPress:^{
         [weakSelf onBookmarkButtonPress:nil];
-    } onLocationButtonPress:^{} onMapButtonPress:^{
+    } onLocationButtonPress:^{
+        [weakSelf onLocationButtonPress:nil];
+    } onMapButtonPress:^{
         [weakSelf onMapButtonPress:nil];
-    } onCategoriesLinkPress:^(NSOrderedSet<NSString *>* _Nonnull linkedItems){
+    } onCategoriesLinkPress:^(NSOrderedSet<NSString *>* _Nonnull linkedItems, Category *category){
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         PlacesViewController *placesViewController =
-        [[PlacesViewController alloc] initWithIndexModel:weakSelf.indexModel
-                                              apiService:weakSelf.apiService
-                                                mapModel:weakSelf.mapModel
-                                           locationModel:weakSelf.locationModel
+        [[PlacesViewController alloc] initWithIndexModel:strongSelf.indexModel
+                                              apiService:strongSelf.apiService
+                                                mapModel:strongSelf.mapModel
+                                           locationModel:strongSelf.locationModel
                                               bookmarked:NO
                                         allowedItemUUIDs:linkedItems];
         placesViewController.category = category;
-        [weakSelf.navigationController pushViewController:placesViewController animated:YES];
+        [strongSelf.navigationController pushViewController:placesViewController animated:YES];
     }];
     [self.contentView addSubview:self.detailsView];
     self.detailsView.translatesAutoresizingMaskIntoConstraints = NO;

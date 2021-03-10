@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@class Category;
 @class PlaceItem;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 onBookmarkButtonPress:(void(^)(void))onBookmarkButtonPress
 onLocationButtonPress:(void(^)(void))onLocationButtonPress
 onMapButtonPress:(void(^)(void))onMapButtonPress
-onCategoriesLinkPress:(void(^)(NSOrderedSet<NSString *> *))onCategoriesLinkPress;
+onCategoriesLinkPress:(void(^)(NSOrderedSet<NSString *> *, Category *))onCategoriesLinkPress;
 - (void)showDetailed;
 
 @end

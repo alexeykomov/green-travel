@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
                           mapModel:(nonnull MapModel *)mapModel
                      locationModel:(nonnull LocationModel *)locationModel
         pushToNavigationController:(void(^)(PlacesViewController *))pushToNavigationController
-             onCategoriesLinkPress:(void(^)(NSOrderedSet<NSString *> *))onCategoriesLinkPress;
+             onCategoriesLinkPress:(void(^)(NSOrderedSet<NSString *> *, Category *category))onCategoriesLinkPress;
 
 - (void)update:(NSArray<CategoryUUIDToRelatedItemUUIDs *>*)categoryIdToItems;
 

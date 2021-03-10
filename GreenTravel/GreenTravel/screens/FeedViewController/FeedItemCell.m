@@ -9,6 +9,7 @@
 #import "FeedItemCell.h"
 #import "DetailsView.h"
 #import "Category.h"
+#import "FeedItem.h"
 
 @interface FeedItemCell()
 
@@ -30,7 +31,7 @@
     
 }
  
-- (void)update:(PlaceItem *)item
+- (void)update:(FeedItem *)item
 onBookmarkButtonPress:(void(^)(void))onBookmarkButtonPress
 onLocationButtonPress:(void(^)(void))onLocationButtonPress
 onMapButtonPress:(void(^)(void))onMapButtonPress
@@ -38,7 +39,7 @@ onCategoriesLinkPress:(void(^)(NSOrderedSet<NSString *> *, Category *))onCategor
     if (self.detailsView != nil) {
         return;
     }
-    self.detailsView = [[DetailsView alloc] initWithItem:item onBookmarkButtonPress:onBookmarkButtonPress onLocationButtonPress:onLocationButtonPress onMapButtonPress:onMapButtonPress onCategoriesLinkPress:onCategoriesLinkPress]; 
+    self.detailsView = [[DetailsView alloc] initWithItem:item onBookmarkButtonPress:onBookmarkButtonPress onLocationButtonPress:onLocationButtonPress onMapButtonPress:onMapButtonPress onCategoriesLinkPress:onCategoriesLinkPress];
     [self.contentView addSubview:self.detailsView];
     self.detailsView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[

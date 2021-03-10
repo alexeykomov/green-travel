@@ -7,10 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FeedObservable.h"
+
+@class FeedItem;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FeedModel : NSObject
+@interface FeedModel : NSObject<FeedObservable>
+
+@property (strong, nonatomic) NSArray<FeedItem *> *feedItems;
 
 @end
 

@@ -12,6 +12,7 @@
 		5A0F981625F4F46C00395457 /* FeedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F981525F4F46C00395457 /* FeedModel.m */; };
 		5A0F981C25F4F4A300395457 /* FeedItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F981B25F4F4A300395457 /* FeedItemCell.m */; };
 		5A0F982325F63CDA00395457 /* DetailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F982225F63CDA00395457 /* DetailsView.m */; };
+		5A0F984C25F80ECD00395457 /* FeedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0F984B25F80ECD00395457 /* FeedItem.m */; };
 		5A11BF8B2584F0FF00113B31 /* GalleryPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A11BF8A2584F0FF00113B31 /* GalleryPageControl.m */; };
 		5A14824A24E7ED9100EBB756 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824924E7ED9100EBB756 /* AppDelegate.m */; };
 		5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A14824C24E7ED9100EBB756 /* SceneDelegate.m */; };
@@ -155,6 +156,10 @@
 		5A0F981B25F4F4A300395457 /* FeedItemCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedItemCell.m; sourceTree = "<group>"; };
 		5A0F982125F63CDA00395457 /* DetailsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsView.h; sourceTree = "<group>"; };
 		5A0F982225F63CDA00395457 /* DetailsView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsView.m; sourceTree = "<group>"; };
+		5A0F984925F80E8400395457 /* FeedObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedObserver.h; sourceTree = "<group>"; };
+		5A0F984A25F80ECD00395457 /* FeedItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedItem.h; sourceTree = "<group>"; };
+		5A0F984B25F80ECD00395457 /* FeedItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FeedItem.m; sourceTree = "<group>"; };
+		5A0F985325F80EF100395457 /* FeedObservable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FeedObservable.h; sourceTree = "<group>"; };
 		5A11BF892584F0FF00113B31 /* GalleryPageControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GalleryPageControl.h; sourceTree = "<group>"; };
 		5A11BF8A2584F0FF00113B31 /* GalleryPageControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GalleryPageControl.m; sourceTree = "<group>"; };
 		5A14824524E7ED9100EBB756 /* GreenTravel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenTravel.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -407,6 +412,8 @@
 			children = (
 				5A0F981425F4F46C00395457 /* FeedModel.h */,
 				5A0F981525F4F46C00395457 /* FeedModel.m */,
+				5A0F984925F80E8400395457 /* FeedObserver.h */,
+				5A0F985325F80EF100395457 /* FeedObservable.h */,
 			);
 			path = FeedModel;
 			sourceTree = "<group>";
@@ -630,6 +637,8 @@
 				5AEA98092556C0FE0037A51D /* CategoryUUIDToRelatedItemUUIDs.m */,
 				5A18E9C025C9E15A00F26C3E /* IconNameToImageNameMap.h */,
 				5A18E9C125C9E15A00F26C3E /* IconNameToImageNameMap.m */,
+				5A0F984A25F80ECD00395457 /* FeedItem.h */,
+				5A0F984B25F80ECD00395457 /* FeedItem.m */,
 			);
 			path = valueobjects;
 			sourceTree = "<group>";
@@ -1362,6 +1371,7 @@
 				5A69921724F7DE51008FB47E /* IndexModel.m in Sources */,
 				5A1482EC24EDC34C00EBB756 /* SizeUtils.m in Sources */,
 				5A55D48325CECA2000D795E1 /* StoredPlaceDetails+CoreDataClass.m in Sources */,
+				5A0F984C25F80ECD00395457 /* FeedItem.m in Sources */,
 				5A14824D24E7ED9100EBB756 /* SceneDelegate.m in Sources */,
 				5A14829324E8103400EBB756 /* BookmarksViewController.m in Sources */,
 				5A1482EF24EDC8E500EBB756 /* StyleUtils.m in Sources */,
