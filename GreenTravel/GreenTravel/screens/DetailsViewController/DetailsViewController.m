@@ -26,6 +26,7 @@
 #import "Typography.h"
 #import "CommonButton.h"
 #import "DescriptionView.h"
+#import "PlacesViewController.h"
 
 @interface DetailsViewController ()
 
@@ -63,23 +64,23 @@
 
 @end
 
-@implementation DetailsViewController
+@implementation DetailsViewController 
 
 - (instancetype)initWithApiService:(ApiService *)apiService
                    coreDataService:(nonnull CoreDataService *)coreDataService
                       indexModel:(IndexModel *)indexModel
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel
-                     searchModel:(SearchModel *)searchModel
+                     searchModel:(SearchModel *)searchModel               
 {
     self = [super init];
     if (self) {
         _apiService = apiService;
         _coreDataService = coreDataService;
-        _mapModel = mapModel;
         _indexModel = indexModel;
         _locationModel = locationModel;
         _searchModel = searchModel;
+        _mapModel = mapModel;
     }
     return self;
 }
@@ -242,9 +243,18 @@
                                           apiService:self.apiService
                                             mapModel:self.mapModel
                                        locationModel:self.locationModel
-                          pushToNavigationController:^(PlacesViewController * _Nonnull placesViewController) {
-        [weakSelf.navigationController pushViewController:(UIViewController *)placesViewController
-                                                 animated:YES];
+                                onCategoryLinkSelect:^(Category * _Nonnull category, NSOrderedSet<NSString *> * _Nonnull linkedItems) {
+        PlacesViewController *placesViewController =
+        [[PlacesViewController alloc] initWithIndexModel:weakSelf.indexModel
+                                              apiService:weakSelf.apiService
+                                         coreDataService:weakSelf.coreDataService
+                                                mapModel:weakSelf.mapModel
+                                           locationModel:weakSelf.locationModel
+                                             searchModel:weakSelf.searchModel
+                                              bookmarked:NO
+                                        allowedItemUUIDs:linkedItems];
+        placesViewController.category = category;
+        [weakSelf.navigationController pushViewController:placesViewController animated:YES];
     }];
 
     self.linkedCategoriesView.translatesAutoresizingMaskIntoConstraints = NO;

@@ -12,6 +12,7 @@
 
 @class FilterOption;
 @class IndexModel;
+@class PlaceItem;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, nonnull) NSMutableSet<NSString *> *selectedCategoryUUIDs;
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel;
 - (void)selectOption:(FilterOption *)option;
+- (void)selectOptionForPlaceItem:(PlaceItem *)item;
 
 @end
 

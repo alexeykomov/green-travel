@@ -22,8 +22,10 @@
 @property (assign, nonatomic) BOOL bookmarked;
 @property (strong, nonatomic) NSMutableArray<PlaceItem *> *bookmarkedItems;
 @property (strong, nonatomic) ApiService *apiService;
+@property (strong, nonatomic) CoreDataService *coreDataService;
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) LocationModel *locationModel;
+@property (strong, nonatomic) SearchModel *searchModel;
 @property (strong, nonatomic) IndexModel *indexModel;
 @property (strong, nonatomic) NSOrderedSet<NSString *> *allowedItemUUIDs;
 @property (strong, nonatomic) NSMutableArray<PlaceItem *> *allowedItems;
@@ -37,8 +39,10 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
 
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel
                         apiService:(ApiService *)apiService
+                        coreDataService:(CoreDataService *)coreDataService
                           mapModel:(MapModel *)mapModel
                      locationModel:(LocationModel *)locationModel
+                     searchModel:(SearchModel *)searchModel
                         bookmarked:(BOOL)bookmarked
                   allowedItemUUIDs:(NSOrderedSet<NSString *> *)allowedItemUUIDs;
 {
@@ -50,8 +54,10 @@ static const CGFloat kCellAspectRatio = 324.0 / 144.0;
         _bookmarked = bookmarked;
         _indexModel = indexModel;
         _apiService = apiService;
+        _coreDataService = coreDataService;
         _mapModel = mapModel;
         _locationModel = locationModel;
+        _searchModel = searchModel;
         _allowedItemUUIDs = allowedItemUUIDs;
     }
     return self;
@@ -174,8 +180,10 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
         PlacesViewController *placesViewController =
         [[PlacesViewController alloc] initWithIndexModel:self.indexModel
                                               apiService:self.apiService
+                                         coreDataService:self.coreDataService
                                                 mapModel:self.mapModel
                                            locationModel:self.locationModel
+                                             searchModel:self.searchModel
                                               bookmarked:NO
                                         allowedItemUUIDs:nil];
         placesViewController.category = category;
@@ -191,9 +199,15 @@ didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     } else {
         item = self.category.items[indexPath.row];
     }
-    DetailsViewController *detailsViewController = [[DetailsViewController alloc] initWithApiService:self.apiService indexModel:self.indexModel mapModel:self.mapModel locationModel:self.locationModel];
-    detailsViewController.item = item;
-    [self.navigationController pushViewController:detailsViewController animated:YES];
+    DetailsViewController *detailsController =
+    [[DetailsViewController alloc] initWithApiService:self.apiService
+                                      coreDataService:self.coreDataService
+                                           indexModel:self.indexModel
+                                             mapModel:self.mapModel
+                                        locationModel:self.locationModel
+                                          searchModel:self.searchModel];
+    detailsController.item = item;
+    [self.navigationController pushViewController:detailsController animated:YES];
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {

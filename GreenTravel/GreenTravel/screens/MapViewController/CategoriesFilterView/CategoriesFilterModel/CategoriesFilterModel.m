@@ -12,6 +12,7 @@
 #import "IndexModel.h"
 #import "CategoriesFilterObserver.h"
 #import "CategoryUtils.h"
+#import "PlaceItem.h"
 
 @interface CategoriesFilterModel()
 
@@ -142,6 +143,18 @@
     }];
     [self notifyObserversFilterSelect:selectedIndex];
     [self notifyObservers];
+}
+
+- (void)selectOptionForPlaceItem:(PlaceItem *)item {
+    NSString *categoryUUID = self.indexModel.flatItems[item.uuid].category.uuid;
+    NSUInteger optionIndex = [self.filterOptions indexOfObjectPassingTest:^BOOL(FilterOption * _Nonnull filterOption, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [filterOption.categoryId isEqualToString:categoryUUID];
+    }];
+    FilterOption *optionForItem = self.filterOptions[optionIndex];
+    if (!optionForItem.on) {
+        [self selectOption:optionForItem];
+    }
+    
 }
     
     

@@ -34,6 +34,7 @@
 @property (strong, nonatomic) NSArray<CategoryUUIDToRelatedItemUUIDs *> *categoryIdToItems;
 @property (copy, nonatomic) void(^pushToNavigationController)(PlacesViewController *);
 @property (strong, nonatomic) NSLayoutConstraint *tableViewHeightConstraint;
+@property (copy, nonatomic) void(^onCategoryLinkSelect)(Category *, NSOrderedSet<NSString *> *);
 
 @end
 
@@ -45,7 +46,7 @@ static NSString * const kCategoryLinkCellId = @"categoryLinkCellId";
                      apiService:(nonnull ApiService *)apiService
                        mapModel:(nonnull MapModel *)mapModel
                   locationModel:(nonnull LocationModel *)locationModel
-     pushToNavigationController:(nonnull void (^)(PlacesViewController * _Nonnull))pushToNavigationController
+              onCategoryLinkSelect:(void(^)(Category *, NSOrderedSet<NSString *> *))onCategoryLinkSelect
 {
     self = [super init];
     if (self) {
@@ -54,7 +55,7 @@ static NSString * const kCategoryLinkCellId = @"categoryLinkCellId";
         self.indexModel = indexModel;
         self.mapModel = mapModel;
         self.locationModel = locationModel;
-        self.pushToNavigationController = pushToNavigationController;
+        self.onCategoryLinkSelect = onCategoryLinkSelect;
         self.tableView = [[UITableView alloc] init];
         [self.tableView registerClass:CategoryLinkCell.class forCellReuseIdentifier:kCategoryLinkCellId];
         self.tableView.delegate = self;
@@ -144,16 +145,7 @@ static NSString * const kCategoryLinkCellId = @"categoryLinkCellId";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSOrderedSet<NSString *> *linkedItems = [self.categoryIdToItems[indexPath.row].relatedItemUUIDs copy];
     Category *category = self.categories[indexPath.row];
-    
-    PlacesViewController *placesViewController =
-    [[PlacesViewController alloc] initWithIndexModel:self.indexModel
-                                          apiService:self.apiService
-                                            mapModel:self.mapModel
-                                       locationModel:self.locationModel
-                                          bookmarked:NO
-                                    allowedItemUUIDs:linkedItems];
-    placesViewController.category = category;
-    self.pushToNavigationController(placesViewController);
+    self.onCategoryLinkSelect(category, linkedItems);
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

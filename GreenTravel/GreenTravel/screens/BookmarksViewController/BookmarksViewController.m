@@ -21,9 +21,10 @@
 
 @property (strong, nonatomic) BookmarksGroupModel *model;
 @property (strong, nonatomic) ApiService *apiService;
-@property (strong, nonatomic) DetailsModel *detailsModel;
+@property (strong, nonatomic) CoreDataService *coreDataService;
 @property (strong, nonatomic) MapModel *mapModel;
 @property (strong, nonatomic) LocationModel *locationModel;
+@property (strong, nonatomic) SearchModel *searchModel;
 @property (strong, nonatomic) IndexModel *indexModel;
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) UIScrollView *scrollView;
@@ -38,13 +39,14 @@ static NSString * const kBookmarkCellId = @"bookmarkCellId";
 static const CGFloat kCellAspectRatio = 166.0 / 104.0;
 static const CGFloat kMinHeightOfPlaceholderView = 400.0;
 
-@implementation BookmarksViewController
+@implementation BookmarksViewController 
 
 - (instancetype)initWithModel:(BookmarksGroupModel *)model
                    indexModel:(IndexModel *)indexModel
                    apiService:(ApiService *)apiService
-                 detailsModel:(DetailsModel *)detailsModel
+              coreDataService:(CoreDataService *)coreDataService
                      mapModel:(MapModel *)mapModel
+                  searchModel:(SearchModel *)searchModel
                 locationModel:(LocationModel *)locationModel
 {
     self = [super init];
@@ -55,8 +57,9 @@ static const CGFloat kMinHeightOfPlaceholderView = 400.0;
         _model = model;
         _indexModel = indexModel;
         _apiService = apiService;
-        _detailsModel = detailsModel;
+        _coreDataService = coreDataService;
         _mapModel = mapModel;
+        _searchModel = searchModel;
         _locationModel = locationModel;
     }
     return self;
@@ -251,10 +254,12 @@ static const CGFloat kInsetVertical = 24.0;
     }
     
     PlacesViewController *placesViewController =
-    [[PlacesViewController alloc] initWithIndexModel:self.indexModel
+    [[PlacesViewController alloc] initWithIndexModel:self.indexModel 
                                           apiService:self.apiService
+                                     coreDataService:self.coreDataService
                                             mapModel:self.mapModel
                                        locationModel:self.locationModel
+                                         searchModel:self.searchModel
                                           bookmarked:YES allowedItemUUIDs:nil];
     placesViewController.category = bookmarkItem.correspondingCategory;
     [self.navigationController pushViewController:placesViewController animated:YES];

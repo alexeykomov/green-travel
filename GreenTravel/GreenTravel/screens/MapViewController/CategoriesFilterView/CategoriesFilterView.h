@@ -13,12 +13,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class CategoriesFilterModel;
 @class IndexModel;
+@class PlaceItem;
 
 @interface CategoriesFilterView : UICollectionView<UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, CategoriesFilterObserver> 
 
 
 - (instancetype)initWithIndexModel:(IndexModel *)indexModel
                     onFilterUpdate:(void(^)(NSSet<NSString *>*))onFilterUpdate;
+- (void)activateFilterForPlaceItem:(PlaceItem *)item;
 
 @end
 

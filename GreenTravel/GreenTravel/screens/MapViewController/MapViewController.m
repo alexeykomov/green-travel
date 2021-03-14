@@ -23,6 +23,7 @@
 #import "SearchModel.h"
 #import "ApiService.h"
 #import "CoreDataService.h"
+#import "PlaceItem.h"
 
 @interface MapViewController ()
 
@@ -109,7 +110,11 @@
         [self.filterView.heightAnchor constraintEqualToConstant:73.5],
     ]];
 #pragma mark - Location button
-    self.locationButton = [[UIButton alloc] init];
+    self.locationButton = [[MapButton alloc] initWithImageName:@"location-arrow"
+                                                      target:self
+                                                    selector:@selector(onLocateMePress:)
+                                  imageCenterXAnchorConstant:-2.0
+                                  imageCenterYAnchorConstant:2.0];
     [self.view addSubview:self.locationButton];
     
     self.locationButton.translatesAutoresizingMaskIntoConstraints = NO;
@@ -117,35 +122,13 @@
     [NSLayoutConstraint activateConstraints:@[
         [self.locationButton.bottomAnchor constraintEqualToAnchor:self.filterView.topAnchor],
         [self.locationButton.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-16.0],
-        [self.locationButton.widthAnchor constraintEqualToConstant:44.0],
-        [self.locationButton.heightAnchor constraintEqualToConstant:44.0],
     ]];
-
-    self.locationButton.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.7];
-    
-    self.locationButton.layer.masksToBounds = YES;
-    self.locationButton.layer.cornerRadius = 8.0;
-    self.locationButton.layer.borderColor = [[Colors get].alto CGColor];
-    self.locationButton.layer.borderWidth = 1.0;
-    
-    UIImageView *locationImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"location-arrow"]];
-    [self.locationButton addSubview:locationImageView];
-    
-    locationImageView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [NSLayoutConstraint activateConstraints:@[
-        [locationImageView.centerXAnchor constraintEqualToAnchor:self.locationButton.centerXAnchor constant:-2.0],
-        [locationImageView.centerYAnchor constraintEqualToAnchor:self.locationButton.centerYAnchor constant:2.0],
-        [locationImageView.widthAnchor constraintEqualToConstant:26.0],
-        [locationImageView.heightAnchor constraintEqualToConstant:26.0],
-    ]];
-    
-    [self.locationButton addTarget:self action:@selector(onLocateMePress:) forControlEvents:UIControlEventTouchUpInside];
-    
 #pragma mark - Search button
     self.searchButton = [[MapButton alloc] initWithImageName:@"search-outline"
                                                       target:self
-                                                    selector:@selector(onSearchPress:)];
+                                                    selector:@selector(onSearchPress:)
+                                  imageCenterXAnchorConstant:0.0
+                                  imageCenterYAnchorConstant:0.0];
     [self.view addSubview:self.searchButton];
     
     self.searchButton.translatesAutoresizingMaskIntoConstraints = NO;
@@ -232,17 +215,31 @@
 }
 
 - (void)onSearchPress:(id)sender {
-    SearchViewController *searchViewController = [[SearchViewController alloc] initWithModel:self.searchModel
+    __weak typeof(self) weakSelf = self;
+    SearchViewController *searchViewController =
+    [[SearchViewController alloc] initWithModel:self.searchModel
                                      indexModel:self.indexModel
                                   locationModel:self.locationModel
                                        mapModel:self.mapModel
                                      apiService:self.apiService
-                                coreDataService:self.coreDataService];
-    searchViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDonePress:)];
-    UINavigationController *searchViewControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:searchViewController];
-    [self presentViewController:searchViewControllerWithNavigation animated:YES completion:^{
-            
+                                coreDataService:self.coreDataService
+                             onSearchItemSelect:^(PlaceItem * _Nonnull item) {
+        [weakSelf.filterView activateFilterForPlaceItem:item];
+        [weakSelf.navigationController dismissViewControllerAnimated:YES
+            completion:^{}];
+        NSUInteger indexOfFoundItem = [weakSelf.mapView.annotations indexOfObjectPassingTest:^BOOL(id<MGLAnnotation> _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            return obj.coordinate.latitude == item.coords.latitude && obj.coordinate.longitude == item.coords.longitude;
+        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.mapView setCenterCoordinate:item.coords zoomLevel:8 animated:YES];
+            //[weakSelf.mapView showAnnotations:@[self.mapView.annotations[indexOfFoundItem]] animated:YES];
+        });
     }];
+    searchViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]  initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDonePress:)];
+    UINavigationController *searchViewControllerWithNavigation =
+    [[UINavigationController alloc ] initWithRootViewController:searchViewController]; 
+    [self presentViewController:searchViewControllerWithNavigation animated:YES
+                     completion:^{}];
 }
 
 -(void)onDonePress:(id)sender {

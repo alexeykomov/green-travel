@@ -14,7 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithImageName:(NSString *)imageName
                            target:(id)target
-                         selector:(SEL)selector;
+                         selector:(SEL)selector
+        imageCenterXAnchorConstant:(CGFloat)imageCenterXAnchorConstant
+        imageCenterYAnchorConstant:(CGFloat)imageCenterYAnchorConstant;
 
 @end
 

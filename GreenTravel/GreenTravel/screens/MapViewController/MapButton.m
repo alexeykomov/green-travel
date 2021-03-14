@@ -22,19 +22,25 @@
 - (instancetype)initWithImageName:(NSString *)imageName
                            target:(id)target
                          selector:(SEL)selector
+            imageCenterXAnchorConstant:(CGFloat)imageCenterXAnchorConstant
+            imageCenterYAnchorConstant:(CGFloat)imageCenterYAnchorConstant
 {
     self = [super init];
     if (self) {
         [self setUp:imageName
              target:target
-           selector:selector];
+           selector:selector
+imageCenterXAnchorConstant:imageCenterXAnchorConstant
+imageCenterYAnchorConstant:imageCenterYAnchorConstant];
     }
     return self;
 }
 
 - (void)setUp:(NSString *)imageName
        target:(id)target
-     selector:(SEL)selector {
+     selector:(SEL)selector
+imageCenterXAnchorConstant:(CGFloat)imageCenterXAnchorConstant
+imageCenterYAnchorConstant:(CGFloat)imageCenterYAnchorConstant {
     self.translatesAutoresizingMaskIntoConstraints = NO;
     
     [NSLayoutConstraint activateConstraints:@[
@@ -55,8 +61,8 @@
     imageView.translatesAutoresizingMaskIntoConstraints = NO;
     
     [NSLayoutConstraint activateConstraints:@[
-        [imageView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor constant:-2.0],
-        [imageView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:2.0],
+        [imageView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor constant:imageCenterXAnchorConstant],
+        [imageView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:imageCenterYAnchorConstant],
         [imageView.widthAnchor constraintEqualToConstant:26.0],
         [imageView.heightAnchor constraintEqualToConstant:26.0],
     ]];

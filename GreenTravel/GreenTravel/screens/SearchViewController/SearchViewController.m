@@ -46,6 +46,7 @@
 @property (assign, nonatomic) BOOL searchActive;
 @property (assign, nonatomic) UIEdgeInsets scrollInsets;
 @property (strong, nonatomic) NSLayoutConstraint *scrollViewHeightConstraint;
+@property (copy, nonatomic) void (^onSearchItemSelect)(PlaceItem *);
 
 @end
 
@@ -65,6 +66,7 @@ static const CGFloat kSearchRowHeight = 58.0;
                      mapModel:(MapModel *)mapModel
                    apiService:(ApiService *)apiService
               coreDataService:(CoreDataService *)coreDataService
+           onSearchItemSelect:(void(^)(PlaceItem *))onSearchItemSelect
 {
     self = [super init];
     if (self) {
@@ -73,6 +75,7 @@ static const CGFloat kSearchRowHeight = 58.0;
         _locationModel = locationModel;
         _mapModel = mapModel;
         _apiService = apiService;
+        _onSearchItemSelect = onSearchItemSelect;
     }
     return self;
 }
@@ -96,6 +99,7 @@ static const CGFloat kSearchRowHeight = 58.0;
     self.searchController.obscuresBackgroundDuringPresentation = NO;
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.searchBar.placeholder = kPlaceholderSearch;
+    self.searchController.searchBar.keyboardAppearance = UIKeyboardAppearanceDefault;
     self.searchController.searchBar.delegate = self;
     if (@available(iOS 13.0, *)) {
         self.searchController.automaticallyShowsCancelButton = NO;
@@ -236,7 +240,8 @@ static const CGFloat kSearchRowHeight = 58.0;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    BOOL searchBarIsFirstResponder = [self.searchController.searchBar becomeFirstResponder];
+    [self.searchController.searchBar performSelector:@selector(becomeFirstResponder)
+                                          withObject:nil afterDelay:0];
     
 }
 
@@ -346,19 +351,19 @@ estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    DetailsViewController *detailsController = [[DetailsViewController alloc] initWithApiService:self.apiService indexModel:self.indexModel mapModel:self.mapModel locationModel:self.locationModel];
+    PlaceItem *item;
     if ([self isSearching]) {
         SearchItem *searchItem = self.dataSourceFiltered[indexPath.row];
-        detailsController.item = self.indexModel.flatItems[searchItem.correspondingPlaceItemUUID];
+        item = self.indexModel.flatItems[searchItem.correspondingPlaceItemUUID];
         self.itemToSaveToHistory = searchItem;
         self.searchController.searchBar.text = @"";
     } else {
         SearchItem *searchItem =
         self.model.searchHistoryItems[indexPath.row - kDataSourceOrigOffset];
         self.itemToSaveToHistory = searchItem;
-        detailsController.item = self.indexModel.flatItems[searchItem.correspondingPlaceItemUUID];
+        item = self.indexModel.flatItems[searchItem.correspondingPlaceItemUUID];
     }
-    [self.navigationController pushViewController:detailsController animated:YES];
+    self.onSearchItemSelect(item);
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

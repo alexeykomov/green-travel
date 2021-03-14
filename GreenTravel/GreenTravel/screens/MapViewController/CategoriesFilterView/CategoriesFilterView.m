@@ -60,6 +60,10 @@ static const CGFloat kSpacingWidth = 16.0;
     return self;
 }
 
+- (void)activateFilterForPlaceItem:(PlaceItem *)item {
+    [self.model selectOptionForPlaceItem:item];
+}
+
 #pragma mark - Collection view
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;

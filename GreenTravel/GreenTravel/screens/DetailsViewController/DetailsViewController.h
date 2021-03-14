@@ -14,16 +14,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class PlaceItem;
 @class ApiService;
+@class CoreDataService;
 @class MapModel;
 @class LocationModel;
 @class IndexModel;
+@class SearchModel;
 
 @interface DetailsViewController : UIViewController <BookmarksObserver, CategoriesObserver>
 
 - (instancetype)initWithApiService:(ApiService *)apiService
+                   coreDataService:(nonnull CoreDataService *)coreDataService
                         indexModel:(IndexModel *)indexModel
                           mapModel:(MapModel *)mapModel
-                     locationModel:(LocationModel *)locationModel;
+                     locationModel:(LocationModel *)locationModel
+                       searchModel:(SearchModel *) searchModel;
 @property (strong, nonatomic) PlaceItem *item;
 
 @end

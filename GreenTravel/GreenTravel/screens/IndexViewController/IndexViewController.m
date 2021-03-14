@@ -245,13 +245,25 @@ static CGFloat kMinHeightOfPlaceholderView = 500.0;
 
 - (void)onSearchPress:(id)sender {
     [self.navigationItem setBackBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil]];
+    __weak typeof(self) weakSelf = self;
     [self.navigationController pushViewController:
      [[SearchViewController alloc] initWithModel:self.searchModel
                                       indexModel:self.model
                                    locationModel:self.locationModel
                                         mapModel:self.mapModel
                                       apiService:self.apiService
-                                 coreDataService:self.coreDataService] animated:NO];
+                                 coreDataService:self.coreDataService
+                              onSearchItemSelect:^(PlaceItem * _Nonnull item) {
+        DetailsViewController *detailsController =
+        [[DetailsViewController alloc] initWithApiService:weakSelf.apiService
+                                          coreDataService:weakSelf.coreDataService
+                                               indexModel:weakSelf.model
+                                                 mapModel:weakSelf.mapModel
+                                            locationModel:weakSelf.locationModel
+                                              searchModel:weakSelf.searchModel];
+        detailsController.item = item;
+        [weakSelf.navigationController pushViewController:detailsController animated:YES];
+    }] animated:NO];
 }
 
 #pragma mark - Table data source
@@ -357,9 +369,11 @@ static CGFloat kMinHeightOfPlaceholderView = 500.0;
             PlacesViewController *placesViewController =
             [[PlacesViewController alloc] initWithIndexModel:weakSelf.model
                                                   apiService:weakSelf.apiService
+                                             coreDataService:weakSelf.coreDataService
                                                     mapModel:weakSelf.mapModel
-                                               locationModel:weakSelf.locationModel bookmarked:NO
-                                            allowedItemUUIDs:nil];
+                                               locationModel:weakSelf.locationModel
+                                                 searchModel:weakSelf.searchModel
+                                                  bookmarked:NO allowedItemUUIDs:nil];
             placesViewController.category = weakCategory;
             [weakSelf.navigationController pushViewController:placesViewController animated:YES];
         };
@@ -369,12 +383,13 @@ static CGFloat kMinHeightOfPlaceholderView = 500.0;
             __weak typeof(obj) weakCategory = obj;
             obj.onPlaceCellPress = ^void() {
                 PlacesViewController *placesViewController =
-                [[PlacesViewController alloc] initWithIndexModel:weakSelf.model 
+                [[PlacesViewController alloc] initWithIndexModel:weakSelf.model
                                                       apiService:weakSelf.apiService
+                                                 coreDataService:weakSelf.coreDataService
                                                         mapModel:weakSelf.mapModel
                                                    locationModel:weakSelf.locationModel
-                                                      bookmarked:NO
-                                                allowedItemUUIDs:nil];
+                                                     searchModel:weakSelf.searchModel
+                                                      bookmarked:NO allowedItemUUIDs:nil];
                 placesViewController.category = weakCategory;
                 [weakSelf.navigationController pushViewController:placesViewController animated:YES];
             };
@@ -383,9 +398,15 @@ static CGFloat kMinHeightOfPlaceholderView = 500.0;
         [obj.items enumerateObjectsUsingBlock:^(PlaceItem * _Nonnull placeItem, NSUInteger idx, BOOL * _Nonnull stop) {
             __weak typeof(placeItem) weakPlaceItem = placeItem;
             placeItem.onPlaceCellPress = ^void() {
-                DetailsViewController *detailsViewController = [[DetailsViewController alloc] initWithApiService:weakSelf.apiService  indexModel:weakSelf.model mapModel:weakSelf.mapModel locationModel:weakSelf.locationModel];
-                detailsViewController.item = weakPlaceItem;
-                [weakSelf.navigationController pushViewController:detailsViewController animated:YES];
+                DetailsViewController *detailsController =
+                [[DetailsViewController alloc] initWithApiService:weakSelf.apiService
+                                                  coreDataService:weakSelf.coreDataService
+                                                       indexModel:weakSelf.model
+                                                         mapModel:weakSelf.mapModel
+                                                    locationModel:weakSelf.locationModel
+                                                      searchModel:weakSelf.searchModel];
+                detailsController.item = weakPlaceItem;
+                [weakSelf.navigationController pushViewController:detailsController animated:YES];
             };
             placeItem.onFavoriteButtonPress = ^void() {
                 [weakSelf.model bookmarkItem:weakPlaceItem

@@ -107,8 +107,9 @@
     [[BookmarksViewController alloc] initWithModel:bookmarksGroupsModel
                                         indexModel:self.indexModel
                                         apiService:self.apiService
-                                      detailsModel:detailsModel
+                                   coreDataService:self.coreDataService
                                           mapModel:mapModel
+                                       searchModel:searchModel
                                      locationModel:locationModel];
     bookmarksController.title = @"Закладки";
     UINavigationController *bookmarksControllerWithNavigation = [[UINavigationController alloc ] initWithRootViewController:bookmarksController];
