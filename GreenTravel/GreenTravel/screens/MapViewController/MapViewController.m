@@ -227,12 +227,8 @@
         [weakSelf.filterView activateFilterForPlaceItem:item];
         [weakSelf.navigationController dismissViewControllerAnimated:YES
             completion:^{}];
-        NSUInteger indexOfFoundItem = [weakSelf.mapView.annotations indexOfObjectPassingTest:^BOOL(id<MGLAnnotation> _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            return obj.coordinate.latitude == item.coords.latitude && obj.coordinate.longitude == item.coords.longitude;
-        }];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.mapView setCenterCoordinate:item.coords zoomLevel:8 animated:YES];
-            //[weakSelf.mapView showAnnotations:@[self.mapView.annotations[indexOfFoundItem]] animated:YES];
         });
     }];
     searchViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]  initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onDonePress:)];
